@@ -1,0 +1,10 @@
+{
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "isort.args": ["--settings", "setup.cfg"],
+  "cSpell.language": "en,ru"
+}
