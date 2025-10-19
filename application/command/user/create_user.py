@@ -11,4 +11,4 @@ class CreateUserCommand:
         if self.__repository.is_user_of_id_exist(user_id=user_id):
             return
         user = User(user_id=user_id)
-        self.__repository.user_save(user=user)
+        self.__repository.user_create(user=user)

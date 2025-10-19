@@ -1,6 +1,6 @@
 from enum import StrEnum
 
-from domain.error import DomainError
+from domain.error import AppError
 
 
 class ClassName(StrEnum):
@@ -43,6 +43,4 @@ class ClassName(StrEnum):
             case ClassName.SORCERER.value:
                 return ClassName.SORCERER
             case _:
-                raise DomainError.invalid_data(
-                    f"класса с названием {name} не существует"
-                )
+                raise AppError.invalid_data(f"класса с названием {name} не существует")

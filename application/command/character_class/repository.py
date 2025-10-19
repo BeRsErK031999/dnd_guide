@@ -5,7 +5,7 @@ from domain.character_class import CharacterClass, ClassID, ClassName
 
 class ClassRepository(ABC):
     @abstractmethod
-    def next_id(self) -> ClassID:
+    def next_class_id(self) -> ClassID:
         raise NotImplementedError()
 
     @abstractmethod

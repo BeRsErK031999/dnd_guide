@@ -10,7 +10,7 @@ from domain.character_class_feature import (
 
 class ClassFeatureRepository(ABC):
     @abstractmethod
-    def next_id(self) -> ClassFeatureID:
+    def next_class_feature_id(self) -> ClassFeatureID:
         raise NotImplementedError()
 
     @abstractmethod

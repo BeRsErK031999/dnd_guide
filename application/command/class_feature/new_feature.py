@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from app_error import AppError
 from application.command.class_feature.base_command import BaseCommand
 from domain.character_class import ClassID
 from domain.character_class_feature import (
@@ -8,7 +9,6 @@ from domain.character_class_feature import (
     ClassFeatureLevel,
     ClassFeatureName,
 )
-from domain.error import DomainError
 from domain.user import UserID
 
 
@@ -29,10 +29,14 @@ class NewClassFeatureCommand(BaseCommand):
         if self.__feature_repository.is_class_feature_name_of_class_exist(
             class_id, name
         ):
-            raise DomainError.idempotent(
+            raise AppError.idempotent(
                 f"для класса уже существует умение с названием {name}"
             )
         feature = ClassFeature(
-            self.__feature_repository.next_id(), class_id, name, level, description
+            self.__feature_repository.next_class_feature_id(),
+            class_id,
+            name,
+            level,
+            description,
         )
         self.__feature_repository.class_feature_create(feature)

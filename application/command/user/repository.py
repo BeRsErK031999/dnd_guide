@@ -9,7 +9,7 @@ class UserRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def user_save(self, user: User) -> None:
+    def user_create(self, user: User) -> None:
         raise NotImplementedError()
 
     @abstractmethod
