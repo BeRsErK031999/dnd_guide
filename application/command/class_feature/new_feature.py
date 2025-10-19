@@ -26,11 +26,13 @@ class NewClassFeatureCommand(BaseCommand):
         name = ClassFeatureName(row_name)
         level = ClassFeatureLevel(row_level)
         description = ClassFeatureDescription(row_description)
-        if self.__feature_repository.is_feature_name_of_class_exist(class_id, name):
+        if self.__feature_repository.is_class_feature_name_of_class_exist(
+            class_id, name
+        ):
             raise DomainError.idempotent(
                 f"для класса уже существует умение с названием {name}"
             )
         feature = ClassFeature(
             self.__feature_repository.next_id(), class_id, name, level, description
         )
-        self.__feature_repository.feature_create(feature)
+        self.__feature_repository.class_feature_create(feature)

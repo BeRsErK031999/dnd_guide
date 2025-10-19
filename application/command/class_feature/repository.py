@@ -14,29 +14,29 @@ class ClassFeatureRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def is_feature_of_id_exist(self, feature_id: ClassFeatureID) -> bool:
+    def is_class_feature_of_id_exist(self, feature_id: ClassFeatureID) -> bool:
         raise NotImplementedError()
 
     @abstractmethod
-    def is_feature_of_class_exist(
+    def is_class_feature_of_class_exist(
         self, class_id: ClassID, feature_id: ClassFeatureID
     ) -> bool:
         raise NotImplementedError()
 
     @abstractmethod
-    def is_feature_name_of_class_exist(
+    def is_class_feature_name_of_class_exist(
         self, class_id: ClassID, feature_name: ClassFeatureName
     ) -> bool:
         raise NotImplementedError()
 
     @abstractmethod
-    def get_feature_of_id(self, feature_id: ClassFeatureID) -> ClassFeature:
+    def get_class_feature_of_id(self, feature_id: ClassFeatureID) -> ClassFeature:
         raise NotImplementedError()
 
     @abstractmethod
-    def feature_create(self, feature: ClassFeature) -> None:
+    def class_feature_create(self, feature: ClassFeature) -> None:
         raise NotImplementedError()
 
     @abstractmethod
-    def feature_update(self, feature: ClassFeature) -> None:
+    def class_feature_update(self, feature: ClassFeature) -> None:
         raise NotImplementedError()

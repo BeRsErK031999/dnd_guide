@@ -31,13 +31,13 @@ class UpdateClassFeatureCommand(BaseCommand):
             if row_description is not None
             else None
         )
-        if not self.__feature_repository.is_feature_of_id_exist(feature_id):
+        if not self.__feature_repository.is_class_feature_of_id_exist(feature_id):
             raise DomainError.not_found(f"умения с id {feature_id} не существует")
-        feature = self.__feature_repository.get_feature_of_id(feature_id)
+        feature = self.__feature_repository.get_class_feature_of_id(feature_id)
         if name is not None:
             feature.new_name(name)
         if level is not None:
             feature.new_level(level)
         if description is not None:
             feature.new_description(description)
-        self.__feature_repository.feature_update(feature)
+        self.__feature_repository.class_feature_update(feature)
