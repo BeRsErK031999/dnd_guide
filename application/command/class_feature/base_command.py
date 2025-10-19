@@ -1,8 +1,7 @@
 from abc import ABC
 
-from application.command.class_feature.repository import ClassFeatureRepository
-from application.command.user import UserRepository
-from domain.error import AppError
+from app_error import AppError
+from application.repositories import ClassFeatureRepository, UserRepository
 from domain.user.user_id import UserID
 
 

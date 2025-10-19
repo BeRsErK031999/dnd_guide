@@ -1,9 +1,7 @@
 from uuid import UUID, uuid4
 
 from app_error import AppError
-from application.command.class_feature import (
-    ClassFeatureRepository as CommandClassFeatureRepository,
-)
+from application.repositories import ClassFeatureRepository
 from domain.character_class import ClassID
 from domain.character_class_feature import (
     ClassFeature,
@@ -12,7 +10,7 @@ from domain.character_class_feature import (
 )
 
 
-class InMemoryClassFeatureRepository(CommandClassFeatureRepository):
+class InMemoryClassFeatureRepository(ClassFeatureRepository):
     def __init__(self) -> None:
         self.__class_feature_store: dict[UUID, ClassFeature] = dict()
 

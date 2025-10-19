@@ -1,6 +1,5 @@
-from application.command.user.repository import UserRepository
+from application.repositories import UserRepository
 from domain.user import UserID
-from domain.user.user import User
 
 
 class RemoveUserCommand:

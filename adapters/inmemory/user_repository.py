@@ -1,11 +1,11 @@
 from uuid import UUID
 
 from app_error import AppError
-from application.command.user import UserRepository as CommandUserRepository
+from application.repositories import UserRepository
 from domain.user import User, UserID
 
 
-class InMemoryUserRepository(CommandUserRepository):
+class InMemoryUserRepository(UserRepository):
     def __init__(self) -> None:
         self.__user_store: dict[UUID, User] = dict()
 

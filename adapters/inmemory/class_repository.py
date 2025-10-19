@@ -1,13 +1,11 @@
 from uuid import UUID, uuid4
 
 from app_error import AppError
-from application.command.character_class import (
-    ClassRepository as CommandClassRepository,
-)
+from application.repositories import ClassRepository
 from domain.character_class import CharacterClass, ClassID, ClassName
 
 
-class InMemoryClassRepository(CommandClassRepository):
+class InMemoryClassRepository(ClassRepository):
     def __init__(self) -> None:
         self.__class_store: dict[UUID, CharacterClass] = dict()
 
