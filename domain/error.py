@@ -26,6 +26,8 @@ class DomainError(Exception):
 
     @classmethod
     def access(cls, msg: str):
+        if len(msg) == 0:
+            msg = "у вас недостаточно прав для совершения операции"
         return cls(status=DomainErrorStatus.ACCESS, msg=msg)
 
     @classmethod
