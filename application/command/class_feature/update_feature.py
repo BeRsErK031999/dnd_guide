@@ -1,12 +1,14 @@
 from uuid import UUID
 
 from application.command.class_feature.base_command import BaseCommand
-from domain.character_class_feature.description import ClassFeatureDescription
-from domain.character_class_feature.feature_id import ClassFeatureID
-from domain.character_class_feature.level import ClassFeatureLevel
-from domain.character_class_feature.name import ClassFeatureName
+from domain.character_class_feature import (
+    ClassFeatureDescription,
+    ClassFeatureID,
+    ClassFeatureLevel,
+    ClassFeatureName,
+)
 from domain.error import DomainError
-from domain.user.user_id import UserID
+from domain.user import UserID
 
 
 class UpdateClassFeatureCommand(BaseCommand):

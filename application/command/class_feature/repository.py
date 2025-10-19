@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 
-from domain.character_class.class_id import ClassID
-from domain.character_class_feature.feature import ClassFeature
-from domain.character_class_feature.feature_id import ClassFeatureID
-from domain.character_class_feature.name import ClassFeatureName
+from domain.character_class import ClassID
+from domain.character_class_feature import (
+    ClassFeature,
+    ClassFeatureID,
+    ClassFeatureName,
+)
 
 
 class ClassFeatureRepository(ABC):
