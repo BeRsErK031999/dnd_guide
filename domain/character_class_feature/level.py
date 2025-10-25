@@ -1,10 +1,10 @@
-from app_error import AppError
+from domain.error import DomainError
 
 
 class ClassFeatureLevel:
     def __init__(self, level: int) -> None:
         if level < 1 | level > 20:
-            raise AppError.invalid_data(
+            raise DomainError.invalid_data(
                 "уровень умения должен находиться в диапазоне от 1 до 20"
             )
         self.__level = level

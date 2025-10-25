@@ -1,5 +1,5 @@
 from domain.tool_type import ToolType
-from domain.weapon_type import WeaponType
+from domain.weapon_kind.weapon_type import WeaponType
 
 
 class ClassStartingEquipment:

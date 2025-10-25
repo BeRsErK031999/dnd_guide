@@ -2,7 +2,7 @@ from domain.armor_type import ArmorType
 from domain.character_class.skill import ClassSkill
 from domain.modifier import Modifier
 from domain.tool_type import ToolType
-from domain.weapon_type import WeaponType
+from domain.weapon_kind.weapon_type import WeaponType
 
 
 class ClassProficiency:

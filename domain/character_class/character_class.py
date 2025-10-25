@@ -8,7 +8,7 @@ from domain.character_class.skill import ClassSkill
 from domain.dice import Dice
 from domain.modifier import Modifier
 from domain.tool_type import ToolType
-from domain.weapon_type import WeaponType
+from domain.weapon_kind.weapon_type import WeaponType
 
 
 class CharacterClass:
