@@ -64,4 +64,6 @@ class WeaponKind:
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
             return self.__weapon_kind_id == value.__weapon_kind_id
+        if isinstance(value, UUID):
+            return self.__weapon_kind_id == value
         raise NotImplemented

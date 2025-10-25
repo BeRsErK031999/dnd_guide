@@ -134,3 +134,13 @@ class Armor:
             raise DomainError.invalid_data(
                 "модификатор силы для доспехов должен находиться в диапазоне от 1 до 20"
             )
+
+    def __str__(self) -> str:
+        return self.__name
+
+    def __eq__(self, value: object) -> bool:
+        if isinstance(value, self.__class__):
+            return self.__armor_id == value.__armor_id
+        if isinstance(value, UUID):
+            return self.__armor_id == value
+        raise NotImplemented

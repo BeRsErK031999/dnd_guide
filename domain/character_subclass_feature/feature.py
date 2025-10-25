@@ -80,4 +80,6 @@ class SubclassFeature:
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
             return self.__feature_id == value.__feature_id
+        if isinstance(value, UUID):
+            return self.__feature_id == value
         raise NotImplemented

@@ -107,4 +107,6 @@ class Tool:
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
             return self.__tool_id == value.__tool_id
+        if isinstance(value, UUID):
+            return self.__tool_id == value
         raise NotImplemented
