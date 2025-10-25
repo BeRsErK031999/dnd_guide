@@ -112,3 +112,11 @@ class Weapon:
             return
         if len(properties) != len(set(properties)):
             raise DomainError.invalid_data("свойства содержат дубликаты")
+
+    def __str__(self) -> str:
+        return self.__name
+
+    def __eq__(self, value: object) -> bool:
+        if isinstance(value, self.__class__):
+            return self.__weapon_id == value.__weapon_id
+        raise NotImplemented
