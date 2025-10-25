@@ -1,12 +1,12 @@
 from uuid import UUID
 
-from domain.creature_race.age import CreatureAge
-from domain.creature_race.increase_modifier import CreatureIncreaseModifier
-from domain.creature_race.speed import CreatureSpeed
 from domain.error import DomainError
+from domain.race.age import RaceAge
+from domain.race.increase_modifier import RaceIncreaseModifier
+from domain.race.speed import RaceSpeed
 
 
-class CreatureRace:
+class Race:
     def __init__(
         self,
         race_id: UUID,
@@ -14,9 +14,9 @@ class CreatureRace:
         description: str,
         type_id: UUID,
         size_id: UUID,
-        speed: CreatureSpeed,
-        age: CreatureAge,
-        increase_modifier: CreatureIncreaseModifier,
+        speed: RaceSpeed,
+        age: RaceAge,
+        increase_modifier: RaceIncreaseModifier,
     ) -> None:
         self.__validate_name(name)
         self.__validate_description(description)
@@ -44,13 +44,13 @@ class CreatureRace:
     def size_id(self) -> UUID:
         return self.__size_id
 
-    def speed(self) -> CreatureSpeed:
+    def speed(self) -> RaceSpeed:
         return self.__speed
 
-    def age(self) -> CreatureAge:
+    def age(self) -> RaceAge:
         return self.__age
 
-    def increase_modifier(self) -> CreatureIncreaseModifier:
+    def increase_modifier(self) -> RaceIncreaseModifier:
         return self.__increase_modifier
 
     def new_name(self, name: str) -> None:
@@ -77,23 +77,21 @@ class CreatureRace:
             )
         self.__size_id = size_id
 
-    def new_speed(self, speed: CreatureSpeed) -> None:
+    def new_speed(self, speed: RaceSpeed) -> None:
         if self.__speed == speed:
             raise DomainError.idempotent(
                 "текущий скорость расы равен новому скорости расы"
             )
         self.__speed = speed
 
-    def new_age(self, age: CreatureAge) -> None:
+    def new_age(self, age: RaceAge) -> None:
         if self.__age == age:
             raise DomainError.idempotent(
                 "текущий возраст расы равен новому возрасту расы"
             )
         self.__age = age
 
-    def new_increase_modifier(
-        self, increase_modifier: CreatureIncreaseModifier
-    ) -> None:
+    def new_increase_modifier(self, increase_modifier: RaceIncreaseModifier) -> None:
         if self.__increase_modifier == increase_modifier:
             raise DomainError.idempotent(
                 "текущее увеличение характеристик расы равно новому увеличению характеристик расы"

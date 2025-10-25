@@ -1,15 +1,14 @@
 from domain.error import DomainError
-from domain.length import Length
 
 
-class CreatureSpeed:
-    def __init__(self, base_speed: Length, description: str) -> None:
+class RaceAge:
+    def __init__(self, max_age: int, description: str) -> None:
         self.__validate_description(description)
-        self.__base_speed = base_speed
+        self.__max_age = max_age
         self.__description = description
 
-    def base_speed(self) -> Length:
-        return self.__base_speed
+    def max_age(self) -> int:
+        return self.__max_age
 
     def description(self) -> str:
         return self.__description
@@ -17,13 +16,13 @@ class CreatureSpeed:
     def __validate_description(self, description: str) -> None:
         if len(description) == 0:
             raise DomainError.invalid_data(
-                "описание скорости существа не может быть пустым"
+                "описание возраста расы не может быть пустым"
             )
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
             return (
-                self.__base_speed == value.__base_speed
+                self.__max_age == value.__max_age
                 and self.__description == value.__description
             )
         raise NotImplemented

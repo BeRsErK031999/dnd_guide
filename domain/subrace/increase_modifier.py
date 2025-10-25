@@ -2,11 +2,11 @@ from domain.error import DomainError
 from domain.modifier import Modifier
 
 
-class CreatureIncreaseModifier:
+class SubraceIncreaseModifier:
     def __init__(self, modifier: Modifier, bonus: int) -> None:
         if bonus < 1 or bonus > 5:
             raise DomainError.invalid_data(
-                "бонус модификатора для расы должен находиться в диапазоне от 1 до 5"
+                "бонус модификатора для подрасы должен находиться в диапазоне от 1 до 5"
             )
         self.__modifier = modifier
         self.__bonus = bonus
