@@ -30,3 +30,8 @@ class Length:
         if isinstance(value, self.__class__):
             return self.__count == value.__count
         raise NotImplemented
+
+    def __lt__(self, value: object) -> bool:
+        if isinstance(value, self.__class__):
+            return self.__count < value.__count
+        raise NotImplemented

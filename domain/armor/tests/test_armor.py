@@ -74,6 +74,8 @@ def test_ok_create(
         if should_error:
             return
         raise e
+    if should_error:
+        pytest.fail("не было вызвано исключение")
 
 
 @pytest.mark.parametrize(
@@ -92,6 +94,8 @@ def test_change_armor_type(armor, armor_type, should_error):
         if should_error:
             return
         raise e
+    if should_error:
+        pytest.fail("не было вызвано исключение")
 
 
 @pytest.mark.parametrize(
@@ -109,12 +113,14 @@ def test_change_name(armor, name, should_error):
         if should_error:
             return
         raise e
+    if should_error:
+        pytest.fail("не было вызвано исключение")
 
 
 @pytest.mark.parametrize(
     "description, should_error",
     [
-        ["description", True],
+        ["description", False],
         ["new_description", False],
         ["", True],
     ],
@@ -126,6 +132,8 @@ def test_change_description(armor, description, should_error):
         if should_error:
             return
         raise e
+    if should_error:
+        pytest.fail("не было вызвано исключение")
 
 
 @pytest.mark.parametrize(
@@ -143,6 +151,8 @@ def test_change_armor_class(armor, armor_class_with_modifier, should_error):
         if should_error:
             return
         raise e
+    if should_error:
+        pytest.fail("не было вызвано исключение")
 
 
 @pytest.mark.parametrize(
@@ -161,3 +171,5 @@ def test_change_strength(armor, strength, should_error):
         if should_error:
             return
         raise e
+    if should_error:
+        pytest.fail("не было вызвано исключение")
