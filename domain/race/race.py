@@ -1,7 +1,9 @@
+from typing import Sequence
 from uuid import UUID
 
 from domain.error import DomainError
 from domain.race.age import RaceAge
+from domain.race.feature import RaceFeature
 from domain.race.increase_modifier import RaceIncreaseModifier
 from domain.race.speed import RaceSpeed
 
@@ -17,9 +19,11 @@ class Race:
         speed: RaceSpeed,
         age: RaceAge,
         increase_modifier: RaceIncreaseModifier,
+        features: Sequence[RaceFeature],
     ) -> None:
         self.__validate_name(name)
         self.__validate_description(description)
+        self.__validate_features(features)
         self.__race_id = race_id
         self.__name = name
         self.__description = description
@@ -28,6 +32,7 @@ class Race:
         self.__speed = speed
         self.__age = age
         self.__increase_modifier = increase_modifier
+        self.__features = list(features)
 
     def race_id(self) -> UUID:
         return self.__race_id
@@ -52,6 +57,9 @@ class Race:
 
     def increase_modifier(self) -> RaceIncreaseModifier:
         return self.__increase_modifier
+
+    def features(self) -> list[RaceFeature]:
+        return self.__features
 
     def new_name(self, name: str) -> None:
         if self.__name == name:
@@ -98,6 +106,10 @@ class Race:
             )
         self.__increase_modifier = increase_modifier
 
+    def new_features(self, features: Sequence[RaceFeature]) -> None:
+        self.__validate_features(features)
+        self.__features = list(features)
+
     def __validate_name(self, name: str) -> None:
         if len(name) == 0:
             raise DomainError.invalid_data("название расы не может быть пустым")
@@ -109,6 +121,13 @@ class Race:
     def __validate_description(self, description: str) -> None:
         if len(description) == 0:
             raise DomainError.invalid_data("описание расы не может быть пустым")
+
+    def __validate_features(self, features: Sequence[RaceFeature]) -> None:
+        if len(features) == 0:
+            return
+        temp = [feature.name() for feature in features]
+        if len(temp) != len(set(temp)):
+            raise DomainError.invalid_data("умения расы содержат дубликаты")
 
     def __str__(self) -> str:
         return self.__name

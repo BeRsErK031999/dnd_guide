@@ -1,6 +1,8 @@
+from typing import Sequence
 from uuid import UUID
 
 from domain.error import DomainError
+from domain.subrace.feature import SubraceFeature
 from domain.subrace.increase_modifier import SubraceIncreaseModifier
 
 
@@ -12,14 +14,17 @@ class Subrace:
         name: str,
         description: str,
         increase_modifier: SubraceIncreaseModifier,
+        features: Sequence[SubraceFeature],
     ) -> None:
         self.__validate_name(name)
         self.__validate_description(description)
+        self.__validate_features(features)
         self.__subrace_id = subrace_id
         self.__race_id = race_id
         self.__name = name
         self.__description = description
         self.__increase_modifier = increase_modifier
+        self.__features = list(features)
 
     def subrace_id(self) -> UUID:
         return self.__subrace_id
@@ -35,6 +40,9 @@ class Subrace:
 
     def increase_modifier(self) -> SubraceIncreaseModifier:
         return self.__increase_modifier
+
+    def features(self) -> list[SubraceFeature]:
+        return self.__features
 
     def new_race_id(self, race_id: UUID) -> None:
         if self.__race_id == race_id:
@@ -60,6 +68,10 @@ class Subrace:
             )
         self.__increase_modifier = increase_modifier
 
+    def new_features(self, features: Sequence[SubraceFeature]) -> None:
+        self.__validate_features(features)
+        self.__features = list(features)
+
     def __validate_name(self, name: str) -> None:
         if len(name) == 0:
             raise DomainError.invalid_data("название подрасы не может быть пустым")
@@ -71,6 +83,13 @@ class Subrace:
     def __validate_description(self, description: str) -> None:
         if len(description) == 0:
             raise DomainError.invalid_data("описание подрасы не может быть пустым")
+
+    def __validate_features(self, features: Sequence[SubraceFeature]) -> None:
+        if len(features) == 0:
+            return
+        temp = [feature.name() for feature in features]
+        if len(temp) != len(set(temp)):
+            raise DomainError.invalid_data("умения подрасы содержат дубликаты")
 
     def __str__(self) -> str:
         return self.__name
