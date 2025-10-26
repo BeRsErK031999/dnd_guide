@@ -1,21 +1,28 @@
-from domain.armor_type import ArmorType
-from domain.character_class.skill import ClassSkill
+from typing import Sequence
+from uuid import UUID
+
+from domain.armor.armor_type import ArmorType
+from domain.error import DomainError
 from domain.modifier import Modifier
-from domain.tool_type import ToolType
-from domain.weapon_kind.weapon_type import WeaponType
+from domain.skill import Skill
 
 
-class ClassProficiency:
+class ClassProficiencies:
     def __init__(
         self,
         armors: list[ArmorType],
-        weapon: list[WeaponType],
-        tools: list[ToolType],
+        weapon: list[UUID],
+        tools: list[UUID],
         saving_throws: list[Modifier],
-        skills: list[ClassSkill],
+        skills: list[Skill],
         number_skills: int,
         number_tools: int = 1,
     ) -> None:
+        self.__validate_duplicate(armors, "типы доспехов содержат дубликаты")
+        self.__validate_duplicate(weapon, "оружия содержат дубликаты")
+        self.__validate_duplicate(tools, "инструменты содержат дубликаты")
+        self.__validate_duplicate(saving_throws, "спасброски содержат дубликаты")
+        self.__validate_duplicate(skills, "навыки содержат дубликаты")
         self.__armors = armors
         self.__weapon = weapon
         self.__tools = tools
@@ -30,10 +37,10 @@ class ClassProficiency:
     def armors(self) -> list[ArmorType]:
         return self.__armors
 
-    def weapon(self) -> list[WeaponType]:
+    def weapon(self) -> list[UUID]:
         return self.__weapon
 
-    def tools(self) -> list[ToolType]:
+    def tools(self) -> list[UUID]:
         return self.__tools
 
     def number_tools(self) -> int:
@@ -42,16 +49,14 @@ class ClassProficiency:
     def saving_throws(self) -> list[Modifier]:
         return self.__saving_throws
 
-    def skills(self) -> list[ClassSkill]:
+    def skills(self) -> list[Skill]:
         return self.__skills
 
     def number_skills(self) -> int:
         return self.__number_skills
 
-    def __str__(self) -> str:
-        return (
-            f"доспехи: {self.__armors}\nоружие: {self.__weapon}\n"
-            f"количество инструментов: {self.__number_tools}\nинструменты: {self.__tools}\n"
-            f"спасброски: {self.__saving_throws}\n"
-            f"количество навыков: {self.__number_skills}\nнавыки: {self.__skills}"
-        )
+    def __validate_duplicate(self, seq: Sequence, msg: str) -> None:
+        if len(seq) == 0:
+            return
+        if len(seq) != len(set(seq)):
+            raise DomainError.invalid_data(msg)

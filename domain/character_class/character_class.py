@@ -1,399 +1,99 @@
-from domain.armor_type import ArmorType
-from domain.character_class.class_id import ClassID
-from domain.character_class.description import ClassDescription
-from domain.character_class.hit import ClassHit
+from typing import Sequence
+from uuid import UUID
+
+from domain.character_class.hit import ClassHits
 from domain.character_class.name import ClassName
-from domain.character_class.proficiency import ClassProficiency
-from domain.character_class.skill import ClassSkill
-from domain.dice import Dice
+from domain.character_class.proficiency import ClassProficiencies
+from domain.error import DomainError
 from domain.modifier import Modifier
-from domain.tool_type import ToolType
-from domain.weapon_kind.weapon_type import WeaponType
 
 
 class CharacterClass:
     def __init__(
         self,
-        class_id: ClassID,
+        class_id: UUID,
         name: ClassName,
-        description: ClassDescription,
+        description: str,
+        primary_modifiers: Sequence[Modifier],
+        hits: ClassHits,
+        proficiencies: ClassProficiencies,
     ) -> None:
+        self.__validate_description(description)
+        self.__validate_primary_modifiers(primary_modifiers)
         self.__class_id = class_id
         self.__name = name
         self.__description = description
-        match name:
-            case ClassName.BARD:
-                self.__init_bard()
-            case ClassName.BARBARIAN:
-                self.__init_barbarian()
-            case ClassName.FIGHTER:
-                self.__init_fighter()
-            case ClassName.WIZARD:
-                self.__init_wizard()
-            case ClassName.DRUID:
-                self.__init_druid()
-            case ClassName.CLERIC:
-                self.__init_cleric()
-            case ClassName.WARLOCK:
-                self.__init_warlock()
-            case ClassName.MONK:
-                self.__init_monk()
-            case ClassName.PALADIN:
-                self.__init_paladin()
-            case ClassName.ROGUE:
-                self.__init_rogue()
-            case ClassName.RANGER:
-                self.__init_ranger()
-            case ClassName.SORCERER:
-                self.__init_sorcerer()
+        self.__primary_modifiers = list(primary_modifiers)
+        self.__hits = hits
+        self.__proficiencies = proficiencies
 
-    def __init_bard(self) -> None:
-        self.__primary_modifier = [Modifier.CHARISMA]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D8,
-            starting_hits=8,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=5,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[ArmorType.LIGHT_ARMOR],
-            weapon=[WeaponType.SIMPLE],
-            tools=[ToolType.MUSICAL_INSTRUMENTS],
-            number_tools=3,
-            saving_throws=[Modifier.CHARISMA, Modifier.DEXTERITY],
-            skills=[
-                ClassSkill.ACROBATICS,
-                ClassSkill.ATHLETICS,
-                ClassSkill.PERCEPTION,
-                ClassSkill.SURVIVAL,
-                ClassSkill.ANIMAL_HANDLING,
-                ClassSkill.INTIMIDATION,
-                ClassSkill.PERFORMANCE,
-                ClassSkill.HISTORY,
-                ClassSkill.SLEIGHT_OF_HAND,
-                ClassSkill.ARCANA,
-                ClassSkill.MEDICINE,
-                ClassSkill.DECEPTION,
-                ClassSkill.NATURE,
-                ClassSkill.INSIGHT,
-                ClassSkill.INVESTIGATION,
-                ClassSkill.RELIGION,
-                ClassSkill.STEALTH,
-                ClassSkill.PERSUASION,
-            ],
-            number_skills=3,
-        )
-
-    def __init_barbarian(self) -> None:
-        self.__primary_modifier = [Modifier.STRENGTH]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D12,
-            starting_hits=12,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=7,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[ArmorType.LIGHT_ARMOR, ArmorType.MEDIUM_ARMOR, ArmorType.SHIELD],
-            weapon=[WeaponType.SIMPLE, WeaponType.MARTIAL],
-            tools=[],
-            saving_throws=[Modifier.STRENGTH, Modifier.CONSTITUTION],
-            skills=[
-                ClassSkill.ANIMAL_HANDLING,
-                ClassSkill.ATHLETICS,
-                ClassSkill.INTIMIDATION,
-                ClassSkill.NATURE,
-                ClassSkill.PERCEPTION,
-                ClassSkill.SURVIVAL,
-            ],
-            number_skills=2,
-        )
-
-    def __init_fighter(self) -> None:
-        self.__primary_modifier = [Modifier.STRENGTH]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D10,
-            starting_hits=10,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=6,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[
-                ArmorType.LIGHT_ARMOR,
-                ArmorType.MEDIUM_ARMOR,
-                ArmorType.HEAVY_ARMOR,
-                ArmorType.SHIELD,
-            ],
-            weapon=[WeaponType.SIMPLE, WeaponType.MARTIAL],
-            tools=[],
-            saving_throws=[Modifier.STRENGTH, Modifier.CONSTITUTION],
-            skills=[
-                ClassSkill.ACROBATICS,
-                ClassSkill.ANIMAL_HANDLING,
-                ClassSkill.ATHLETICS,
-                ClassSkill.HISTORY,
-                ClassSkill.INSIGHT,
-                ClassSkill.INTIMIDATION,
-                ClassSkill.PERSUASION,
-                ClassSkill.PERCEPTION,
-                ClassSkill.SURVIVAL,
-            ],
-            number_skills=2,
-        )
-
-    def __init_wizard(self) -> None:
-        self.__primary_modifier = [Modifier.INTELLIGENT]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D6,
-            starting_hits=6,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=4,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[],
-            weapon=[WeaponType.SIMPLE],
-            tools=[],
-            saving_throws=[Modifier.INTELLIGENT, Modifier.WISDOM],
-            skills=[
-                ClassSkill.ARCANA,
-                ClassSkill.HISTORY,
-                ClassSkill.INSIGHT,
-                ClassSkill.INVESTIGATION,
-                ClassSkill.MEDICINE,
-                ClassSkill.NATURE,
-                ClassSkill.RELIGION,
-            ],
-            number_skills=2,
-        )
-
-    def __init_druid(self) -> None:
-        self.__primary_modifier = [Modifier.WISDOM]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D8,
-            starting_hits=8,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=5,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[ArmorType.LIGHT_ARMOR, ArmorType.MEDIUM_ARMOR, ArmorType.SHIELD],
-            weapon=[WeaponType.SIMPLE],
-            tools=[ToolType.HERBALISM_KIT],
-            saving_throws=[Modifier.INTELLIGENT, Modifier.WISDOM],
-            skills=[
-                ClassSkill.ANIMAL_HANDLING,
-                ClassSkill.ARCANA,
-                ClassSkill.INSIGHT,
-                ClassSkill.MEDICINE,
-                ClassSkill.NATURE,
-                ClassSkill.PERCEPTION,
-                ClassSkill.RELIGION,
-                ClassSkill.RELIGION,
-            ],
-            number_skills=2,
-        )
-
-    def __init_cleric(self) -> None:
-        self.__primary_modifier = [Modifier.WISDOM]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D8,
-            starting_hits=8,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=5,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[ArmorType.LIGHT_ARMOR, ArmorType.MEDIUM_ARMOR, ArmorType.SHIELD],
-            weapon=[WeaponType.SIMPLE],
-            tools=[],
-            saving_throws=[Modifier.CHARISMA, Modifier.WISDOM],
-            skills=[
-                ClassSkill.HISTORY,
-                ClassSkill.INSIGHT,
-                ClassSkill.MEDICINE,
-                ClassSkill.PERSUASION,
-                ClassSkill.RELIGION,
-            ],
-            number_skills=2,
-        )
-
-    def __init_warlock(self) -> None:
-        self.__primary_modifier = [Modifier.WISDOM]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D8,
-            starting_hits=8,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=5,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[ArmorType.LIGHT_ARMOR],
-            weapon=[WeaponType.SIMPLE],
-            tools=[],
-            saving_throws=[Modifier.CHARISMA, Modifier.WISDOM],
-            skills=[
-                ClassSkill.ARCANA,
-                ClassSkill.DECEPTION,
-                ClassSkill.HISTORY,
-                ClassSkill.INTIMIDATION,
-                ClassSkill.INVESTIGATION,
-                ClassSkill.NATURE,
-                ClassSkill.RELIGION,
-            ],
-            number_skills=2,
-        )
-
-    def __init_monk(self) -> None:
-        self.__primary_modifier = [Modifier.WISDOM, Modifier.DEXTERITY]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D8,
-            starting_hits=8,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=5,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[],
-            weapon=[WeaponType.SIMPLE, WeaponType.MARTIAL],
-            tools=[ToolType.ARTISANS_TOOLS, ToolType.MUSICAL_INSTRUMENTS],
-            saving_throws=[Modifier.STRENGTH, Modifier.DEXTERITY],
-            skills=[
-                ClassSkill.ACROBATICS,
-                ClassSkill.ATHLETICS,
-                ClassSkill.HISTORY,
-                ClassSkill.INSIGHT,
-                ClassSkill.RELIGION,
-                ClassSkill.STEALTH,
-            ],
-            number_skills=2,
-        )
-
-    def __init_paladin(self) -> None:
-        self.__primary_modifier = [Modifier.STRENGTH, Modifier.CHARISMA]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D10,
-            starting_hits=10,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=6,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[
-                ArmorType.LIGHT_ARMOR,
-                ArmorType.MEDIUM_ARMOR,
-                ArmorType.HEAVY_ARMOR,
-                ArmorType.SHIELD,
-            ],
-            weapon=[WeaponType.SIMPLE, WeaponType.MARTIAL],
-            tools=[],
-            saving_throws=[Modifier.CHARISMA, Modifier.WISDOM],
-            skills=[
-                ClassSkill.ATHLETICS,
-                ClassSkill.INSIGHT,
-                ClassSkill.INTIMIDATION,
-                ClassSkill.MEDICINE,
-                ClassSkill.PERSUASION,
-                ClassSkill.RELIGION,
-            ],
-            number_skills=2,
-        )
-
-    def __init_rogue(self) -> None:
-        self.__primary_modifier = [Modifier.DEXTERITY]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D8,
-            starting_hits=8,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=5,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[ArmorType.LIGHT_ARMOR],
-            weapon=[WeaponType.SIMPLE, WeaponType.MARTIAL],
-            tools=[ToolType.THIEVES_TOOLS],
-            saving_throws=[Modifier.INTELLIGENT, Modifier.DEXTERITY],
-            skills=[
-                ClassSkill.ACROBATICS,
-                ClassSkill.ATHLETICS,
-                ClassSkill.DECEPTION,
-                ClassSkill.INSIGHT,
-                ClassSkill.INTIMIDATION,
-                ClassSkill.INVESTIGATION,
-                ClassSkill.PERCEPTION,
-                ClassSkill.PERSUASION,
-                ClassSkill.SLEIGHT_OF_HAND,
-                ClassSkill.STEALTH,
-            ],
-            number_skills=4,
-        )
-
-    def __init_ranger(self) -> None:
-        self.__primary_modifier = [Modifier.DEXTERITY, Modifier.WISDOM]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D10,
-            starting_hits=10,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=6,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[
-                ArmorType.LIGHT_ARMOR,
-                ArmorType.MEDIUM_ARMOR,
-                ArmorType.SHIELD,
-            ],
-            weapon=[WeaponType.SIMPLE, WeaponType.MARTIAL],
-            tools=[],
-            saving_throws=[Modifier.STRENGTH, Modifier.DEXTERITY],
-            skills=[
-                ClassSkill.ANIMAL_HANDLING,
-                ClassSkill.ATHLETICS,
-                ClassSkill.INSIGHT,
-                ClassSkill.INVESTIGATION,
-                ClassSkill.NATURE,
-                ClassSkill.PERCEPTION,
-                ClassSkill.STEALTH,
-                ClassSkill.SURVIVAL,
-            ],
-            number_skills=3,
-        )
-
-    def __init_sorcerer(self) -> None:
-        self.__primary_modifier = [Modifier.CHARISMA]
-        self.__hits = ClassHit(
-            hit_dice=Dice.D6,
-            starting_hits=6,
-            hit_modifier=Modifier.CONSTITUTION,
-            next_level_hits=4,
-        )
-        self.__proficiency = ClassProficiency(
-            armors=[],
-            weapon=[WeaponType.SIMPLE],
-            tools=[],
-            saving_throws=[Modifier.CONSTITUTION, Modifier.CHARISMA],
-            skills=[
-                ClassSkill.ARCANA,
-                ClassSkill.DECEPTION,
-                ClassSkill.INSIGHT,
-                ClassSkill.INTIMIDATION,
-                ClassSkill.PERSUASION,
-                ClassSkill.RELIGION,
-            ],
-            number_skills=2,
-        )
-
-    def class_id(self) -> ClassID:
+    def class_id(self) -> UUID:
         return self.__class_id
 
     def name(self) -> ClassName:
         return self.__name
 
-    def description(self) -> ClassDescription:
+    def description(self) -> str:
         return self.__description
 
     def primary_modifier(self) -> list[Modifier]:
-        return self.__primary_modifier
+        return self.__primary_modifiers
 
-    def hits(self) -> ClassHit:
+    def hits(self) -> ClassHits:
         return self.__hits
 
-    def proficiency(self) -> ClassProficiency:
-        return self.__proficiency
+    def proficiency(self) -> ClassProficiencies:
+        return self.__proficiencies
 
-    def new_description(self, description: ClassDescription) -> None:
+    def new_name(self, name: ClassName) -> None:
+        if self.__name == name:
+            raise DomainError.idempotent(
+                "текущее название класса равно новому названию класса"
+            )
+        self.__name = name
+
+    def new_description(self, description: str) -> None:
+        self.__validate_description(description)
         self.__description = description
 
+    def new_primary_modifiers(self, primary_modifiers: Sequence[Modifier]) -> None:
+        if set(self.__primary_modifiers) == set(primary_modifiers):
+            raise DomainError.idempotent(
+                "текущий список главных модификаторов равен списку новых главных модификаторов"
+            )
+        self.__validate_primary_modifiers(primary_modifiers)
+        self.__primary_modifiers = list(primary_modifiers)
+
+    def new_hits(self, hits: ClassHits) -> None:
+        if self.__hits == hits:
+            raise DomainError.idempotent("текущие хиты равны новым хитам")
+        self.__hits = hits
+
+    def new_proficiencies(self, proficiencies: ClassProficiencies) -> None:
+        if self.__proficiencies == proficiencies:
+            raise DomainError.idempotent("текущее владение равно новому владению")
+        self.__proficiencies = proficiencies
+
+    def __validate_description(self, description: str) -> None:
+        if len(description) == 0:
+            raise DomainError.invalid_data("описание класса не может быть пустым")
+
+    def __validate_primary_modifiers(self, modifiers: Sequence[Modifier]) -> None:
+        if len(modifiers) < 1:
+            raise DomainError.invalid_data(
+                "количество главных модификаторов класса не может быть меньше 1"
+            )
+        if len(modifiers) != len(set(modifiers)):
+            raise DomainError.invalid_data(
+                "список главных модификаторов класса содержит дубликаты"
+            )
+
     def __str__(self) -> str:
-        return f"название: {self.__name}"
+        return self.__name
+
+    def __eq__(self, value: object) -> bool:
+        if isinstance(value, self.__class__):
+            return self.__class_id == value.__class_id
+        if isinstance(value, UUID):
+            return self.__class_id == value
+        raise NotImplemented

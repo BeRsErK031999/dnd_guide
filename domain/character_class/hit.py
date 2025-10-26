@@ -1,8 +1,9 @@
 from domain.dice import Dice
+from domain.error import DomainError
 from domain.modifier import Modifier
 
 
-class ClassHit:
+class ClassHits:
     def __init__(
         self,
         hit_dice: Dice,
@@ -10,6 +11,14 @@ class ClassHit:
         hit_modifier: Modifier,
         next_level_hits: int,
     ) -> None:
+        if starting_hits < 1:
+            raise DomainError.invalid_data(
+                "количество начальных хитов не может быть меньше 1"
+            )
+        if next_level_hits < 1:
+            raise DomainError.invalid_data(
+                "количество хитов при увеличении уровня не может быть меньше 1"
+            )
         self.__dice = hit_dice
         self.__starting = starting_hits
         self.__modifier = hit_modifier
@@ -30,9 +39,12 @@ class ClassHit:
     def standard_next_level(self) -> int:
         return self.__next_level
 
-    def __str__(self) -> str:
-        return (
-            f"кость: {self.__dice}, начальные хиты: {self.__starting}, "
-            f"хиты на следующих уровнях {self.__dice} или {self.__next_level}, "
-            f"модификатор: {self.__modifier}"
-        )
+    def __eq__(self, value: object) -> bool:
+        if isinstance(value, self.__class__):
+            return (
+                self.__dice == value.__dice
+                and self.__starting == value.__starting
+                and self.__modifier == value.__modifier
+                and self.__next_level == value.__next_level
+            )
+        raise NotImplemented

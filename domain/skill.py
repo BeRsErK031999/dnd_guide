@@ -3,7 +3,7 @@ from enum import StrEnum
 from domain.modifier import Modifier
 
 
-class ClassSkill(StrEnum):
+class Skill(StrEnum):
     ACROBATICS = "акробатика"
     ATHLETICS = "атлетика"
     PERCEPTION = "внимание"
@@ -25,36 +25,34 @@ class ClassSkill(StrEnum):
 
     def modifier(self) -> Modifier:
         match self:
-            case ClassSkill.ATHLETICS:
+            case Skill.ATHLETICS:
                 return Modifier.STRENGTH
 
-            case (
-                ClassSkill.ACROBATICS | ClassSkill.SLEIGHT_OF_HAND | ClassSkill.STEALTH
-            ):
+            case Skill.ACROBATICS | Skill.SLEIGHT_OF_HAND | Skill.STEALTH:
                 return Modifier.DEXTERITY
 
             case (
-                ClassSkill.ARCANA
-                | ClassSkill.HISTORY
-                | ClassSkill.INVESTIGATION
-                | ClassSkill.NATURE
-                | ClassSkill.RELIGION
+                Skill.ARCANA
+                | Skill.HISTORY
+                | Skill.INVESTIGATION
+                | Skill.NATURE
+                | Skill.RELIGION
             ):
                 return Modifier.INTELLIGENT
 
             case (
-                ClassSkill.ANIMAL_HANDLING
-                | ClassSkill.INSIGHT
-                | ClassSkill.MEDICINE
-                | ClassSkill.PERCEPTION
-                | ClassSkill.SURVIVAL
+                Skill.ANIMAL_HANDLING
+                | Skill.INSIGHT
+                | Skill.MEDICINE
+                | Skill.PERCEPTION
+                | Skill.SURVIVAL
             ):
                 return Modifier.WISDOM
 
             case (
-                ClassSkill.DECEPTION
-                | ClassSkill.INTIMIDATION
-                | ClassSkill.PERFORMANCE
-                | ClassSkill.PERSUASION
+                Skill.DECEPTION
+                | Skill.INTIMIDATION
+                | Skill.PERFORMANCE
+                | Skill.PERSUASION
             ):
                 return Modifier.CHARISMA
