@@ -48,3 +48,13 @@ class Material:
     def __validate_description(self, description: str) -> None:
         if len(description) == 0:
             raise DomainError.invalid_data("описание материала не может быть пустым")
+
+    def __str__(self) -> str:
+        return self.__name
+
+    def __eq__(self, value: object) -> bool:
+        if isinstance(value, self.__class__):
+            return self.__material_id == value.__material_id
+        if isinstance(value, UUID):
+            return self.__material_id == value
+        raise NotImplemented

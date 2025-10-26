@@ -8,6 +8,7 @@
   "isort.args": ["--settings", "setup.cfg"],
   "cSpell.language": "en,ru",
   "cSpell.words": [
-    "спасброски"
+    "спасброски",
+    "спасбросков"
   ]
 }
