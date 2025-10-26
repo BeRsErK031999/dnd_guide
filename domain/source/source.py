@@ -8,8 +8,8 @@ class Source:
         self,
         source_id: UUID,
         name: str,
-        original_name: str,
         description: str,
+        original_name: str,
     ) -> None:
         self.__validate_description(description)
         self.__validate_name(name)
@@ -58,10 +58,6 @@ class Source:
             )
 
     def __validate_original_name(self, original_name: str) -> None:
-        if len(original_name) == 0:
-            raise DomainError.invalid_data(
-                "оригинальное название источника не может быть пустым"
-            )
         if len(original_name) > 50:
             raise DomainError.invalid_data(
                 "оригинальное название источника не может превышать длину в 50 символов"
