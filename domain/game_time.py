@@ -7,10 +7,8 @@ class GameTimeUnit(StrEnum):
     ACTION = "действие"
     BONUS_ACTION = "бонусное действие"
     REACTION = "реакция"
-    ROUND = "раунд"
     MINUTE = "минута"
     HOUR = "час"
-    DAY = "день"
 
 
 class GameTime:
