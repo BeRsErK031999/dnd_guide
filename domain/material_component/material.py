@@ -3,7 +3,7 @@ from uuid import UUID
 from domain.error import DomainError
 
 
-class Material:
+class MaterialComponent:
     def __init__(
         self,
         material_id: UUID,
