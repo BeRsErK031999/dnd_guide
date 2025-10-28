@@ -5,11 +5,11 @@ from domain.character_class.hit import ClassHits
 from domain.character_class.name import ClassName
 from domain.character_class.proficiency import ClassProficiencies
 from domain.error import DomainError
-from domain.mixin import EntityDescription
+from domain.mixin import EntityDescription, EntityNameInEnglish
 from domain.modifier import Modifier
 
 
-class CharacterClass(EntityDescription):
+class CharacterClass(EntityNameInEnglish, EntityDescription):
     def __init__(
         self,
         class_id: UUID,
@@ -18,9 +18,11 @@ class CharacterClass(EntityDescription):
         primary_modifiers: Sequence[Modifier],
         hits: ClassHits,
         proficiencies: ClassProficiencies,
+        name_in_english: str,
     ) -> None:
         self.__validate_primary_modifiers(primary_modifiers)
         EntityDescription.__init__(self, description)
+        EntityNameInEnglish.__init__(self, name_in_english)
         self.__class_id = class_id
         self.__name = name
         self.__primary_modifiers = list(primary_modifiers)
