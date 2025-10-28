@@ -4,10 +4,11 @@ from domain.armor.armor_class import ArmorClass
 from domain.armor.armor_type import ArmorType
 from domain.coin import Coins
 from domain.error import DomainError
+from domain.mixin import EntityDescription, EntityName
 from domain.weight import Weight
 
 
-class Armor:
+class Armor(EntityName, EntityDescription):
     def __init__(
         self,
         armor_id: UUID,
@@ -20,13 +21,11 @@ class Armor:
         weight: Weight,
         cost: Coins,
     ) -> None:
-        self.__validate_name(name)
-        self.__validate_description(description)
+        EntityName.__init__(self, name)
+        EntityDescription.__init__(self, description)
         self.__validate_strength(strength)
         self.__armor_id = armor_id
         self.__armor_type = armor_type
-        self.__name = name
-        self.__description = description
         self.__armor_class = armor_class
         self.__strength = strength
         self.__stealth = stealth
@@ -38,12 +37,6 @@ class Armor:
 
     def armor_type(self) -> ArmorType:
         return self.__armor_type
-
-    def name(self) -> str:
-        return self.__name
-
-    def description(self) -> str:
-        return self.__description
 
     def armor_class(self) -> ArmorClass:
         return self.__armor_class
@@ -66,18 +59,6 @@ class Armor:
                 "текущий тип доспеха равен новому типу доспеха"
             )
         self.__armor_type = armor_type
-
-    def new_name(self, name: str) -> None:
-        if self.__name == name:
-            raise DomainError.idempotent(
-                "текущее название доспеха равно новому названию доспеха"
-            )
-        self.__validate_name(name)
-        self.__name = name
-
-    def new_description(self, description: str) -> None:
-        self.__validate_description(description)
-        self.__description = description
 
     def new_armor_class(self, armor_class: ArmorClass) -> None:
         if self.__armor_class == armor_class:
@@ -114,18 +95,6 @@ class Armor:
                 "текущая стоимость доспеха равна новой стоимости доспеха"
             )
         self.__cost = cost
-
-    def __validate_name(self, name: str) -> None:
-        if len(name) == 0:
-            raise DomainError.invalid_data("название брони не может быть пустым")
-        if len(name) > 50:
-            raise DomainError.invalid_data(
-                "название брони не может превышать длину в 50 символов"
-            )
-
-    def __validate_description(self, description: str) -> None:
-        if len(description) == 0:
-            raise DomainError.invalid_data("описание брони не может быть пустым")
 
     def __validate_strength(self, strength: int | None) -> None:
         if strength is None:

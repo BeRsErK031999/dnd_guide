@@ -5,10 +5,11 @@ from domain.character_class.hit import ClassHits
 from domain.character_class.name import ClassName
 from domain.character_class.proficiency import ClassProficiencies
 from domain.error import DomainError
+from domain.mixin import EntityDescription
 from domain.modifier import Modifier
 
 
-class CharacterClass:
+class CharacterClass(EntityDescription):
     def __init__(
         self,
         class_id: UUID,
@@ -18,11 +19,10 @@ class CharacterClass:
         hits: ClassHits,
         proficiencies: ClassProficiencies,
     ) -> None:
-        self.__validate_description(description)
         self.__validate_primary_modifiers(primary_modifiers)
+        EntityDescription.__init__(self, description)
         self.__class_id = class_id
         self.__name = name
-        self.__description = description
         self.__primary_modifiers = list(primary_modifiers)
         self.__hits = hits
         self.__proficiencies = proficiencies
@@ -32,9 +32,6 @@ class CharacterClass:
 
     def name(self) -> ClassName:
         return self.__name
-
-    def description(self) -> str:
-        return self.__description
 
     def primary_modifier(self) -> list[Modifier]:
         return self.__primary_modifiers
@@ -51,10 +48,6 @@ class CharacterClass:
                 "текущее название класса равно новому названию класса"
             )
         self.__name = name
-
-    def new_description(self, description: str) -> None:
-        self.__validate_description(description)
-        self.__description = description
 
     def new_primary_modifiers(self, primary_modifiers: Sequence[Modifier]) -> None:
         if set(self.__primary_modifiers) == set(primary_modifiers):
@@ -73,10 +66,6 @@ class CharacterClass:
         if self.__proficiencies == proficiencies:
             raise DomainError.idempotent("текущее владение равно новому владению")
         self.__proficiencies = proficiencies
-
-    def __validate_description(self, description: str) -> None:
-        if len(description) == 0:
-            raise DomainError.invalid_data("описание класса не может быть пустым")
 
     def __validate_primary_modifiers(self, modifiers: Sequence[Modifier]) -> None:
         if len(modifiers) < 1:

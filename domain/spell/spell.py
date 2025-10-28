@@ -5,12 +5,13 @@ from domain.damage_type import DamageType
 from domain.error import DomainError
 from domain.game_time import GameTime
 from domain.length import Length
+from domain.mixin import EntityDescription, EntityName, EntityNameInEnglish
 from domain.modifier import Modifier
 from domain.spell.components import SpellComponents
 from domain.spell.school import SpellSchool
 
 
-class Spell:
+class Spell(EntityName, EntityNameInEnglish, EntityDescription):
     def __init__(
         self,
         spell_id: UUID,
@@ -31,9 +32,6 @@ class Spell:
         saving_throws: Sequence[Modifier],
         name_in_english: str,
     ) -> None:
-        self.__validate_name(name)
-        self.__validate_name_in_english(name_in_english)
-        self.__validate_description(description)
         self.__validate_class_ids(class_ids)
         self.__validate_level(level)
         self.__validate_duplicate_in_seq(
@@ -42,12 +40,12 @@ class Spell:
         self.__validate_duplicate_in_seq(
             saving_throws, "спасброски заклинания содержат дубликаты"
         )
+        EntityName.__init__(self, name)
+        EntityDescription.__init__(self, description)
+        EntityNameInEnglish.__init__(self, name_in_english)
         self.__spell_id = spell_id
         self.__class_ids = list(class_ids)
         self.__subclass_ids = list(subclass_ids)
-        self.__name = name
-        self.__name_in_english = name_in_english
-        self.__description = description
         self.__next_level_description = next_level_description
         self.__level = level
         self.__school = school
@@ -68,15 +66,6 @@ class Spell:
 
     def subclass_ids(self) -> list[UUID]:
         return self.__subclass_ids
-
-    def name(self) -> str:
-        return self.__name
-
-    def name_in_english(self) -> str:
-        return self.__name_in_english
-
-    def description(self) -> str:
-        return self.__description
 
     def next_level_description(self) -> str:
         return self.__next_level_description
@@ -128,24 +117,6 @@ class Spell:
             subclass_ids, "список подклассов содержит дубликаты"
         )
         self.__subclass_ids = subclass_ids
-
-    def new_name(self, name: str) -> None:
-        if self.__name == name:
-            raise DomainError.idempotent("текущее название равно новому названию")
-        self.__validate_name(name)
-        self.__name = name
-
-    def new_name_in_english(self, name_in_english: str) -> None:
-        if self.__name == name_in_english:
-            raise DomainError.idempotent(
-                "текущее название на английском равно новому названию на английском"
-            )
-        self.__validate_name_in_english(name_in_english)
-        self.__name = name_in_english
-
-    def new_description(self, description: str) -> None:
-        self.__validate_description(description)
-        self.__description = description
 
     def new_next_level_description(self, description: str) -> None:
         self.__next_level_description = description
@@ -222,24 +193,6 @@ class Spell:
             )
         if len(class_ids) != len(set(class_ids)):
             raise DomainError.invalid_data("список классов содержит дубликаты")
-
-    def __validate_name(self, name: str) -> None:
-        if len(name) == 0:
-            raise DomainError.invalid_data("название заклинания не может быть пустым")
-        if len(name) > 50:
-            raise DomainError.invalid_data(
-                "название заклинания не может превышать длину в 50 символов"
-            )
-
-    def __validate_name_in_english(self, name_in_english: str) -> None:
-        if len(name_in_english) > 50:
-            raise DomainError.invalid_data(
-                "название заклинания на английском не может превышать длину в 50 символов"
-            )
-
-    def __validate_description(self, description: str) -> None:
-        if len(description) == 0:
-            raise DomainError.invalid_data("описание заклинания не может быть пустым")
 
     def __validate_duplicate_in_seq(self, seq: Sequence, msg: str) -> None:
         if len(seq) != len(set(seq)):

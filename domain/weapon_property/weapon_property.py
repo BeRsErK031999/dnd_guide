@@ -3,10 +3,11 @@ from uuid import UUID
 from domain.dice import Dice
 from domain.error import DomainError
 from domain.length import Length
+from domain.mixin import EntityDescription
 from domain.weapon_property.name import WeaponPropertyName
 
 
-class WeaponProperty:
+class WeaponProperty(EntityDescription):
     def __init__(
         self,
         weapon_property_id: UUID,
@@ -16,11 +17,10 @@ class WeaponProperty:
         max_range: Length | None,
         second_hand_dice: Dice | None,
     ) -> None:
-        self.__validate_description(description)
         self.__validate_stats_by_name(name, base_range, max_range, second_hand_dice)
+        EntityDescription.__init__(self, description)
         self.__weapon_property_id = weapon_property_id
         self.__name = name
-        self.__description = description
         self.__base_range = base_range
         self.__max_range = max_range
         self.__second_hand_dice = second_hand_dice
@@ -30,9 +30,6 @@ class WeaponProperty:
 
     def name(self) -> WeaponPropertyName:
         return self.__name
-
-    def description(self) -> str:
-        return self.__description
 
     def base_range(self) -> Length | None:
         return self.__base_range
@@ -57,10 +54,6 @@ class WeaponProperty:
         self.__base_range = base_range
         self.__max_range = max_range
         self.__second_hand_dice = second_hand_dice
-
-    def new_description(self, description: str) -> None:
-        self.__validate_description(description)
-        self.__description = description
 
     def new_base_range(self, base_range: Length | None) -> None:
         if self.__name != WeaponPropertyName.AMMUNITION:
@@ -110,12 +103,6 @@ class WeaponProperty:
                 "текущая кость для второй руки ровна новой кости для второй руки"
             )
         self.__second_hand_dice = dice
-
-    def __validate_description(self, description: str) -> None:
-        if len(description) == 0:
-            raise DomainError.invalid_data(
-                "описание свойства оружия не может быть пустым"
-            )
 
     def __validate_stats_by_name(
         self,

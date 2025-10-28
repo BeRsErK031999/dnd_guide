@@ -2,13 +2,14 @@ from typing import Sequence
 from uuid import UUID
 
 from domain.error import DomainError
+from domain.mixin import EntityDescription, EntityName, EntityNameInEnglish
 from domain.race.age import RaceAge
 from domain.race.feature import RaceFeature
 from domain.race.increase_modifier import RaceIncreaseModifier
 from domain.race.speed import RaceSpeed
 
 
-class Race:
+class Race(EntityName, EntityDescription, EntityNameInEnglish):
     def __init__(
         self,
         race_id: UUID,
@@ -22,14 +23,11 @@ class Race:
         features: Sequence[RaceFeature],
         name_in_english: str,
     ) -> None:
-        self.__validate_name(name)
-        self.__validate_name_in_english(name_in_english)
-        self.__validate_description(description)
         self.__validate_features(features)
+        EntityName.__init__(self, name)
+        EntityNameInEnglish.__init__(self, name_in_english)
+        EntityDescription.__init__(self, description)
         self.__race_id = race_id
-        self.__name = name
-        self.__name_in_english = name_in_english
-        self.__description = description
         self.__type_id = type_id
         self.__size_id = size_id
         self.__speed = speed
@@ -39,15 +37,6 @@ class Race:
 
     def race_id(self) -> UUID:
         return self.__race_id
-
-    def name(self) -> str:
-        return self.__name
-
-    def name_in_english(self) -> str:
-        return self.__name_in_english
-
-    def description(self) -> str:
-        return self.__description
 
     def type_id(self) -> UUID:
         return self.__type_id
@@ -66,26 +55,6 @@ class Race:
 
     def features(self) -> list[RaceFeature]:
         return self.__features
-
-    def new_name(self, name: str) -> None:
-        if self.__name == name:
-            raise DomainError.idempotent(
-                "текущее название расы равно новому названию расы"
-            )
-        self.__validate_name(name)
-        self.__name = name
-
-    def new_name_in_english(self, name_in_english: str) -> None:
-        if self.__name_in_english == name_in_english:
-            raise DomainError.idempotent(
-                "текущее название расы на английском равно новому названию расы на английском"
-            )
-        self.__validate_name_in_english(name_in_english)
-        self.__name_in_english = name_in_english
-
-    def new_description(self, description: str) -> None:
-        self.__validate_description(description)
-        self.__description = description
 
     def new_type_id(self, type_id: UUID) -> None:
         if self.__type_id == type_id:
@@ -123,24 +92,6 @@ class Race:
     def new_features(self, features: Sequence[RaceFeature]) -> None:
         self.__validate_features(features)
         self.__features = list(features)
-
-    def __validate_name(self, name: str) -> None:
-        if len(name) == 0:
-            raise DomainError.invalid_data("название расы не может быть пустым")
-        if len(name) > 50:
-            raise DomainError.invalid_data(
-                "название расы не может превышать длину в 50 символов"
-            )
-
-    def __validate_name_in_english(self, name_in_english: str) -> None:
-        if len(name_in_english) > 50:
-            raise DomainError.invalid_data(
-                "название расы на английском не может превышать длину в 50 символов"
-            )
-
-    def __validate_description(self, description: str) -> None:
-        if len(description) == 0:
-            raise DomainError.invalid_data("описание расы не может быть пустым")
 
     def __validate_features(self, features: Sequence[RaceFeature]) -> None:
         if len(features) == 0:
