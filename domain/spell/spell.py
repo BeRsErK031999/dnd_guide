@@ -29,10 +29,10 @@ class Spell:
         concentration: bool,
         ritual: bool,
         saving_throws: Sequence[Modifier],
-        original_name: str,
+        name_in_english: str,
     ) -> None:
         self.__validate_name(name)
-        self.__validate_original_name(original_name)
+        self.__validate_name_in_english(name_in_english)
         self.__validate_description(description)
         self.__validate_class_ids(class_ids)
         self.__validate_level(level)
@@ -46,7 +46,7 @@ class Spell:
         self.__class_ids = list(class_ids)
         self.__subclass_ids = list(subclass_ids)
         self.__name = name
-        self.__original_name = original_name
+        self.__name_in_english = name_in_english
         self.__description = description
         self.__next_level_description = next_level_description
         self.__level = level
@@ -72,8 +72,8 @@ class Spell:
     def name(self) -> str:
         return self.__name
 
-    def original_name(self) -> str:
-        return self.__original_name
+    def name_in_english(self) -> str:
+        return self.__name_in_english
 
     def description(self) -> str:
         return self.__description
@@ -135,13 +135,13 @@ class Spell:
         self.__validate_name(name)
         self.__name = name
 
-    def new_original_name(self, original_name: str) -> None:
-        if self.__name == original_name:
+    def new_name_in_english(self, name_in_english: str) -> None:
+        if self.__name == name_in_english:
             raise DomainError.idempotent(
-                "текущее оригинальное название равно новому оригинальному названию"
+                "текущее название на английском равно новому названию на английском"
             )
-        self.__validate_original_name(original_name)
-        self.__name = original_name
+        self.__validate_name_in_english(name_in_english)
+        self.__name = name_in_english
 
     def new_description(self, description: str) -> None:
         self.__validate_description(description)
@@ -231,10 +231,10 @@ class Spell:
                 "название заклинания не может превышать длину в 50 символов"
             )
 
-    def __validate_original_name(self, original_name: str) -> None:
-        if len(original_name) > 50:
+    def __validate_name_in_english(self, name_in_english: str) -> None:
+        if len(name_in_english) > 50:
             raise DomainError.invalid_data(
-                "оригинальное название заклинания не может превышать длину в 50 символов"
+                "название заклинания на английском не может превышать длину в 50 символов"
             )
 
     def __validate_description(self, description: str) -> None:

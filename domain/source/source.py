@@ -9,14 +9,14 @@ class Source:
         source_id: UUID,
         name: str,
         description: str,
-        original_name: str,
+        name_in_english: str,
     ) -> None:
         self.__validate_description(description)
         self.__validate_name(name)
-        self.__validate_original_name(original_name)
+        self.__validate_name_in_english(name_in_english)
         self.__source_id = source_id
         self.__name = name
-        self.__original_name = original_name
+        self.__name_in_english = name_in_english
         self.__description = description
 
     def source_id(self) -> UUID:
@@ -25,8 +25,8 @@ class Source:
     def name(self) -> str:
         return self.__name
 
-    def original_name(self) -> str:
-        return self.__original_name
+    def name_in_english(self) -> str:
+        return self.__name_in_english
 
     def description(self) -> str:
         return self.__description
@@ -37,13 +37,13 @@ class Source:
         self.__validate_name(name)
         self.__name = name
 
-    def new_original_name(self, original_name: str) -> None:
-        if self.__original_name == original_name:
+    def new_name_in_english(self, name_in_english: str) -> None:
+        if self.__name_in_english == name_in_english:
             raise DomainError.idempotent(
-                "текущее оригинальное название равно новому оригинальному названию"
+                "текущее название на английском равно новому названию на английском"
             )
-        self.__validate_original_name(original_name)
-        self.__original_name = original_name
+        self.__validate_name_in_english(name_in_english)
+        self.__name_in_english = name_in_english
 
     def new_description(self, description: str) -> None:
         self.__validate_description(description)
@@ -57,10 +57,10 @@ class Source:
                 "название источника не может превышать длину в 50 символов"
             )
 
-    def __validate_original_name(self, original_name: str) -> None:
-        if len(original_name) > 50:
+    def __validate_name_in_english(self, name_in_english: str) -> None:
+        if len(name_in_english) > 50:
             raise DomainError.invalid_data(
-                "оригинальное название источника не может превышать длину в 50 символов"
+                "название источника на английском не может превышать длину в 50 символов"
             )
 
     def __validate_description(self, description: str) -> None:
