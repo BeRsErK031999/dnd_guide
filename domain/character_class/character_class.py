@@ -2,18 +2,17 @@ from typing import Sequence
 from uuid import UUID
 
 from domain.character_class.hit import ClassHits
-from domain.character_class.name import ClassName
 from domain.character_class.proficiency import ClassProficiencies
 from domain.error import DomainError
-from domain.mixin import EntityDescription, EntityNameInEnglish
+from domain.mixin import EntityDescription, EntityName, EntityNameInEnglish
 from domain.modifier import Modifier
 
 
-class CharacterClass(EntityNameInEnglish, EntityDescription):
+class CharacterClass(EntityName, EntityNameInEnglish, EntityDescription):
     def __init__(
         self,
         class_id: UUID,
-        name: ClassName,
+        name: str,
         description: str,
         primary_modifiers: Sequence[Modifier],
         hits: ClassHits,
@@ -23,17 +22,14 @@ class CharacterClass(EntityNameInEnglish, EntityDescription):
         self.__validate_primary_modifiers(primary_modifiers)
         EntityDescription.__init__(self, description)
         EntityNameInEnglish.__init__(self, name_in_english)
+        EntityName.__init__(self, name)
         self.__class_id = class_id
-        self.__name = name
         self.__primary_modifiers = list(primary_modifiers)
         self.__hits = hits
         self.__proficiencies = proficiencies
 
     def class_id(self) -> UUID:
         return self.__class_id
-
-    def name(self) -> ClassName:
-        return self.__name
 
     def primary_modifier(self) -> list[Modifier]:
         return self.__primary_modifiers
@@ -43,13 +39,6 @@ class CharacterClass(EntityNameInEnglish, EntityDescription):
 
     def proficiency(self) -> ClassProficiencies:
         return self.__proficiencies
-
-    def new_name(self, name: ClassName) -> None:
-        if self.__name == name:
-            raise DomainError.idempotent(
-                "текущее название класса равно новому названию класса"
-            )
-        self.__name = name
 
     def new_primary_modifiers(self, primary_modifiers: Sequence[Modifier]) -> None:
         if set(self.__primary_modifiers) == set(primary_modifiers):
