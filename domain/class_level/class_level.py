@@ -3,7 +3,7 @@ from uuid import UUID
 from domain.class_level.damage import ClassLevelBonusDamage
 from domain.class_level.dice import ClassLevelDice
 from domain.class_level.points import ClassLevelPoints
-from domain.class_level.spell_slots import SpellSlots
+from domain.class_level.spell_slots import ClassLevelSpellSlots
 from domain.error import DomainError
 from domain.length import Length
 
@@ -15,7 +15,7 @@ class ClassLevel:
         class_id: UUID,
         level: int,
         dice: ClassLevelDice | None,
-        spell_slots: SpellSlots | None,
+        spell_slots: ClassLevelSpellSlots | None,
         number_cantrips_know: int | None,
         number_spells_know: int | None,
         number_arcanums_know: int | None,
@@ -48,7 +48,7 @@ class ClassLevel:
     def dice(self) -> ClassLevelDice | None:
         return self.__dice
 
-    def spell_slots(self) -> SpellSlots | None:
+    def spell_slots(self) -> ClassLevelSpellSlots | None:
         return self.__spell_slots
 
     def number_cantrips_know(self) -> int | None:
@@ -87,7 +87,7 @@ class ClassLevel:
             )
         self.__dice = dice
 
-    def new_spell_slots(self, spell_slots: SpellSlots | None) -> None:
+    def new_spell_slots(self, spell_slots: ClassLevelSpellSlots | None) -> None:
         if self.__spell_slots == spell_slots:
             raise DomainError.idempotent("текущие ячейки заклинаний равны новым")
         self.__spell_slots = spell_slots

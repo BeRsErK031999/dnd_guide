@@ -3,7 +3,7 @@ from typing import Sequence
 from domain.error import DomainError
 
 
-class SpellSlots:
+class ClassLevelSpellSlots:
     def __init__(self, spell_slots: Sequence[int]) -> None:
         len_spells = len(spell_slots)
         if len_spells < 5 or len_spells > 9:
