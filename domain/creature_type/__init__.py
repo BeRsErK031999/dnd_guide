@@ -1,4 +1,5 @@
 from .creature_type import CreatureType
-from .name import CreatureTypeName
+from .repository import CreatureTypeRepository
+from .service import CreatureTypeService
 
-__all__ = ["CreatureType", "CreatureTypeName"]
+__all__ = ["CreatureType", "CreatureTypeRepository", "CreatureTypeService"]
