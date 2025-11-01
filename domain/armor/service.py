@@ -1,4 +1,4 @@
-from domain.armor.armor_repository import ArmorRepository
+from domain.armor.repository import ArmorRepository
 
 
 class ArmorService:

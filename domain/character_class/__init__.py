@@ -1,13 +1,15 @@
 from .character_class import CharacterClass
 from .hit import ClassHits
-from .name import ClassName
 from .proficiency import ClassProficiencies
+from .repository import ClassRepository
+from .service import ClassService
 from .starting_equipment import ClassStartingEquipment
 
 __all__ = [
     "CharacterClass",
     "ClassHits",
-    "ClassName",
     "ClassProficiencies",
+    "ClassRepository",
+    "ClassService",
     "ClassStartingEquipment",
 ]
