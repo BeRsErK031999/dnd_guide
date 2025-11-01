@@ -1,24 +1,14 @@
-from domain.error import DomainError
 from domain.length import Length
+from domain.mixin import ValueDescription
 
 
-class RaceSpeed:
+class RaceSpeed(ValueDescription):
     def __init__(self, base_speed: Length, description: str) -> None:
-        self.__validate_description(description)
+        ValueDescription.__init__(self, description)
         self.__base_speed = base_speed
-        self.__description = description
 
     def base_speed(self) -> Length:
         return self.__base_speed
-
-    def description(self) -> str:
-        return self.__description
-
-    def __validate_description(self, description: str) -> None:
-        if len(description) == 0:
-            raise DomainError.invalid_data(
-                "описание скорости расы не может быть пустым"
-            )
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):

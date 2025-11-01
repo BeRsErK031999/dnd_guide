@@ -1,23 +1,13 @@
-from domain.error import DomainError
+from domain.mixin import ValueDescription
 
 
-class RaceAge:
+class RaceAge(ValueDescription):
     def __init__(self, max_age: int, description: str) -> None:
-        self.__validate_description(description)
+        ValueDescription.__init__(self, description)
         self.__max_age = max_age
-        self.__description = description
 
     def max_age(self) -> int:
         return self.__max_age
-
-    def description(self) -> str:
-        return self.__description
-
-    def __validate_description(self, description: str) -> None:
-        if len(description) == 0:
-            raise DomainError.invalid_data(
-                "описание возраста расы не может быть пустым"
-            )
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
