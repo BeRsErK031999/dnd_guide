@@ -1,28 +1,16 @@
 from uuid import UUID
 
-from domain.creature_type.name import CreatureTypeName
-from domain.error import DomainError
-from domain.mixin import EntityDescription
+from domain.mixin import EntityDescription, EntityName
 
 
-class CreatureType(EntityDescription):
-    def __init__(self, type_id: UUID, name: CreatureTypeName, description: str) -> None:
+class CreatureType(EntityName, EntityDescription):
+    def __init__(self, type_id: UUID, name: str, description: str) -> None:
         EntityDescription.__init__(self, description)
+        EntityName.__init__(self, name)
         self.__creature_type_id = type_id
-        self.__name = name
 
     def creature_type_id(self) -> UUID:
         return self.__creature_type_id
-
-    def name(self) -> CreatureTypeName:
-        return self.__name
-
-    def new_name(self, name: CreatureTypeName) -> None:
-        if self.__name == name:
-            raise DomainError.idempotent(
-                "текущее название типа существа равно новому названию типа существа"
-            )
-        self.__name = name
 
     def __str__(self) -> str:
         return self.__name
