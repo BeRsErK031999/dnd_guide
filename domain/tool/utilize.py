@@ -1,7 +1,7 @@
 from domain.error import DomainError
 
 
-class Utilize:
+class ToolUtilize:
     def __init__(self, action: str, complexity: int) -> None:
         if len(action) == 0:
             raise DomainError.invalid_data("название действия не может быть пустым")

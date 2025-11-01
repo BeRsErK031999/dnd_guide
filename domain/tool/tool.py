@@ -5,7 +5,7 @@ from domain.coin import Coins
 from domain.error import DomainError
 from domain.mixin import EntityDescription, EntityName
 from domain.tool.tool_type import ToolType
-from domain.tool.utilize import Utilize
+from domain.tool.utilize import ToolUtilize
 from domain.weight import Weight
 
 
@@ -18,7 +18,7 @@ class Tool(EntityName, EntityDescription):
         description: str,
         cost: Coins,
         weight: Weight,
-        utilizes: Sequence[Utilize],
+        utilizes: Sequence[ToolUtilize],
     ) -> None:
         self.__validate_utilizes(utilizes)
         EntityName.__init__(self, name)
@@ -41,7 +41,7 @@ class Tool(EntityName, EntityDescription):
     def weight(self) -> Weight:
         return self.__weight
 
-    def utilizes(self) -> list[Utilize]:
+    def utilizes(self) -> list[ToolUtilize]:
         return self.__utilizes
 
     def new_tool_type(self, tool_type: ToolType) -> None:
@@ -59,11 +59,11 @@ class Tool(EntityName, EntityDescription):
             raise DomainError.idempotent("текущая масса инструментов ровна новой массе")
         self.__weight = weight
 
-    def new_utilizes(self, utilizes: Sequence[Utilize]) -> None:
+    def new_utilizes(self, utilizes: Sequence[ToolUtilize]) -> None:
         self.__validate_utilizes(utilizes)
         self.__utilizes = list(utilizes)
 
-    def __validate_utilizes(self, utilizes: Sequence[Utilize]) -> None:
+    def __validate_utilizes(self, utilizes: Sequence[ToolUtilize]) -> None:
         if len(utilizes) == 0:
             return
         temp = [utilize.action() for utilize in utilizes]
