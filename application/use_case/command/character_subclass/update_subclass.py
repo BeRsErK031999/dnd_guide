@@ -23,7 +23,7 @@ class UpdateSubclassUseCase(UserCheck):
         if not await self.__subclass_repository.is_subclass_of_id_exist(
             command.subclass_id
         ):
-            raise DomainError.invalid_data(
+            raise DomainError.not_found(
                 f"подкласс с id {command.subclass_id} не существует"
             )
         changing_class = await self.__subclass_repository.get_subclass_of_id(

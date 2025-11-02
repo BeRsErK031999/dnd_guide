@@ -18,7 +18,7 @@ class DeleteSubclassUseCase(UserCheck):
         if not await self.__subclass_repository.is_subclass_of_id_exist(
             command.subclass_id
         ):
-            raise DomainError.invalid_data(
+            raise DomainError.not_found(
                 f"подкласс с id {command.subclass_id} не существует"
             )
         await self.__subclass_repository.delete(command.subclass_id)

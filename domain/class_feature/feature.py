@@ -29,6 +29,11 @@ class ClassFeature(EntityName, EntityDescription):
     def level(self) -> int:
         return self.__level
 
+    def new_class_id(self, class_id: UUID) -> None:
+        if self.__class_id == class_id:
+            raise DomainError.idempotent("текущий класс равен новому")
+        self.__class_id = class_id
+
     def new_level(self, level: int) -> None:
         if self.__level == level:
             raise DomainError.idempotent(

@@ -43,7 +43,12 @@ class UpdateClassUseCase(UserCheck):
             changing_class.new_primary_modifiers(
                 [Modifier.from_str(modifier) for modifier in command.primary_modifiers]
             )
-        if command.hit_dice is not None:
+        if (
+            command.hit_dice is not None
+            and command.starting_hits is not None
+            and command.hit_modifier is not None
+            and command.next_level_hits is not None
+        ):
             changing_class.new_hits(
                 ClassHits(
                     Dice.from_str(command.hit_dice),
@@ -52,7 +57,15 @@ class UpdateClassUseCase(UserCheck):
                     command.next_level_hits,
                 )
             )
-        if command.armors is not None:
+        if (
+            command.armors is not None
+            and command.weapon is not None
+            and command.tools is not None
+            and command.saving_throws is not None
+            and command.skills is not None
+            and command.number_skills is not None
+            and command.number_tools is not None
+        ):
             for weapon_id in command.weapon:
                 if not await self.__weapon_repository.is_weapon_of_id_exist(weapon_id):
                     raise DomainError.invalid_data(
