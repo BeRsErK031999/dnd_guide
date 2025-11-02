@@ -20,3 +20,7 @@ class RaceRepository(ABC):
     @abstractmethod
     async def save(self, race: Race) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, race_id: UUID) -> None:
+        raise NotImplemented

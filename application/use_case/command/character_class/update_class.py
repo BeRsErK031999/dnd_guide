@@ -1,4 +1,4 @@
-from application.dto.command.character_class import CharacterClassUpdateCommand
+from application.dto.command.character_class import UpdateClassCommand
 from application.repository import (
     ClassRepository,
     ToolRepository,
@@ -6,7 +6,7 @@ from application.repository import (
     WeaponRepository,
 )
 from application.use_case.command.user_check import UserCheck
-from domain.armor.armor_type import ArmorType
+from domain.armor import ArmorType
 from domain.character_class import ClassHits, ClassProficiencies, ClassService
 from domain.dice import Dice
 from domain.error import DomainError
@@ -29,8 +29,8 @@ class UpdateClassUseCase(UserCheck):
         self.__weapon_repository = weapon_repository
         self.__tool_repository = tool_repository
 
-    async def execute(self, command: CharacterClassUpdateCommand) -> None:
-        self.__check_user(command.user_id)
+    async def execute(self, command: UpdateClassCommand) -> None:
+        self.__user_check(command.user_id)
         if not await self.__class_repository.is_class_of_id_exist(command.class_id):
             raise DomainError.not_found(f"класса с id {command.class_id} не существует")
         changing_class = await self.__class_repository.get_class_of_id(command.class_id)

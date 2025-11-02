@@ -20,3 +20,7 @@ class SubclassFeatureRepository(ABC):
     @abstractmethod
     async def save(self, feature: SubclassFeature) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, feature_id: UUID) -> None:
+        raise NotImplemented

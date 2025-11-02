@@ -4,7 +4,7 @@ from uuid import UUID
 from domain.error import DomainError
 
 
-class CharacterClassCreateCommand:
+class CreateClassCommand:
     def __init__(
         self,
         user_id: UUID,
@@ -42,7 +42,7 @@ class CharacterClassCreateCommand:
         self.name_in_english = name_in_english
 
 
-class CharacterClassUpdateCommand:
+class UpdateClassCommand:
     def __init__(
         self,
         user_id: UUID,
@@ -144,7 +144,7 @@ class CharacterClassUpdateCommand:
         self.name_in_english = name_in_english
 
 
-class CharacterClassDeleteCommand:
+class DeleteClassCommand:
     def __init__(self, user_id: UUID, class_id: UUID) -> None:
         self.user_id = user_id
         self.class_id = class_id

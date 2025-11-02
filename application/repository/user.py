@@ -10,9 +10,9 @@ class UserRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def user_create(self, user: User) -> None:
+    def create(self, user: User) -> None:
         raise NotImplementedError()
 
     @abstractmethod
-    def user_remove(self, user_id: UUID) -> None:
+    def delete(self, user_id: UUID) -> None:
         raise NotImplementedError()

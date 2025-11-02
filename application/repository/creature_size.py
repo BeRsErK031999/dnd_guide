@@ -20,3 +20,7 @@ class CreatureSizeRepository(ABC):
     @abstractmethod
     async def save(self, size: CreatureSize) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, size_id: UUID) -> None:
+        raise NotImplemented

@@ -20,3 +20,7 @@ class ToolRepository(ABC):
     @abstractmethod
     async def save(self, tool: Tool) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, tool_id: UUID) -> None:
+        raise NotImplemented

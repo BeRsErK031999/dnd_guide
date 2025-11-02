@@ -20,3 +20,7 @@ class SubraceRepository(ABC):
     @abstractmethod
     async def save(self, subrace: Subrace) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, subrace_id: UUID) -> None:
+        raise NotImplemented

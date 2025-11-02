@@ -20,3 +20,7 @@ class SourceRepository(ABC):
     @abstractmethod
     async def save(self, source: Source) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, source_id: UUID) -> None:
+        raise NotImplemented

@@ -3,7 +3,7 @@ from uuid import UUID
 from domain.error import DomainError
 
 
-class CharacterSubclassCreateCommand:
+class SubclassCreateCommand:
     def __init__(
         self,
         user_id: UUID,
@@ -17,7 +17,7 @@ class CharacterSubclassCreateCommand:
         self.description = description
 
 
-class CharacterSubclassUpdateCommand:
+class SubclassUpdateCommand:
     def __init__(
         self,
         user_id: UUID,
@@ -35,3 +35,13 @@ class CharacterSubclassUpdateCommand:
         self.class_id = class_id
         self.name = name
         self.description = description
+
+
+class SubclassDeleteCommand:
+    def __init__(
+        self,
+        user_id: UUID,
+        subclass_id: UUID,
+    ) -> None:
+        self.user_id = user_id
+        self.subclass_id = subclass_id

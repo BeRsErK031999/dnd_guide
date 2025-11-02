@@ -22,3 +22,7 @@ class WeaponPropertyRepository(ABC):
     @abstractmethod
     async def save(self, weapon_property: WeaponProperty) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, weapon_property_id: UUID) -> None:
+        raise NotImplemented

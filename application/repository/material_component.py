@@ -20,3 +20,7 @@ class MaterialComponentRepository(ABC):
     @abstractmethod
     async def save(self, material: MaterialComponent) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, material_id: UUID) -> None:
+        raise NotImplemented

@@ -20,3 +20,7 @@ class ClassLevelRepository(ABC):
     @abstractmethod
     async def save(self, level: ClassLevel) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, level_id: UUID) -> None:
+        raise NotImplemented

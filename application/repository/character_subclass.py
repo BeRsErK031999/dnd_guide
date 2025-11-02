@@ -20,3 +20,7 @@ class SubclassRepository(ABC):
     @abstractmethod
     async def save(self, subclass: CharacterSubclass) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, subclass_id: UUID) -> None:
+        raise NotImplemented

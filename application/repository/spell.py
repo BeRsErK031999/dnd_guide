@@ -20,3 +20,7 @@ class SpellRepository(ABC):
     @abstractmethod
     async def save(self, spell: Spell) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, spell_id: UUID) -> None:
+        raise NotImplemented

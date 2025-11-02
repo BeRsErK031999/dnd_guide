@@ -1,4 +1,4 @@
-from application.dto.command.character_class import CharacterClassCreateCommand
+from application.dto.command.character_class import CreateClassCommand
 from application.repository import (
     ClassRepository,
     ToolRepository,
@@ -6,7 +6,7 @@ from application.repository import (
     WeaponRepository,
 )
 from application.use_case.command.user_check import UserCheck
-from domain.armor.armor_type import ArmorType
+from domain.armor import ArmorType
 from domain.character_class import (
     CharacterClass,
     ClassHits,
@@ -34,9 +34,12 @@ class CreateClassUseCase(UserCheck):
         self.__weapon_repository = weapon_repository
         self.__tool_repository = tool_repository
 
-    async def execute(self, command: CharacterClassCreateCommand) -> None:
-        self.__check_user(command.user_id)
-        await self.__class_service.can_create_with_name(command.name)
+    async def execute(self, command: CreateClassCommand) -> None:
+        self.__user_check(command.user_id)
+        if not await self.__class_service.can_create_with_name(command.name):
+            raise DomainError.invalid_data(
+                f"класс с названием {command.name} уже существует"
+            )
         for weapon_id in command.weapon:
             if not await self.__weapon_repository.is_weapon_of_id_exist(weapon_id):
                 raise DomainError.invalid_data(f"оружия с id {weapon_id} не существует")

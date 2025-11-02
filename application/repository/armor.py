@@ -20,3 +20,7 @@ class ArmorRepository(ABC):
     @abstractmethod
     async def save(self, armor: Armor) -> None:
         raise NotImplemented
+
+    @abstractmethod
+    async def delete(self, armor_id: UUID) -> None:
+        raise NotImplemented
