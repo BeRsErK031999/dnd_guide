@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
+from uuid import UUID
 
-from domain.user import User, UserID
+from domain.user import User
 
 
 class UserRepository(ABC):
     @abstractmethod
-    def is_user_of_id_exist(self, user_id: UserID) -> bool:
+    def is_user_of_id_exist(self, user_id: UUID) -> bool:
         raise NotImplementedError()
 
     @abstractmethod
@@ -13,5 +14,5 @@ class UserRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def user_remove(self, user_id: UserID) -> None:
+    def user_remove(self, user_id: UUID) -> None:
         raise NotImplementedError()

@@ -1,0 +1,22 @@
+from abc import ABC, abstractmethod
+from uuid import UUID
+
+from domain.armor.armor import Armor
+
+
+class ArmorRepository(ABC):
+    @abstractmethod
+    async def next_id(self) -> UUID:
+        raise NotImplemented
+
+    @abstractmethod
+    async def is_armor_of_id_exist(self, armor_id: UUID) -> bool:
+        raise NotImplemented
+
+    @abstractmethod
+    async def get_armor_of_id(self, armor_id: UUID) -> Armor:
+        raise NotImplemented
+
+    @abstractmethod
+    async def save(self, armor: Armor) -> None:
+        raise NotImplemented
