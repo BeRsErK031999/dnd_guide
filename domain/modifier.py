@@ -13,18 +13,18 @@ class Modifier(StrEnum):
 
     @staticmethod
     def from_str(name: str) -> Modifier:
-        match name:
-            case Modifier.STRENGTH.value:
+        match name.upper():
+            case Modifier.STRENGTH.name:
                 return Modifier.STRENGTH
-            case Modifier.DEXTERITY.value:
+            case Modifier.DEXTERITY.name:
                 return Modifier.DEXTERITY
-            case Modifier.CONSTITUTION.value:
+            case Modifier.CONSTITUTION.name:
                 return Modifier.CONSTITUTION
-            case Modifier.INTELLIGENT.value:
+            case Modifier.INTELLIGENT.name:
                 return Modifier.INTELLIGENT
-            case Modifier.WISDOM.value:
+            case Modifier.WISDOM.name:
                 return Modifier.WISDOM
-            case Modifier.CHARISMA.value:
+            case Modifier.CHARISMA.name:
                 return Modifier.CHARISMA
             case _:
                 raise DomainError.invalid_data(

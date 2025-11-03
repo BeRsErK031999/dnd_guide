@@ -26,42 +26,42 @@ class Skill(StrEnum):
 
     @staticmethod
     def from_str(name: str) -> Skill:
-        match name:
-            case Skill.ACROBATICS.value:
+        match name.upper():
+            case Skill.ACROBATICS.name:
                 return Skill.ACROBATICS
-            case Skill.ATHLETICS.value:
+            case Skill.ATHLETICS.name:
                 return Skill.ATHLETICS
-            case Skill.PERCEPTION.value:
+            case Skill.PERCEPTION.name:
                 return Skill.PERCEPTION
-            case Skill.SURVIVAL.value:
+            case Skill.SURVIVAL.name:
                 return Skill.SURVIVAL
-            case Skill.ANIMAL_HANDLING.value:
+            case Skill.ANIMAL_HANDLING.name:
                 return Skill.ANIMAL_HANDLING
-            case Skill.INTIMIDATION.value:
+            case Skill.INTIMIDATION.name:
                 return Skill.INTIMIDATION
-            case Skill.PERFORMANCE.value:
+            case Skill.PERFORMANCE.name:
                 return Skill.PERFORMANCE
-            case Skill.HISTORY.value:
+            case Skill.HISTORY.name:
                 return Skill.HISTORY
-            case Skill.SLEIGHT_OF_HAND.value:
+            case Skill.SLEIGHT_OF_HAND.name:
                 return Skill.SLEIGHT_OF_HAND
-            case Skill.ARCANA.value:
+            case Skill.ARCANA.name:
                 return Skill.ARCANA
-            case Skill.MEDICINE.value:
+            case Skill.MEDICINE.name:
                 return Skill.MEDICINE
-            case Skill.DECEPTION.value:
+            case Skill.DECEPTION.name:
                 return Skill.DECEPTION
-            case Skill.NATURE.value:
+            case Skill.NATURE.name:
                 return Skill.NATURE
-            case Skill.INSIGHT.value:
+            case Skill.INSIGHT.name:
                 return Skill.INSIGHT
-            case Skill.INVESTIGATION.value:
+            case Skill.INVESTIGATION.name:
                 return Skill.INVESTIGATION
-            case Skill.RELIGION.value:
+            case Skill.RELIGION.name:
                 return Skill.RELIGION
-            case Skill.STEALTH.value:
+            case Skill.STEALTH.name:
                 return Skill.STEALTH
-            case Skill.PERSUASION.value:
+            case Skill.PERSUASION.name:
                 return Skill.PERSUASION
             case _:
                 raise DomainError.invalid_data(

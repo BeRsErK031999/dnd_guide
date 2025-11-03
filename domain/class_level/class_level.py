@@ -2,10 +2,10 @@ from uuid import UUID
 
 from domain.class_level.damage import ClassLevelBonusDamage
 from domain.class_level.dice import ClassLevelDice
+from domain.class_level.increase_speed import ClassLevelIncreaseSpeed
 from domain.class_level.points import ClassLevelPoints
 from domain.class_level.spell_slots import ClassLevelSpellSlots
 from domain.error import DomainError
-from domain.length import Length
 
 
 class ClassLevel:
@@ -21,7 +21,7 @@ class ClassLevel:
         number_arcanums_know: int | None,
         points: ClassLevelPoints | None,
         bonus_damage: ClassLevelBonusDamage | None,
-        increase_speed: Length | None,
+        increase_speed: ClassLevelIncreaseSpeed | None,
     ) -> None:
         self.__validate_level(level)
         self.__level_id = level_id
@@ -66,7 +66,7 @@ class ClassLevel:
     def bonus_damage(self) -> ClassLevelBonusDamage | None:
         return self.__bonus_damage
 
-    def increase_speed(self) -> Length | None:
+    def increase_speed(self) -> ClassLevelIncreaseSpeed | None:
         return self.__increase_speed
 
     def new_class_id(self, class_id: UUID) -> None:
@@ -123,7 +123,9 @@ class ClassLevel:
             raise DomainError.idempotent("текущий бонусный урон равен новому")
         self.__bonus_damage = bonus_damage
 
-    def new_increase_speed(self, increase_speed: Length | None) -> None:
+    def new_increase_speed(
+        self, increase_speed: ClassLevelIncreaseSpeed | None
+    ) -> None:
         if self.__increase_speed == increase_speed:
             raise DomainError.idempotent("текущее увеличение скорости равно новому")
         self.__increase_speed = increase_speed

@@ -10,6 +10,25 @@ class PieceType(StrEnum):
     GOLD = "золотые"
     PLATINUM = "платиновые"
 
+    @staticmethod
+    def from_str(name: str) -> PieceType:
+        match name.upper():
+            case PieceType.COPPER.name:
+                return PieceType.COPPER
+            case PieceType.SILVER.name:
+                return PieceType.SILVER
+            case PieceType.ELECTRUM.name:
+                return PieceType.ELECTRUM
+            case PieceType.GOLD.name:
+                return PieceType.GOLD
+            case PieceType.PLATINUM.name:
+                return PieceType.PLATINUM
+            case _:
+                raise DomainError.invalid_data(
+                    f"для типа монет с названием {name} не удалось сопоставить "
+                    "значение"
+                )
+
 
 class Coins:
     def __init__(self, count: int, piece_type: PieceType = PieceType.COPPER) -> None:

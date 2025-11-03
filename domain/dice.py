@@ -14,7 +14,7 @@ class Dice(IntEnum):
 
     @staticmethod
     def from_str(name: str) -> Dice:
-        match name:
+        match name.upper():
             case Dice.D4.name:
                 return Dice.D4
             case Dice.D6.name:

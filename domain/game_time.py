@@ -10,6 +10,25 @@ class GameTimeUnit(StrEnum):
     MINUTE = "минута"
     HOUR = "час"
 
+    @staticmethod
+    def from_str(name: str) -> GameTimeUnit:
+        match name.upper():
+            case GameTimeUnit.ACTION.name:
+                return GameTimeUnit.ACTION
+            case GameTimeUnit.BONUS_ACTION.name:
+                return GameTimeUnit.BONUS_ACTION
+            case GameTimeUnit.REACTION.name:
+                return GameTimeUnit.REACTION
+            case GameTimeUnit.MINUTE.name:
+                return GameTimeUnit.MINUTE
+            case GameTimeUnit.HOUR.name:
+                return GameTimeUnit.HOUR
+            case _:
+                raise DomainError.invalid_data(
+                    f"для временного промежутка с названием {name} не "
+                    "удалось сопоставить значение"
+                )
+
 
 class GameTime:
     def __init__(self, count: int, units: GameTimeUnit) -> None:

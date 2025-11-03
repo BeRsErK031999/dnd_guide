@@ -7,6 +7,19 @@ class WeightUnit(StrEnum):
     LB = "фунт"
     KG = "килограмм"
 
+    @staticmethod
+    def from_str(name: str) -> WeightUnit:
+        match name.upper():
+            case WeightUnit.LB.name:
+                return WeightUnit.LB
+            case WeightUnit.KG.name:
+                return WeightUnit.KG
+            case _:
+                raise DomainError.invalid_data(
+                    f"для единиц измерения массы с названием {name} не удалось "
+                    "сопоставить значение"
+                )
+
 
 class Weight:
     def __init__(self, count: float, unit: WeightUnit) -> None:

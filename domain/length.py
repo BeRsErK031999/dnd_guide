@@ -7,6 +7,18 @@ class LengthUnit(StrEnum):
     FT = "фут"
     M = "метр"
 
+    @staticmethod
+    def from_str(name: str) -> LengthUnit:
+        match name.upper():
+            case LengthUnit.FT.name:
+                return LengthUnit.FT
+            case LengthUnit.M.name:
+                return LengthUnit.M
+            case _:
+                raise DomainError.invalid_data(
+                    f"для единиц {name} не удалось сопоставить значение"
+                )
+
 
 class Length:
     def __init__(self, count: float, unit: LengthUnit) -> None:
