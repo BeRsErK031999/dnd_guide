@@ -7,7 +7,7 @@ class ClassLevelDice(ValueDescription):
         self,
         dice: Dice,
         dice_description: str,
-        number_dices: int | None,
+        number_dices: int = 1,
     ) -> None:
         ValueDescription.__init__(self, dice_description)
         self.__dice = dice
@@ -16,7 +16,7 @@ class ClassLevelDice(ValueDescription):
     def dice(self) -> Dice:
         return self.__dice
 
-    def number_dices(self) -> int | None:
+    def number_dices(self) -> int:
         return self.__number_dices
 
     def __eq__(self, value: object) -> bool:

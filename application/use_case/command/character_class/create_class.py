@@ -40,10 +40,10 @@ class CreateClassUseCase(UserCheck):
             raise DomainError.invalid_data(
                 f"класс с названием {command.name} уже существует"
             )
-        for weapon_id in command.weapon:
+        for weapon_id in command.proficiencies.weapon:
             if not await self.__weapon_repository.is_weapon_of_id_exist(weapon_id):
                 raise DomainError.invalid_data(f"оружия с id {weapon_id} не существует")
-        for tool_id in command.tools:
+        for tool_id in command.proficiencies.tools:
             if not await self.__tool_repository.is_tool_of_id_exist(tool_id):
                 raise DomainError.invalid_data(
                     f"инструментов с id {tool_id} не существует"
@@ -54,22 +54,25 @@ class CreateClassUseCase(UserCheck):
             command.description,
             [Modifier.from_str(modifier) for modifier in command.primary_modifiers],
             ClassHits(
-                Dice.from_str(command.hit_dice),
-                command.starting_hits,
-                Modifier.from_str(command.hit_modifier),
-                command.next_level_hits,
+                Dice.from_str(command.hits.hit_dice),
+                command.hits.starting_hits,
+                Modifier.from_str(command.hits.hit_modifier),
+                command.hits.next_level_hits,
             ),
             ClassProficiencies(
-                [ArmorType.from_str(armor_type) for armor_type in command.armors],
-                command.weapon,
-                command.tools,
+                [
+                    ArmorType.from_str(armor_type)
+                    for armor_type in command.proficiencies.armors
+                ],
+                command.proficiencies.weapon,
+                command.proficiencies.tools,
                 [
                     Modifier.from_str(saving_throw)
-                    for saving_throw in command.saving_throws
+                    for saving_throw in command.proficiencies.saving_throws
                 ],
-                [Skill.from_str(skill) for skill in command.skills],
-                command.number_skills,
-                command.number_tools,
+                [Skill.from_str(skill) for skill in command.proficiencies.skills],
+                command.proficiencies.number_skills,
+                command.proficiencies.number_tools,
             ),
             command.name_in_english,
         )

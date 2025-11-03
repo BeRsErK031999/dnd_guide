@@ -71,45 +71,34 @@ class UpdateClassLevelUseCase(UserCheck):
                     "для класса невозможно создать указанный уровень"
                 )
             class_level.new_level(command.level)
-        if (
-            command.dice is not None
-            and command.dice_description is not None
-            and command.number_dices is not None
-        ):
+        if command.dice is not None:
             class_level.new_dice(
                 ClassLevelDice(
-                    Dice.from_str(command.dice),
-                    command.dice_description,
-                    command.number_dices,
+                    Dice.from_str(command.dice.dice),
+                    command.dice.description,
+                    command.dice.number,
                 )
             )
         if command.spell_slots is not None:
             class_level.new_spell_slots(ClassLevelSpellSlots(command.spell_slots))
-        if command.points is not None and command.points_description is not None:
+        if command.points is not None:
             class_level.new_points(
-                ClassLevelPoints(command.points, command.points_description)
+                ClassLevelPoints(command.points.points, command.points.description)
             )
-        if (
-            command.bonus_damage is not None
-            and command.bonus_damage_description is not None
-        ):
+        if command.bonus_damage is not None:
             class_level.new_bonus_damage(
                 ClassLevelBonusDamage(
-                    command.bonus_damage, command.bonus_damage_description
+                    command.bonus_damage.damage, command.bonus_damage.description
                 )
             )
-        if (
-            command.increase_speed is not None
-            and command.increase_speed_description is not None
-            and command.increase_speed_unit is not None
-        ):
+        if command.increase_speed is not None:
             class_level.new_increase_speed(
                 ClassLevelIncreaseSpeed(
                     Length(
-                        command.increase_speed,
-                        LengthUnit.from_str(command.increase_speed_unit),
+                        command.increase_speed.speed,
+                        LengthUnit.from_str(command.increase_speed.unit),
                     ),
-                    command.increase_speed_description,
+                    command.increase_speed.description,
                 )
             )
         if command.number_cantrips_know is not None:

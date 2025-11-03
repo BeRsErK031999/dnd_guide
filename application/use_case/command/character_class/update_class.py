@@ -43,48 +43,41 @@ class UpdateClassUseCase(UserCheck):
             changing_class.new_primary_modifiers(
                 [Modifier.from_str(modifier) for modifier in command.primary_modifiers]
             )
-        if (
-            command.hit_dice is not None
-            and command.starting_hits is not None
-            and command.hit_modifier is not None
-            and command.next_level_hits is not None
-        ):
+        if command.hits is not None:
             changing_class.new_hits(
                 ClassHits(
-                    Dice.from_str(command.hit_dice),
-                    command.starting_hits,
-                    Modifier.from_str(command.hit_modifier),
-                    command.next_level_hits,
+                    Dice.from_str(command.hits.hit_dice),
+                    command.hits.starting_hits,
+                    Modifier.from_str(command.hits.hit_modifier),
+                    command.hits.next_level_hits,
                 )
             )
-        if (
-            command.armors is not None
-            and command.weapon is not None
-            and command.tools is not None
-            and command.saving_throws is not None
-            and command.skills is not None
-            and command.number_skills is not None
-            and command.number_tools is not None
-        ):
-            for weapon_id in command.weapon:
+        if command.proficiencies is not None:
+            for weapon_id in command.proficiencies.weapon:
                 if not await self.__weapon_repository.is_weapon_of_id_exist(weapon_id):
                     raise DomainError.invalid_data(
                         f"оружия с id {weapon_id} не существует"
                     )
-            for tool_id in command.tools:
+            for tool_id in command.proficiencies.tools:
                 if not await self.__tool_repository.is_tool_of_id_exist(tool_id):
                     raise DomainError.invalid_data(
                         f"инструментов с id {tool_id} не существует"
                     )
             changing_class.new_proficiencies(
                 ClassProficiencies(
-                    [ArmorType.from_str(armor) for armor in command.armors],
-                    command.weapon,
-                    command.tools,
-                    [Modifier.from_str(modifier) for modifier in command.saving_throws],
-                    [Skill.from_str(skill) for skill in command.skills],
-                    command.number_skills,
-                    command.number_tools,
+                    [
+                        ArmorType.from_str(armor)
+                        for armor in command.proficiencies.armors
+                    ],
+                    command.proficiencies.weapon,
+                    command.proficiencies.tools,
+                    [
+                        Modifier.from_str(modifier)
+                        for modifier in command.proficiencies.saving_throws
+                    ],
+                    [Skill.from_str(skill) for skill in command.proficiencies.skills],
+                    command.proficiencies.number_skills,
+                    command.proficiencies.number_tools,
                 )
             )
         if command.name_in_english is not None:
