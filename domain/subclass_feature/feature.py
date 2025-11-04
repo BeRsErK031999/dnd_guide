@@ -29,11 +29,14 @@ class SubclassFeature(EntityName, EntityDescription):
     def level(self) -> int:
         return self.__level
 
+    def new_subclass_id(self, subclass_id: UUID) -> None:
+        if self.__subclass_id == subclass_id:
+            raise DomainError.idempotent("текущий подкласс равен новому")
+        self.__subclass_id = subclass_id
+
     def new_level(self, level: int) -> None:
         if self.__level == level:
-            raise DomainError.idempotent(
-                "текущее уровень умения равен новому уровень умения"
-            )
+            raise DomainError.idempotent("текущее уровень умения равен новому")
         self.__validate_level(level)
         self.__level = level
 
