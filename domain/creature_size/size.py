@@ -9,7 +9,7 @@ class CreatureSize(EntityName, EntityDescription):
         EntityName.__init__(self, name)
         self.__creature_size_id = size_id
 
-    def creature_size_id(self) -> UUID:
+    def size_id(self) -> UUID:
         return self.__creature_size_id
 
     def __str__(self) -> str:
