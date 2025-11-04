@@ -53,6 +53,30 @@ class Subrace(EntityName, EntityDescription):
         self.__validate_features(features)
         self.__features = list(features)
 
+    def add_features(self, features: Sequence[SubraceFeature]) -> None:
+        if len(features) == 0:
+            raise DomainError.invalid_data(
+                "список для добавления умений не может быть пустым"
+            )
+        self.__validate_features(features)
+        for feature in features:
+            if feature in self.__features:
+                raise DomainError.invalid_data(
+                    f"умение с названием {feature.name()} уже существует"
+                )
+        self.__features.extend(features)
+
+    def remove_features(self, feature_names: Sequence[str]) -> None:
+        if len(feature_names) == 0:
+            raise DomainError.invalid_data(
+                "список названий для удаления умений не может быть пустым"
+            )
+        removing_indexes = list()
+        for i, feature in enumerate(self.__features):
+            if feature.name() in feature_names:
+                removing_indexes.append(i)
+        [self.__features.pop(i) for i in removing_indexes]
+
     def __validate_features(self, features: Sequence[SubraceFeature]) -> None:
         if len(features) == 0:
             return

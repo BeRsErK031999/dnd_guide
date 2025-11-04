@@ -6,7 +6,7 @@ from domain.subrace.subrace import Subrace
 
 class SubraceRepository(ABC):
     @abstractmethod
-    def next_id(self) -> UUID:
+    async def next_id(self) -> UUID:
         raise NotImplemented
 
     @abstractmethod

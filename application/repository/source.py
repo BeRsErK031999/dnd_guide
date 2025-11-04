@@ -6,7 +6,7 @@ from domain.source.source import Source
 
 class SourceRepository(ABC):
     @abstractmethod
-    def next_id(self) -> UUID:
+    async def next_id(self) -> UUID:
         raise NotImplemented
 
     @abstractmethod

@@ -6,7 +6,7 @@ from domain.weapon_property.weapon_property import WeaponProperty
 
 class WeaponPropertyRepository(ABC):
     @abstractmethod
-    def next_id(self) -> UUID:
+    async def next_id(self) -> UUID:
         raise NotImplemented
 
     @abstractmethod

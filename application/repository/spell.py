@@ -6,7 +6,7 @@ from domain.spell.spell import Spell
 
 class SpellRepository(ABC):
     @abstractmethod
-    def next_id(self) -> UUID:
+    async def next_id(self) -> UUID:
         raise NotImplemented
 
     @abstractmethod

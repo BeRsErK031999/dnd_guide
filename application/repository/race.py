@@ -6,7 +6,7 @@ from domain.race.race import Race
 
 class RaceRepository(ABC):
     @abstractmethod
-    def next_id(self) -> UUID:
+    async def next_id(self) -> UUID:
         raise NotImplemented
 
     @abstractmethod

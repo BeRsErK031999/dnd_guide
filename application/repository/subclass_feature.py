@@ -6,7 +6,7 @@ from domain.subclass_feature.feature import SubclassFeature
 
 class SubclassFeatureRepository(ABC):
     @abstractmethod
-    def next_id(self) -> UUID:
+    async def next_id(self) -> UUID:
         raise NotImplemented
 
     @abstractmethod

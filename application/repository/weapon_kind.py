@@ -6,7 +6,7 @@ from domain.weapon_kind.weapon_kind import WeaponKind
 
 class WeaponKindRepository(ABC):
     @abstractmethod
-    def next_id(self) -> UUID:
+    async def next_id(self) -> UUID:
         raise NotImplemented
 
     @abstractmethod
