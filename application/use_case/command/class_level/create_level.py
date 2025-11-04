@@ -62,8 +62,8 @@ class CreateClassLevelUseCase(UserCheck):
         if command.increase_speed is not None:
             increase_speed = ClassLevelIncreaseSpeed(
                 Length(
-                    command.increase_speed.speed,
-                    LengthUnit.from_str(command.increase_speed.unit),
+                    command.increase_speed.speed.count,
+                    LengthUnit.from_str(command.increase_speed.speed.unit),
                 ),
                 command.increase_speed.description,
             )

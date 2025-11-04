@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
+from application.dto.command.length import LengthCommand
 from domain.error import DomainError
 
 
@@ -26,8 +27,7 @@ class ClassLevelBonusDamageCommand:
 
 @dataclass
 class ClassLevelIncreaseSpeedCommand:
-    speed: int
-    unit: str
+    speed: LengthCommand
     description: str
 
 

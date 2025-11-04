@@ -95,8 +95,8 @@ class UpdateClassLevelUseCase(UserCheck):
             class_level.new_increase_speed(
                 ClassLevelIncreaseSpeed(
                     Length(
-                        command.increase_speed.speed,
-                        LengthUnit.from_str(command.increase_speed.unit),
+                        command.increase_speed.speed.count,
+                        LengthUnit.from_str(command.increase_speed.speed.unit),
                     ),
                     command.increase_speed.description,
                 )

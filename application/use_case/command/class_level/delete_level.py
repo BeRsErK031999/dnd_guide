@@ -4,7 +4,7 @@ from application.use_case.command.user_check import UserCheck
 from domain.error import DomainError
 
 
-class CreateClassLevelUseCase(UserCheck):
+class DeleteClassLevelUseCase(UserCheck):
     def __init__(
         self,
         user_repository: UserRepository,

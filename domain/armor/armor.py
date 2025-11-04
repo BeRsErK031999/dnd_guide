@@ -16,7 +16,7 @@ class Armor(EntityName, EntityDescription):
         name: str,
         description: str,
         armor_class: ArmorClass,
-        strength: int | None,
+        strength: int,
         stealth: bool,
         weight: Weight,
         cost: Coins,
@@ -41,7 +41,7 @@ class Armor(EntityName, EntityDescription):
     def armor_class(self) -> ArmorClass:
         return self.__armor_class
 
-    def strength(self) -> int | None:
+    def strength(self) -> int:
         return self.__strength
 
     def stealth(self) -> bool:
@@ -67,7 +67,7 @@ class Armor(EntityName, EntityDescription):
             )
         self.__armor_class = armor_class
 
-    def new_strength(self, strength: int | None) -> None:
+    def new_strength(self, strength: int) -> None:
         if self.__strength == strength:
             raise DomainError.idempotent(
                 "текущее требование к силе доспеха равно новому требованию к силе доспеха"
@@ -96,9 +96,7 @@ class Armor(EntityName, EntityDescription):
             )
         self.__cost = cost
 
-    def __validate_strength(self, strength: int | None) -> None:
-        if strength is None:
-            return
+    def __validate_strength(self, strength: int) -> None:
         if strength < 1 or strength > 20:
             raise DomainError.invalid_data(
                 "модификатор силы для доспехов должен находиться в диапазоне от 1 до 20"
