@@ -1,6 +1,5 @@
 from uuid import UUID
 
-from domain.error import DomainError
 from domain.mixin import EntityDescription, EntityName
 
 

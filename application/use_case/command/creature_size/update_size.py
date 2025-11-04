@@ -24,9 +24,9 @@ class UpdateCreatureSizeUseCase(UserCheck):
             )
         size = await self.__size_repository.get_size_of_id(command.size_id)
         if command.name is not None:
-            if not await self.__size_service.can_create_with_name(command.name):
+            if not await self.__size_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
-                    f"не возможно создать размер существа с название {command.name}"
+                    f"не возможно переименовать размер существа с название {command.name}"
                 )
             size.new_name(command.name)
         if command.description is not None:
