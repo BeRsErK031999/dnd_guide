@@ -93,7 +93,7 @@ class WeaponProperty(EntityDescription):
             )
         self.__max_range = max_range
 
-    def new_second_hand_dice(self, dice: Dice) -> None:
+    def new_second_hand_dice(self, dice: Dice | None) -> None:
         if self.__name != WeaponPropertyName.VERSATILE:
             raise DomainError.invalid_data(
                 "для этого свойства нельзя назначить кость для двух рук"
