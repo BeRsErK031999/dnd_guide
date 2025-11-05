@@ -45,9 +45,9 @@ class UpdateWeaponUseCase(UserCheck):
                 )
             weapon.new_kind(command.weapon_kind)
         if command.name is not None:
-            if not await self.__weapon_service.can_create_with_name(command.name):
+            if not await self.__weapon_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
-                    f"оружие с названием {command.name} не возможно создать"
+                    f"не возможно переименовать оружие с названием {command.name}"
                 )
             weapon.new_name(command.name)
         if command.description is not None:
