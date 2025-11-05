@@ -71,12 +71,15 @@ class UpdateRaceUseCase(UserCheck):
             )
         if command.age is not None:
             race.new_age(RaceAge(command.age.max_age, command.age.description))
-        if command.increase_modifier is not None:
-            race.new_increase_modifier(
-                RaceIncreaseModifier(
-                    Modifier.from_str(command.increase_modifier.modifier),
-                    command.increase_modifier.bonus,
-                )
+        if command.increase_modifiers is not None:
+            race.new_increase_modifiers(
+                [
+                    RaceIncreaseModifier(
+                        Modifier.from_str(increase_modifier.modifier),
+                        increase_modifier.bonus,
+                    )
+                    for increase_modifier in command.increase_modifiers
+                ]
             )
         if command.new_features is not None:
             race.new_features(

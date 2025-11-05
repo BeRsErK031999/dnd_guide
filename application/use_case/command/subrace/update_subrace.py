@@ -1,0 +1,68 @@
+from application.dto.command.subrace import UpdateSubraceCommand
+from application.repository import RaceRepository, SubraceRepository, UserRepository
+from application.use_case.command.user_check import UserCheck
+from domain.error import DomainError
+from domain.modifier import Modifier
+from domain.subrace import SubraceFeature, SubraceIncreaseModifier, SubraceService
+
+
+class UpdateSubraceUseCase(UserCheck):
+    def __init__(
+        self,
+        subrace_service: SubraceService,
+        user_repository: UserRepository,
+        subrace_repository: SubraceRepository,
+        race_repository: RaceRepository,
+    ) -> None:
+        UserCheck.__init__(self, user_repository)
+        self.__subrace_service = subrace_service
+        self.__race_repository = race_repository
+        self.__subrace_repository = subrace_repository
+
+    async def execute(self, command: UpdateSubraceCommand) -> None:
+        self.__user_check(command.user_id)
+        if not await self.__subrace_repository.is_subrace_of_id_exist(
+            command.subrace_id
+        ):
+            raise DomainError.not_found(f"подрасы с id {command.race_id} не существует")
+        subrace = await self.__subrace_repository.get_subrace_of_id(command.subrace_id)
+        if command.race_id is not None:
+            if not await self.__race_repository.is_race_of_id_exist(command.race_id):
+                raise DomainError.invalid_data(f"расы с id {command} не существует")
+            subrace.new_race_id(command.race_id)
+        if command.name is not None:
+            if not await self.__subrace_service.can_rename_with_name(command.name):
+                raise DomainError.invalid_data(
+                    "не возможно переименовать подрасу с использованием "
+                    f"названия {command.name}"
+                )
+            subrace.new_name(command.name)
+        if command.description is not None:
+            subrace.new_description(command.description)
+        if command.increase_modifiers is not None:
+            subrace.new_increase_modifiers(
+                [
+                    SubraceIncreaseModifier(
+                        Modifier.from_str(increase_modifier.modifier),
+                        increase_modifier.bonus,
+                    )
+                    for increase_modifier in command.increase_modifiers
+                ]
+            )
+        if command.new_features is not None:
+            subrace.new_features(
+                [
+                    SubraceFeature(feature.name, feature.description)
+                    for feature in command.new_features
+                ]
+            )
+        if command.add_features is not None:
+            subrace.add_features(
+                [
+                    SubraceFeature(feature.name, feature.description)
+                    for feature in command.add_features
+                ]
+            )
+        if command.remove_features is not None:
+            subrace.remove_features(command.remove_features)
+        await self.__subrace_repository.save(subrace)

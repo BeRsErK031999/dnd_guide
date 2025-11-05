@@ -62,10 +62,13 @@ class CreateRaceUseCase(UserCheck):
                 command.speed.description,
             ),
             RaceAge(command.age.max_age, command.age.description),
-            RaceIncreaseModifier(
-                Modifier.from_str(command.increase_modifier.modifier),
-                command.increase_modifier.bonus,
-            ),
+            [
+                RaceIncreaseModifier(
+                    Modifier.from_str(increase_modifier.modifier),
+                    increase_modifier.bonus,
+                )
+                for increase_modifier in command.increase_modifiers
+            ],
             [
                 RaceFeature(feature.name, feature.description)
                 for feature in command.features

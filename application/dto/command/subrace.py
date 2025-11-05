@@ -2,78 +2,53 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
-from application.dto.command.length import LengthCommand
 from domain.error import DomainError
 
 
 @dataclass
-class RaceFeatureCommand:
+class SubraceFeatureCommand:
     name: str
     description: str
 
 
 @dataclass
-class RaceAgeCommand:
-    max_age: int
-    description: str
-
-
-@dataclass
-class RaceSpeedCommand:
-    base_speed: LengthCommand
-    description: str
-
-
-@dataclass
-class RaceIncreaseModifierCommand:
+class SubraceIncreaseModifierCommand:
     modifier: str
     bonus: int
 
 
 @dataclass
-class CreateRaceCommand:
+class CreateSubraceCommand:
     user_id: UUID
+    race_id: UUID
     name: str
     description: str
-    type_id: UUID
-    size_id: UUID
-    speed: RaceSpeedCommand
-    age: RaceAgeCommand
-    increase_modifiers: Sequence[RaceIncreaseModifierCommand]
-    features: Sequence[RaceFeatureCommand] = []
-    name_in_english: str = ""
+    increase_modifiers: Sequence[SubraceIncreaseModifierCommand]
+    features: Sequence[SubraceFeatureCommand] = []
 
 
 @dataclass
-class UpdateRaceCommand:
+class UpdateSubraceCommand:
     user_id: UUID
+    subrace_id: UUID
     race_id: UUID
     name: str | None = None
     description: str | None = None
-    type_id: UUID | None = None
-    size_id: UUID | None = None
-    speed: RaceSpeedCommand | None = None
-    age: RaceAgeCommand | None = None
-    increase_modifiers: Sequence[RaceIncreaseModifierCommand] | None = None
-    new_features: Sequence[RaceFeatureCommand] | None = None
-    add_features: Sequence[RaceFeatureCommand] | None = None
+    increase_modifiers: Sequence[SubraceIncreaseModifierCommand] | None = None
+    new_features: Sequence[SubraceFeatureCommand] | None = None
+    add_features: Sequence[SubraceFeatureCommand] | None = None
     remove_features: Sequence[str] | None = None
-    name_in_english: str | None = None
 
     def __post_init__(self) -> None:
         if all(
             [
+                self.race_id is None,
                 self.name is None,
                 self.description is None,
-                self.type_id is None,
-                self.size_id is None,
-                self.speed is None,
-                self.age is None,
                 self.increase_modifiers is None,
                 self.new_features is None,
                 self.add_features is None,
                 self.remove_features is None,
-                self.name_in_english is None,
             ]
         ):
             raise DomainError.invalid_data("не переданы данные для обновления расы")
@@ -94,6 +69,6 @@ class UpdateRaceCommand:
 
 
 @dataclass
-class DeleteRaceCommand:
+class DeleteSubraceCommand:
     user_id: UUID
-    race_id: UUID
+    subrace_id: UUID

@@ -19,11 +19,12 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish):
         size_id: UUID,
         speed: RaceSpeed,
         age: RaceAge,
-        increase_modifier: RaceIncreaseModifier,
+        increase_modifiers: Sequence[RaceIncreaseModifier],
         features: Sequence[RaceFeature],
         name_in_english: str,
     ) -> None:
         self.__validate_features(features)
+        self.__validate_increase_modifiers(increase_modifiers)
         EntityName.__init__(self, name)
         EntityNameInEnglish.__init__(self, name_in_english)
         EntityDescription.__init__(self, description)
@@ -32,7 +33,7 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish):
         self.__size_id = size_id
         self.__speed = speed
         self.__age = age
-        self.__increase_modifier = increase_modifier
+        self.__increase_modifiers = list(increase_modifiers)
         self.__features = list(features)
 
     def race_id(self) -> UUID:
@@ -50,8 +51,8 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish):
     def age(self) -> RaceAge:
         return self.__age
 
-    def increase_modifier(self) -> RaceIncreaseModifier:
-        return self.__increase_modifier
+    def increase_modifiers(self) -> list[RaceIncreaseModifier]:
+        return self.__increase_modifiers
 
     def features(self) -> list[RaceFeature]:
         return self.__features
@@ -82,12 +83,11 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish):
             )
         self.__age = age
 
-    def new_increase_modifier(self, increase_modifier: RaceIncreaseModifier) -> None:
-        if self.__increase_modifier == increase_modifier:
-            raise DomainError.idempotent(
-                "текущее увеличение характеристик расы равно новому увеличению характеристик расы"
-            )
-        self.__increase_modifier = increase_modifier
+    def new_increase_modifiers(
+        self, increase_modifiers: Sequence[RaceIncreaseModifier]
+    ) -> None:
+        self.__validate_increase_modifiers(increase_modifiers)
+        self.__increase_modifiers = list(increase_modifiers)
 
     def new_features(self, features: Sequence[RaceFeature]) -> None:
         self.__validate_features(features)
@@ -116,6 +116,19 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish):
             if feature.name() in feature_names:
                 removing_indexes.append(i)
         [self.__features.pop(i) for i in removing_indexes]
+
+    def __validate_increase_modifiers(
+        self, increase_modifiers: Sequence[RaceIncreaseModifier]
+    ) -> None:
+        if len(increase_modifiers) == 0:
+            return
+        temp = [
+            increase_modifier.modifier() for increase_modifier in increase_modifiers
+        ]
+        if len(temp) != len(set(temp)):
+            raise DomainError.invalid_data(
+                "увеличения модификаторов расы содержат дубликаты"
+            )
 
     def __validate_features(self, features: Sequence[RaceFeature]) -> None:
         if len(features) == 0:
