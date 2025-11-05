@@ -100,15 +100,15 @@ class Spell(EntityName, EntityNameInEnglish, EntityDescription):
     def saving_throws(self) -> list[Modifier]:
         return self.__saving_throws
 
-    def new_class_ids(self, class_ids: list[UUID]) -> None:
+    def new_class_ids(self, class_ids: Sequence[UUID]) -> None:
         if set(self.__class_ids) == set(class_ids):
             raise DomainError.idempotent(
                 "текущий список классов равен новому списку классов"
             )
         self.__validate_class_ids(class_ids)
-        self.__class_ids = class_ids
+        self.__class_ids = list(class_ids)
 
-    def new_subclass_ids(self, subclass_ids: list[UUID]) -> None:
+    def new_subclass_ids(self, subclass_ids: Sequence[UUID]) -> None:
         if set(self.__subclass_ids) == set(subclass_ids):
             raise DomainError.idempotent(
                 "текущий список подклассов равен новому списку подклассов"
@@ -116,7 +116,7 @@ class Spell(EntityName, EntityNameInEnglish, EntityDescription):
         self.__validate_duplicate_in_seq(
             subclass_ids, "список подклассов содержит дубликаты"
         )
-        self.__subclass_ids = subclass_ids
+        self.__subclass_ids = list(subclass_ids)
 
     def new_next_level_description(self, description: str) -> None:
         self.__next_level_description = description
