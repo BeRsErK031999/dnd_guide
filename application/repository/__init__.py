@@ -5,6 +5,7 @@ from .class_feature import ClassFeatureRepository
 from .class_level import ClassLevelRepository
 from .creature_size import CreatureSizeRepository
 from .creature_type import CreatureTypeRepository
+from .feat import FeatRepository
 from .material_component import MaterialComponentRepository
 from .race import RaceRepository
 from .source import SourceRepository
@@ -25,6 +26,7 @@ __all__ = [
     "ClassLevelRepository",
     "CreatureSizeRepository",
     "CreatureTypeRepository",
+    "FeatRepository",
     "MaterialComponentRepository",
     "RaceRepository",
     "SourceRepository",
