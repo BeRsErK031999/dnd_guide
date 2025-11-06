@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.source.source import Source
+from domain.source import Source
 
 
 class SourceRepository(ABC):

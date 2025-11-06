@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.spell.spell import Spell
+from domain.spell import Spell
 
 
 class SpellRepository(ABC):

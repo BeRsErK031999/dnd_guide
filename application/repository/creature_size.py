@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.creature_size.size import CreatureSize
+from domain.creature_size import CreatureSize
 
 
 class CreatureSizeRepository(ABC):

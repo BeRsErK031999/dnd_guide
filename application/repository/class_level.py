@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.class_level.class_level import ClassLevel
+from domain.class_level import ClassLevel
 
 
 class ClassLevelRepository(ABC):

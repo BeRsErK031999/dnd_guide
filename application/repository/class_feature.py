@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.class_feature.feature import ClassFeature
+from domain.class_feature import ClassFeature
 
 
 class ClassFeatureRepository(ABC):

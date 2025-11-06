@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.weapon_kind.weapon_kind import WeaponKind
+from domain.weapon_kind import WeaponKind
 
 
 class WeaponKindRepository(ABC):

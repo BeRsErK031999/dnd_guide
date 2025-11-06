@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.subclass_feature.feature import SubclassFeature
+from domain.subclass_feature import SubclassFeature
 
 
 class SubclassFeatureRepository(ABC):

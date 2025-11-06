@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.feat.feat import Feat
+from domain.feat import Feat
 
 
 class FeatRepository(ABC):

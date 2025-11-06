@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.race.race import Race
+from domain.race import Race
 
 
 class RaceRepository(ABC):

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.tool.tool import Tool
+from domain.tool import Tool
 
 
 class ToolRepository(ABC):

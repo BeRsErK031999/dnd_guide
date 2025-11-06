@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.character_subclass.character_subclass import CharacterSubclass
+from domain.character_subclass import CharacterSubclass
 
 
 class SubclassRepository(ABC):

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.material_component.material import MaterialComponent
+from domain.material_component import MaterialComponent
 
 
 class MaterialComponentRepository(ABC):

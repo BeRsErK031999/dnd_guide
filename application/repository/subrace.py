@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.subrace.subrace import Subrace
+from domain.subrace import Subrace
 
 
 class SubraceRepository(ABC):

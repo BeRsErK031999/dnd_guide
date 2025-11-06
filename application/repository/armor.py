@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.armor.armor import Armor
+from domain.armor import Armor
 
 
 class ArmorRepository(ABC):

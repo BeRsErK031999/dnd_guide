@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.weapon_property.weapon_property import WeaponProperty
+from domain.weapon_property import WeaponProperty
 
 
 class WeaponPropertyRepository(ABC):
