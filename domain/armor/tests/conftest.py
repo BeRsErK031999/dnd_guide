@@ -43,7 +43,7 @@ def armor(gen_uuid) -> Armor:
         "name",
         "description",
         ArmorClass(10, Modifier.DEXTERITY, 2),
-        None,
+        0,
         False,
         Weight(10, WeightUnit.LB),
         Coins(10, PieceType.GOLD),

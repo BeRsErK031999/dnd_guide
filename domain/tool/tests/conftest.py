@@ -3,7 +3,7 @@ from uuid import uuid4
 import pytest
 from domain.coin import Coins, PieceType
 from domain.tool.tool import Tool
-from domain.tool.utilize import Utilize
+from domain.tool.utilize import ToolUtilize
 from domain.weight import Weight, WeightUnit
 
 
@@ -23,8 +23,8 @@ def coins(request: pytest.FixtureRequest) -> Coins:
 
 
 @pytest.fixture
-def utilizes(request) -> list[Utilize]:
-    return [Utilize(utilize[0], utilize[1]) for utilize in request.param]
+def utilizes(request) -> list[ToolUtilize]:
+    return [ToolUtilize(utilize[0], utilize[1]) for utilize in request.param]
 
 
 @pytest.fixture
@@ -32,5 +32,5 @@ def tool(gen_uuid, request) -> Tool:
     tool_type, name, description, cost, weight, utilizes = request.param
     cost = Coins(cost, PieceType.GOLD)
     weight = Weight(weight, WeightUnit.LB)
-    utilizes = [Utilize(utilize[0], utilize[1]) for utilize in utilizes]
+    utilizes = [ToolUtilize(utilize[0], utilize[1]) for utilize in utilizes]
     return Tool(gen_uuid(), tool_type, name, description, cost, weight, utilizes)

@@ -1,5 +1,5 @@
 import pytest
-from domain.dice import Dice
+from domain.dice import Dice, DiceType
 from domain.error import DomainError
 from domain.weapon_property.name import WeaponPropertyName
 from domain.weapon_property.weapon_property import WeaponProperty
@@ -9,20 +9,76 @@ from domain.weapon_property.weapon_property import WeaponProperty
     "name, description, base_attack_range, max_attack_range, second_hand_dice, should_error",
     [
         [WeaponPropertyName.AMMUNITION, "description", 20, 40, None, False],
-        [WeaponPropertyName.VERSATILE, "description", None, None, Dice.D10, False],
+        [
+            WeaponPropertyName.VERSATILE,
+            "description",
+            None,
+            None,
+            Dice(1, DiceType.D10),
+            False,
+        ],
         [WeaponPropertyName.DISTANCE, "description", None, None, None, False],
         [WeaponPropertyName.DISTANCE, "description", 20, None, None, True],
         [WeaponPropertyName.DISTANCE, "description", 20, 40, None, True],
-        [WeaponPropertyName.DISTANCE, "description", 20, 40, Dice.D10, True],
-        [WeaponPropertyName.DISTANCE, "description", None, 40, Dice.D10, True],
-        [WeaponPropertyName.DISTANCE, "description", None, None, Dice.D10, True],
-        [WeaponPropertyName.DISTANCE, "description", 20, None, Dice.D10, True],
-        [WeaponPropertyName.AMMUNITION, "description", 20, 40, Dice.D10, True],
+        [
+            WeaponPropertyName.DISTANCE,
+            "description",
+            20,
+            40,
+            Dice(1, DiceType.D10),
+            True,
+        ],
+        [
+            WeaponPropertyName.DISTANCE,
+            "description",
+            None,
+            40,
+            Dice(1, DiceType.D10),
+            True,
+        ],
+        [
+            WeaponPropertyName.DISTANCE,
+            "description",
+            None,
+            None,
+            Dice(1, DiceType.D10),
+            True,
+        ],
+        [
+            WeaponPropertyName.DISTANCE,
+            "description",
+            20,
+            None,
+            Dice(1, DiceType.D10),
+            True,
+        ],
+        [
+            WeaponPropertyName.AMMUNITION,
+            "description",
+            20,
+            40,
+            Dice(1, DiceType.D10),
+            True,
+        ],
         [WeaponPropertyName.AMMUNITION, "description", None, 40, None, True],
         [WeaponPropertyName.AMMUNITION, "description", None, None, None, True],
         [WeaponPropertyName.VERSATILE, "description", None, None, None, True],
-        [WeaponPropertyName.VERSATILE, "description", None, 40, Dice.D10, True],
-        [WeaponPropertyName.VERSATILE, "description", 20, 40, Dice.D10, True],
+        [
+            WeaponPropertyName.VERSATILE,
+            "description",
+            None,
+            40,
+            Dice(1, DiceType.D10),
+            True,
+        ],
+        [
+            WeaponPropertyName.VERSATILE,
+            "description",
+            20,
+            40,
+            Dice(1, DiceType.D10),
+            True,
+        ],
     ],
     indirect=["base_attack_range", "max_attack_range"],
 )
@@ -68,11 +124,11 @@ def test_create(
             WeaponPropertyName.VERSATILE,
             None,
             None,
-            Dice.D10,
+            Dice(1, DiceType.D10),
             False,
         ],
         [
-            [WeaponPropertyName.VERSATILE, None, None, Dice.D10],
+            [WeaponPropertyName.VERSATILE, None, None, Dice(1, DiceType.D10)],
             WeaponPropertyName.AMMUNITION,
             20,
             40,
@@ -116,7 +172,7 @@ def test_create(
             WeaponPropertyName.AMMUNITION,
             None,
             40,
-            Dice.D10,
+            Dice(1, DiceType.D10),
             True,
         ],
         [
@@ -140,7 +196,7 @@ def test_create(
             WeaponPropertyName.FINESSE,
             None,
             None,
-            Dice.D10,
+            Dice(1, DiceType.D10),
             True,
         ],
         [
@@ -223,7 +279,7 @@ def test_change_description(weapon_property, description, should_error):
             False,
         ],
         [
-            [WeaponPropertyName.VERSATILE, None, None, Dice.D10],
+            [WeaponPropertyName.VERSATILE, None, None, Dice(1, DiceType.D10)],
             10,
             True,
         ],
@@ -260,7 +316,7 @@ def test_change_base_range(weapon_property, base_attack_range, should_error):
             False,
         ],
         [
-            [WeaponPropertyName.VERSATILE, None, None, Dice.D10],
+            [WeaponPropertyName.VERSATILE, None, None, Dice(1, DiceType.D10)],
             10,
             True,
         ],
@@ -288,17 +344,17 @@ def test_change_max_range(weapon_property, max_attack_range, should_error):
     [
         [
             [WeaponPropertyName.AMMUNITION, 20, 40, None],
-            Dice.D10,
+            Dice(1, DiceType.D10),
             True,
         ],
         [
-            [WeaponPropertyName.VERSATILE, None, None, Dice.D10],
-            Dice.D12,
+            [WeaponPropertyName.VERSATILE, None, None, Dice(1, DiceType.D10)],
+            Dice(1, DiceType.D12),
             False,
         ],
         [
-            [WeaponPropertyName.VERSATILE, None, None, Dice.D10],
-            Dice.D10,
+            [WeaponPropertyName.VERSATILE, None, None, Dice(1, DiceType.D10)],
+            Dice(1, DiceType.D10),
             True,
         ],
     ],

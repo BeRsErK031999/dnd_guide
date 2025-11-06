@@ -97,9 +97,9 @@ class Armor(EntityName, EntityDescription):
         self.__cost = cost
 
     def __validate_strength(self, strength: int) -> None:
-        if strength < 1 or strength > 20:
+        if strength < 0 or strength > 20:
             raise DomainError.invalid_data(
-                "модификатор силы для доспехов должен находиться в диапазоне от 1 до 20"
+                "модификатор силы для доспехов должен находиться в диапазоне от 0 до 20"
             )
 
     def __str__(self) -> str:

@@ -2,7 +2,6 @@ from uuid import uuid4
 
 import pytest
 from domain.length import Length, LengthUnit
-from domain.weapon_property.name import WeaponPropertyName
 from domain.weapon_property.weapon_property import WeaponProperty
 
 

@@ -1,6 +1,6 @@
 import pytest
 from domain.damage_type import DamageType
-from domain.dice import Dice
+from domain.dice import Dice, DiceType
 from domain.error import DomainError
 from domain.weapon.weapon import Weapon
 
@@ -8,9 +8,16 @@ from domain.weapon.weapon import Weapon
 @pytest.mark.parametrize(
     "name, description, coins, weapon_damage, weight, should_error",
     [
-        ["name", "description", 20, [Dice.D10, DamageType.ACID, 0], 5, False],
-        ["name", "", 20, [Dice.D10, DamageType.ACID, 0], 5, True],
-        ["", "description", 20, [Dice.D10, DamageType.ACID, 0], 5, True],
+        [
+            "name",
+            "description",
+            20,
+            [Dice(1, DiceType.D10), DamageType.ACID, 0],
+            5,
+            False,
+        ],
+        ["name", "", 20, [Dice(1, DiceType.D10), DamageType.ACID, 0], 5, True],
+        ["", "description", 20, [Dice(1, DiceType.D10), DamageType.ACID, 0], 5, True],
     ],
     indirect=["coins", "weapon_damage", "weight"],
 )
@@ -40,17 +47,17 @@ def test_create(
     "weapon, name, should_error",
     [
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
             "new_name",
             False,
         ],
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
             "name",
             True,
         ],
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
             "",
             True,
         ],
@@ -71,17 +78,17 @@ def test_change_name(weapon, name, should_error):
     "weapon, description, should_error",
     [
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
             "new_description",
             False,
         ],
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
             "description",
             False,
         ],
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
             "",
             True,
         ],
@@ -102,12 +109,12 @@ def test_change_description(weapon, description, should_error):
     "weapon, coins, should_error",
     [
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
             25,
             False,
         ],
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
             20,
             True,
         ],
@@ -128,12 +135,12 @@ def test_change_cost(weapon, coins, should_error):
     "weapon, weight, should_error",
     [
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
             2,
             False,
         ],
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
             5,
             True,
         ],
@@ -154,13 +161,13 @@ def test_change_weight(weapon, weight, should_error):
     "weapon, weapon_damage, should_error",
     [
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
-            [Dice.D12, DamageType.ACID, 0],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
+            [Dice(1, DiceType.D12), DamageType.ACID, 0],
             False,
         ],
         [
-            ["name", "description", 20, Dice.D10, DamageType.ACID, 0, 5],
-            [Dice.D10, DamageType.ACID, 0],
+            ["name", "description", 20, Dice(1, DiceType.D10), DamageType.ACID, 0, 5],
+            [Dice(1, DiceType.D10), DamageType.ACID, 0],
             True,
         ],
     ],
