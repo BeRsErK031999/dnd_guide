@@ -3,13 +3,14 @@ from typing import Sequence
 from uuid import UUID
 
 from application.dto.command.coin import CoinCommand
+from application.dto.command.dice import DiceCommand
 from application.dto.command.weight import WeightCommand
 from domain.error import DomainError
 
 
 @dataclass
 class WeaponDamageCommand:
-    dice: str
+    dice: DiceCommand
     damage_type: str
     bonus_damage: int
 

@@ -2,15 +2,15 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
+from application.dto.command.dice import DiceCommand
 from application.dto.command.length import LengthCommand
 from domain.error import DomainError
 
 
 @dataclass
 class ClassLevelDiceCommand:
-    dice: str
+    dice: DiceCommand
     description: str
-    number: int = 1
 
 
 @dataclass

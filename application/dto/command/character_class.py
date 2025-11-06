@@ -2,12 +2,13 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
+from application.dto.command.dice import DiceCommand
 from domain.error import DomainError
 
 
 @dataclass
 class ClassHitsCommand:
-    hit_dice: str
+    hit_dice: DiceCommand
     starting_hits: int
     hit_modifier: str
     next_level_hits: int

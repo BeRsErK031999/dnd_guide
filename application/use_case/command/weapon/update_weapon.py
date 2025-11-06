@@ -8,7 +8,7 @@ from application.repository import (
 from application.use_case.command.user_check import UserCheck
 from domain.coin import Coins, PieceType
 from domain.damage_type import DamageType
-from domain.dice import Dice
+from domain.dice import Dice, DiceType
 from domain.error import DomainError
 from domain.weapon import WeaponDamage, WeaponService
 from domain.weight import Weight, WeightUnit
@@ -59,7 +59,10 @@ class UpdateWeaponUseCase(UserCheck):
         if command.damage is not None:
             weapon.new_damage(
                 WeaponDamage(
-                    Dice.from_str(command.damage.dice),
+                    Dice(
+                        command.damage.dice.count,
+                        DiceType.from_str(command.damage.dice.dice_type),
+                    ),
                     DamageType.from_str(command.damage.damage_type),
                     command.damage.bonus_damage,
                 )

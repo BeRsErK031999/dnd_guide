@@ -1,7 +1,7 @@
 from application.dto.command.weapon_property import CreateWeaponPropertyCommand
 from application.repository import UserRepository, WeaponPropertyRepository
 from application.use_case.command.user_check import UserCheck
-from domain.dice import Dice
+from domain.dice import Dice, DiceType
 from domain.error import DomainError
 from domain.length import Length, LengthUnit
 from domain.weapon_property import (
@@ -50,7 +50,10 @@ class CreateWeaponPropertyUseCase(UserCheck):
                 else None
             ),
             (
-                Dice(command.second_hand_dice.dice)
+                Dice(
+                    command.second_hand_dice.dice.count,
+                    DiceType.from_str(command.second_hand_dice.dice.dice_type),
+                )
                 if command.second_hand_dice is not None
                 and command.second_hand_dice.dice is not None
                 else None

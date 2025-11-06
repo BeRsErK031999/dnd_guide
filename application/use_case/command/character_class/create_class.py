@@ -13,7 +13,7 @@ from domain.character_class import (
     ClassProficiencies,
     ClassService,
 )
-from domain.dice import Dice
+from domain.dice import Dice, DiceType
 from domain.error import DomainError
 from domain.modifier import Modifier
 from domain.skill import Skill
@@ -54,7 +54,10 @@ class CreateClassUseCase(UserCheck):
             command.description,
             [Modifier.from_str(modifier) for modifier in command.primary_modifiers],
             ClassHits(
-                Dice.from_str(command.hits.hit_dice),
+                Dice(
+                    command.hits.hit_dice.count,
+                    DiceType.from_str(command.hits.hit_dice.dice_type),
+                ),
                 command.hits.starting_hits,
                 Modifier.from_str(command.hits.hit_modifier),
                 command.hits.next_level_hits,

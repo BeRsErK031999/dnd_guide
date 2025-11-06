@@ -1,7 +1,7 @@
 from application.dto.command.weapon_property import UpdateWeaponPropertyCommand
 from application.repository import UserRepository, WeaponPropertyRepository
 from application.use_case.command.user_check import UserCheck
-from domain.dice import Dice
+from domain.dice import Dice, DiceType
 from domain.error import DomainError
 from domain.length import Length, LengthUnit
 from domain.weapon_property import WeaponPropertyName, WeaponPropertyService
@@ -55,7 +55,10 @@ class UpdateWeaponPropertyUseCase(UserCheck):
                     else weapon_property.max_range()
                 ),
                 (
-                    Dice(command.second_hand_dice.dice)
+                    Dice(
+                        command.second_hand_dice.dice.count,
+                        DiceType.from_str(command.second_hand_dice.dice.dice_type),
+                    )
                     if command.second_hand_dice is not None
                     and command.second_hand_dice.dice is not None
                     else weapon_property.second_hand_dice()
@@ -88,7 +91,10 @@ class UpdateWeaponPropertyUseCase(UserCheck):
         if command.second_hand_dice is not None:
             weapon_property.new_second_hand_dice(
                 (
-                    Dice.from_str(command.second_hand_dice.dice)
+                    Dice(
+                        command.second_hand_dice.dice.count,
+                        DiceType.from_str(command.second_hand_dice.dice.dice_type),
+                    )
                     if command.second_hand_dice.dice is not None
                     else None
                 )

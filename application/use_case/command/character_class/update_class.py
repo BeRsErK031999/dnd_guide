@@ -8,7 +8,7 @@ from application.repository import (
 from application.use_case.command.user_check import UserCheck
 from domain.armor import ArmorType
 from domain.character_class import ClassHits, ClassProficiencies, ClassService
-from domain.dice import Dice
+from domain.dice import Dice, DiceType
 from domain.error import DomainError
 from domain.modifier import Modifier
 from domain.skill import Skill
@@ -46,7 +46,10 @@ class UpdateClassUseCase(UserCheck):
         if command.hits is not None:
             changing_class.new_hits(
                 ClassHits(
-                    Dice.from_str(command.hits.hit_dice),
+                    Dice(
+                        command.hits.hit_dice.count,
+                        DiceType.from_str(command.hits.hit_dice.dice_type),
+                    ),
                     command.hits.starting_hits,
                     Modifier.from_str(command.hits.hit_modifier),
                     command.hits.next_level_hits,

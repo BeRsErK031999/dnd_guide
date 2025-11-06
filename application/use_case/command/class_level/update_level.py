@@ -9,7 +9,7 @@ from domain.class_level import (
     ClassLevelService,
     ClassLevelSpellSlots,
 )
-from domain.dice import Dice
+from domain.dice import Dice, DiceType
 from domain.error import DomainError
 from domain.length import Length, LengthUnit
 
@@ -74,9 +74,11 @@ class UpdateClassLevelUseCase(UserCheck):
         if command.dice is not None:
             class_level.new_dice(
                 ClassLevelDice(
-                    Dice.from_str(command.dice.dice),
+                    Dice(
+                        command.dice.dice.count,
+                        DiceType.from_str(command.dice.dice.dice_type),
+                    ),
                     command.dice.description,
-                    command.dice.number,
                 )
             )
         if command.spell_slots is not None:

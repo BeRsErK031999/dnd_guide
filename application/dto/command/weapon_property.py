@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+from application.dto.command.dice import DiceCommand
 from application.dto.command.length import LengthCommand
 
 
@@ -16,7 +17,7 @@ class WeaponPropertyMaxRangeCommand:
 
 @dataclass
 class WeaponPropertySecondHandDiceCommand:
-    dice: str | None
+    dice: DiceCommand | None
 
 
 @dataclass
