@@ -6,13 +6,13 @@ from domain.user import User
 
 class UserRepository(ABC):
     @abstractmethod
-    def is_user_of_id_exist(self, user_id: UUID) -> bool:
+    async def is_user_of_id_exist(self, user_id: UUID) -> bool:
         raise NotImplementedError()
 
     @abstractmethod
-    def create(self, user: User) -> None:
+    async def save(self, user: User) -> None:
         raise NotImplementedError()
 
     @abstractmethod
-    def delete(self, user_id: UUID) -> None:
+    async def delete(self, user_id: UUID) -> None:
         raise NotImplementedError()

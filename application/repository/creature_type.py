@@ -18,7 +18,7 @@ class CreatureTypeRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, size: CreatureType) -> None:
+    async def save(self, creature_type: CreatureType) -> None:
         raise NotImplemented
 
     @abstractmethod
