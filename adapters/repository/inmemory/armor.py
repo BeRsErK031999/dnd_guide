@@ -9,16 +9,16 @@ class InMemoryArmorRepository(DomainArmorRepository, AppArmorRepository):
     def __init__(self) -> None:
         self.__store: dict[UUID, Armor] = {}
 
-    async def is_name_exist(self, name: str) -> bool:
+    async def name_exists(self, name: str) -> bool:
         return any(armor.name == name for armor in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()
 
-    async def is_armor_of_id_exist(self, armor_id: UUID) -> bool:
+    async def id_exists(self, armor_id: UUID) -> bool:
         return armor_id in self.__store
 
-    async def get_armor_of_id(self, armor_id: UUID) -> Armor:
+    async def get_by_id(self, armor_id: UUID) -> Armor:
         return self.__store[armor_id]
 
     async def save(self, armor: Armor) -> None:

@@ -11,16 +11,16 @@ class InMemoryClassFeatureRepository(
     def __init__(self) -> None:
         self.__store: dict[UUID, ClassFeature] = {}
 
-    async def is_name_exist(self, name: str) -> bool:
+    async def name_for_class_exists(self, class_id: UUID, name: str) -> bool:
         return any(feature.name == name for feature in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()
 
-    async def is_feature_of_id_exist(self, feature_id: UUID) -> bool:
+    async def id_exists(self, feature_id: UUID) -> bool:
         return feature_id in self.__store
 
-    async def get_feature_of_id(self, feature_id: UUID) -> ClassFeature:
+    async def get_by_id(self, feature_id: UUID) -> ClassFeature:
         return self.__store[feature_id]
 
     async def save(self, feature: ClassFeature) -> None:

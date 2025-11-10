@@ -9,7 +9,7 @@ class InMemoryClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepo
     def __init__(self) -> None:
         self.__store: dict[UUID, ClassLevel] = {}
 
-    async def is_level_of_class_exist(self, class_id: UUID, level: int) -> bool:
+    async def level_of_class_exists(self, class_id: UUID, level: int) -> bool:
         return any(
             level == lvl.level()
             for lvl in self.__store.values()
@@ -19,10 +19,10 @@ class InMemoryClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepo
     async def next_id(self) -> UUID:
         return uuid4()
 
-    async def is_level_of_id_exist(self, level_id: UUID) -> bool:
+    async def id_exists(self, level_id: UUID) -> bool:
         return level_id in self.__store
 
-    async def get_level_of_id(self, level_id: UUID) -> ClassLevel:
+    async def get_by_id(self, level_id: UUID) -> ClassLevel:
         return self.__store[level_id]
 
     async def save(self, level: ClassLevel) -> None:

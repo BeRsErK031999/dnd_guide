@@ -9,16 +9,16 @@ class InMemorySpellRepository(DomainSpellRepository, AppSpellRepository):
     def __init__(self) -> None:
         self.__store: dict[UUID, Spell] = {}
 
-    async def is_name_exist(self, name: str) -> bool:
+    async def name_exists(self, name: str) -> bool:
         return any(spell.name == name for spell in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()
 
-    async def is_spell_of_id_exist(self, spell_id: UUID) -> bool:
+    async def id_exists(self, spell_id: UUID) -> bool:
         return spell_id in self.__store
 
-    async def get_spell_of_id(self, spell_id: UUID) -> Spell:
+    async def get_by_id(self, spell_id: UUID) -> Spell:
         return self.__store[spell_id]
 
     async def save(self, spell: Spell) -> None:

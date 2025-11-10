@@ -9,16 +9,16 @@ class InMemoryFeatRepository(DomainFeatRepository, AppFeatRepository):
     def __init__(self) -> None:
         self.__store: dict[UUID, Feat] = {}
 
-    async def is_name_exist(self, name: str) -> bool:
+    async def name_exists(self, name: str) -> bool:
         return any(feat.name == name for feat in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()
 
-    async def is_feat_of_id_exist(self, feat_id: UUID) -> bool:
+    async def id_exists(self, feat_id: UUID) -> bool:
         return feat_id in self.__store
 
-    async def get_feat_of_id(self, feat_id: UUID) -> Feat:
+    async def get_by_id(self, feat_id: UUID) -> Feat:
         return self.__store[feat_id]
 
     async def save(self, feat: Feat) -> None:

@@ -8,7 +8,7 @@ class InMemoryUserRepository(UserRepository):
     def __init__(self) -> None:
         self.__store: dict[UUID, User] = {}
 
-    async def is_user_of_id_exist(self, user_id: UUID) -> bool:
+    async def id_exists(self, user_id: UUID) -> bool:
         return user_id in self.__store
 
     async def save(self, user: User) -> None:

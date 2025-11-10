@@ -15,7 +15,7 @@ class InMemoryWeaponPropertyRepository(
     def __init__(self) -> None:
         self.__store: dict[UUID, WeaponProperty] = {}
 
-    async def is_name_exist(self, name: str) -> bool:
+    async def name_exists(self, name: str) -> bool:
         return any(
             weapon_property.name == name for weapon_property in self.__store.values()
         )
@@ -23,12 +23,10 @@ class InMemoryWeaponPropertyRepository(
     async def next_id(self) -> UUID:
         return uuid4()
 
-    async def is_weapon_property_of_id_exist(self, weapon_property_id: UUID) -> bool:
+    async def id_exists(self, weapon_property_id: UUID) -> bool:
         return weapon_property_id in self.__store
 
-    async def get_weapon_property_of_id(
-        self, weapon_property_id: UUID
-    ) -> WeaponProperty:
+    async def get_by_id(self, weapon_property_id: UUID) -> WeaponProperty:
         return self.__store[weapon_property_id]
 
     async def save(self, weapon_property: WeaponProperty) -> None:

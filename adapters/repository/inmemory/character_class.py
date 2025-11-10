@@ -9,7 +9,7 @@ class InMemoryClassRepository(DomainClassRepository, AppClassRepository):
     def __init__(self) -> None:
         self.__store: dict[UUID, CharacterClass] = {}
 
-    async def is_name_exist(self, name: str) -> bool:
+    async def name_exists(self, name: str) -> bool:
         return any(
             character_class.name == name for character_class in self.__store.values()
         )
@@ -17,10 +17,10 @@ class InMemoryClassRepository(DomainClassRepository, AppClassRepository):
     async def next_id(self) -> UUID:
         return uuid4()
 
-    async def is_class_of_id_exist(self, class_id: UUID) -> bool:
+    async def id_exists(self, class_id: UUID) -> bool:
         return class_id in self.__store
 
-    async def get_class_of_id(self, class_id: UUID) -> CharacterClass:
+    async def get_by_id(self, class_id: UUID) -> CharacterClass:
         return self.__store[class_id]
 
     async def save(self, character_class: CharacterClass) -> None:

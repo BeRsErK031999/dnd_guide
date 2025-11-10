@@ -10,16 +10,16 @@ class InMemorySubclassRepository(DomainSubclassRepository, AppSubclassRepository
     def __init__(self) -> None:
         self.__store: Dict[UUID, CharacterSubclass] = {}
 
-    async def is_name_exist(self, name: str) -> bool:
+    async def name_exists(self, name: str) -> bool:
         return any(armor.name == name for armor in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()
 
-    async def is_subclass_of_id_exist(self, subclass_id: UUID) -> bool:
+    async def id_exists(self, subclass_id: UUID) -> bool:
         return subclass_id in self.__store
 
-    async def get_subclass_of_id(self, subclass_id: UUID) -> CharacterSubclass:
+    async def get_by_id(self, subclass_id: UUID) -> CharacterSubclass:
         return self.__store[subclass_id]
 
     async def save(self, subclass: CharacterSubclass) -> None:

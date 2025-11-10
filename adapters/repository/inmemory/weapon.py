@@ -9,16 +9,16 @@ class InMemoryWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
     def __init__(self) -> None:
         self.__store: dict[UUID, Weapon] = {}
 
-    async def is_name_exist(self, name: str) -> bool:
+    async def name_exists(self, name: str) -> bool:
         return any(weapon.name == name for weapon in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()
 
-    async def is_weapon_of_id_exist(self, weapon_id: UUID) -> bool:
+    async def id_exists(self, weapon_id: UUID) -> bool:
         return weapon_id in self.__store
 
-    async def get_weapon_of_id(self, weapon_id: UUID) -> Weapon:
+    async def get_by_id(self, weapon_id: UUID) -> Weapon:
         return self.__store[weapon_id]
 
     async def save(self, weapon: Weapon) -> None:

@@ -9,16 +9,16 @@ class InMemorySubraceRepository(DomainSubraceRepository, AppSubraceRepository):
     def __init__(self) -> None:
         self.__store: dict[UUID, Subrace] = {}
 
-    async def is_name_exist(self, name: str) -> bool:
+    async def name_exists(self, name: str) -> bool:
         return any(subrace.name == name for subrace in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()
 
-    async def is_subrace_of_id_exist(self, subrace_id: UUID) -> bool:
+    async def id_exists(self, subrace_id: UUID) -> bool:
         return subrace_id in self.__store
 
-    async def get_subrace_of_id(self, subrace_id: UUID) -> Subrace:
+    async def get_by_id(self, subrace_id: UUID) -> Subrace:
         return self.__store[subrace_id]
 
     async def save(self, subrace: Subrace) -> None:
