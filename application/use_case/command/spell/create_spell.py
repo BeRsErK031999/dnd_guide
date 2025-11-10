@@ -36,12 +36,10 @@ class CreateSpellUseCase(UserCheck):
                 f"заклинание с именем {command.name} не возможно создать"
             )
         for class_id in command.class_ids:
-            if not await self.__class_repository.is_class_of_id_exist(class_id):
+            if not await self.__class_repository.id_exists(class_id):
                 raise DomainError.invalid_data(f"класс с id {class_id} не существует")
         for subclass_id in command.subclass_ids:
-            if not await self.__subclass_repository.is_subclass_of_id_exist(
-                subclass_id
-            ):
+            if not await self.__subclass_repository.id_exists(subclass_id):
                 raise DomainError.invalid_data(
                     f"подкласс с id {subclass_id} не существует"
                 )

@@ -1,24 +1,9 @@
-from application.dto.command.race import CreateRaceCommand
 from application.dto.command.subrace import CreateSubraceCommand
-from application.repository import (
-    CreatureSizeRepository,
-    CreatureTypeRepository,
-    RaceRepository,
-    UserRepository,
-)
+from application.repository import RaceRepository, UserRepository
 from application.repository.subrace import SubraceRepository
 from application.use_case.command.user_check import UserCheck
 from domain.error import DomainError
-from domain.length import Length, LengthUnit
 from domain.modifier import Modifier
-from domain.race import (
-    Race,
-    RaceAge,
-    RaceFeature,
-    RaceIncreaseModifier,
-    RaceService,
-    RaceSpeed,
-)
 from domain.subrace.feature import SubraceFeature
 from domain.subrace.increase_modifier import SubraceIncreaseModifier
 from domain.subrace.service import SubraceService
@@ -44,7 +29,7 @@ class CreateSubraceUseCase(UserCheck):
             raise DomainError.invalid_data(
                 f"не возможно создать подрасу с названием {command.name}"
             )
-        if not await self.__race_repository.is_race_of_id_exist(command.race_id):
+        if not await self.__race_repository.id_exists(command.race_id):
             raise DomainError.invalid_data(f"расы с id {command.race_id} не существует")
         subrace = Subrace(
             await self.__subrace_repository.next_id(),

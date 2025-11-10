@@ -24,13 +24,11 @@ class UpdateClassFeatureUseCase(UserCheck):
 
     async def execute(self, command: UpdateClassFeatureCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__feature_repository.is_feature_of_id_exist(
-            command.feature_id
-        ):
+        if not await self.__feature_repository.id_exists(command.feature_id):
             raise DomainError.not_found(
                 f"умения класса с id {command.feature_id} не существует"
             )
-        feature = await self.__feature_repository.get_feature_of_id(command.feature_id)
+        feature = await self.__feature_repository.get_by_id(command.feature_id)
         if command.name is not None and command.class_id is not None:
             if not await self.__feature_service.can_rename_for_class_with_name(
                 command.class_id, command.name
@@ -38,7 +36,7 @@ class UpdateClassFeatureUseCase(UserCheck):
                 raise DomainError.invalid_data(
                     f"умение для класса с название {command.name} уже существует"
                 )
-            if not await self.__class_repository.is_class_of_id_exist(command.class_id):
+            if not await self.__class_repository.id_exists(command.class_id):
                 raise DomainError.invalid_data(
                     f"класс с id {command.class_id} не существует"
                 )
@@ -59,7 +57,7 @@ class UpdateClassFeatureUseCase(UserCheck):
                 raise DomainError.invalid_data(
                     f"умение для класса с название {feature.name()} уже существует"
                 )
-            if not await self.__class_repository.is_class_of_id_exist(command.class_id):
+            if not await self.__class_repository.id_exists(command.class_id):
                 raise DomainError.invalid_data(
                     f"класс с id {command.class_id} не существует"
                 )

@@ -10,11 +10,11 @@ class ArmorRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_armor_of_id_exist(self, armor_id: UUID) -> bool:
+    async def id_exists(self, armor_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_armor_of_id(self, armor_id: UUID) -> Armor:
+    async def get_by_id(self, armor_id: UUID) -> Armor:
         raise NotImplemented
 
     @abstractmethod

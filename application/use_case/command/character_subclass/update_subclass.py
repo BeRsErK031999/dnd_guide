@@ -20,17 +20,13 @@ class UpdateSubclassUseCase(UserCheck):
 
     async def execute(self, command: SubclassUpdateCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__subclass_repository.is_subclass_of_id_exist(
-            command.subclass_id
-        ):
+        if not await self.__subclass_repository.id_exists(command.subclass_id):
             raise DomainError.not_found(
                 f"подкласс с id {command.subclass_id} не существует"
             )
-        changing_class = await self.__subclass_repository.get_subclass_of_id(
-            command.subclass_id
-        )
+        changing_class = await self.__subclass_repository.get_by_id(command.subclass_id)
         if command.class_id is not None:
-            if not await self.__class_repository.is_class_of_id_exist(command.class_id):
+            if not await self.__class_repository.id_exists(command.class_id):
                 raise DomainError.invalid_data(
                     f"класса с id {command.class_id} не существует"
                 )

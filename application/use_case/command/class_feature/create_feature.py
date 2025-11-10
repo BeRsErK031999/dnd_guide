@@ -30,7 +30,7 @@ class CreateClassFeatureUseCase(UserCheck):
             raise DomainError.invalid_data(
                 f"умение для класса с название {command.name} уже существует"
             )
-        if not await self.__class_repository.is_class_of_id_exist(command.class_id):
+        if not await self.__class_repository.id_exists(command.class_id):
             raise DomainError.invalid_data(
                 f"класс с id {command.class_id} не существует"
             )

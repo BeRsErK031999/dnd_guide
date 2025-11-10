@@ -15,9 +15,7 @@ class DeleteWeaponKindUseCase(UserCheck):
 
     async def execute(self, command: DeleteWeaponKindCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__kind_repository.is_weapon_kind_of_id_exist(
-            command.weapon_kind_id
-        ):
+        if not await self.__kind_repository.id_exists(command.weapon_kind_id):
             raise DomainError.not_found(
                 f"вид оружия с id {command.weapon_kind_id} не существует"
             )

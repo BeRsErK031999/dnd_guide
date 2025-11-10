@@ -21,11 +21,11 @@ class UpdateArmorUseCase(UserCheck):
 
     async def execute(self, command: UpdateArmorCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__armor_repository.is_armor_of_id_exist(command.armor_id):
+        if not await self.__armor_repository.id_exists(command.armor_id):
             raise DomainError.not_found(
                 f"доспехов с id {command.armor_id} не существует"
             )
-        armor = await self.__armor_repository.get_armor_of_id(command.armor_id)
+        armor = await self.__armor_repository.get_by_id(command.armor_id)
         if command.armor_type is not None:
             armor.new_armor_type(ArmorType.from_str(command.armor_type))
         if command.name is not None:

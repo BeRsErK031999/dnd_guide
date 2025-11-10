@@ -15,9 +15,7 @@ class DeleteWeaponPropertyUseCase(UserCheck):
 
     async def execute(self, command: DeleteWeaponPropertyCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__property_repository.is_weapon_property_of_id_exist(
-            command.weapon_property_id
-        ):
+        if not await self.__property_repository.id_exists(command.weapon_property_id):
             raise DomainError.not_found(
                 f"свойство с id {command.weapon_property_id} не существует"
             )

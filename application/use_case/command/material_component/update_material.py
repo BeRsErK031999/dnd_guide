@@ -18,15 +18,11 @@ class UpdateMaterialComponentUseCase(UserCheck):
 
     async def execute(self, command: UpdateMaterialComponentCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__material_repository.is_material_of_id_exist(
-            command.material_id
-        ):
+        if not await self.__material_repository.id_exists(command.material_id):
             raise DomainError.not_found(
                 f"материала с id {command.material_id} не существует"
             )
-        material = await self.__material_repository.get_material_of_id(
-            command.material_id
-        )
+        material = await self.__material_repository.get_by_id(command.material_id)
         if command.name is not None:
             if not await self.__material_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(

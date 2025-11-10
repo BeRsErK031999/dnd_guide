@@ -24,13 +24,11 @@ class UpdateSubclassFeatureUseCase(UserCheck):
 
     async def execute(self, command: UpdateSubclassFeatureCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__feature_repository.is_feature_of_id_exist(
-            command.feature_id
-        ):
+        if not await self.__feature_repository.id_exists(command.feature_id):
             raise DomainError.not_found(
                 f"умения подкласса с id {command.feature_id} не существует"
             )
-        feature = await self.__feature_repository.get_feature_of_id(command.feature_id)
+        feature = await self.__feature_repository.get_by_id(command.feature_id)
         if command.name is not None and command.subclass_id is not None:
             if not await self.__feature_service.can_rename_for_class_with_name(
                 command.subclass_id, command.name
@@ -38,9 +36,7 @@ class UpdateSubclassFeatureUseCase(UserCheck):
                 raise DomainError.invalid_data(
                     f"умение для подкласса с название {command.name} уже существует"
                 )
-            if not await self.__subclass_repository.is_subclass_of_id_exist(
-                command.subclass_id
-            ):
+            if not await self.__subclass_repository.id_exists(command.subclass_id):
                 raise DomainError.invalid_data(
                     f"класс с id {command.subclass_id} не существует"
                 )
@@ -61,9 +57,7 @@ class UpdateSubclassFeatureUseCase(UserCheck):
                 raise DomainError.invalid_data(
                     f"умение для подкласса с название {feature.name()} уже существует"
                 )
-            if not await self.__subclass_repository.is_subclass_of_id_exist(
-                command.subclass_id
-            ):
+            if not await self.__subclass_repository.id_exists(command.subclass_id):
                 raise DomainError.invalid_data(
                     f"подкласс с id {command.subclass_id} не существует"
                 )

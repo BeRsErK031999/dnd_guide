@@ -10,11 +10,11 @@ class SubraceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_subrace_of_id_exist(self, subrace_id: UUID) -> bool:
+    async def id_exists(self, subrace_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_subrace_of_id(self, subrace_id: UUID) -> Subrace:
+    async def get_by_id(self, subrace_id: UUID) -> Subrace:
         raise NotImplemented
 
     @abstractmethod

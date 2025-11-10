@@ -31,23 +31,21 @@ class UpdateSpellUseCase(UserCheck):
 
     async def execute(self, command: UpdateSpellCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__spell_repository.is_spell_of_id_exist(command.spell_id):
+        if not await self.__spell_repository.id_exists(command.spell_id):
             raise DomainError.not_found(
                 f"заклинание с id {command.spell_id} не существует"
             )
-        spell = await self.__spell_repository.get_spell_of_id(command.spell_id)
+        spell = await self.__spell_repository.get_by_id(command.spell_id)
         if command.class_ids is not None:
             for class_id in command.class_ids:
-                if not await self.__class_repository.is_class_of_id_exist(class_id):
+                if not await self.__class_repository.id_exists(class_id):
                     raise DomainError.invalid_data(
                         f"класс с id {class_id} не существует"
                     )
             spell.new_class_ids(command.class_ids)
         if command.subclass_ids is not None:
             for subclass_id in command.subclass_ids:
-                if not await self.__subclass_repository.is_subclass_of_id_exist(
-                    subclass_id
-                ):
+                if not await self.__subclass_repository.id_exists(subclass_id):
                     raise DomainError.invalid_data(
                         f"подкласс с id {subclass_id} не существует"
                     )

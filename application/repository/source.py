@@ -10,11 +10,11 @@ class SourceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_source_of_id_exist(self, source_id: UUID) -> bool:
+    async def id_exists(self, source_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_source_of_id(self, source_id: UUID) -> Source:
+    async def get_by_id(self, source_id: UUID) -> Source:
         raise NotImplemented
 
     @abstractmethod

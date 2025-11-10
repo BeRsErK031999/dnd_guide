@@ -10,11 +10,11 @@ class ToolRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_tool_of_id_exist(self, tool_id: UUID) -> bool:
+    async def id_exists(self, tool_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_tool_of_id(self, tool_id: UUID) -> Tool:
+    async def get_by_id(self, tool_id: UUID) -> Tool:
         raise NotImplemented
 
     @abstractmethod

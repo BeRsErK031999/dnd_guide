@@ -35,9 +35,9 @@ class UpdateRaceUseCase(UserCheck):
 
     async def execute(self, command: UpdateRaceCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__race_repository.is_race_of_id_exist(command.race_id):
+        if not await self.__race_repository.id_exists(command.race_id):
             raise DomainError.not_found(f"расы с id {command.race_id} не существует")
-        race = await self.__race_repository.get_race_of_id(command.race_id)
+        race = await self.__race_repository.get_by_id(command.race_id)
         if command.name is not None:
             if not await self.__race_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
@@ -48,13 +48,13 @@ class UpdateRaceUseCase(UserCheck):
         if command.description is not None:
             race.new_description(command.description)
         if command.size_id is not None:
-            if not await self.__size_repository.is_size_of_id_exist(command.size_id):
+            if not await self.__size_repository.id_exists(command.size_id):
                 raise DomainError.invalid_data(
                     f"размера существ с id {command.size_id} не существует"
                 )
             race.new_size_id(command.size_id)
         if command.type_id is not None:
-            if not await self.__type_repository.is_type_of_id_exist(command.type_id):
+            if not await self.__type_repository.id_exists(command.type_id):
                 raise DomainError.invalid_data(
                     f"типа существ с id {command.type_id} не существует"
                 )

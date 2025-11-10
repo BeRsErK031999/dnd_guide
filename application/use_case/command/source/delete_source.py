@@ -15,7 +15,7 @@ class DeleteSourceUseCase(UserCheck):
 
     async def execute(self, command: DeleteSourceCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__source_repository.is_source_of_id_exist(command.source_id):
+        if not await self.__source_repository.id_exists(command.source_id):
             raise DomainError.not_found(
                 f"источника с id {command.source_id} не существует"
             )

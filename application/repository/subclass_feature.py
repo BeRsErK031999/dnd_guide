@@ -10,11 +10,11 @@ class SubclassFeatureRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_feature_of_id_exist(self, feature_id: UUID) -> bool:
+    async def id_exists(self, feature_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_feature_of_id(self, feature_id: UUID) -> SubclassFeature:
+    async def get_by_id(self, feature_id: UUID) -> SubclassFeature:
         raise NotImplemented
 
     @abstractmethod

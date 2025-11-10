@@ -30,9 +30,7 @@ class CreateSubclassFeatureUseCase(UserCheck):
             raise DomainError.invalid_data(
                 f"умение для подкласса с название {command.name} уже существует"
             )
-        if not await self.__subclass_repository.is_subclass_of_id_exist(
-            command.subclass_id
-        ):
+        if not await self.__subclass_repository.id_exists(command.subclass_id):
             raise DomainError.invalid_data(
                 f"подкласс с id {command.subclass_id} не существует"
             )

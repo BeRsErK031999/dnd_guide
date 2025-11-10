@@ -40,11 +40,11 @@ class CreateRaceUseCase(UserCheck):
             raise DomainError.invalid_data(
                 f"не возможно создать расу с названием {command.name}"
             )
-        if not await self.__size_repository.is_size_of_id_exist(command.size_id):
+        if not await self.__size_repository.id_exists(command.size_id):
             raise DomainError.invalid_data(
                 f"размера существ с id {command.size_id} не существует"
             )
-        if not await self.__type_repository.is_type_of_id_exist(command.type_id):
+        if not await self.__type_repository.id_exists(command.type_id):
             raise DomainError.invalid_data(
                 f"типа существ с id {command.type_id} не существует"
             )

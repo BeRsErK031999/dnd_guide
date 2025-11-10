@@ -10,11 +10,11 @@ class RaceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_race_of_id_exist(self, race_id: UUID) -> bool:
+    async def id_exists(self, race_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_race_of_id(self, race_id: UUID) -> Race:
+    async def get_by_id(self, race_id: UUID) -> Race:
         raise NotImplemented
 
     @abstractmethod

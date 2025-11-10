@@ -10,11 +10,11 @@ class CreatureTypeRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_type_of_id_exist(self, creature_type_id: UUID) -> bool:
+    async def id_exists(self, creature_type_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_type_of_id(self, creature_type_id: UUID) -> CreatureType:
+    async def get_by_id(self, creature_type_id: UUID) -> CreatureType:
         raise NotImplemented
 
     @abstractmethod

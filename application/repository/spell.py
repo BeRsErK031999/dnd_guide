@@ -10,11 +10,11 @@ class SpellRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_spell_of_id_exist(self, spell_id: UUID) -> bool:
+    async def id_exists(self, spell_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_spell_of_id(self, spell_id: UUID) -> Spell:
+    async def get_by_id(self, spell_id: UUID) -> Spell:
         raise NotImplemented
 
     @abstractmethod

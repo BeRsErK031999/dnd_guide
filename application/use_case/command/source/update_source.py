@@ -18,11 +18,11 @@ class UpdateSourceUseCase(UserCheck):
 
     async def execute(self, command: UpdateSourceCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__source_repository.is_source_of_id_exist(command.source_id):
+        if not await self.__source_repository.id_exists(command.source_id):
             raise DomainError.not_found(
                 f"источника с id {command.source_id} не существует"
             )
-        source = await self.__source_repository.get_source_of_id(command.source_id)
+        source = await self.__source_repository.get_by_id(command.source_id)
         if command.name is not None:
             if not await self.__source_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(

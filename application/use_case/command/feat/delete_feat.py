@@ -15,6 +15,6 @@ class DeleteFeatUseCase(UserCheck):
 
     async def execute(self, command: DeleteFeatCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__feat_repository.is_feat_of_id_exist(command.feat_id):
+        if not await self.__feat_repository.id_exists(command.feat_id):
             raise DomainError.not_found(f"черты с id {command.feat_id} не существует")
         await self.__feat_repository.delete(command.feat_id)

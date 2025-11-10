@@ -21,13 +21,11 @@ class UpdateSubraceUseCase(UserCheck):
 
     async def execute(self, command: UpdateSubraceCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__subrace_repository.is_subrace_of_id_exist(
-            command.subrace_id
-        ):
+        if not await self.__subrace_repository.id_exists(command.subrace_id):
             raise DomainError.not_found(f"подрасы с id {command.race_id} не существует")
-        subrace = await self.__subrace_repository.get_subrace_of_id(command.subrace_id)
+        subrace = await self.__subrace_repository.get_by_id(command.subrace_id)
         if command.race_id is not None:
-            if not await self.__race_repository.is_race_of_id_exist(command.race_id):
+            if not await self.__race_repository.id_exists(command.race_id):
                 raise DomainError.invalid_data(f"расы с id {command} не существует")
             subrace.new_race_id(command.race_id)
         if command.name is not None:

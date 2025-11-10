@@ -6,7 +6,7 @@ from domain.user import User
 
 class UserRepository(ABC):
     @abstractmethod
-    async def is_user_of_id_exist(self, user_id: UUID) -> bool:
+    async def id_exists(self, user_id: UUID) -> bool:
         raise NotImplementedError()
 
     @abstractmethod

@@ -10,11 +10,11 @@ class SubclassRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_subclass_of_id_exist(self, subclass_id: UUID) -> bool:
+    async def id_exists(self, subclass_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_subclass_of_id(self, subclass_id: UUID) -> CharacterSubclass:
+    async def get_by_id(self, subclass_id: UUID) -> CharacterSubclass:
         raise NotImplemented
 
     @abstractmethod

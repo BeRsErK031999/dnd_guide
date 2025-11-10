@@ -15,9 +15,7 @@ class DeleteSubclassUseCase(UserCheck):
 
     async def execute(self, command: SubclassDeleteCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__subclass_repository.is_subclass_of_id_exist(
-            command.subclass_id
-        ):
+        if not await self.__subclass_repository.id_exists(command.subclass_id):
             raise DomainError.not_found(
                 f"подкласс с id {command.subclass_id} не существует"
             )

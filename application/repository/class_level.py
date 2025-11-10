@@ -10,11 +10,11 @@ class ClassLevelRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_level_of_id_exist(self, level_id: UUID) -> bool:
+    async def id_exists(self, level_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_level_of_id(self, level_id: UUID) -> ClassLevel:
+    async def get_by_id(self, level_id: UUID) -> ClassLevel:
         raise NotImplemented
 
     @abstractmethod

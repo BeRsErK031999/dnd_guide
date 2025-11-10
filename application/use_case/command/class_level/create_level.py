@@ -30,7 +30,7 @@ class CreateClassLevelUseCase(UserCheck):
 
     async def execute(self, command: CreateClassLevelCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__class_repository.is_class_of_id_exist(command.class_id):
+        if not await self.__class_repository.id_exists(command.class_id):
             raise DomainError.invalid_data(
                 f"класс с id {command.class_id} не существует"
             )

@@ -18,15 +18,11 @@ class UpdateWeaponKindUseCase(UserCheck):
 
     async def execute(self, command: UpdateWeaponKindCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__kind_repository.is_weapon_kind_of_id_exist(
-            command.weapon_kind_id
-        ):
+        if not await self.__kind_repository.id_exists(command.weapon_kind_id):
             raise DomainError.not_found(
                 f"вид оружия с id {command.weapon_kind_id} не существует"
             )
-        kind = await self.__kind_repository.get_weapon_kind_of_id(
-            command.weapon_kind_id
-        )
+        kind = await self.__kind_repository.get_by_id(command.weapon_kind_id)
         if command.weapon_type is not None:
             kind.new_weapon_type(WeaponType.from_str(command.weapon_type))
         if command.name is not None:

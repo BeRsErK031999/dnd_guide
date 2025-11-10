@@ -15,6 +15,6 @@ class DeleteRaceUseCase(UserCheck):
 
     async def execute(self, command: DeleteRaceCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__race_repository.is_race_of_id_exist(command.race_id):
+        if not await self.__race_repository.id_exists(command.race_id):
             raise DomainError.not_found(f"расы с id {command.race_id} не существует")
         await self.__race_repository.delete(command.race_id)

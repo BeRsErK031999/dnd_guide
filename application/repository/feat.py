@@ -10,11 +10,11 @@ class FeatRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_feat_of_id_exist(self, feat_id: UUID) -> bool:
+    async def id_exists(self, feat_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_feat_of_id(self, feat_id: UUID) -> Feat:
+    async def get_by_id(self, feat_id: UUID) -> Feat:
         raise NotImplemented
 
     @abstractmethod

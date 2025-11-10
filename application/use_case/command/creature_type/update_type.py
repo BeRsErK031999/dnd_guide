@@ -18,11 +18,11 @@ class UpdateCreatureTypeUseCase(UserCheck):
 
     async def execute(self, command: UpdateCreatureTypeCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__type_repository.is_type_of_id_exist(command.type_id):
+        if not await self.__type_repository.id_exists(command.type_id):
             raise DomainError.not_found(
                 f"типа существа с id {command.type_id} не существует"
             )
-        creature_type = await self.__type_repository.get_type_of_id(command.type_id)
+        creature_type = await self.__type_repository.get_by_id(command.type_id)
         if command.name is not None:
             if not await self.__type_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(

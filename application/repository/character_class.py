@@ -10,11 +10,11 @@ class ClassRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_class_of_id_exist(self, class_id: UUID) -> bool:
+    async def id_exists(self, class_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_class_of_id(self, class_id: UUID) -> CharacterClass:
+    async def get_by_id(self, class_id: UUID) -> CharacterClass:
         raise NotImplemented
 
     @abstractmethod

@@ -19,9 +19,9 @@ class UpdateFeatUseCase(UserCheck):
 
     async def execute(self, command: UpdateFeatCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__feat_repository.is_feat_of_id_exist(command.feat_id):
+        if not await self.__feat_repository.id_exists(command.feat_id):
             raise DomainError.not_found(f"черты с id {command.feat_id} не существует")
-        feat = await self.__feat_repository.get_feat_of_id(command.feat_id)
+        feat = await self.__feat_repository.get_by_id(command.feat_id)
         if command.name is not None:
             if not await self.__feat_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(

@@ -10,11 +10,11 @@ class WeaponKindRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_weapon_kind_of_id_exist(self, weapon_kind_id: UUID) -> bool:
+    async def id_exists(self, weapon_kind_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_weapon_kind_of_id(self, weapon_kind_id: UUID) -> WeaponKind:
+    async def get_by_id(self, weapon_kind_id: UUID) -> WeaponKind:
         raise NotImplemented
 
     @abstractmethod

@@ -10,11 +10,11 @@ class MaterialComponentRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def is_material_of_id_exist(self, material_id: UUID) -> bool:
+    async def id_exists(self, material_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_material_of_id(self, material_id: UUID) -> MaterialComponent:
+    async def get_by_id(self, material_id: UUID) -> MaterialComponent:
         raise NotImplemented
 
     @abstractmethod

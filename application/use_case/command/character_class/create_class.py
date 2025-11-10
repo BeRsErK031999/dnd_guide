@@ -41,10 +41,10 @@ class CreateClassUseCase(UserCheck):
                 f"класс с названием {command.name} уже существует"
             )
         for weapon_id in command.proficiencies.weapon:
-            if not await self.__weapon_repository.is_weapon_of_id_exist(weapon_id):
+            if not await self.__weapon_repository.id_exists(weapon_id):
                 raise DomainError.invalid_data(f"оружия с id {weapon_id} не существует")
         for tool_id in command.proficiencies.tools:
-            if not await self.__tool_repository.is_tool_of_id_exist(tool_id):
+            if not await self.__tool_repository.id_exists(tool_id):
                 raise DomainError.invalid_data(
                     f"инструментов с id {tool_id} не существует"
                 )

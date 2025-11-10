@@ -15,7 +15,7 @@ class DeleteCreatureSizeUseCase(UserCheck):
 
     async def execute(self, command: DeleteCreatureSizeCommand) -> None:
         self.__user_check(command.user_id)
-        if not await self.__size_repository.is_size_of_id_exist(command.size_id):
+        if not await self.__size_repository.id_exists(command.size_id):
             raise DomainError.not_found(
                 f"размера существ с id {command.size_id} не существует"
             )
