@@ -18,6 +18,10 @@ class RaceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[Race]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, race: Race) -> None:
         raise NotImplemented
 

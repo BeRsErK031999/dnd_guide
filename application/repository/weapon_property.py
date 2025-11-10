@@ -18,6 +18,10 @@ class WeaponPropertyRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[WeaponProperty]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, weapon_property: WeaponProperty) -> None:
         raise NotImplemented
 

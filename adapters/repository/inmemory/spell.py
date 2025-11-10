@@ -21,6 +21,9 @@ class InMemorySpellRepository(DomainSpellRepository, AppSpellRepository):
     async def get_by_id(self, spell_id: UUID) -> Spell:
         return self.__store[spell_id]
 
+    async def get_all(self) -> list[Spell]:
+        return list(self.__store.values())
+
     async def save(self, spell: Spell) -> None:
         self.__store[spell.spell_id()] = spell
 

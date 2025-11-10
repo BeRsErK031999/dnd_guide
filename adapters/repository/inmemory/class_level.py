@@ -25,6 +25,9 @@ class InMemoryClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepo
     async def get_by_id(self, level_id: UUID) -> ClassLevel:
         return self.__store[level_id]
 
+    async def get_all(self) -> list[ClassLevel]:
+        return list(self.__store.values())
+
     async def save(self, level: ClassLevel) -> None:
         self.__store[level.level_id()] = level
 

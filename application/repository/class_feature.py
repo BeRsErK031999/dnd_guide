@@ -18,6 +18,10 @@ class ClassFeatureRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[ClassFeature]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, feature: ClassFeature) -> None:
         raise NotImplemented
 

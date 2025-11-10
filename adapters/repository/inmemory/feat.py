@@ -21,6 +21,9 @@ class InMemoryFeatRepository(DomainFeatRepository, AppFeatRepository):
     async def get_by_id(self, feat_id: UUID) -> Feat:
         return self.__store[feat_id]
 
+    async def get_all(self) -> list[Feat]:
+        return list(self.__store.values())
+
     async def save(self, feat: Feat) -> None:
         self.__store[feat.feat_id()] = feat
 

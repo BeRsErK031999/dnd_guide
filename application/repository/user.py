@@ -10,6 +10,10 @@ class UserRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
+    async def get_all(self) -> list[User]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, user: User) -> None:
         raise NotImplementedError()
 

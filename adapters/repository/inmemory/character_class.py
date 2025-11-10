@@ -23,6 +23,9 @@ class InMemoryClassRepository(DomainClassRepository, AppClassRepository):
     async def get_by_id(self, class_id: UUID) -> CharacterClass:
         return self.__store[class_id]
 
+    async def get_all(self) -> list[CharacterClass]:
+        return list(self.__store.values())
+
     async def save(self, character_class: CharacterClass) -> None:
         self.__store[character_class.class_id()] = character_class
 

@@ -22,6 +22,9 @@ class InMemorySubclassRepository(DomainSubclassRepository, AppSubclassRepository
     async def get_by_id(self, subclass_id: UUID) -> CharacterSubclass:
         return self.__store[subclass_id]
 
+    async def get_all(self) -> list[CharacterSubclass]:
+        return list(self.__store.values())
+
     async def save(self, subclass: CharacterSubclass) -> None:
         self.__store[subclass.subclass_id()] = subclass
 

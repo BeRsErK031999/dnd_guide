@@ -18,6 +18,10 @@ class SpellRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[Spell]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, spell: Spell) -> None:
         raise NotImplemented
 

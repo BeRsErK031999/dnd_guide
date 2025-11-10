@@ -23,6 +23,9 @@ class InMemoryCreatureSizeRepository(
     async def get_by_id(self, size_id: UUID) -> CreatureSize:
         return self.__store[size_id]
 
+    async def get_all(self) -> list[CreatureSize]:
+        return list(self.__store.values())
+
     async def save(self, size: CreatureSize) -> None:
         self.__store[size.size_id()] = size
 

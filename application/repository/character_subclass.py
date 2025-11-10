@@ -18,6 +18,10 @@ class SubclassRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[CharacterSubclass]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, subclass: CharacterSubclass) -> None:
         raise NotImplemented
 

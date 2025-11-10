@@ -21,6 +21,9 @@ class InMemoryWeaponKindRepository(DomainWeaponKindRepository, AppWeaponKindRepo
     async def get_by_id(self, weapon_kind_id: UUID) -> WeaponKind:
         return self.__store[weapon_kind_id]
 
+    async def get_all(self) -> list[WeaponKind]:
+        return list(self.__store.values())
+
     async def save(self, weapon_kind: WeaponKind) -> None:
         self.__store[weapon_kind.weapon_kind_id()] = weapon_kind
 

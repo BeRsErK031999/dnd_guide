@@ -18,6 +18,10 @@ class SubraceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[Subrace]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, subrace: Subrace) -> None:
         raise NotImplemented
 

@@ -18,6 +18,10 @@ class ArmorRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[Armor]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, armor: Armor) -> None:
         raise NotImplemented
 

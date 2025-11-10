@@ -18,6 +18,10 @@ class ClassRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[CharacterClass]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, character_class: CharacterClass) -> None:
         raise NotImplemented
 

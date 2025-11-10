@@ -23,6 +23,9 @@ class InMemoryCreatureTypeRepository(
     async def get_by_id(self, creature_type_id: UUID) -> CreatureType:
         return self.__store[creature_type_id]
 
+    async def get_all(self) -> list[CreatureType]:
+        return list(self.__store.values())
+
     async def save(self, creature_type: CreatureType) -> None:
         self.__store[creature_type.creature_type_id()] = creature_type
 

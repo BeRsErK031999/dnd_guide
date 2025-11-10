@@ -18,6 +18,10 @@ class CreatureSizeRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[CreatureSize]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, size: CreatureSize) -> None:
         raise NotImplemented
 

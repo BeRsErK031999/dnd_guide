@@ -27,6 +27,9 @@ class InMemoryMaterialComponentRepository(
     async def get_by_id(self, material_id: UUID) -> MaterialComponent:
         return self.__store[material_id]
 
+    async def get_all(self) -> list[MaterialComponent]:
+        return list(self.__store.values())
+
     async def save(self, material: MaterialComponent) -> None:
         self.__store[material.material_id()] = material
 

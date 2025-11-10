@@ -21,6 +21,9 @@ class InMemoryToolRepository(DomainToolRepository, AppToolRepository):
     async def get_by_id(self, tool_id: UUID) -> Tool:
         return self.__store[tool_id]
 
+    async def get_all(self) -> list[Tool]:
+        return list(self.__store.values())
+
     async def save(self, tool: Tool) -> None:
         self.__store[tool.tool_id()] = tool
 

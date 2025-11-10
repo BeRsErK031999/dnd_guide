@@ -18,6 +18,10 @@ class ClassLevelRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[ClassLevel]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, level: ClassLevel) -> None:
         raise NotImplemented
 

@@ -11,6 +11,9 @@ class InMemoryUserRepository(UserRepository):
     async def id_exists(self, user_id: UUID) -> bool:
         return user_id in self.__store
 
+    async def get_all(self) -> list[User]:
+        return list(self.__store.values())
+
     async def save(self, user: User) -> None:
         self.__store[user.user_id()] = user
 

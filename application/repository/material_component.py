@@ -18,6 +18,10 @@ class MaterialComponentRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[MaterialComponent]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, material: MaterialComponent) -> None:
         raise NotImplemented
 

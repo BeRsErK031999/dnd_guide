@@ -29,6 +29,9 @@ class InMemoryWeaponPropertyRepository(
     async def get_by_id(self, weapon_property_id: UUID) -> WeaponProperty:
         return self.__store[weapon_property_id]
 
+    async def get_all(self) -> list[WeaponProperty]:
+        return list(self.__store.values())
+
     async def save(self, weapon_property: WeaponProperty) -> None:
         self.__store[weapon_property.weapon_property_id()] = weapon_property
 

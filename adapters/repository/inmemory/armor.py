@@ -21,6 +21,9 @@ class InMemoryArmorRepository(DomainArmorRepository, AppArmorRepository):
     async def get_by_id(self, armor_id: UUID) -> Armor:
         return self.__store[armor_id]
 
+    async def get_all(self) -> list[Armor]:
+        return list(self.__store.values())
+
     async def save(self, armor: Armor) -> None:
         self.__store[armor.armor_id()] = armor
 

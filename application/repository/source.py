@@ -18,6 +18,10 @@ class SourceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def get_all(self) -> list[Source]:
+        raise NotImplemented
+
+    @abstractmethod
     async def save(self, source: Source) -> None:
         raise NotImplemented
 
