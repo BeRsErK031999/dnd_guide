@@ -1,14 +1,14 @@
 from typing import TYPE_CHECKING
 from uuid import UUID
 
-from adapters.repository.postgres.models.base import Base
-from adapters.repository.postgres.models.mixin import Timestamp
+from adapters.repository.sql.models.base import Base
+from adapters.repository.sql.models.mixin import Timestamp
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from adapters.repository.postgres.models.creature_size import CreatureSize
-    from adapters.repository.postgres.models.creature_type import CreatureType
+    from adapters.repository.sql.models.creature_size import CreatureSize
+    from adapters.repository.sql.models.creature_type import CreatureType
 
 
 class Race(Timestamp, Base):

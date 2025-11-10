@@ -1,7 +1,7 @@
 from uuid import UUID
 
-from adapters.repository.postgres.models.base import Base
-from adapters.repository.postgres.models.mixin import Timestamp
+from adapters.repository.sql.models.base import Base
+from adapters.repository.sql.models.mixin import Timestamp
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 

@@ -1,16 +1,16 @@
 from typing import TYPE_CHECKING
 from uuid import UUID
 
-from adapters.repository.postgres.models.base import Base
-from adapters.repository.postgres.models.mixin import Timestamp
+from adapters.repository.sql.models.base import Base
+from adapters.repository.sql.models.mixin import Timestamp
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from adapters.repository.postgres.models.character_subclass import CharacterSubclass
-    from adapters.repository.postgres.models.class_feature import ClassFeature
-    from adapters.repository.postgres.models.class_level import ClassLevel
-    from adapters.repository.postgres.models.spell import Spell
+    from adapters.repository.sql.models.character_subclass import CharacterSubclass
+    from adapters.repository.sql.models.class_feature import ClassFeature
+    from adapters.repository.sql.models.class_level import ClassLevel
+    from adapters.repository.sql.models.spell import Spell
 
 
 class CharacterClass(Timestamp, Base):

@@ -1,5 +1,5 @@
-from adapters.repository.postgres.models.base import Base
-from adapters.repository.postgres.models.mixin import Timestamp
+from adapters.repository.sql.models.base import Base
+from adapters.repository.sql.models.mixin import Timestamp
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 
