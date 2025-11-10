@@ -17,7 +17,7 @@ class UpdateMaterialComponentUseCase(UserCheck):
         self.__material_repository = material_repository
 
     async def execute(self, command: UpdateMaterialComponentCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__material_repository.id_exists(command.material_id):
             raise DomainError.not_found(
                 f"материала с id {command.material_id} не существует"

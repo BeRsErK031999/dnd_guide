@@ -16,7 +16,7 @@ class InMemorySubclassFeatureRepository(
         self.__store: dict[UUID, SubclassFeature] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(feature.name == name for feature in self.__store.values())
+        return any(feature.name() == name for feature in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

@@ -12,7 +12,7 @@ class DeleteSpellUseCase(UserCheck):
         self.__spell_repository = spell_repository
 
     async def execute(self, command: DeleteSpellCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__spell_repository.id_exists(command.spell_id):
             raise DomainError.not_found(
                 f"заклинание с id {command.spell_id} не существует"

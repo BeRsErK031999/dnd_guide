@@ -10,7 +10,7 @@ class InMemoryToolRepository(DomainToolRepository, AppToolRepository):
         self.__store: dict[UUID, Tool] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(tool.name == name for tool in self.__store.values())
+        return any(tool.name() == name for tool in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

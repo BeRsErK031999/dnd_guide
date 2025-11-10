@@ -17,7 +17,7 @@ class UpdateCreatureSizeUseCase(UserCheck):
         self.__size_service = creature_size_service
 
     async def execute(self, command: UpdateCreatureSizeCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__size_repository.id_exists(command.size_id):
             raise DomainError.not_found(
                 f"размера существ с id {command.size_id} не существует"

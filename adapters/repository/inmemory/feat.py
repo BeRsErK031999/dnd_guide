@@ -10,7 +10,7 @@ class InMemoryFeatRepository(DomainFeatRepository, AppFeatRepository):
         self.__store: dict[UUID, Feat] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(feat.name == name for feat in self.__store.values())
+        return any(feat.name() == name for feat in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

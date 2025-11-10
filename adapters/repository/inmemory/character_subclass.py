@@ -11,7 +11,7 @@ class InMemorySubclassRepository(DomainSubclassRepository, AppSubclassRepository
         self.__store: Dict[UUID, CharacterSubclass] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(armor.name == name for armor in self.__store.values())
+        return any(armor.name() == name for armor in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

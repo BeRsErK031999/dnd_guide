@@ -10,7 +10,7 @@ class InMemorySourceRepository(DomainSourceRepository, AppSourceRepository):
         self.__store: dict[UUID, Source] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(source.name == name for source in self.__store.values())
+        return any(source.name() == name for source in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

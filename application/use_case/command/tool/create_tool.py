@@ -19,7 +19,7 @@ class CreateToolUseCase(UserCheck):
         self.__tool_repository = tool_repository
 
     async def execute(self, command: CreateToolCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__tool_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"не возможно создать инструмент с названием {command.name}"

@@ -12,7 +12,7 @@ class InMemoryCreatureSizeRepository(
         self.__store: dict[UUID, CreatureSize] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(size.name == name for size in self.__store.values())
+        return any(size.name() == name for size in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

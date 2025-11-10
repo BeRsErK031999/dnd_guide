@@ -19,7 +19,7 @@ class UpdateWeaponPropertyUseCase(UserCheck):
         self.__property_repository = weapon_property_repository
 
     async def execute(self, command: UpdateWeaponPropertyCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__property_repository.id_exists(command.weapon_property_id):
             raise DomainError.not_found(
                 f"свойство с id {command.weapon_property_id} не существует"

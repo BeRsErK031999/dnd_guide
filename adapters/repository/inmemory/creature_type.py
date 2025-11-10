@@ -12,7 +12,7 @@ class InMemoryCreatureTypeRepository(
         self.__store: dict[UUID, CreatureType] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(ct.name == name for ct in self.__store.values())
+        return any(ct.name() == name for ct in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

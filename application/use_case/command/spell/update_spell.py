@@ -30,7 +30,7 @@ class UpdateSpellUseCase(UserCheck):
         self.__subclass_repository = subclass_repository
 
     async def execute(self, command: UpdateSpellCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__spell_repository.id_exists(command.spell_id):
             raise DomainError.not_found(
                 f"заклинание с id {command.spell_id} не существует"

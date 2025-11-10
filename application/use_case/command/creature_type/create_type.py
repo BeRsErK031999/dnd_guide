@@ -17,7 +17,7 @@ class CreateCreatureTypeUseCase(UserCheck):
         self.__type_repository = creature_type_repository
 
     async def execute(self, command: CreateCreatureTypeCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__type_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"невозможно создать тип существа с названием {command.name}"

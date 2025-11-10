@@ -8,6 +8,6 @@ class UserCheck:
     def __init__(self, user_repository: UserRepository) -> None:
         self.__user_repository = user_repository
 
-    def __user_check(self, user_id: UUID) -> None:
-        if not self.__user_repository.is_user_of_id_exist(user_id):
+    async def _user_check(self, user_id: UUID) -> None:
+        if not await self.__user_repository.id_exists(user_id):
             raise DomainError.access("у вас недостаточно прав для совершения операции")

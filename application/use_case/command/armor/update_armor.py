@@ -20,7 +20,7 @@ class UpdateArmorUseCase(UserCheck):
         self.__armor_repository = armor_repository
 
     async def execute(self, command: UpdateArmorCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__armor_repository.id_exists(command.armor_id):
             raise DomainError.not_found(
                 f"доспехов с id {command.armor_id} не существует"

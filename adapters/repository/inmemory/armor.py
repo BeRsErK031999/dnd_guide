@@ -10,7 +10,7 @@ class InMemoryArmorRepository(DomainArmorRepository, AppArmorRepository):
         self.__store: dict[UUID, Armor] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(armor.name == name for armor in self.__store.values())
+        return any(armor.name() == name for armor in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

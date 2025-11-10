@@ -8,7 +8,7 @@ class ClassLevelService:
         self.__repository = class_level_repository
 
     async def can_create_with_class_and_level(self, class_id: UUID, level: int) -> bool:
-        return await self.__repository.is_level_of_class_exist(class_id, level)
+        return not await self.__repository.level_of_class_exists(class_id, level)
 
     async def can_change_level_of_class(self, class_id: UUID, level: int) -> bool:
-        return await self.__repository.is_level_of_class_exist(class_id, level)
+        return not await self.__repository.level_of_class_exists(class_id, level)

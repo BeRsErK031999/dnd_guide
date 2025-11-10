@@ -30,7 +30,7 @@ class CreateWeaponUseCase(UserCheck):
         self.__property_repository = property_repository
 
     async def execute(self, command: CreateWeaponCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__weapon_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"оружие с названием {command.name} не возможно создать"

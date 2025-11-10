@@ -20,7 +20,7 @@ class UpdateSubraceUseCase(UserCheck):
         self.__subrace_repository = subrace_repository
 
     async def execute(self, command: UpdateSubraceCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__subrace_repository.id_exists(command.subrace_id):
             raise DomainError.not_found(f"подрасы с id {command.race_id} не существует")
         subrace = await self.__subrace_repository.get_by_id(command.subrace_id)

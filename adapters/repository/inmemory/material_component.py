@@ -16,7 +16,7 @@ class InMemoryMaterialComponentRepository(
         self.__store: dict[UUID, MaterialComponent] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(material.name == name for material in self.__store.values())
+        return any(material.name() == name for material in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

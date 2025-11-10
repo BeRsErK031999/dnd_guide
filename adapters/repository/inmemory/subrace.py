@@ -10,7 +10,7 @@ class InMemorySubraceRepository(DomainSubraceRepository, AppSubraceRepository):
         self.__store: dict[UUID, Subrace] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(subrace.name == name for subrace in self.__store.values())
+        return any(subrace.name() == name for subrace in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

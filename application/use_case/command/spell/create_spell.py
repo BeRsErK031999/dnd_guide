@@ -30,7 +30,7 @@ class CreateSpellUseCase(UserCheck):
         self.__subclass_repository = subclass_repository
 
     async def execute(self, command: CreateSpellCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__spell_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"заклинание с именем {command.name} не возможно создать"

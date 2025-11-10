@@ -23,7 +23,7 @@ class CreateSubclassFeatureUseCase(UserCheck):
         self.__feature_repository = feature_repository
 
     async def execute(self, command: CreateSubclassFeatureCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__feature_service.can_create_for_class_with_name(
             command.subclass_id, command.name
         ):

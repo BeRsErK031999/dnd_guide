@@ -14,7 +14,7 @@ class DeleteSubclassFeatureUseCase(UserCheck):
         self.__feature_repository = feature_repository
 
     async def execute(self, command: DeleteSubclassFeatureCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__feature_repository.id_exists(command.feature_id):
             raise DomainError.not_found(
                 f"умение подкласса с id {command.feature_id} не существует"

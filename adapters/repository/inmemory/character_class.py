@@ -11,7 +11,7 @@ class InMemoryClassRepository(DomainClassRepository, AppClassRepository):
 
     async def name_exists(self, name: str) -> bool:
         return any(
-            character_class.name == name for character_class in self.__store.values()
+            character_class.name() == name for character_class in self.__store.values()
         )
 
     async def next_id(self) -> UUID:

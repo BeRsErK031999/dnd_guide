@@ -12,13 +12,13 @@ class ArmorType(StrEnum):
     @staticmethod
     def from_str(name: str) -> ArmorType:
         match name:
-            case ArmorType.LIGHT_ARMOR.value:
+            case ArmorType.LIGHT_ARMOR.name:
                 return ArmorType.LIGHT_ARMOR
-            case ArmorType.MEDIUM_ARMOR.value:
+            case ArmorType.MEDIUM_ARMOR.name:
                 return ArmorType.MEDIUM_ARMOR
-            case ArmorType.HEAVY_ARMOR.value:
+            case ArmorType.HEAVY_ARMOR.name:
                 return ArmorType.HEAVY_ARMOR
-            case ArmorType.SHIELD.value:
+            case ArmorType.SHIELD.name:
                 return ArmorType.SHIELD
             case _:
                 raise DomainError.invalid_data(

@@ -30,7 +30,7 @@ class UpdateClassUseCase(UserCheck):
         self.__tool_repository = tool_repository
 
     async def execute(self, command: UpdateClassCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__class_repository.id_exists(command.class_id):
             raise DomainError.not_found(f"класса с id {command.class_id} не существует")
         changing_class = await self.__class_repository.get_by_id(command.class_id)

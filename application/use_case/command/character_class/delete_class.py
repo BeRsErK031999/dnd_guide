@@ -14,7 +14,7 @@ class DeleteClassUseCase(UserCheck):
         self.__class_repository = class_repository
 
     async def execute(self, command: DeleteClassCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__class_repository.id_exists(command.class_id):
             raise DomainError.not_found(f"класса с id {command.class_id} не существует")
         await self.__class_repository.delete(command.class_id)

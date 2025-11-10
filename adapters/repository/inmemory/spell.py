@@ -10,7 +10,7 @@ class InMemorySpellRepository(DomainSpellRepository, AppSpellRepository):
         self.__store: dict[UUID, Spell] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(spell.name == name for spell in self.__store.values())
+        return any(spell.name() == name for spell in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

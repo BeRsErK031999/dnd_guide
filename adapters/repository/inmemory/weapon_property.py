@@ -17,7 +17,7 @@ class InMemoryWeaponPropertyRepository(
 
     async def name_exists(self, name: str) -> bool:
         return any(
-            weapon_property.name == name for weapon_property in self.__store.values()
+            weapon_property.name() == name for weapon_property in self.__store.values()
         )
 
     async def next_id(self) -> UUID:

@@ -10,7 +10,7 @@ class InMemoryWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
         self.__store: dict[UUID, Weapon] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(weapon.name == name for weapon in self.__store.values())
+        return any(weapon.name() == name for weapon in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

@@ -14,7 +14,7 @@ class DeleteToolUseCase(UserCheck):
         self.__tool_repository = tool_repository
 
     async def execute(self, command: DeleteToolCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__tool_repository.id_exists(command.tool_id):
             raise DomainError.not_found(
                 f"инструмент с id {command.tool_id} не существует"

@@ -10,7 +10,7 @@ class InMemoryRaceRepository(DomainRaceRepository, AppRaceRepository):
         self.__store: dict[UUID, Race] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(race.name == name for race in self.__store.values())
+        return any(race.name() == name for race in self.__store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()

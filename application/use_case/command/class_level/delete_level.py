@@ -14,7 +14,7 @@ class DeleteClassLevelUseCase(UserCheck):
         self.__class_level_repository = class_level_repository
 
     async def execute(self, command: DeleteClassLevelCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__class_level_repository.id_exists(command.class_level_id):
             raise DomainError.not_found(
                 f"уровень с id {command.class_level_id} не существует"

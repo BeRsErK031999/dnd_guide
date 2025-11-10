@@ -34,7 +34,7 @@ class UpdateRaceUseCase(UserCheck):
         self.__type_repository = creature_type_repository
 
     async def execute(self, command: UpdateRaceCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__race_repository.id_exists(command.race_id):
             raise DomainError.not_found(f"расы с id {command.race_id} не существует")
         race = await self.__race_repository.get_by_id(command.race_id)

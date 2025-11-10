@@ -14,7 +14,7 @@ class DeleteSubraceUseCase(UserCheck):
         self.__subrace_repository = subrace_repository
 
     async def execute(self, command: DeleteSubraceCommand) -> None:
-        self.__user_check(command.user_id)
+        await self._user_check(command.user_id)
         if not await self.__subrace_repository.id_exists(command.subrace_id):
             raise DomainError.not_found(
                 f"подрасы с id {command.subrace_id} не существует"

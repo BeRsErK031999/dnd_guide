@@ -8,7 +8,7 @@ class ClassFeatureService:
         self.__repository = class_feature_repository
 
     async def can_create_for_class_with_name(self, class_id: UUID, name: str) -> bool:
-        return await self.__repository.is_name_for_class_exist(class_id, name)
+        return not await self.__repository.name_for_class_exists(class_id, name)
 
     async def can_rename_for_class_with_name(self, class_id: UUID, name: str) -> bool:
-        return await self.__repository.is_name_for_class_exist(class_id, name)
+        return not await self.__repository.name_for_class_exists(class_id, name)
