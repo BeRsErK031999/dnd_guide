@@ -1,5 +1,5 @@
 import pytest
-from domain.armor.armor_type import ArmorType
+from domain.armor import ArmorType
 from domain.coin import PieceType
 from domain.error import DomainError
 from domain.modifier import Modifier
@@ -8,7 +8,7 @@ from domain.weight import WeightUnit
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    "gen_create_armor_command, gen_armor_create_use_case, should_error",
+    "create_armor_command, armor_create_use_case, should_error",
     [
         [
             [
@@ -71,14 +71,12 @@ from domain.weight import WeightUnit
             True,
         ],
     ],
-    indirect=["gen_create_armor_command", "gen_armor_create_use_case"],
+    indirect=["create_armor_command", "armor_create_use_case"],
     ids=["ok_with_modifier", "ok_without_modifier", "not_admin", "duplicate_name"],
 )
-async def test_create(
-    gen_create_armor_command, gen_armor_create_use_case, should_error
-):
+async def test_create(create_armor_command, armor_create_use_case, should_error):
     try:
-        await gen_armor_create_use_case.execute(gen_create_armor_command)
+        await armor_create_use_case.execute(create_armor_command)
     except DomainError as e:
         if should_error:
             return
