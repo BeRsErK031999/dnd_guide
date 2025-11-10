@@ -15,6 +15,7 @@ class WeaponPropertyName(StrEnum):
     VERSATILE = "универсальное"
     DISTANCE = "дистанция"
 
+    @staticmethod
     def from_str(name: str) -> WeaponPropertyName:
         match name.upper():
             case WeaponPropertyName.AMMUNITION.name:

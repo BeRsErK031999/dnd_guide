@@ -36,5 +36,5 @@ def gen_subrace(gen_uuid, request) -> Subrace:
     ]
     features = [SubraceFeature(feature[0], feature[1]) for feature in features]
     return Subrace(
-        gen_uuid(), gen_uuid(), name, description, increase_modifiers, features
+        gen_uuid(), gen_uuid(), name, description, increase_modifiers, features, ""
     )

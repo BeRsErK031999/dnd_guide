@@ -2,12 +2,12 @@ from typing import Sequence
 from uuid import UUID
 
 from domain.error import DomainError
-from domain.mixin import EntityDescription, EntityName
+from domain.mixin import EntityDescription, EntityName, EntityNameInEnglish
 from domain.subrace.feature import SubraceFeature
 from domain.subrace.increase_modifier import SubraceIncreaseModifier
 
 
-class Subrace(EntityName, EntityDescription):
+class Subrace(EntityName, EntityDescription, EntityNameInEnglish):
     def __init__(
         self,
         subrace_id: UUID,
@@ -16,11 +16,13 @@ class Subrace(EntityName, EntityDescription):
         description: str,
         increase_modifiers: Sequence[SubraceIncreaseModifier],
         features: Sequence[SubraceFeature],
+        name_in_english: str,
     ) -> None:
         self.__validate_features(features)
         self.__validate_increase_modifiers(increase_modifiers)
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
+        EntityNameInEnglish.__init__(self, name_in_english)
         self.__subrace_id = subrace_id
         self.__race_id = race_id
         self.__increase_modifiers = list(increase_modifiers)

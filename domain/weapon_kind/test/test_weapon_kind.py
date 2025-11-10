@@ -15,7 +15,7 @@ from domain.weapon_kind.weapon_type import WeaponType
 )
 def test_create(gen_uuid, weapon_type, name, description, should_error):
     try:
-        WeaponKind(gen_uuid, weapon_type, name, description)
+        WeaponKind(gen_uuid, name, description, weapon_type)
     except DomainError as e:
         if should_error:
             return

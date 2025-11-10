@@ -9,9 +9,9 @@ class WeaponKind(EntityName, EntityDescription):
     def __init__(
         self,
         weapon_kind_id: UUID,
-        weapon_type: WeaponType,
         name: str,
         description: str,
+        weapon_type: WeaponType,
     ) -> None:
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)

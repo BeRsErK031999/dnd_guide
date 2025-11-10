@@ -12,4 +12,4 @@ def gen_uuid():
 @pytest.fixture
 def weapon_kind(gen_uuid, request) -> WeaponKind:
     weapon_type, name, description = request.param
-    return WeaponKind(gen_uuid(), weapon_type, name, description)
+    return WeaponKind(gen_uuid(), name, description, weapon_type)

@@ -73,6 +73,7 @@ def test_create(
             description,
             gen_increase_modifiers,
             gen_features,
+            "",
         )
     except DomainError as e:
         if should_error:
