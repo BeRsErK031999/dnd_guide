@@ -5,13 +5,18 @@ from domain.damage_type import DamageType
 from domain.error import DomainError
 from domain.game_time import GameTime
 from domain.length import Length
-from domain.mixin import EntityDescription, EntityName, EntityNameInEnglish
+from domain.mixin import (
+    EntityDescription,
+    EntityName,
+    EntityNameInEnglish,
+    EntitySource,
+)
 from domain.modifier import Modifier
 from domain.spell.components import SpellComponents
 from domain.spell.school import SpellSchool
 
 
-class Spell(EntityName, EntityNameInEnglish, EntityDescription):
+class Spell(EntityName, EntityNameInEnglish, EntityDescription, EntitySource):
     def __init__(
         self,
         spell_id: UUID,
@@ -31,6 +36,7 @@ class Spell(EntityName, EntityNameInEnglish, EntityDescription):
         ritual: bool,
         saving_throws: Sequence[Modifier],
         name_in_english: str,
+        source_id: UUID,
     ) -> None:
         self.__validate_class_ids(class_ids)
         self.__validate_level(level)
@@ -43,6 +49,7 @@ class Spell(EntityName, EntityNameInEnglish, EntityDescription):
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
         EntityNameInEnglish.__init__(self, name_in_english)
+        EntitySource.__init__(self, source_id)
         self.__spell_id = spell_id
         self.__class_ids = list(class_ids)
         self.__subclass_ids = list(subclass_ids)

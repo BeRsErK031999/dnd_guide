@@ -1,6 +1,7 @@
 from application.dto.command.character_class import CreateClassCommand
 from application.repository import (
     ClassRepository,
+    SourceRepository,
     ToolRepository,
     UserRepository,
     WeaponRepository,
@@ -27,12 +28,14 @@ class CreateClassUseCase(UserCheck):
         class_repository: ClassRepository,
         weapon_repository: WeaponRepository,
         tool_repository: ToolRepository,
+        source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
         self.__class_service = class_service
         self.__class_repository = class_repository
         self.__weapon_repository = weapon_repository
         self.__tool_repository = tool_repository
+        self.__source_repository = source_repository
 
     async def execute(self, command: CreateClassCommand) -> None:
         await self._user_check(command.user_id)
@@ -48,6 +51,10 @@ class CreateClassUseCase(UserCheck):
                 raise DomainError.invalid_data(
                     f"инструментов с id {tool_id} не существует"
                 )
+        if not await self.__source_repository.id_exists(command.source_id):
+            raise DomainError.invalid_data(
+                f"источник с id {command.source_id} не существует"
+            )
         new_class = CharacterClass(
             await self.__class_repository.next_id(),
             command.name,

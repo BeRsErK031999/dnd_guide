@@ -1,6 +1,7 @@
 from application.dto.command.spell import CreateSpellCommand
 from application.repository import (
     ClassRepository,
+    SourceRepository,
     SpellRepository,
     SubclassRepository,
     UserRepository,
@@ -22,12 +23,14 @@ class CreateSpellUseCase(UserCheck):
         spell_repository: SpellRepository,
         class_repository: ClassRepository,
         subclass_repository: SubclassRepository,
+        source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
         self.__spell_service = spell_service
         self.__spell_repository = spell_repository
         self.__class_repository = class_repository
         self.__subclass_repository = subclass_repository
+        self.__source_repository = source_repository
 
     async def execute(self, command: CreateSpellCommand) -> None:
         await self._user_check(command.user_id)
@@ -43,6 +46,10 @@ class CreateSpellUseCase(UserCheck):
                 raise DomainError.invalid_data(
                     f"подкласс с id {subclass_id} не существует"
                 )
+        if not await self.__source_repository.id_exists(command.source_id):
+            raise DomainError.invalid_data(
+                f"источник с id {command.source_id} не существует"
+            )
         spell = Spell(
             await self.__spell_repository.next_id(),
             command.class_ids,
@@ -84,5 +91,6 @@ class CreateSpellUseCase(UserCheck):
             command.ritual,
             [Modifier.from_str(modifier) for modifier in command.saving_throws],
             command.name_in_english,
+            command.source_id,
         )
         await self.__spell_repository.save(spell)

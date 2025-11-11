@@ -1,6 +1,7 @@
 from application.dto.command.character_class import UpdateClassCommand
 from application.repository import (
     ClassRepository,
+    SourceRepository,
     ToolRepository,
     UserRepository,
     WeaponRepository,
@@ -22,12 +23,14 @@ class UpdateClassUseCase(UserCheck):
         class_repository: ClassRepository,
         weapon_repository: WeaponRepository,
         tool_repository: ToolRepository,
+        source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
         self.__class_service = class_service
         self.__class_repository = class_repository
         self.__weapon_repository = weapon_repository
         self.__tool_repository = tool_repository
+        self.__source_repository = source_repository
 
     async def execute(self, command: UpdateClassCommand) -> None:
         await self._user_check(command.user_id)
@@ -86,5 +89,9 @@ class UpdateClassUseCase(UserCheck):
         if command.name_in_english is not None:
             changing_class.new_name_in_english(command.name_in_english)
         if command.source_id is not None:
+            if not await self.__source_repository.id_exists(command.source_id):
+                raise DomainError.invalid_data(
+                    f"источник с id {command.source_id} не существует"
+                )
             changing_class.new_source_id(command.source_id)
         await self.__class_repository.save(changing_class)

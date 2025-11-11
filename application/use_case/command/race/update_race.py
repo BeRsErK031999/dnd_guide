@@ -3,6 +3,7 @@ from application.repository import (
     CreatureSizeRepository,
     CreatureTypeRepository,
     RaceRepository,
+    SourceRepository,
     UserRepository,
 )
 from application.use_case.command.user_check import UserCheck
@@ -26,12 +27,14 @@ class UpdateRaceUseCase(UserCheck):
         race_repository: RaceRepository,
         creature_size_repository: CreatureSizeRepository,
         creature_type_repository: CreatureTypeRepository,
+        source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
         self.__race_service = race_service
         self.__race_repository = race_repository
         self.__size_repository = creature_size_repository
         self.__type_repository = creature_type_repository
+        self.__source_repository = source_repository
 
     async def execute(self, command: UpdateRaceCommand) -> None:
         await self._user_check(command.user_id)
@@ -100,5 +103,9 @@ class UpdateRaceUseCase(UserCheck):
         if command.name_in_english is not None:
             race.new_name_in_english(command.name_in_english)
         if command.source_id is not None:
+            if not await self.__source_repository.id_exists(command.source_id):
+                raise DomainError.invalid_data(
+                    f"источник с id {command.source_id} не существует"
+                )
             race.new_source_id(command.source_id)
         await self.__race_repository.save(race)

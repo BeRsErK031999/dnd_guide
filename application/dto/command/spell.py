@@ -43,7 +43,8 @@ class CreateSpellCommand:
     concentration: bool
     ritual: bool
     saving_throws: Sequence[str]
-    name_in_english: str = ""
+    name_in_english: str
+    source_id: UUID
 
 
 @dataclass
@@ -66,6 +67,7 @@ class UpdateSpellCommand:
     ritual: bool | None = None
     saving_throws: Sequence[str] | None = None
     name_in_english: str | None = None
+    source_id: UUID | None = None
 
     def __post_init__(self):
         if all(
@@ -86,6 +88,7 @@ class UpdateSpellCommand:
                 self.ritual is None,
                 self.saving_throws is None,
                 self.name_in_english is None,
+                self.source_id is None,
             ]
         ):
             raise DomainError.invalid_data(
