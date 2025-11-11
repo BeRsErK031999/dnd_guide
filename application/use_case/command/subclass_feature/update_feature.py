@@ -66,4 +66,6 @@ class UpdateSubclassFeatureUseCase(UserCheck):
             feature.new_description(command.description)
         if command.level is not None:
             feature.new_level(command.level)
+        if command.name_in_english is not None:
+            feature.new_name_in_english(command.name_in_english)
         await self.__feature_repository.save(feature)

@@ -10,11 +10,11 @@ class MaterialRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def id_exists(self, race_id: UUID) -> bool:
+    async def id_exists(self, material_id: UUID) -> bool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, race_id: UUID) -> Material:
+    async def get_by_id(self, material_id: UUID) -> Material:
         raise NotImplemented
 
     @abstractmethod
@@ -22,9 +22,9 @@ class MaterialRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, race: Material) -> None:
+    async def save(self, material: Material) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def delete(self, race_id: UUID) -> None:
+    async def delete(self, material_id: UUID) -> None:
         raise NotImplemented

@@ -74,5 +74,6 @@ class CreateRaceUseCase(UserCheck):
                 for feature in command.features
             ],
             command.name_in_english,
+            command.source_id,
         )
         await self.__race_repository.save(race)

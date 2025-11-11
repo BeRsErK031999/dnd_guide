@@ -15,7 +15,7 @@ from domain.subclass_feature.feature import SubclassFeature
 )
 def test_create(gen_uuid, name, description, level, should_error):
     try:
-        SubclassFeature(gen_uuid(), gen_uuid(), name, description, level)
+        SubclassFeature(gen_uuid(), gen_uuid(), name, description, level, "")
     except DomainError as e:
         if should_error:
             return

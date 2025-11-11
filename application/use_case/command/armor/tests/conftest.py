@@ -3,6 +3,7 @@ from uuid import UUID, uuid4
 
 import pytest
 from adapters.repository.inmemory import InMemoryArmorRepository, InMemoryUserRepository
+from adapters.repository.inmemory.material import InMemoryMaterialRepository
 from application.dto.command.armor import (
     ArmorClassCommand,
     CreateArmorCommand,
@@ -17,6 +18,7 @@ from application.use_case.command.armor import (
 )
 from domain.armor import Armor, ArmorClass, ArmorService, ArmorType
 from domain.coin import Coins, PieceType
+from domain.material.material import Material
 from domain.modifier import Modifier
 from domain.user import User
 from domain.weight import Weight, WeightUnit
@@ -24,6 +26,7 @@ from domain.weight import Weight, WeightUnit
 admin_uuid = uuid4()
 not_admin_uuid = uuid4()
 armor_uuid = uuid4()
+material_uuid = uuid4()
 
 
 @pytest.fixture
@@ -42,6 +45,11 @@ def not_admin_user() -> UUID:
 
 
 @pytest.fixture
+def material_id() -> UUID:
+    return material_uuid
+
+
+@pytest.fixture
 def create_armor_command(request) -> CreateArmorCommand:
     data = request.param
     if data[0]:
@@ -55,6 +63,7 @@ def create_armor_command(request) -> CreateArmorCommand:
             data[6],
             WeightCommand(data[7][0], data[7][1]),
             CoinCommand(data[8][0], data[8][1]),
+            material_uuid,
         )
     return CreateArmorCommand(
         not_admin_uuid,
@@ -66,6 +75,7 @@ def create_armor_command(request) -> CreateArmorCommand:
         data[6],
         WeightCommand(data[7][0], data[7][1]),
         CoinCommand(data[8][0], data[8][1]),
+        material_uuid,
     )
 
 
@@ -84,12 +94,20 @@ def armor_create_use_case(request) -> CreateArmorUseCase:
             True,
             Weight(20, WeightUnit.LB),
             Coins(20, PieceType.GOLD),
+            uuid4(),
         )
         asyncio.run(armor_repository.save(armor))
     user_repository = InMemoryUserRepository()
     asyncio.run(user_repository.save(User(admin_uuid)))
+    material_repository = InMemoryMaterialRepository()
+    asyncio.run(
+        material_repository.save(Material(material_uuid, "material", "description"))
+    )
     return CreateArmorUseCase(
-        ArmorService(armor_repository), user_repository, armor_repository
+        ArmorService(armor_repository),
+        user_repository,
+        armor_repository,
+        material_repository,
     )
 
 
@@ -146,12 +164,16 @@ def armor_update_use_case(request) -> UpdateArmorUseCase:
             True,
             Weight(20, WeightUnit.LB),
             Coins(20, PieceType.GOLD),
+            uuid4(),
         )
         asyncio.run(armor_repository.save(armor))
     user_repository = InMemoryUserRepository()
     asyncio.run(user_repository.save(User(admin_uuid)))
     return UpdateArmorUseCase(
-        ArmorService(armor_repository), user_repository, armor_repository
+        ArmorService(armor_repository),
+        user_repository,
+        armor_repository,
+        InMemoryMaterialRepository(),
     )
 
 
@@ -170,6 +192,7 @@ def armor_delete_use_case(request) -> DeleteArmorUseCase:
             True,
             Weight(20, WeightUnit.LB),
             Coins(20, PieceType.GOLD),
+            uuid4(),
         )
         asyncio.run(armor_repository.save(armor))
     user_repository = InMemoryUserRepository()

@@ -24,6 +24,7 @@ class CreateArmorCommand:
     stealth: bool
     weight: WeightCommand
     cost: CoinCommand
+    material_id: UUID
 
 
 @dataclass
@@ -38,6 +39,7 @@ class UpdateArmorCommand:
     stealth: bool | None = None
     weight: WeightCommand | None = None
     cost: CoinCommand | None = None
+    material_id: UUID | None = None
 
     def __post_init__(self) -> None:
         if all(
@@ -50,6 +52,7 @@ class UpdateArmorCommand:
                 self.stealth is None,
                 self.weight is None,
                 self.cost is None,
+                self.material_id is None,
             ]
         ):
             raise DomainError.invalid_data("не переданы данные для обновления доспехов")

@@ -10,9 +10,9 @@ class SubclassFeatureService:
     async def can_create_for_class_with_name(
         self, subclass_id: UUID, name: str
     ) -> bool:
-        return await self.__repository.is_name_for_class_exist(subclass_id, name)
+        return await self.__repository.name_for_class_exists(subclass_id, name)
 
     async def can_rename_for_class_with_name(
         self, subclass_id: UUID, name: str
     ) -> bool:
-        return await self.__repository.is_name_for_class_exist(subclass_id, name)
+        return await self.__repository.name_for_class_exists(subclass_id, name)

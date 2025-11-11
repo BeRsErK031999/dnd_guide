@@ -99,4 +99,6 @@ class UpdateRaceUseCase(UserCheck):
             race.remove_features(command.remove_features)
         if command.name_in_english is not None:
             race.new_name_in_english(command.name_in_english)
+        if command.source_id is not None:
+            race.new_source_id(command.source_id)
         await self.__race_repository.save(race)

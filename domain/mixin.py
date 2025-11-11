@@ -1,4 +1,5 @@
 from re import L
+from uuid import UUID
 
 from domain.error import DomainError
 
@@ -109,3 +110,16 @@ class EntityDescription:
     def __validate_description(self, description: str) -> None:
         if len(description) == 0:
             raise DomainError.invalid_data("описание не может быть пустым")
+
+
+class EntitySource:
+    def __init__(self, source_id: UUID) -> None:
+        self.__source_id = source_id
+
+    def source_id(self) -> UUID:
+        return self.__source_id
+
+    def new_source_id(self, source_id: UUID) -> None:
+        if self.__source_id == source_id:
+            raise DomainError.idempotent("текущий источник равен новому")
+        self.__source_id = source_id

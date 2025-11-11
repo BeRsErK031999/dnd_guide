@@ -43,4 +43,5 @@ def weapon(gen_uuid, request) -> Weapon:
         damage,
         weight,
         [gen_uuid(), gen_uuid()],
+        uuid4(),
     )

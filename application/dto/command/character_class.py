@@ -33,7 +33,8 @@ class CreateClassCommand:
     primary_modifiers: Sequence[str]
     hits: ClassHitsCommand
     proficiencies: ClassProficienciesCommand
-    name_in_english: str = ""
+    name_in_english: str
+    source_id: UUID
 
 
 @dataclass
@@ -46,6 +47,7 @@ class UpdateClassCommand:
     hits: ClassHitsCommand | None = None
     proficiencies: ClassProficienciesCommand | None = None
     name_in_english: str | None = None
+    source_id: UUID | None = None
 
     def __post_init__(self) -> None:
         if all(
@@ -56,6 +58,7 @@ class UpdateClassCommand:
                 self.hits is None,
                 self.proficiencies is None,
                 self.name_in_english is None,
+                self.source_id is None,
             ]
         ):
             raise DomainError.invalid_data("не переданы данные для обновления класса")

@@ -11,6 +11,7 @@ class CreateClassFeatureCommand:
     name: str
     description: str
     level: int
+    name_in_english: str
 
 
 @dataclass
@@ -21,6 +22,7 @@ class UpdateClassFeatureCommand:
     name: str | None
     description: str | None
     level: int | None
+    name_in_english: str | None
 
     def __post_init__(self) -> None:
         if all(
@@ -29,6 +31,7 @@ class UpdateClassFeatureCommand:
                 self.name is None,
                 self.description is None,
                 self.level is None,
+                self.name_in_english is None,
             ]
         ):
             raise DomainError.invalid_data(

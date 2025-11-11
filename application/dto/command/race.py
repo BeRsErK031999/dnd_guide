@@ -40,6 +40,7 @@ class CreateRaceCommand:
     speed: RaceSpeedCommand
     age: RaceAgeCommand
     increase_modifiers: Sequence[RaceIncreaseModifierCommand]
+    source_id: UUID
     features: Sequence[RaceFeatureCommand] = []
     name_in_english: str = ""
 
@@ -59,6 +60,7 @@ class UpdateRaceCommand:
     add_features: Sequence[RaceFeatureCommand] | None = None
     remove_features: Sequence[str] | None = None
     name_in_english: str | None = None
+    source_id: UUID | None = None
 
     def __post_init__(self) -> None:
         if all(
@@ -74,6 +76,7 @@ class UpdateRaceCommand:
                 self.add_features is None,
                 self.remove_features is None,
                 self.name_in_english is None,
+                self.source_id is None,
             ]
         ):
             raise DomainError.invalid_data("не переданы данные для обновления расы")

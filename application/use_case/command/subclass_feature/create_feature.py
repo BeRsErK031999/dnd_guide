@@ -40,5 +40,6 @@ class CreateSubclassFeatureUseCase(UserCheck):
             command.name,
             command.description,
             command.level,
+            command.name_in_english,
         )
         await self.__feature_repository.save(feature)

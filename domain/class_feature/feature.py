@@ -1,10 +1,10 @@
 from uuid import UUID
 
 from domain.error import DomainError
-from domain.mixin import EntityDescription, EntityName
+from domain.mixin import EntityDescription, EntityName, EntityNameInEnglish
 
 
-class ClassFeature(EntityName, EntityDescription):
+class ClassFeature(EntityName, EntityNameInEnglish, EntityDescription):
     def __init__(
         self,
         feature_id: UUID,
@@ -12,9 +12,11 @@ class ClassFeature(EntityName, EntityDescription):
         name: str,
         description: str,
         level: int,
+        name_in_english: str,
     ) -> None:
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
+        EntityNameInEnglish.__init__(self, name_in_english)
         self.__validate_level(level)
         self.__feature_id = feature_id
         self.__class_id = class_id

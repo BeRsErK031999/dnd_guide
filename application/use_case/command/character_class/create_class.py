@@ -78,5 +78,6 @@ class CreateClassUseCase(UserCheck):
                 command.proficiencies.number_tools,
             ),
             command.name_in_english,
+            command.source_id,
         )
         await self.__class_repository.save(new_class)

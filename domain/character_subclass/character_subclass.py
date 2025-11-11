@@ -1,15 +1,21 @@
 from uuid import UUID
 
 from domain.error import DomainError
-from domain.mixin import EntityDescription, EntityName
+from domain.mixin import EntityDescription, EntityName, EntityNameInEnglish
 
 
-class CharacterSubclass(EntityName, EntityDescription):
+class CharacterSubclass(EntityName, EntityDescription, EntityNameInEnglish):
     def __init__(
-        self, subclass_id: UUID, class_id: UUID, name: str, description: str
+        self,
+        subclass_id: UUID,
+        class_id: UUID,
+        name: str,
+        description: str,
+        name_in_english: str,
     ) -> None:
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
+        EntityNameInEnglish.__init__(self, name_in_english)
         self.__subclass_id = subclass_id
         self.__class_id = class_id
 

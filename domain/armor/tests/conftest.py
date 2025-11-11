@@ -47,4 +47,5 @@ def armor(gen_uuid) -> Armor:
         False,
         Weight(10, WeightUnit.LB),
         Coins(10, PieceType.GOLD),
+        uuid4(),
     )

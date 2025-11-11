@@ -33,5 +33,6 @@ class CreateSubclassUseCase(UserCheck):
             command.class_id,
             command.name,
             command.description,
+            command.name_in_english,
         )
         await self.__subclass_repository.save(new_subclass)

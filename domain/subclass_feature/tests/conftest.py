@@ -12,4 +12,4 @@ def gen_uuid():
 @pytest.fixture
 def gen_feature(gen_uuid, request) -> SubclassFeature:
     name, description, level = request.param
-    return SubclassFeature(gen_uuid(), gen_uuid(), name, description, level)
+    return SubclassFeature(gen_uuid(), gen_uuid(), name, description, level, "")

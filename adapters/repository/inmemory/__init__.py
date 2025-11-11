@@ -6,6 +6,7 @@ from .class_level import InMemoryClassLevelRepository
 from .creature_size import InMemoryCreatureSizeRepository
 from .creature_type import InMemoryCreatureTypeRepository
 from .feat import InMemoryFeatRepository
+from .material import InMemoryMaterialRepository
 from .material_component import InMemoryMaterialComponentRepository
 from .race import InMemoryRaceRepository
 from .source import InMemorySourceRepository
@@ -27,6 +28,7 @@ __all__ = [
     "InMemoryCreatureSizeRepository",
     "InMemoryCreatureTypeRepository",
     "InMemoryFeatRepository",
+    "InMemoryMaterialRepository",
     "InMemoryMaterialComponentRepository",
     "InMemoryRaceRepository",
     "InMemorySourceRepository",

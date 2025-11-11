@@ -25,6 +25,7 @@ class CreateWeaponCommand:
     damage: WeaponDamageCommand
     weight: WeightCommand
     weapon_properties: Sequence[UUID]
+    material_id: UUID
 
 
 @dataclass
@@ -38,6 +39,7 @@ class UpdateWeaponCommand:
     damage: WeaponDamageCommand | None = None
     weight: WeightCommand | None = None
     weapon_properties: Sequence[UUID] | None = None
+    material_id: UUID | None = None
 
     def __post_init__(self):
         if all(
@@ -49,6 +51,7 @@ class UpdateWeaponCommand:
                 self.damage is None,
                 self.weight is None,
                 self.weapon_properties is None,
+                self.material_id is None,
             ]
         ):
             raise DomainError.invalid_data("не переданы данные для обновления оружия")

@@ -19,6 +19,7 @@ class Weapon(EntityName, EntityDescription):
         damage: WeaponDamage,
         weight: Weight,
         weapon_properties: Sequence[UUID],
+        material_id: UUID,
     ) -> None:
         self.__validate_properties(weapon_properties)
         EntityName.__init__(self, name)
@@ -29,6 +30,7 @@ class Weapon(EntityName, EntityDescription):
         self.__damage = damage
         self.__weight = weight
         self.__properties = list(weapon_properties)
+        self.__material_id = material_id
 
     def weapon_id(self) -> UUID:
         return self.__weapon_id
@@ -47,6 +49,9 @@ class Weapon(EntityName, EntityDescription):
 
     def properties(self) -> list[UUID]:
         return self.__properties
+
+    def material_id(self) -> UUID:
+        return self.__material_id
 
     def new_kind(self, kind: UUID) -> None:
         if self.__kind == kind:
@@ -75,6 +80,13 @@ class Weapon(EntityName, EntityDescription):
             )
         self.__validate_properties(properties)
         self.__properties = list(properties)
+
+    def new_material_id(self, material_id: UUID) -> None:
+        if self.__material_id == material_id:
+            raise DomainError.idempotent(
+                "текущий материал оружия равен новому материалу"
+            )
+        self.__material_id = material_id
 
     def __validate_properties(self, properties: Sequence[UUID]) -> None:
         if len(properties) == 0:

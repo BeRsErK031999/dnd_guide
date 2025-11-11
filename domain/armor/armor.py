@@ -20,6 +20,7 @@ class Armor(EntityName, EntityDescription):
         stealth: bool,
         weight: Weight,
         cost: Coins,
+        material_id: UUID,
     ) -> None:
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
@@ -31,6 +32,7 @@ class Armor(EntityName, EntityDescription):
         self.__stealth = stealth
         self.__weight = weight
         self.__cost = cost
+        self.__material_id = material_id
 
     def armor_id(self) -> UUID:
         return self.__armor_id
@@ -52,6 +54,9 @@ class Armor(EntityName, EntityDescription):
 
     def cost(self) -> Coins:
         return self.__cost
+
+    def material_id(self) -> UUID:
+        return self.__material_id
 
     def new_armor_type(self, armor_type: ArmorType) -> None:
         if self.__armor_type == armor_type:
@@ -95,6 +100,13 @@ class Armor(EntityName, EntityDescription):
                 "текущая стоимость доспеха равна новой стоимости доспеха"
             )
         self.__cost = cost
+
+    def new_material_id(self, material_id: UUID) -> None:
+        if self.__material_id == material_id:
+            raise DomainError.idempotent(
+                "текущий материал доспеха равен новому материалу доспеха"
+            )
+        self.__material_id = material_id
 
     def __validate_strength(self, strength: int) -> None:
         if strength < 0 or strength > 20:

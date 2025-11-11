@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pytest
 from domain.damage_type import DamageType
 from domain.dice import Dice, DiceType
@@ -34,6 +36,7 @@ def test_create(
             weapon_damage,
             weight,
             [gen_uuid(), gen_uuid()],
+            uuid4(),
         )
     except DomainError as e:
         if should_error:

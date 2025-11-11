@@ -2,14 +2,19 @@ from typing import Sequence
 from uuid import UUID
 
 from domain.error import DomainError
-from domain.mixin import EntityDescription, EntityName, EntityNameInEnglish
+from domain.mixin import (
+    EntityDescription,
+    EntityName,
+    EntityNameInEnglish,
+    EntitySource,
+)
 from domain.race.age import RaceAge
 from domain.race.feature import RaceFeature
 from domain.race.increase_modifier import RaceIncreaseModifier
 from domain.race.speed import RaceSpeed
 
 
-class Race(EntityName, EntityDescription, EntityNameInEnglish):
+class Race(EntityName, EntityDescription, EntityNameInEnglish, EntitySource):
     def __init__(
         self,
         race_id: UUID,
@@ -22,12 +27,14 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish):
         increase_modifiers: Sequence[RaceIncreaseModifier],
         features: Sequence[RaceFeature],
         name_in_english: str,
+        source_id: UUID,
     ) -> None:
         self.__validate_features(features)
         self.__validate_increase_modifiers(increase_modifiers)
         EntityName.__init__(self, name)
         EntityNameInEnglish.__init__(self, name_in_english)
         EntityDescription.__init__(self, description)
+        EntitySource.__init__(self, source_id)
         self.__race_id = race_id
         self.__type_id = type_id
         self.__size_id = size_id

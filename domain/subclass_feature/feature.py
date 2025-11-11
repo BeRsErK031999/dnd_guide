@@ -1,10 +1,10 @@
 from uuid import UUID
 
 from domain.error import DomainError
-from domain.mixin import EntityDescription, EntityName
+from domain.mixin import EntityDescription, EntityName, EntityNameInEnglish
 
 
-class SubclassFeature(EntityName, EntityDescription):
+class SubclassFeature(EntityName, EntityDescription, EntityNameInEnglish):
     def __init__(
         self,
         feature_id: UUID,
@@ -12,10 +12,12 @@ class SubclassFeature(EntityName, EntityDescription):
         name: str,
         description: str,
         level: int,
+        name_in_english: str,
     ) -> None:
         self.__validate_level(level)
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
+        EntityNameInEnglish.__init__(self, name_in_english)
         self.__feature_id = feature_id
         self.__subclass_id = subclass_id
         self.__level = level

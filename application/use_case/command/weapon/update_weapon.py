@@ -1,5 +1,6 @@
 from application.dto.command.weapon import UpdateWeaponCommand
 from application.repository import (
+    MaterialRepository,
     UserRepository,
     WeaponKindRepository,
     WeaponPropertyRepository,
@@ -22,12 +23,14 @@ class UpdateWeaponUseCase(UserCheck):
         weapon_repository: WeaponRepository,
         kind_repository: WeaponKindRepository,
         property_repository: WeaponPropertyRepository,
+        material_repository: MaterialRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
         self.__weapon_service = weapon_service
         self.__weapon_repository = weapon_repository
         self.__kind_repository = kind_repository
         self.__property_repository = property_repository
+        self.__material_repository = material_repository
 
     async def execute(self, command: UpdateWeaponCommand) -> None:
         await self._user_check(command.user_id)
@@ -76,4 +79,10 @@ class UpdateWeaponUseCase(UserCheck):
                         f"свойство оружия с id {property_id} не существует"
                     )
             weapon.new_properties(command.weapon_properties)
+        if command.material_id is not None:
+            if not await self.__material_repository.id_exists(command.material_id):
+                raise DomainError.invalid_data(
+                    f"материал с id {command.material_id} не существует"
+                )
+            weapon.new_material_id(command.material_id)
         await self.__weapon_repository.save(weapon)

@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pytest
 from domain.armor.armor import Armor
 from domain.armor.armor_type import ArmorType
@@ -69,6 +71,7 @@ def test_ok_create(
             stealth,
             weight,
             coins,
+            uuid4(),
         )
     except DomainError as e:
         if should_error:
