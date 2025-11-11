@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from adapters.repository.sql.models.mixin import Timestamp
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -10,14 +9,15 @@ if TYPE_CHECKING:
     from adapters.repository.sql.models.character_class import CharacterClass
     from adapters.repository.sql.models.character_subclass import CharacterSubclass
     from adapters.repository.sql.models.material_component import MaterialComponent
+    from adapters.repository.sql.models.source import Source
 
 
-class Spell(Timestamp, Base):
+class Spell(Base):
     __tablename__ = "spell"
 
-    name: Mapped[str] = mapped_column(String(100), unique=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
-    name_in_english: Mapped[str] = mapped_column(String(100))
+    name_in_english: Mapped[str] = mapped_column(String(50))
     next_level_description: Mapped[str]
     level: Mapped[int]
     school: Mapped[str]
@@ -42,9 +42,11 @@ class Spell(Timestamp, Base):
     materials: Mapped[list["MaterialComponent"] | None] = relationship(
         back_populates="spells", secondary="rel_spell_material"
     )
+    source_id: Mapped[UUID] = mapped_column(ForeignKey("source.id"))
+    source: Mapped["Source"] = relationship(back_populates="spells")
 
 
-class SpellDuration(Timestamp, Base):
+class SpellDuration(Base):
     __tablename__ = "spell_duration"
 
     units: Mapped[str]
@@ -53,7 +55,7 @@ class SpellDuration(Timestamp, Base):
     spell: Mapped["Spell"] = relationship(back_populates="duration")
 
 
-class SpellCastingTime(Timestamp, Base):
+class SpellCastingTime(Base):
     __tablename__ = "spell_casting_time"
 
     units: Mapped[str]
@@ -62,7 +64,7 @@ class SpellCastingTime(Timestamp, Base):
     spell: Mapped["Spell"] = relationship(back_populates="casting_time")
 
 
-class SpellSavingThrow(Timestamp, Base):
+class SpellSavingThrow(Base):
     __tablename__ = "spell_saving_throw"
 
     name: Mapped[str]
@@ -70,14 +72,14 @@ class SpellSavingThrow(Timestamp, Base):
     spell: Mapped["Spell"] = relationship(back_populates="saving_throws")
 
 
-class RelSpellCharacterClass(Timestamp, Base):
+class RelSpellCharacterClass(Base):
     __tablename__ = "rel_spell_character_class"
 
     character_class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
     spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"))
 
 
-class RelSpellCharacterSubclass(Timestamp, Base):
+class RelSpellCharacterSubclass(Base):
     __tablename__ = "rel_spell_character_subclass"
 
     character_subclass_id: Mapped[UUID] = mapped_column(
@@ -86,7 +88,7 @@ class RelSpellCharacterSubclass(Timestamp, Base):
     spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"))
 
 
-class RelSpellMaterial(Timestamp, Base):
+class RelSpellMaterial(Base):
     __tablename__ = "rel_spell_material"
 
     material_id: Mapped[UUID] = mapped_column(ForeignKey("material.id"))

@@ -6,6 +6,7 @@ from .class_level import ClassLevel
 from .creature_size import CreatureSize
 from .creature_type import CreatureType
 from .feat import Feat
+from .material import Material
 from .material_component import MaterialComponent
 from .race import Race
 from .source import Source
@@ -25,6 +26,7 @@ __all__ = [
     "CreatureSize",
     "CreatureType",
     "Feat",
+    "Material",
     "MaterialComponent",
     "Race",
     "Source",

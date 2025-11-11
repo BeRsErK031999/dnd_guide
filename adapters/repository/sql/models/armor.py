@@ -1,13 +1,18 @@
+from typing import TYPE_CHECKING
+from uuid import UUID
+
 from adapters.repository.sql.models.base import Base
-from adapters.repository.sql.models.mixin import Timestamp
-from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+if TYPE_CHECKING:
+    from adapters.repository.sql.models.material import Material
 
 
-class Armor(Timestamp, Base):
+class Armor(Base):
     __tablename__ = "armor"
 
-    name: Mapped[str] = mapped_column(String(100), unique=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
     armor_type: Mapped[str]
     strength: Mapped[int]
@@ -17,3 +22,5 @@ class Armor(Timestamp, Base):
     base_class: Mapped[int]
     modifier: Mapped[str] = mapped_column(String(50), nullable=True)
     max_modifier_bonus: Mapped[int | None]
+    material_id: Mapped[UUID] = mapped_column(ForeignKey("material.id"))
+    material: Mapped["Material"] = relationship(back_populates="armors")

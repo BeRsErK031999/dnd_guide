@@ -1,15 +1,14 @@
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from adapters.repository.sql.models.mixin import Timestamp
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
-class Feat(Timestamp, Base):
+class Feat(Base):
     __tablename__ = "feat"
 
-    name: Mapped[str] = mapped_column(String(100), unique=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
     increase_modifier: Mapped["FeatIncreaseModifier"] = relationship(
         back_populates="feat"
@@ -19,7 +18,7 @@ class Feat(Timestamp, Base):
     )
 
 
-class FeatIncreaseModifier(Timestamp, Base):
+class FeatIncreaseModifier(Base):
     __tablename__ = "feat_increase_modifier"
 
     name: Mapped[str] = mapped_column(String(50), unique=True)
@@ -27,7 +26,7 @@ class FeatIncreaseModifier(Timestamp, Base):
     feat: Mapped["Feat"] = relationship(back_populates="increase_modifier")
 
 
-class FeatRequiredModifier(Timestamp, Base):
+class FeatRequiredModifier(Base):
     __tablename__ = "feat_required_modifier"
 
     name: Mapped[str] = mapped_column(String(50), unique=True)

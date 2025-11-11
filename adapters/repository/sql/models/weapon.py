@@ -2,18 +2,18 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from adapters.repository.sql.models.mixin import Timestamp
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from adapters.repository.sql.models.character_class import CharacterClass
+    from adapters.repository.sql.models.material import Material
 
 
-class Weapon(Timestamp, Base):
+class Weapon(Base):
     __tablename__ = "weapon"
 
-    name: Mapped[str] = mapped_column(String(100), unique=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
     cost: Mapped[int]
     damage_dice_name: Mapped[str]
@@ -30,12 +30,14 @@ class Weapon(Timestamp, Base):
     character_classes: Mapped[list["CharacterClass"]] = relationship(
         back_populates="weapons", secondary="rel_class_weapon"
     )
+    material_id: Mapped[UUID] = mapped_column(ForeignKey("material.id"))
+    material: Mapped["Material"] = relationship(back_populates="weapons")
 
 
-class WeaponProperty(Timestamp, Base):
+class WeaponProperty(Base):
     __tablename__ = "weapon_property"
 
-    name: Mapped[str] = mapped_column(String(100), unique=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
     base_range: Mapped[int | None]
     max_range: Mapped[int | None]
@@ -49,25 +51,25 @@ class WeaponProperty(Timestamp, Base):
     )
 
 
-class WeaponKind(Timestamp, Base):
+class WeaponKind(Base):
     __tablename__ = "weapon_kind"
 
-    name: Mapped[str] = mapped_column(String(100), unique=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
-    weapon_type: Mapped[str] = mapped_column(String(100))
+    weapon_type: Mapped[str] = mapped_column(String(50))
     weapons: Mapped[list["Weapon"]] = relationship(
         back_populates="kind", secondary="rel_weapon_kind"
     )
 
 
-class RelWeaponProperty(Timestamp, Base):
+class RelWeaponProperty(Base):
     __tablename__ = "rel_weapon_property"
 
     weapon_id: Mapped[UUID] = mapped_column(ForeignKey("weapon.id"), unique=True)
     weapon_property_id: Mapped[UUID] = mapped_column(ForeignKey("weapon_property.id"))
 
 
-class RelWeaponKind(Timestamp, Base):
+class RelWeaponKind(Base):
     __tablename__ = "rel_weapon_kind"
 
     weapon_id: Mapped[UUID] = mapped_column(ForeignKey("weapon.id"))

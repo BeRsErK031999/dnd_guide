@@ -2,21 +2,21 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from adapters.repository.sql.models.mixin import Timestamp
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from adapters.repository.sql.models.creature_size import CreatureSize
     from adapters.repository.sql.models.creature_type import CreatureType
+    from adapters.repository.sql.models.source import Source
 
 
-class Race(Timestamp, Base):
+class Race(Base):
     __tablename__ = "race"
 
-    name: Mapped[str] = mapped_column(String(100), unique=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
-    name_in_english: Mapped[str] = mapped_column(String(100))
+    name_in_english: Mapped[str] = mapped_column(String(50))
     base_speed: Mapped[int]
     speed_description: Mapped[str]
     max_age: Mapped[int]
@@ -29,21 +29,23 @@ class Race(Timestamp, Base):
         back_populates="race"
     )
     features: Mapped[list["RaceFeature"]] = relationship(back_populates="race")
+    source_id: Mapped[UUID] = mapped_column(ForeignKey("source.id"))
+    source: Mapped["Source"] = relationship(back_populates="races")
 
 
-class RaceIncreaseModifier(Timestamp, Base):
+class RaceIncreaseModifier(Base):
     __tablename__ = "race_increase_modifier"
 
-    name: Mapped[str] = mapped_column(String(100))
+    name: Mapped[str] = mapped_column(String(50))
     bonus: Mapped[int]
     race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
     race: Mapped["Race"] = relationship(back_populates="increase_modifiers")
 
 
-class RaceFeature(Timestamp, Base):
+class RaceFeature(Base):
     __tablename__ = "race_feature"
 
-    name: Mapped[str] = mapped_column(String(100))
+    name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str]
     race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
     race: Mapped["Race"] = relationship(back_populates="features")

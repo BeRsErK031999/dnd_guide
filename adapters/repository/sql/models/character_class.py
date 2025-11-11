@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from adapters.repository.sql.models.mixin import Timestamp
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -10,15 +9,16 @@ if TYPE_CHECKING:
     from adapters.repository.sql.models.character_subclass import CharacterSubclass
     from adapters.repository.sql.models.class_feature import ClassFeature
     from adapters.repository.sql.models.class_level import ClassLevel
+    from adapters.repository.sql.models.source import Source
     from adapters.repository.sql.models.spell import Spell
 
 
-class CharacterClass(Timestamp, Base):
+class CharacterClass(Base):
     __tablename__ = "character_class"
 
-    name: Mapped[str] = mapped_column(String(100), unique=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
-    name_in_english: Mapped[str] = mapped_column(String(100))
+    name_in_english: Mapped[str] = mapped_column(String(50))
     starting_hits: Mapped[int]
     hit_modifier: Mapped[str]
     next_level_hits: Mapped[int]
@@ -55,9 +55,11 @@ class CharacterClass(Timestamp, Base):
     spells: Mapped[list["Spell"]] = relationship(
         back_populates="character_classes", secondary="rel_spell_character_class"
     )
+    source_id: Mapped[UUID] = mapped_column(ForeignKey("source.id"))
+    source: Mapped["Source"] = relationship(back_populates="character_classes")
 
 
-class ClassPrimaryModifier(Timestamp, Base):
+class ClassPrimaryModifier(Base):
     __tablename__ = "class_primary_modifier"
 
     name: Mapped[str] = mapped_column(String(50))
@@ -67,7 +69,7 @@ class ClassPrimaryModifier(Timestamp, Base):
     )
 
 
-class ClassHitDice(Timestamp, Base):
+class ClassHitDice(Base):
     __tablename__ = "class_hit_dice"
 
     name: Mapped[str] = mapped_column(String(50))
@@ -76,7 +78,7 @@ class ClassHitDice(Timestamp, Base):
     character_class: Mapped["CharacterClass"] = relationship(back_populates="hit_dice")
 
 
-class ClassArmorType(Timestamp, Base):
+class ClassArmorType(Base):
     __tablename__ = "class_armor_type"
 
     name: Mapped[str] = mapped_column(String(50))
@@ -86,7 +88,7 @@ class ClassArmorType(Timestamp, Base):
     )
 
 
-class ClassSavingThrow(Timestamp, Base):
+class ClassSavingThrow(Base):
     __tablename__ = "class_saving_throw"
 
     name: Mapped[str] = mapped_column(String(50))
@@ -96,7 +98,7 @@ class ClassSavingThrow(Timestamp, Base):
     )
 
 
-class ClassSkill(Timestamp, Base):
+class ClassSkill(Base):
     __tablename__ = "class_skill"
 
     name: Mapped[str] = mapped_column(String(50))
@@ -104,14 +106,14 @@ class ClassSkill(Timestamp, Base):
     character_class: Mapped["CharacterClass"] = relationship(back_populates="skills")
 
 
-class RelClassTool(Timestamp, Base):
+class RelClassTool(Base):
     __tablename__ = "rel_class_tool"
 
     tool_id: Mapped[UUID] = mapped_column(ForeignKey("tool.id"))
     class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
 
 
-class RelClassWeapon(Timestamp, Base):
+class RelClassWeapon(Base):
     __tablename__ = "rel_class_weapon"
 
     weapon_id: Mapped[UUID] = mapped_column(ForeignKey("weapon.id"))

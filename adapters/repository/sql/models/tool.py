@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from adapters.repository.sql.models.mixin import Timestamp
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -10,10 +9,10 @@ if TYPE_CHECKING:
     from adapters.repository.sql.models.character_class import CharacterClass
 
 
-class Tool(Timestamp, Base):
+class Tool(Base):
     __tablename__ = "tool"
 
-    name: Mapped[str] = mapped_column(String(100), unique=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
     cost: Mapped[int]
     weight: Mapped[float]
@@ -26,7 +25,7 @@ class Tool(Timestamp, Base):
     )
 
 
-class ToolUtilize(Timestamp, Base):
+class ToolUtilize(Base):
     __tablename__ = "tool_utilize"
 
     action: Mapped[str]

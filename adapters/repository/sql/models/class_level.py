@@ -2,15 +2,14 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from adapters.repository.sql.models.mixin import Timestamp
-from sqlalchemy import ForeignKey, Integer
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
     from adapters.repository.sql.models.character_class import CharacterClass
 
 
-class ClassLevel(Timestamp, Base):
+class ClassLevel(Base):
     __tablename__ = "class_level"
 
     level: Mapped[int]
@@ -34,7 +33,7 @@ class ClassLevel(Timestamp, Base):
     )
 
 
-class ClassLevelSpellSlot(Timestamp, Base):
+class ClassLevelSpellSlot(Base):
     __tablename__ = "class_level_spell_slot"
 
     level_1: Mapped[int]
