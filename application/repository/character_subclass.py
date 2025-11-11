@@ -22,7 +22,11 @@ class SubclassRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, subclass: CharacterSubclass) -> None:
+    async def create(self, subclass: CharacterSubclass) -> None:
+        raise NotImplemented
+
+    @abstractmethod
+    async def update(self, subclass: CharacterSubclass) -> None:
         raise NotImplemented
 
     @abstractmethod

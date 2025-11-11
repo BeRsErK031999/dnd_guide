@@ -24,7 +24,10 @@ class InMemoryArmorRepository(DomainArmorRepository, AppArmorRepository):
     async def get_all(self) -> list[Armor]:
         return list(self.__store.values())
 
-    async def save(self, armor: Armor) -> None:
+    async def create(self, armor: Armor) -> None:
+        self.__store[armor.armor_id()] = armor
+
+    async def update(self, armor: Armor) -> None:
         self.__store[armor.armor_id()] = armor
 
     async def delete(self, armor_id: UUID) -> None:

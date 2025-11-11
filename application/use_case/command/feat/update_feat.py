@@ -47,4 +47,4 @@ class UpdateFeatUseCase(UserCheck):
                     for increase_modifier in command.increase_modifiers
                 ]
             )
-        await self.__feat_repository.save(feat)
+        await self.__feat_repository.update(feat)

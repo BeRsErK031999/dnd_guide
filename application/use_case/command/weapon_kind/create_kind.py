@@ -24,8 +24,8 @@ class CreateWeaponKindUseCase(UserCheck):
             )
         kind = WeaponKind(
             await self.__kind_repository.next_id(),
-            WeaponType.from_str(command.weapon_type),
             command.name,
             command.description,
+            WeaponType.from_str(command.weapon_type),
         )
-        await self.__kind_repository.save(kind)
+        await self.__kind_repository.create(kind)

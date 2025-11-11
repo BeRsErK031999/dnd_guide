@@ -24,7 +24,10 @@ class InMemoryMaterialRepository(DomainMaterialRepository, AppMaterialRepository
     async def get_all(self) -> list[Material]:
         return list(self.__store.values())
 
-    async def save(self, material: Material) -> None:
+    async def create(self, material: Material) -> None:
+        self.__store[material.material_id()] = material
+
+    async def update(self, material: Material) -> None:
         self.__store[material.material_id()] = material
 
     async def delete(self, material_id: UUID) -> None:

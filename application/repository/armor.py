@@ -22,7 +22,11 @@ class ArmorRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, armor: Armor) -> None:
+    async def create(self, armor: Armor) -> None:
+        raise NotImplemented
+
+    @abstractmethod
+    async def update(self, armor: Armor) -> None:
         raise NotImplemented
 
     @abstractmethod

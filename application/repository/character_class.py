@@ -22,7 +22,11 @@ class ClassRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, character_class: CharacterClass) -> None:
+    async def create(self, character_class: CharacterClass) -> None:
+        raise NotImplemented
+
+    @abstractmethod
+    async def update(self, character_class: CharacterClass) -> None:
         raise NotImplemented
 
     @abstractmethod

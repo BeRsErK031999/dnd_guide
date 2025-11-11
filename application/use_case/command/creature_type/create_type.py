@@ -25,4 +25,4 @@ class CreateCreatureTypeUseCase(UserCheck):
         creature_type = CreatureType(
             await self.__type_repository.next_id(), command.name, command.description
         )
-        await self.__type_repository.save(creature_type)
+        await self.__type_repository.create(creature_type)

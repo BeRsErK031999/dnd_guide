@@ -26,7 +26,10 @@ class InMemoryClassFeatureRepository(
     async def get_all(self) -> list[ClassFeature]:
         return list(self.__store.values())
 
-    async def save(self, feature: ClassFeature) -> None:
+    async def create(self, feature: ClassFeature) -> None:
+        self.__store[feature.feature_id()] = feature
+
+    async def update(self, feature: ClassFeature) -> None:
         self.__store[feature.feature_id()] = feature
 
     async def delete(self, feature_id: UUID) -> None:

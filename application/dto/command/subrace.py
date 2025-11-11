@@ -24,6 +24,7 @@ class CreateSubraceCommand:
     name: str
     description: str
     increase_modifiers: Sequence[SubraceIncreaseModifierCommand]
+    name_in_english: str
     features: Sequence[SubraceFeatureCommand] = []
 
 
@@ -38,6 +39,7 @@ class UpdateSubraceCommand:
     new_features: Sequence[SubraceFeatureCommand] | None = None
     add_features: Sequence[SubraceFeatureCommand] | None = None
     remove_features: Sequence[str] | None = None
+    name_in_english: str | None = None
 
     def __post_init__(self) -> None:
         if all(
@@ -49,6 +51,7 @@ class UpdateSubraceCommand:
                 self.new_features is None,
                 self.add_features is None,
                 self.remove_features is None,
+                self.name_in_english is None,
             ]
         ):
             raise DomainError.invalid_data("не переданы данные для обновления расы")

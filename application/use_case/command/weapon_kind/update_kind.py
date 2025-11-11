@@ -33,4 +33,4 @@ class UpdateWeaponKindUseCase(UserCheck):
             kind.new_name(command.name)
         if command.description is not None:
             kind.new_description(command.description)
-        await self.__kind_repository.save(kind)
+        await self.__kind_repository.update(kind)

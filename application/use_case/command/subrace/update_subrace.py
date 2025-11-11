@@ -63,4 +63,6 @@ class UpdateSubraceUseCase(UserCheck):
             )
         if command.remove_features is not None:
             subrace.remove_features(command.remove_features)
-        await self.__subrace_repository.save(subrace)
+        if command.name_in_english is not None:
+            subrace.new_name_in_english(command.name_in_english)
+        await self.__subrace_repository.update(subrace)

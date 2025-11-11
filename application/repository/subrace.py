@@ -22,7 +22,11 @@ class SubraceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, subrace: Subrace) -> None:
+    async def create(self, subrace: Subrace) -> None:
+        raise NotImplemented
+
+    @abstractmethod
+    async def update(self, subrace: Subrace) -> None:
         raise NotImplemented
 
     @abstractmethod

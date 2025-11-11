@@ -22,7 +22,11 @@ class WeaponPropertyRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, weapon_property: WeaponProperty) -> None:
+    async def create(self, weapon_property: WeaponProperty) -> None:
+        raise NotImplemented
+
+    @abstractmethod
+    async def update(self, weapon_property: WeaponProperty) -> None:
         raise NotImplemented
 
     @abstractmethod

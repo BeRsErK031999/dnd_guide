@@ -31,4 +31,4 @@ class UpdateMaterialComponentUseCase(UserCheck):
             material.new_name(command.name)
         if command.description is not None:
             material.new_description(command.description)
-        await self.__material_repository.save(material)
+        await self.__material_repository.update(material)

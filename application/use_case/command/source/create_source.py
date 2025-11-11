@@ -28,4 +28,4 @@ class CreateSourceUseCase(UserCheck):
             command.description,
             command.name_in_english,
         )
-        await self.__source_repository.save(source)
+        await self.__source_repository.create(source)

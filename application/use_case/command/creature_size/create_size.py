@@ -25,4 +25,4 @@ class CreateCreatureSizeUseCase(UserCheck):
         size = CreatureSize(
             await self.__size_repository.next_id(), command.name, command.description
         )
-        await self.__size_repository.save(size)
+        await self.__size_repository.create(size)

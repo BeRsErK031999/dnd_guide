@@ -47,5 +47,6 @@ class CreateSubraceUseCase(UserCheck):
                 SubraceFeature(feature.name, feature.description)
                 for feature in command.features
             ],
+            command.name_in_english,
         )
-        await self.__subrace_repository.save(subrace)
+        await self.__subrace_repository.create(subrace)

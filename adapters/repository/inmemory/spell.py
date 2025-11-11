@@ -24,7 +24,10 @@ class InMemorySpellRepository(DomainSpellRepository, AppSpellRepository):
     async def get_all(self) -> list[Spell]:
         return list(self.__store.values())
 
-    async def save(self, spell: Spell) -> None:
+    async def create(self, spell: Spell) -> None:
+        self.__store[spell.spell_id()] = spell
+
+    async def update(self, spell: Spell) -> None:
         self.__store[spell.spell_id()] = spell
 
     async def delete(self, spell_id: UUID) -> None:

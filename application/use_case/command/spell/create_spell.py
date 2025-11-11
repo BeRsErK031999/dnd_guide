@@ -93,4 +93,4 @@ class CreateSpellUseCase(UserCheck):
             command.name_in_english,
             command.source_id,
         )
-        await self.__spell_repository.save(spell)
+        await self.__spell_repository.create(spell)

@@ -22,7 +22,11 @@ class RaceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, race: Race) -> None:
+    async def create(self, race: Race) -> None:
+        raise NotImplemented
+
+    @abstractmethod
+    async def update(self, race: Race) -> None:
         raise NotImplemented
 
     @abstractmethod

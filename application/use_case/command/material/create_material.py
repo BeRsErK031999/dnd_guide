@@ -27,4 +27,4 @@ class CreateMaterialUseCase(UserCheck):
             command.name,
             command.description,
         )
-        await self.__material_repository.save(material)
+        await self.__material_repository.create(material)

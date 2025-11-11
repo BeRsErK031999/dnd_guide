@@ -69,4 +69,4 @@ class CreateWeaponUseCase(UserCheck):
             command.weapon_properties,
             command.material_id,
         )
-        await self.__weapon_repository.save(weapon)
+        await self.__weapon_repository.create(weapon)

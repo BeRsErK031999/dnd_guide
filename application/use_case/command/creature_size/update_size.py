@@ -31,4 +31,4 @@ class UpdateCreatureSizeUseCase(UserCheck):
             size.new_name(command.name)
         if command.description is not None:
             size.new_description(command.description)
-        await self.__size_repository.save(size)
+        await self.__size_repository.update(size)

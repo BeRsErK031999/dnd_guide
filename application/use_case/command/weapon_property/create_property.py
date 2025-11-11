@@ -59,4 +59,4 @@ class CreateWeaponPropertyUseCase(UserCheck):
                 else None
             ),
         )
-        await self.__property_repository.save(weapon_property)
+        await self.__property_repository.create(weapon_property)

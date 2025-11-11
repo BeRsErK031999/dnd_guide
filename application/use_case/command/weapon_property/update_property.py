@@ -97,4 +97,4 @@ class UpdateWeaponPropertyUseCase(UserCheck):
                     else None
                 )
             )
-        await self.__property_repository.save(weapon_property)
+        await self.__property_repository.update(weapon_property)

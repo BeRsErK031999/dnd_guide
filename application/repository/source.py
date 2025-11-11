@@ -22,7 +22,11 @@ class SourceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, source: Source) -> None:
+    async def create(self, source: Source) -> None:
+        raise NotImplemented
+
+    @abstractmethod
+    async def update(self, source: Source) -> None:
         raise NotImplemented
 
     @abstractmethod

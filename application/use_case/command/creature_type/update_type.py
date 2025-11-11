@@ -31,4 +31,4 @@ class UpdateCreatureTypeUseCase(UserCheck):
             creature_type.new_name(command.name)
         if command.description is not None:
             creature_type.new_description(command.description)
-        await self.__type_repository.save(creature_type)
+        await self.__type_repository.update(creature_type)

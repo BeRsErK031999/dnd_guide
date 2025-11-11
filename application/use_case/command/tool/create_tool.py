@@ -36,4 +36,4 @@ class CreateToolUseCase(UserCheck):
                 for utilize in command.utilizes
             ],
         )
-        await self.__tool_repository.save(tool)
+        await self.__tool_repository.create(tool)

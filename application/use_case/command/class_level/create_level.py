@@ -82,4 +82,4 @@ class CreateClassLevelUseCase(UserCheck):
             bonus_damage,
             increase_speed,
         )
-        await self.__class_level_repository.save(class_level)
+        await self.__class_level_repository.create(class_level)

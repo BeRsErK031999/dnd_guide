@@ -30,7 +30,10 @@ class InMemorySubclassFeatureRepository(
     async def get_all(self) -> list[SubclassFeature]:
         return list(self.__store.values())
 
-    async def save(self, feature: SubclassFeature) -> None:
+    async def create(self, feature: SubclassFeature) -> None:
+        self.__store[feature.feature_id()] = feature
+
+    async def update(self, feature: SubclassFeature) -> None:
         self.__store[feature.feature_id()] = feature
 
     async def delete(self, feature_id: UUID) -> None:

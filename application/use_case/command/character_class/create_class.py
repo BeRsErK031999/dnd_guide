@@ -87,4 +87,4 @@ class CreateClassUseCase(UserCheck):
             command.name_in_english,
             command.source_id,
         )
-        await self.__class_repository.save(new_class)
+        await self.__class_repository.create(new_class)

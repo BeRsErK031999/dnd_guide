@@ -22,7 +22,11 @@ class MaterialRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, material: Material) -> None:
+    async def create(self, material: Material) -> None:
+        raise NotImplemented
+
+    @abstractmethod
+    async def update(self, material: Material) -> None:
         raise NotImplemented
 
     @abstractmethod

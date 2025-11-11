@@ -94,4 +94,4 @@ class UpdateClassUseCase(UserCheck):
                     f"источник с id {command.source_id} не существует"
                 )
             changing_class.new_source_id(command.source_id)
-        await self.__class_repository.save(changing_class)
+        await self.__class_repository.update(changing_class)

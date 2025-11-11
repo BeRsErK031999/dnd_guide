@@ -108,4 +108,4 @@ class UpdateRaceUseCase(UserCheck):
                     f"источник с id {command.source_id} не существует"
                 )
             race.new_source_id(command.source_id)
-        await self.__race_repository.save(race)
+        await self.__race_repository.update(race)

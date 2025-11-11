@@ -123,4 +123,4 @@ class UpdateSpellUseCase(UserCheck):
                     f"источник с id {command.source_id} не существует"
                 )
             spell.new_source_id(command.source_id)
-        await self.__spell_repository.save(spell)
+        await self.__spell_repository.update(spell)

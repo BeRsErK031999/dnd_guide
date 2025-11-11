@@ -50,4 +50,4 @@ class UpdateToolUseCase(UserCheck):
                     for utilize in command.utilizes
                 ]
             )
-        await self.__tool_repository.save(tool)
+        await self.__tool_repository.update(tool)

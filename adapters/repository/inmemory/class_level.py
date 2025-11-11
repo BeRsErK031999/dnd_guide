@@ -28,7 +28,10 @@ class InMemoryClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepo
     async def get_all(self) -> list[ClassLevel]:
         return list(self.__store.values())
 
-    async def save(self, level: ClassLevel) -> None:
+    async def create(self, level: ClassLevel) -> None:
+        self.__store[level.level_id()] = level
+
+    async def update(self, level: ClassLevel) -> None:
         self.__store[level.level_id()] = level
 
     async def delete(self, level_id: UUID) -> None:

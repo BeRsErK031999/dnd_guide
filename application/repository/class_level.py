@@ -22,7 +22,11 @@ class ClassLevelRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, level: ClassLevel) -> None:
+    async def create(self, level: ClassLevel) -> None:
+        raise NotImplemented
+
+    @abstractmethod
+    async def update(self, level: ClassLevel) -> None:
         raise NotImplemented
 
     @abstractmethod

@@ -107,4 +107,4 @@ class UpdateClassLevelUseCase(UserCheck):
             class_level.new_number_spells_know(command.number_spells_know)
         if command.number_arcanums_know is not None:
             class_level.new_number_arcanums_know(command.number_arcanums_know)
-        await self.__class_level_repository.save(class_level)
+        await self.__class_level_repository.update(class_level)

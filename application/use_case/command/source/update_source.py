@@ -33,4 +33,4 @@ class UpdateSourceUseCase(UserCheck):
             source.new_description(command.description)
         if command.name_in_english is not None:
             source.new_name_in_english(command.name_in_english)
-        await self.__source_repository.save(source)
+        await self.__source_repository.update(source)

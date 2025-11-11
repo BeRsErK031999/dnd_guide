@@ -42,4 +42,4 @@ class CreateClassFeatureUseCase(UserCheck):
             command.level,
             command.name_in_english,
         )
-        await self.__feature_repository.save(feature)
+        await self.__feature_repository.create(feature)

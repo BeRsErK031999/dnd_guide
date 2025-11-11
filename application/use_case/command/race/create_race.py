@@ -83,4 +83,4 @@ class CreateRaceUseCase(UserCheck):
             command.name_in_english,
             command.source_id,
         )
-        await self.__race_repository.save(race)
+        await self.__race_repository.create(race)

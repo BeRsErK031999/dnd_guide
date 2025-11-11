@@ -22,7 +22,11 @@ class CreatureSizeRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, size: CreatureSize) -> None:
+    async def create(self, size: CreatureSize) -> None:
+        raise NotImplemented
+
+    @abstractmethod
+    async def update(self, size: CreatureSize) -> None:
         raise NotImplemented
 
     @abstractmethod

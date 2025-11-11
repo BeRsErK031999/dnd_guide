@@ -24,7 +24,10 @@ class InMemorySubraceRepository(DomainSubraceRepository, AppSubraceRepository):
     async def get_all(self) -> list[Subrace]:
         return list(self.__store.values())
 
-    async def save(self, subrace: Subrace) -> None:
+    async def create(self, subrace: Subrace) -> None:
+        self.__store[subrace.subrace_id()] = subrace
+
+    async def update(self, subrace: Subrace) -> None:
         self.__store[subrace.subrace_id()] = subrace
 
     async def delete(self, subrace_id: UUID) -> None:

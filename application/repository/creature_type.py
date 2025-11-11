@@ -22,7 +22,11 @@ class CreatureTypeRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def save(self, creature_type: CreatureType) -> None:
+    async def create(self, creature_type: CreatureType) -> None:
+        raise NotImplemented
+
+    @abstractmethod
+    async def update(self, creature_type: CreatureType) -> None:
         raise NotImplemented
 
     @abstractmethod
