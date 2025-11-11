@@ -1,9 +1,10 @@
 from uuid import UUID
 
-from domain.mixin import EntityDescription, EntityName, EntityNameInEnglish
+from domain.error import DomainError
+from domain.mixin import EntityDescription
 
 
-class Source(EntityName, EntityNameInEnglish, EntityDescription):
+class Source(EntityDescription):
     def __init__(
         self,
         source_id: UUID,
@@ -11,13 +12,49 @@ class Source(EntityName, EntityNameInEnglish, EntityDescription):
         description: str,
         name_in_english: str,
     ) -> None:
-        EntityName.__init__(self, name)
-        EntityNameInEnglish.__init__(self, name_in_english)
+        self.__validate_name_in_english(name_in_english)
+        self.__validate_name(name)
         EntityDescription.__init__(self, description)
         self.__source_id = source_id
+        self.__name = name
+        self.__name_in_english = name_in_english
 
     def source_id(self) -> UUID:
         return self.__source_id
+
+    def name(self) -> str:
+        return self.__name
+
+    def name_in_english(self) -> str:
+        return self.__name_in_english
+
+    def new_name(self, name: str) -> None:
+        if self.__name == name:
+            raise DomainError.idempotent("текущее название равно новому названию")
+        self.__validate_name(name)
+        self.__name = name
+
+    def new_name_in_english(self, name_in_english: str) -> None:
+        if self.__name_in_english == name_in_english:
+            raise DomainError.idempotent(
+                "текущее название на английском равно новому названию на английском"
+            )
+        self.__validate_name_in_english(name_in_english)
+        self.__name_in_english = name_in_english
+
+    def __validate_name(self, name: str) -> None:
+        if len(name) == 0:
+            raise DomainError.invalid_data("название не может быть пустым")
+        if len(name) > 100:
+            raise DomainError.invalid_data(
+                "название не может содержать более 100 символов"
+            )
+
+    def __validate_name_in_english(self, name_in_english: str) -> None:
+        if len(name_in_english) > 100:
+            raise DomainError.invalid_data(
+                "название на английском не может содержать более 100 символов"
+            )
 
     def __str__(self) -> str:
         return self.__name
