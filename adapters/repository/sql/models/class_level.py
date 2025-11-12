@@ -6,10 +6,10 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from adapters.repository.sql.models.character_class import CharacterClass
+    from adapters.repository.sql.models.character_class import CharacterClassModel
 
 
-class ClassLevel(Base):
+class ClassLevelModel(Base):
     __tablename__ = "class_level"
 
     level: Mapped[int]
@@ -25,15 +25,15 @@ class ClassLevel(Base):
     increase_speed: Mapped[float | None]
     increase_speed_description: Mapped[str | None]
     character_class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
-    character_class: Mapped["CharacterClass"] = relationship(
+    character_class: Mapped[CharacterClassModel] = relationship(
         back_populates="class_levels"
     )
-    class_level_spell_slots: Mapped[list["ClassLevelSpellSlot"] | None] = relationship(
-        back_populates="class_level"
+    class_level_spell_slots: Mapped[list[ClassLevelSpellSlotModel] | None] = (
+        relationship(back_populates="class_level")
     )
 
 
-class ClassLevelSpellSlot(Base):
+class ClassLevelSpellSlotModel(Base):
     __tablename__ = "class_level_spell_slot"
 
     level_1: Mapped[int]
@@ -46,6 +46,6 @@ class ClassLevelSpellSlot(Base):
     level_8: Mapped[int]
     level_9: Mapped[int]
     class_level_id: Mapped[UUID] = mapped_column(ForeignKey("class_level.id"))
-    class_level: Mapped["ClassLevel"] = relationship(
+    class_level: Mapped[ClassLevelModel] = relationship(
         back_populates="class_level_spell_slots"
     )

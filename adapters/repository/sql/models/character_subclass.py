@@ -6,24 +6,24 @@ from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from adapters.repository.sql.models.character_class import CharacterClass
-    from adapters.repository.sql.models.spell import Spell
-    from adapters.repository.sql.models.subclass_feature import SubclassFeature
+    from adapters.repository.sql.models.character_class import CharacterClassModel
+    from adapters.repository.sql.models.spell import SpellModel
+    from adapters.repository.sql.models.subclass_feature import SubclassFeatureModel
 
 
-class CharacterSubclass(Base):
+class CharacterSubclassModel(Base):
     __tablename__ = "character_subclass"
 
     name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
     name_in_english: Mapped[str] = mapped_column(String(50))
     character_class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
-    character_class: Mapped["CharacterClass"] = relationship(
+    character_class: Mapped[CharacterClassModel] = relationship(
         back_populates="character_subclasses"
     )
-    features: Mapped["SubclassFeature"] = relationship(
+    features: Mapped[SubclassFeatureModel] = relationship(
         back_populates="character_subclass"
     )
-    spells: Mapped[list["Spell"]] = relationship(
+    spells: Mapped[list[SpellModel]] = relationship(
         back_populates="character_subclass", secondary="character_subclass_spell"
     )

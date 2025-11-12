@@ -6,13 +6,13 @@ from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from adapters.repository.sql.models.character_class import CharacterClass
-    from adapters.repository.sql.models.character_subclass import CharacterSubclass
-    from adapters.repository.sql.models.material_component import MaterialComponent
-    from adapters.repository.sql.models.source import Source
+    from adapters.repository.sql.models.character_class import CharacterClassModel
+    from adapters.repository.sql.models.character_subclass import CharacterSubclassModel
+    from adapters.repository.sql.models.material_component import MaterialComponentModel
+    from adapters.repository.sql.models.source import SourceModel
 
 
-class Spell(Base):
+class SpellModel(Base):
     __tablename__ = "spell"
 
     name: Mapped[str] = mapped_column(String(50), unique=True)
@@ -28,58 +28,58 @@ class Spell(Base):
     verbal_component: Mapped[bool]
     symbol_component: Mapped[bool]
     material_component: Mapped[bool]
-    duration: Mapped["SpellDuration"] = relationship(back_populates="spell")
-    casting_time: Mapped["SpellCastingTime"] = relationship(back_populates="spell")
-    saving_throws: Mapped[list["SpellSavingThrow"]] = relationship(
+    duration: Mapped[SpellDurationModel] = relationship(back_populates="spell")
+    casting_time: Mapped[SpellCastingTimeModel] = relationship(back_populates="spell")
+    saving_throws: Mapped[list[SpellSavingThrowModel]] = relationship(
         back_populates="spell"
     )
-    character_classes: Mapped[list["CharacterClass"]] = relationship(
+    character_classes: Mapped[list[CharacterClassModel]] = relationship(
         back_populates="spells", secondary="rel_spell_character_class"
     )
-    character_subclasses: Mapped[list["CharacterSubclass"] | None] = relationship(
+    character_subclasses: Mapped[list[CharacterSubclassModel] | None] = relationship(
         back_populates="spells", secondary="rel_spell_character_subclass"
     )
-    materials: Mapped[list["MaterialComponent"] | None] = relationship(
+    materials: Mapped[list[MaterialComponentModel] | None] = relationship(
         back_populates="spells", secondary="rel_spell_material"
     )
     source_id: Mapped[UUID] = mapped_column(ForeignKey("source.id"))
-    source: Mapped["Source"] = relationship(back_populates="spells")
+    source: Mapped[SourceModel] = relationship(back_populates="spells")
 
 
-class SpellDuration(Base):
+class SpellDurationModel(Base):
     __tablename__ = "spell_duration"
 
     units: Mapped[str]
     count: Mapped[int]
     spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"), unique=True)
-    spell: Mapped["Spell"] = relationship(back_populates="duration")
+    spell: Mapped["SpellModel"] = relationship(back_populates="duration")
 
 
-class SpellCastingTime(Base):
+class SpellCastingTimeModel(Base):
     __tablename__ = "spell_casting_time"
 
     units: Mapped[str]
     count: Mapped[int]
     spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"), unique=True)
-    spell: Mapped["Spell"] = relationship(back_populates="casting_time")
+    spell: Mapped["SpellModel"] = relationship(back_populates="casting_time")
 
 
-class SpellSavingThrow(Base):
+class SpellSavingThrowModel(Base):
     __tablename__ = "spell_saving_throw"
 
     name: Mapped[str]
     spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"))
-    spell: Mapped["Spell"] = relationship(back_populates="saving_throws")
+    spell: Mapped["SpellModel"] = relationship(back_populates="saving_throws")
 
 
-class RelSpellCharacterClass(Base):
+class RelSpellCharacterClassModel(Base):
     __tablename__ = "rel_spell_character_class"
 
     character_class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
     spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"))
 
 
-class RelSpellCharacterSubclass(Base):
+class RelSpellCharacterSubclassModel(Base):
     __tablename__ = "rel_spell_character_subclass"
 
     character_subclass_id: Mapped[UUID] = mapped_column(
@@ -88,7 +88,7 @@ class RelSpellCharacterSubclass(Base):
     spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"))
 
 
-class RelSpellMaterial(Base):
+class RelSpellMaterialModel(Base):
     __tablename__ = "rel_spell_material"
 
     material_id: Mapped[UUID] = mapped_column(ForeignKey("material.id"))

@@ -6,12 +6,12 @@ from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from adapters.repository.sql.models.creature_size import CreatureSize
-    from adapters.repository.sql.models.creature_type import CreatureType
-    from adapters.repository.sql.models.source import Source
+    from adapters.repository.sql.models.creature_size import CreatureSizeModel
+    from adapters.repository.sql.models.creature_type import CreatureTypeModel
+    from adapters.repository.sql.models.source import SourceModel
 
 
-class Race(Base):
+class RaceModel(Base):
     __tablename__ = "race"
 
     name: Mapped[str] = mapped_column(String(50), unique=True)
@@ -22,30 +22,30 @@ class Race(Base):
     max_age: Mapped[int]
     age_description: Mapped[str]
     creature_type_id: Mapped[UUID] = mapped_column(ForeignKey("creature_type.id"))
-    creature_type: Mapped["CreatureType"] = relationship(back_populates="races")
+    creature_type: Mapped["CreatureTypeModel"] = relationship(back_populates="races")
     creature_size_id: Mapped[UUID] = mapped_column(ForeignKey("creature_size.id"))
-    creature_size: Mapped["CreatureSize"] = relationship(back_populates="races")
-    increase_modifiers: Mapped[list["RaceIncreaseModifier"]] = relationship(
+    creature_size: Mapped["CreatureSizeModel"] = relationship(back_populates="races")
+    increase_modifiers: Mapped[list[RaceIncreaseModifierModel]] = relationship(
         back_populates="race"
     )
-    features: Mapped[list["RaceFeature"]] = relationship(back_populates="race")
+    features: Mapped[list[RaceFeatureModel]] = relationship(back_populates="race")
     source_id: Mapped[UUID] = mapped_column(ForeignKey("source.id"))
-    source: Mapped["Source"] = relationship(back_populates="races")
+    source: Mapped[SourceModel] = relationship(back_populates="races")
 
 
-class RaceIncreaseModifier(Base):
+class RaceIncreaseModifierModel(Base):
     __tablename__ = "race_increase_modifier"
 
     name: Mapped[str] = mapped_column(String(50))
     bonus: Mapped[int]
     race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
-    race: Mapped["Race"] = relationship(back_populates="increase_modifiers")
+    race: Mapped[RaceModel] = relationship(back_populates="increase_modifiers")
 
 
-class RaceFeature(Base):
+class RaceFeatureModel(Base):
     __tablename__ = "race_feature"
 
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str]
     race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
-    race: Mapped["Race"] = relationship(back_populates="features")
+    race: Mapped[RaceModel] = relationship(back_populates="features")

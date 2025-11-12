@@ -6,11 +6,11 @@ from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from adapters.repository.sql.models.character_class import CharacterClass
-    from adapters.repository.sql.models.material import Material
+    from adapters.repository.sql.models.character_class import CharacterClassModel
+    from adapters.repository.sql.models.material import MaterialModel
 
 
-class Weapon(Base):
+class WeaponModel(Base):
     __tablename__ = "weapon"
 
     name: Mapped[str] = mapped_column(String(50), unique=True)
@@ -21,20 +21,20 @@ class Weapon(Base):
     damage_type: Mapped[str]
     bonus_damage: Mapped[int]
     weight: Mapped[float]
-    properties: Mapped[list["WeaponProperty"]] = relationship(
+    properties: Mapped[list[WeaponPropertyModel]] = relationship(
         back_populates="weapons", secondary="rel_weapon_property"
     )
-    kind: Mapped[list["WeaponKind"]] = relationship(
+    kind: Mapped[list[WeaponKindModel]] = relationship(
         back_populates="weapons", secondary="rel_weapon_kind"
     )
-    character_classes: Mapped[list["CharacterClass"]] = relationship(
+    character_classes: Mapped[list[CharacterClassModel]] = relationship(
         back_populates="weapons", secondary="rel_class_weapon"
     )
     material_id: Mapped[UUID] = mapped_column(ForeignKey("material.id"))
-    material: Mapped["Material"] = relationship(back_populates="weapons")
+    material: Mapped[MaterialModel] = relationship(back_populates="weapons")
 
 
-class WeaponProperty(Base):
+class WeaponPropertyModel(Base):
     __tablename__ = "weapon_property"
 
     name: Mapped[str] = mapped_column(String(50), unique=True)
@@ -43,33 +43,33 @@ class WeaponProperty(Base):
     max_range: Mapped[int | None]
     second_hand_dice_name: Mapped[str | None]
     second_hand_dace_count: Mapped[int | None]
-    weapons: Mapped[list["Weapon"]] = relationship(
-        "Weapon", secondary="rel_weapon_property"
+    weapons: Mapped[list[WeaponModel]] = relationship(
+        "WeaponModel", secondary="rel_weapon_property"
     )
-    weapons: Mapped[list["Weapon"]] = relationship(
+    weapons: Mapped[list[WeaponModel]] = relationship(
         back_populates="properties", secondary="rel_weapon_property"
     )
 
 
-class WeaponKind(Base):
+class WeaponKindModel(Base):
     __tablename__ = "weapon_kind"
 
     name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
     weapon_type: Mapped[str] = mapped_column(String(50))
-    weapons: Mapped[list["Weapon"]] = relationship(
+    weapons: Mapped[list[WeaponModel]] = relationship(
         back_populates="kind", secondary="rel_weapon_kind"
     )
 
 
-class RelWeaponProperty(Base):
+class RelWeaponPropertyModel(Base):
     __tablename__ = "rel_weapon_property"
 
     weapon_id: Mapped[UUID] = mapped_column(ForeignKey("weapon.id"), unique=True)
     weapon_property_id: Mapped[UUID] = mapped_column(ForeignKey("weapon_property.id"))
 
 
-class RelWeaponKind(Base):
+class RelWeaponKindModel(Base):
     __tablename__ = "rel_weapon_kind"
 
     weapon_id: Mapped[UUID] = mapped_column(ForeignKey("weapon.id"))

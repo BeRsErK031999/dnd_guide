@@ -6,10 +6,10 @@ from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from adapters.repository.sql.models.character_subclass import CharacterSubclass
+    from adapters.repository.sql.models.character_subclass import CharacterSubclassModel
 
 
-class SubclassFeature(Base):
+class SubclassFeatureModel(Base):
     __tablename__ = "subclass_feature"
 
     name: Mapped[str] = mapped_column(String(50), unique=True)
@@ -19,6 +19,6 @@ class SubclassFeature(Base):
     character_subclass_id: Mapped[UUID] = mapped_column(
         ForeignKey("character_subclass.id")
     )
-    character_subclass: Mapped["CharacterSubclass"] = relationship(
+    character_subclass: Mapped[CharacterSubclassModel] = relationship(
         back_populates="features"
     )

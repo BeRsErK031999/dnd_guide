@@ -50,7 +50,7 @@ class Coins:
             case _:
                 raise DomainError.invalid_data("неизвестный тип монет")
 
-    def in_copper(self) -> float:
+    def in_copper(self) -> int:
         return self.__count
 
     def in_silver(self) -> float:
