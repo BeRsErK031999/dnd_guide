@@ -26,6 +26,11 @@ class SpellDamageTypeCommand:
 
 
 @dataclass
+class SplashCommand:
+    splash: LengthCommand | None
+
+
+@dataclass
 class CreateSpellCommand:
     user_id: UUID
     class_ids: Sequence[UUID]
@@ -35,10 +40,11 @@ class CreateSpellCommand:
     next_level_description: str
     level: int
     school: str
-    damage_type: SpellDamageTypeCommand | None
-    duration: SpellDurationCommand | None
+    damage_type: SpellDamageTypeCommand
+    duration: SpellDurationCommand
     casting_time: GameTimeCommand
     spell_range: LengthCommand
+    splash: SplashCommand
     components: SpellComponentsCommand
     concentration: bool
     ritual: bool
@@ -62,6 +68,7 @@ class UpdateSpellCommand:
     duration: SpellDurationCommand | None = None
     casting_time: GameTimeCommand | None = None
     spell_range: LengthCommand | None = None
+    splash: SplashCommand | None = None
     components: SpellComponentsCommand | None = None
     concentration: bool | None = None
     ritual: bool | None = None
@@ -83,6 +90,7 @@ class UpdateSpellCommand:
                 self.duration is None,
                 self.casting_time is None,
                 self.spell_range is None,
+                self.splash is None,
                 self.components is None,
                 self.concentration is None,
                 self.ritual is None,

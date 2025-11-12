@@ -51,46 +51,54 @@ class CreateSpellUseCase(UserCheck):
                 f"источник с id {command.source_id} не существует"
             )
         spell = Spell(
-            await self.__spell_repository.next_id(),
-            command.class_ids,
-            command.subclass_ids,
-            command.name,
-            command.description,
-            command.next_level_description,
-            command.level,
-            SpellSchool.from_str(command.school),
-            (
+            spell_id=await self.__spell_repository.next_id(),
+            class_ids=command.class_ids,
+            subclass_ids=command.subclass_ids,
+            name=command.name,
+            description=command.description,
+            next_level_description=command.next_level_description,
+            level=command.level,
+            school=SpellSchool.from_str(command.school),
+            damage_type=(
                 DamageType.from_str(command.damage_type.name)
-                if command.damage_type is not None
-                and command.damage_type.name is not None
+                if command.damage_type.name is not None
                 else None
             ),
-            (
+            duration=(
                 GameTime(
                     command.duration.game_time.count,
                     GameTimeUnit.from_str(command.duration.game_time.unit),
                 )
-                if command.duration is not None
-                and command.duration.game_time is not None
+                if command.duration.game_time is not None
                 else None
             ),
-            GameTime(
+            casting_time=GameTime(
                 command.casting_time.count,
                 GameTimeUnit.from_str(command.casting_time.unit),
             ),
-            Length(
+            spell_range=Length(
                 command.spell_range.count, LengthUnit.from_str(command.spell_range.unit)
             ),
-            SpellComponents(
+            splash=(
+                Length(
+                    command.splash.splash.count,
+                    LengthUnit.from_str(command.splash.splash.unit),
+                )
+                if command.splash.splash is not None
+                else None
+            ),
+            components=SpellComponents(
                 command.components.verbal,
                 command.components.symbolic,
                 command.components.material,
                 command.components.materials,
             ),
-            command.concentration,
-            command.ritual,
-            [Modifier.from_str(modifier) for modifier in command.saving_throws],
-            command.name_in_english,
-            command.source_id,
+            concentration=command.concentration,
+            ritual=command.ritual,
+            saving_throws=[
+                Modifier.from_str(modifier) for modifier in command.saving_throws
+            ],
+            name_in_english=command.name_in_english,
+            source_id=command.source_id,
         )
         await self.__spell_repository.create(spell)

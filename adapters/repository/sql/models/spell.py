@@ -23,6 +23,7 @@ class SpellModel(Base):
     school: Mapped[str]
     damage_type: Mapped[str | None]
     spell_range: Mapped[float]
+    splash: Mapped[float | None]
     concentration: Mapped[bool]
     ritual: Mapped[bool]
     verbal_component: Mapped[bool]

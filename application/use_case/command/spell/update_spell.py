@@ -98,6 +98,15 @@ class UpdateSpellUseCase(UserCheck):
                     LengthUnit.from_str(command.spell_range.unit),
                 )
             )
+        if command.splash is not None:
+            spell.new_splash(
+                Length(
+                    command.splash.splash.count,
+                    LengthUnit.from_str(command.splash.splash.unit),
+                )
+                if command.splash.splash is not None
+                else None
+            )
         if command.components is not None:
             spell.new_components(
                 SpellComponents(

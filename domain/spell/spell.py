@@ -31,6 +31,7 @@ class Spell(EntityName, EntityNameInEnglish, EntityDescription, EntitySource):
         duration: GameTime | None,
         casting_time: GameTime,
         spell_range: Length,
+        splash: Length | None,
         components: SpellComponents,
         concentration: bool,
         ritual: bool,
@@ -60,6 +61,7 @@ class Spell(EntityName, EntityNameInEnglish, EntityDescription, EntitySource):
         self.__duration = duration
         self.__casting_time = casting_time
         self.__spell_range = spell_range
+        self.__splash = splash
         self.__components = components
         self.__concentration = concentration
         self.__ritual = ritual
@@ -94,6 +96,9 @@ class Spell(EntityName, EntityNameInEnglish, EntityDescription, EntitySource):
 
     def spell_range(self) -> Length:
         return self.__spell_range
+
+    def splash(self) -> Length | None:
+        return self.__splash
 
     def components(self) -> SpellComponents:
         return self.__components
@@ -162,6 +167,11 @@ class Spell(EntityName, EntityNameInEnglish, EntityDescription, EntitySource):
         if self.__spell_range == spell_range:
             raise DomainError.idempotent("текущий радиус равен новому радиусу")
         self.__spell_range = spell_range
+
+    def new_splash(self, splash: Length | None) -> None:
+        if self.__splash == splash:
+            raise DomainError.idempotent("текущий сплеш равен новому")
+        self.__splash = splash
 
     def new_components(self, components: SpellComponents) -> None:
         if self.__components == components:
