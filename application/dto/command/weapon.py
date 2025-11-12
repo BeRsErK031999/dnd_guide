@@ -18,13 +18,13 @@ class WeaponDamageCommand:
 @dataclass
 class CreateWeaponCommand:
     user_id: UUID
-    weapon_kind: UUID
+    weapon_kind_id: UUID
     name: str
     description: str
     cost: CoinCommand
     damage: WeaponDamageCommand
     weight: WeightCommand
-    weapon_properties: Sequence[UUID]
+    weapon_property_ids: Sequence[UUID]
     material_id: UUID
 
 
@@ -32,25 +32,25 @@ class CreateWeaponCommand:
 class UpdateWeaponCommand:
     user_id: UUID
     weapon_id: UUID
-    weapon_kind: UUID | None = None
+    weapon_kind_id: UUID | None = None
     name: str | None = None
     description: str | None = None
     cost: CoinCommand | None = None
     damage: WeaponDamageCommand | None = None
     weight: WeightCommand | None = None
-    weapon_properties: Sequence[UUID] | None = None
+    weapon_property_ids: Sequence[UUID] | None = None
     material_id: UUID | None = None
 
     def __post_init__(self):
         if all(
             [
-                self.weapon_kind is None,
+                self.weapon_kind_id is None,
                 self.name is None,
                 self.description is None,
                 self.cost is None,
                 self.damage is None,
                 self.weight is None,
-                self.weapon_properties is None,
+                self.weapon_property_ids is None,
                 self.material_id is None,
             ]
         ):

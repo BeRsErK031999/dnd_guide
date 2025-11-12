@@ -12,30 +12,30 @@ class Weapon(EntityName, EntityDescription):
     def __init__(
         self,
         weapon_id: UUID,
-        weapon_kind: UUID,
+        weapon_kind_id: UUID,
         name: str,
         description: str,
         cost: Coins,
         damage: WeaponDamage,
         weight: Weight,
-        weapon_properties: Sequence[UUID],
+        weapon_property_ids: Sequence[UUID],
         material_id: UUID,
     ) -> None:
-        self.__validate_properties(weapon_properties)
+        self.__validate_property_ids(weapon_property_ids)
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
         self.__weapon_id = weapon_id
-        self.__kind = weapon_kind
+        self.__kind_id = weapon_kind_id
         self.__cost = cost
         self.__damage = damage
         self.__weight = weight
-        self.__properties = list(weapon_properties)
+        self.__property_ids = list(weapon_property_ids)
         self.__material_id = material_id
 
     def weapon_id(self) -> UUID:
         return self.__weapon_id
 
-    def kind(self) -> UUID:
+    def kind_id(self) -> UUID:
         return self.__kind
 
     def cost(self) -> Coins:
@@ -47,13 +47,13 @@ class Weapon(EntityName, EntityDescription):
     def weight(self) -> Weight:
         return self.__weight
 
-    def properties(self) -> list[UUID]:
-        return self.__properties
+    def property_ids(self) -> list[UUID]:
+        return self.__property_ids
 
     def material_id(self) -> UUID:
         return self.__material_id
 
-    def new_kind(self, kind: UUID) -> None:
+    def new_kind_id(self, kind: UUID) -> None:
         if self.__kind == kind:
             raise DomainError.idempotent("текущий вид оружия равен новому виду")
         self.__kind = kind
@@ -73,13 +73,13 @@ class Weapon(EntityName, EntityDescription):
             raise DomainError.idempotent("текущая масса оружия равна новой массе")
         self.__weight = weight
 
-    def new_properties(self, properties: Sequence[UUID]) -> None:
-        if self.__properties == properties:
+    def new_property_ids(self, property_ids: Sequence[UUID]) -> None:
+        if self.__property_ids == property_ids:
             raise DomainError.idempotent(
                 "текущие свойства оружия равны новым свойствам"
             )
-        self.__validate_properties(properties)
-        self.__properties = list(properties)
+        self.__validate_property_ids(property_ids)
+        self.__property_ids = list(property_ids)
 
     def new_material_id(self, material_id: UUID) -> None:
         if self.__material_id == material_id:
@@ -88,7 +88,7 @@ class Weapon(EntityName, EntityDescription):
             )
         self.__material_id = material_id
 
-    def __validate_properties(self, properties: Sequence[UUID]) -> None:
+    def __validate_property_ids(self, properties: Sequence[UUID]) -> None:
         if len(properties) == 0:
             return
         if len(properties) != len(set(properties)):

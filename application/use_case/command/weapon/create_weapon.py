@@ -38,11 +38,11 @@ class CreateWeaponUseCase(UserCheck):
             raise DomainError.invalid_data(
                 f"оружие с названием {command.name} не возможно создать"
             )
-        if not await self.__kind_repository.id_exists(command.weapon_kind):
+        if not await self.__kind_repository.id_exists(command.weapon_kind_id):
             raise DomainError.invalid_data(
-                f"тип оружия с id {command.weapon_kind} не существует"
+                f"тип оружия с id {command.weapon_kind_id} не существует"
             )
-        for property_id in command.weapon_properties:
+        for property_id in command.weapon_property_ids:
             if not await self.__property_repository.id_exists(property_id):
                 raise DomainError.invalid_data(
                     f"свойство оружия с id {property_id} не существует"
@@ -53,7 +53,7 @@ class CreateWeaponUseCase(UserCheck):
             )
         weapon = Weapon(
             await self.__weapon_repository.next_id(),
-            command.weapon_kind,
+            command.weapon_kind_id,
             command.name,
             command.description,
             Coins(command.cost.count, PieceType.from_str(command.cost.piece_type)),
@@ -66,7 +66,7 @@ class CreateWeaponUseCase(UserCheck):
                 command.damage.bonus_damage,
             ),
             Weight(command.weight.count, WeightUnit.from_str(command.weight.unit)),
-            command.weapon_properties,
+            command.weapon_property_ids,
             command.material_id,
         )
         await self.__weapon_repository.create(weapon)

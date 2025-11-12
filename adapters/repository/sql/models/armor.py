@@ -2,9 +2,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from domain.armor import Armor
-from domain.armor.armor_class import ArmorClass
-from domain.armor.armor_type import ArmorType
+from domain.armor import Armor, ArmorClass, ArmorType
 from domain.coin import Coins, PieceType
 from domain.modifier import Modifier
 from domain.weight import Weight, WeightUnit
