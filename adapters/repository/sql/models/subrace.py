@@ -1,8 +1,14 @@
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
+from domain.modifier import Modifier
+from domain.subrace import Subrace, SubraceFeature, SubraceIncreaseModifier
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+if TYPE_CHECKING:
+    from adapters.repository.sql.models.race import RaceModel
 
 
 class SubraceModel(Base):
@@ -11,10 +17,34 @@ class SubraceModel(Base):
     name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
     name_in_english: Mapped[str] = mapped_column(String(50))
+    race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
+
+    race: Mapped[RaceModel] = relationship(back_populates="subraces")
     increase_modifiers: Mapped[list[SubraceIncreaseModifierModel]] = relationship(
         back_populates="race"
     )
     features: Mapped[list[SubraceFeatureModel]] = relationship(back_populates="race")
+
+    def to_domain(self) -> Subrace:
+        return Subrace(
+            subrace_id=self.id,
+            race_id=self.race_id,
+            name=self.name,
+            description=self.description,
+            increase_modifiers=[im.to_domain() for im in self.increase_modifiers],
+            features=[f.to_domain() for f in self.features],
+            name_in_english=self.name_in_english,
+        )
+
+    @staticmethod
+    def from_domain(subrace: Subrace) -> SubraceModel:
+        return SubraceModel(
+            id=subrace.subrace_id(),
+            name=subrace.name(),
+            description=subrace.description(),
+            name_in_english=subrace.name_in_english(),
+            race_id=subrace.race_id(),
+        )
 
 
 class SubraceIncreaseModifierModel(Base):
@@ -23,7 +53,19 @@ class SubraceIncreaseModifierModel(Base):
     name: Mapped[str] = mapped_column(String(50))
     bonus: Mapped[int]
     race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
+
     race: Mapped[SubraceModel] = relationship(back_populates="increase_modifiers")
+
+    def to_domain(self) -> SubraceIncreaseModifier:
+        return SubraceIncreaseModifier(
+            modifier=Modifier.from_str(self.name), bonus=self.bonus
+        )
+
+    @staticmethod
+    def from_domain(modifier: SubraceIncreaseModifier) -> SubraceIncreaseModifierModel:
+        return SubraceIncreaseModifierModel(
+            name=modifier.modifier().name, bonus=modifier.bonus()
+        )
 
 
 class SubraceFeatureModel(Base):
@@ -32,4 +74,14 @@ class SubraceFeatureModel(Base):
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str]
     race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
+
     race: Mapped[SubraceModel] = relationship(back_populates="features")
+
+    def to_domain(self) -> SubraceFeature:
+        return SubraceFeature(name=self.name, description=self.description)
+
+    @staticmethod
+    def from_domain(feature: SubraceFeature) -> SubraceFeatureModel:
+        return SubraceFeatureModel(
+            name=feature.name(), description=feature.description()
+        )

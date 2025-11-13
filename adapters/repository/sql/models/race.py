@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from adapters.repository.sql.models.creature_size import CreatureSizeModel
     from adapters.repository.sql.models.creature_type import CreatureTypeModel
     from adapters.repository.sql.models.source import SourceModel
+    from adapters.repository.sql.models.subrace import SubraceModel
 
 
 class RaceModel(Base):
@@ -35,6 +36,7 @@ class RaceModel(Base):
     )
     features: Mapped[list[RaceFeatureModel]] = relationship(back_populates="race")
     source: Mapped[SourceModel] = relationship(back_populates="races")
+    subraces: Mapped[list[SubraceModel]] = relationship(back_populates="race")
 
     def to_domain(self) -> Race:
         return Race(
