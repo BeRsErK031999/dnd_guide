@@ -13,7 +13,7 @@ from sqlalchemy import delete, exists, select
 from sqlalchemy.orm import selectinload
 
 
-class InMemorySubclassFeatureRepository(
+class SQLSubclassFeatureRepository(
     DomainSubclassFeatureRepository, AppSubclassFeatureRepository
 ):
     def __init__(self, db_helper: DBHelper) -> None:

@@ -23,8 +23,6 @@ from .spell import (
     RelSpellCharacterClassModel,
     RelSpellCharacterSubclassModel,
     RelSpellMaterialModel,
-    SpellCastingTimeModel,
-    SpellDurationModel,
     SpellModel,
     SpellSavingThrowModel,
 )
@@ -33,7 +31,6 @@ from .subrace import SubraceFeatureModel, SubraceIncreaseModifierModel, SubraceM
 from .tool import ToolModel, ToolUtilizeModel
 from .user import UserModel
 from .weapon import (
-    RelWeaponKindModel,
     RelWeaponPropertyModel,
     WeaponKindModel,
     WeaponModel,
@@ -68,8 +65,6 @@ __all__ = [
     "RelSpellCharacterClassModel",
     "RelSpellCharacterSubclassModel",
     "RelSpellMaterialModel",
-    "SpellCastingTimeModel",
-    "SpellDurationModel",
     "SpellModel",
     "SpellSavingThrowModel",
     "SubclassFeatureModel",
@@ -82,6 +77,5 @@ __all__ = [
     "WeaponKindModel",
     "WeaponModel",
     "WeaponPropertyModel",
-    "RelWeaponKindModel",
     "RelWeaponPropertyModel",
 ]
