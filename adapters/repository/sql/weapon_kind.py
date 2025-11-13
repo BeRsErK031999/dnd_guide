@@ -8,7 +8,7 @@ from domain.weapon_kind import WeaponKindRepository as DomainWeaponKindRepositor
 from sqlalchemy import delete, exists, select
 
 
-class InMemoryWeaponKindRepository(DomainWeaponKindRepository, AppWeaponKindRepository):
+class SQLWeaponKindRepository(DomainWeaponKindRepository, AppWeaponKindRepository):
     def __init__(self, db_helper: DBHelper) -> None:
         self.__helper = db_helper
 
