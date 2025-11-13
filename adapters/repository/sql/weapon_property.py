@@ -46,20 +46,18 @@ class SQLWeaponPropertyRepository(
             )
             result = await session.execute(query)
             result = result.scalar_one()
-            return result.to_domain_weapon_property()
+            return result.to_domain()
 
     async def get_all(self) -> list[WeaponProperty]:
         async with self.__helper.session as session:
             query = select(WeaponPropertyModel)
             result = await session.execute(query)
             result = result.scalars().all()
-            return [item.to_domain_weapon_property() for item in result]
+            return [item.to_domain() for item in result]
 
     async def create(self, weapon_property: WeaponProperty) -> None:
         async with self.__helper.session as session:
-            session.add(
-                WeaponPropertyModel.from_domain_weapon_property(weapon_property)
-            )
+            session.add(WeaponPropertyModel.from_domain(weapon_property))
             await session.commit()
 
     async def update(self, weapon_property: WeaponProperty) -> None:
@@ -69,7 +67,7 @@ class SQLWeaponPropertyRepository(
             )
             result = await session.execute(query)
             model = result.scalar_one()
-            old_domain = model.to_domain_weapon_property()
+            old_domain = model.to_domain()
             if old_domain.name() != weapon_property.name():
                 model.name = weapon_property.name()
             if old_domain.base_range() != weapon_property.base_range():

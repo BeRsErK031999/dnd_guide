@@ -36,18 +36,18 @@ class InMemoryWeaponKindRepository(DomainWeaponKindRepository, AppWeaponKindRepo
             query = select(WeaponKindModel).where(WeaponKindModel.id == weapon_kind_id)
             result = await session.execute(query)
             result = result.scalar_one()
-            return result.to_domain_weapon_kind()
+            return result.to_domain()
 
     async def get_all(self) -> list[WeaponKind]:
         async with self.__helper.session as session:
             query = select(WeaponKindModel)
             result = await session.execute(query)
             result = result.scalars().all()
-            return [item.to_domain_weapon_kind() for item in result]
+            return [item.to_domain() for item in result]
 
     async def create(self, weapon_kind: WeaponKind) -> None:
         async with self.__helper.session as session:
-            session.add(WeaponKindModel.from_domain_weapon_kind(weapon_kind))
+            session.add(WeaponKindModel.from_domain(weapon_kind))
             await session.commit()
 
     async def update(self, weapon_kind: WeaponKind) -> None:
@@ -57,7 +57,7 @@ class InMemoryWeaponKindRepository(DomainWeaponKindRepository, AppWeaponKindRepo
             )
             model = await session.execute(query)
             model = model.scalar_one()
-            old_domain = model.to_domain_weapon_kind()
+            old_domain = model.to_domain()
             if old_domain.name() != weapon_kind.name():
                 model.name = weapon_kind.name()
             if old_domain.description() != weapon_kind.description():

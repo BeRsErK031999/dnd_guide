@@ -34,22 +34,22 @@ class SQLMaterialRepository(DomainMaterialRepository, AppMaterialRepository):
             query = select(MaterialModel).where(MaterialModel.id == material_id)
             result = await session.execute(query)
             material_model = result.scalar_one()
-            return material_model.to_domain_material()
+            return material_model.to_domain()
 
     async def get_all(self) -> list[Material]:
         async with self.__helper.session as session:
             query = select(MaterialModel)
             result = await session.execute(query)
-            return [model.to_domain_material() for model in result.scalars().all()]
+            return [model.to_domain() for model in result.scalars().all()]
 
     async def create(self, material: Material) -> None:
         async with self.__helper.session as session:
-            session.add(MaterialModel.from_domain_material(material))
+            session.add(MaterialModel.from_domain(material))
             await session.commit()
 
     async def update(self, material: Material) -> None:
         async with self.__helper.session as session:
-            await session.merge(MaterialModel.from_domain_material(material))
+            await session.merge(MaterialModel.from_domain(material))
             await session.commit()
 
     async def delete(self, material_id: UUID) -> None:

@@ -39,25 +39,21 @@ class SQLToolRepository(DomainToolRepository, AppToolRepository):
             )
             result = await session.execute(query)
             tool_model = result.scalar_one()
-            return tool_model.to_domain_tool()
+            return tool_model.to_domain()
 
     async def get_all(self) -> list[Tool]:
         async with self.__helper.session as session:
             stmt = select(ToolModel).options(selectinload(ToolModel.utilizes))
             result = await session.execute(stmt)
-            return [
-                tool_model.to_domain_tool() for tool_model in result.scalars().all()
-            ]
+            return [tool_model.to_domain() for tool_model in result.scalars().all()]
 
     async def create(self, tool: Tool) -> None:
         async with self.__helper.session as session:
-            model = ToolModel.from_domain_tool(tool)
+            model = ToolModel.from_domain(tool)
             if len(tool.utilizes()) > 0:
                 model.utilizes.extend(
                     [
-                        ToolUtilizeModel.from_domain_tool_utilize(
-                            tool.tool_id(), utilize
-                        )
+                        ToolUtilizeModel.from_domain(tool.tool_id(), utilize)
                         for utilize in tool.utilizes()
                     ]
                 )
@@ -73,7 +69,7 @@ class SQLToolRepository(DomainToolRepository, AppToolRepository):
             )
             result = await session.execute(query)
             model = result.scalar_one()
-            old_domain = model.to_domain_tool()
+            old_domain = model.to_domain()
             if tool.tool_type() != old_domain.tool_type():
                 model.tool_type = tool.tool_type().name
             if tool.name() != old_domain.name():
@@ -85,7 +81,7 @@ class SQLToolRepository(DomainToolRepository, AppToolRepository):
             model.utilizes.clear()
             model.utilizes.extend(
                 [
-                    ToolUtilizeModel.from_domain_tool_utilize(tool.tool_id(), utilize)
+                    ToolUtilizeModel.from_domain(tool.tool_id(), utilize)
                     for utilize in tool.utilizes()
                 ]
             )

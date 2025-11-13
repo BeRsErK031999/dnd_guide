@@ -30,22 +30,21 @@ class WeaponModel(Base):
     bonus_damage: Mapped[int]
     weight: Mapped[float]
     material_id: Mapped[UUID] = mapped_column(ForeignKey("material.id"))
+    kind_id: Mapped[UUID] = mapped_column(ForeignKey("weapon_kind.id"))
 
     material: Mapped[MaterialModel] = relationship(back_populates="weapons")
+    kind: Mapped[WeaponKindModel] = relationship(back_populates="weapons")
     properties: Mapped[list[WeaponPropertyModel]] = relationship(
         back_populates="weapons", secondary="rel_weapon_property"
-    )
-    kind: Mapped[list[WeaponKindModel]] = relationship(
-        back_populates="weapons", secondary="rel_weapon_kind"
     )
     character_classes: Mapped[list[CharacterClassModel]] = relationship(
         back_populates="weapons", secondary="rel_class_weapon"
     )
 
-    def to_domain_weapon(self, kind_id: UUID, property_ids: Sequence[UUID]) -> Weapon:
+    def to_domain(self) -> Weapon:
         return Weapon(
             weapon_id=self.id,
-            weapon_kind_id=kind_id,
+            weapon_kind_id=self.kind_id,
             name=self.name,
             description=self.description,
             cost=Coins(count=self.cost, piece_type=PieceType.COPPER),
@@ -58,12 +57,12 @@ class WeaponModel(Base):
                 bonus_damage=self.bonus_damage,
             ),
             weight=Weight(count=self.weight, unit=WeightUnit.LB),
-            weapon_property_ids=property_ids,
+            weapon_property_ids=[p.id for p in self.properties],
             material_id=self.material_id,
         )
 
     @staticmethod
-    def from_domain_weapon(weapon: Weapon) -> WeaponModel:
+    def from_domain(weapon: Weapon) -> WeaponModel:
         return WeaponModel(
             id=weapon.weapon_id(),
             name=weapon.name(),
@@ -74,6 +73,7 @@ class WeaponModel(Base):
             damage_type=weapon.damage().damage_type().name,
             bonus_damage=weapon.damage().bonus_damage(),
             weight=weapon.weight().in_lb(),
+            kind_id=weapon.kind_id(),
             material_id=weapon.material_id(),
         )
 
@@ -92,7 +92,7 @@ class WeaponPropertyModel(Base):
         back_populates="properties", secondary="rel_weapon_property"
     )
 
-    def to_domain_weapon_property(self) -> WeaponProperty:
+    def to_domain(self) -> WeaponProperty:
         return WeaponProperty(
             weapon_property_id=self.id,
             name=WeaponPropertyName.from_str(self.name),
@@ -119,7 +119,7 @@ class WeaponPropertyModel(Base):
         )
 
     @staticmethod
-    def from_domain_weapon_property(
+    def from_domain(
         weapon_property: WeaponProperty,
     ) -> WeaponPropertyModel:
         base_range = weapon_property.base_range()
@@ -143,11 +143,9 @@ class WeaponKindModel(Base):
     description: Mapped[str]
     weapon_type: Mapped[str] = mapped_column(String(50))
 
-    weapons: Mapped[list[WeaponModel]] = relationship(
-        back_populates="kind", secondary="rel_weapon_kind"
-    )
+    weapons: Mapped[list[WeaponModel]] = relationship(back_populates="kind")
 
-    def to_domain_weapon_kind(self) -> WeaponKind:
+    def to_domain(self) -> WeaponKind:
         return WeaponKind(
             weapon_kind_id=self.id,
             name=self.name,
@@ -156,7 +154,7 @@ class WeaponKindModel(Base):
         )
 
     @staticmethod
-    def from_domain_weapon_kind(weapon_kind: WeaponKind) -> WeaponKindModel:
+    def from_domain(weapon_kind: WeaponKind) -> WeaponKindModel:
         return WeaponKindModel(
             id=weapon_kind.weapon_kind_id(),
             name=weapon_kind.name(),
@@ -170,10 +168,3 @@ class RelWeaponPropertyModel(Base):
 
     weapon_id: Mapped[UUID] = mapped_column(ForeignKey("weapon.id"), unique=True)
     weapon_property_id: Mapped[UUID] = mapped_column(ForeignKey("weapon_property.id"))
-
-
-class RelWeaponKindModel(Base):
-    __tablename__ = "rel_weapon_kind"
-
-    weapon_id: Mapped[UUID] = mapped_column(ForeignKey("weapon.id"))
-    weapon_kind_id: Mapped[UUID] = mapped_column(ForeignKey("weapon_kind.id"))

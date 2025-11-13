@@ -19,7 +19,7 @@ class MaterialModel(Base):
     armors: Mapped[list[ArmorModel]] = relationship(back_populates="material")
     weapons: Mapped[list[WeaponModel]] = relationship(back_populates="material")
 
-    def to_domain_material(self) -> Material:
+    def to_domain(self) -> Material:
         return Material(
             material_id=self.id,
             name=self.name,
@@ -27,7 +27,7 @@ class MaterialModel(Base):
         )
 
     @staticmethod
-    def from_domain_material(domain_material: Material) -> MaterialModel:
+    def from_domain(domain_material: Material) -> MaterialModel:
         return MaterialModel(
             id=domain_material.material_id(),
             name=domain_material.name(),

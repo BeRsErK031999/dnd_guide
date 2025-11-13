@@ -5,9 +5,9 @@ from domain.user import User
 class UserModel(Base):
     __tablename__ = "user"
 
-    def to_domain_user(self) -> User:
+    def to_domain(self) -> User:
         return User(user_id=self.id)
 
     @staticmethod
-    def from_domain_user(domain_user: User) -> UserModel:
+    def from_domain(domain_user: User) -> UserModel:
         return UserModel(id=domain_user.user_id)

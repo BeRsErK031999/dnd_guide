@@ -30,7 +30,7 @@ class ArmorModel(Base):
 
     material: Mapped[MaterialModel] = relationship(back_populates="armors")
 
-    def to_domain_armor(self) -> Armor:
+    def to_domain(self) -> Armor:
         return Armor(
             armor_id=self.id,
             armor_type=ArmorType.from_str(self.armor_type),
@@ -53,7 +53,7 @@ class ArmorModel(Base):
         )
 
     @staticmethod
-    def from_domain_armor(armor: Armor) -> ArmorModel:
+    def from_domain(armor: Armor) -> ArmorModel:
         modifier = armor.armor_class().modifier()
         max_modifier_bonus = armor.armor_class().max_modifier_bonus()
         return ArmorModel(

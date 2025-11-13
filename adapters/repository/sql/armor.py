@@ -1,7 +1,7 @@
 from uuid import UUID, uuid4
 
 from adapters.repository.sql.database import DBHelper
-from adapters.repository.sql.models import ArmorModel
+from adapters.repository.sql.models import ArmorModel, MaterialModel
 from application.repository import ArmorRepository as AppArmorRepository
 from domain.armor import Armor
 from domain.armor import ArmorRepository as DomainArmorRepository
@@ -34,18 +34,20 @@ class SQLArmorRepository(DomainArmorRepository, AppArmorRepository):
             query = select(ArmorModel).where(ArmorModel.id == armor_id)
             result = await session.execute(query)
             result = result.scalar_one()
-            return result.to_domain_armor()
+            return result.to_domain()
 
     async def get_all(self) -> list[Armor]:
         async with self.__helper.session as session:
             query = select(ArmorModel)
             result = await session.execute(query)
             result = result.scalars().all()
-            return [armor.to_domain_armor() for armor in result]
+            return [armor.to_domain() for armor in result]
 
     async def create(self, armor: Armor) -> None:
         async with self.__helper.session as session:
-            session.add(ArmorModel.from_domain_armor(armor))
+            model = ArmorModel.from_domain(armor)
+            model.material = await session.get_one(MaterialModel, armor.material_id())
+            session.add(model)
             await session.commit()
 
     async def update(self, armor: Armor) -> None:
@@ -53,7 +55,7 @@ class SQLArmorRepository(DomainArmorRepository, AppArmorRepository):
             query = select(ArmorModel).where(ArmorModel.id == armor.armor_id())
             result = await session.execute(query)
             model = result.scalar_one()
-            old_domain = model.to_domain_armor()
+            old_domain = model.to_domain()
             if old_domain.armor_type() != armor.armor_type():
                 model.armor_type = armor.armor_type().name
             if old_domain.armor_class() != armor.armor_class():
@@ -73,7 +75,9 @@ class SQLArmorRepository(DomainArmorRepository, AppArmorRepository):
             if old_domain.cost() != armor.cost():
                 model.cost = armor.cost().in_copper()
             if old_domain.material_id() != armor.material_id():
-                model.material_id = armor.material_id()
+                model.material = await session.get_one(
+                    MaterialModel, armor.material_id()
+                )
             await session.commit()
 
     async def delete(self, armor_id: UUID) -> None:
