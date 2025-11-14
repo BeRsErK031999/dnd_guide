@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.weapon import CreateWeaponCommand
 from application.repository import (
     MaterialRepository,
@@ -32,7 +34,7 @@ class CreateWeaponUseCase(UserCheck):
         self.__property_repository = property_repository
         self.__material_repository = material_repository
 
-    async def execute(self, command: CreateWeaponCommand) -> None:
+    async def execute(self, command: CreateWeaponCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__weapon_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -70,3 +72,4 @@ class CreateWeaponUseCase(UserCheck):
             command.material_id,
         )
         await self.__weapon_repository.create(weapon)
+        return weapon.weapon_id()

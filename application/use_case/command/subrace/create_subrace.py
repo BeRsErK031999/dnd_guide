@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.subrace import CreateSubraceCommand
 from application.repository import RaceRepository, UserRepository
 from application.repository.subrace import SubraceRepository
@@ -23,7 +25,7 @@ class CreateSubraceUseCase(UserCheck):
         self.__subrace_repository = subrace_repository
         self.__race_repository = race_repository
 
-    async def execute(self, command: CreateSubraceCommand) -> None:
+    async def execute(self, command: CreateSubraceCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__subrace_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -50,3 +52,4 @@ class CreateSubraceUseCase(UserCheck):
             command.name_in_english,
         )
         await self.__subrace_repository.create(subrace)
+        return subrace.subrace_id()

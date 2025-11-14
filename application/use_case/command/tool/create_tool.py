@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.tool import CreateToolCommand
 from application.repository import ToolRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
@@ -18,7 +20,7 @@ class CreateToolUseCase(UserCheck):
         self.__tool_service = tool_service
         self.__tool_repository = tool_repository
 
-    async def execute(self, command: CreateToolCommand) -> None:
+    async def execute(self, command: CreateToolCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__tool_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -37,3 +39,4 @@ class CreateToolUseCase(UserCheck):
             ],
         )
         await self.__tool_repository.create(tool)
+        return tool.tool_id()

@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.weapon_kind import CreateWeaponKindCommand
 from application.repository import UserRepository, WeaponKindRepository
 from application.use_case.command.user_check import UserCheck
@@ -16,7 +18,7 @@ class CreateWeaponKindUseCase(UserCheck):
         self.__kind_service = weapon_kind_service
         self.__kind_repository = weapon_kind_repository
 
-    async def execute(self, command: CreateWeaponKindCommand) -> None:
+    async def execute(self, command: CreateWeaponKindCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__kind_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -29,3 +31,4 @@ class CreateWeaponKindUseCase(UserCheck):
             WeaponType.from_str(command.weapon_type),
         )
         await self.__kind_repository.create(kind)
+        return kind.weapon_kind_id()

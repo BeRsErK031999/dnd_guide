@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.character_subclass import SubclassCreateCommand
 from application.repository import ClassRepository, SubclassRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
@@ -18,7 +20,7 @@ class CreateSubclassUseCase(UserCheck):
         self.__class_repository = class_repository
         self.__subclass_repository = subclass_repository
 
-    async def execute(self, command: SubclassCreateCommand) -> None:
+    async def execute(self, command: SubclassCreateCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__subclass_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -36,3 +38,4 @@ class CreateSubclassUseCase(UserCheck):
             command.name_in_english,
         )
         await self.__subclass_repository.create(new_subclass)
+        return new_subclass.subclass_id()

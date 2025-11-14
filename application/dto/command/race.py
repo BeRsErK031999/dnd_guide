@@ -41,8 +41,8 @@ class CreateRaceCommand:
     age: RaceAgeCommand
     increase_modifiers: Sequence[RaceIncreaseModifierCommand]
     source_id: UUID
-    features: Sequence[RaceFeatureCommand] = []
-    name_in_english: str = ""
+    features: Sequence[RaceFeatureCommand]
+    name_in_english: str
 
 
 @dataclass

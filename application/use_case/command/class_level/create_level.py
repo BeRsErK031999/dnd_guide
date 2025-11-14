@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.class_level import CreateClassLevelCommand
 from application.repository import ClassLevelRepository, ClassRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
@@ -28,7 +30,7 @@ class CreateClassLevelUseCase(UserCheck):
         self.__class_level_repository = class_level_repository
         self.__class_repository = class_repository
 
-    async def execute(self, command: CreateClassLevelCommand) -> None:
+    async def execute(self, command: CreateClassLevelCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__class_repository.id_exists(command.class_id):
             raise DomainError.invalid_data(
@@ -83,3 +85,4 @@ class CreateClassLevelUseCase(UserCheck):
             increase_speed,
         )
         await self.__class_level_repository.create(class_level)
+        return class_level.level_id()

@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.material_component import CreateMaterialComponentCommand
 from application.repository import MaterialComponentRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
@@ -16,7 +18,7 @@ class CreateMaterialComponentUseCase(UserCheck):
         self.__material_service = material_service
         self.__material_repository = material_repository
 
-    async def execute(self, command: CreateMaterialComponentCommand) -> None:
+    async def execute(self, command: CreateMaterialComponentCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__material_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -28,3 +30,4 @@ class CreateMaterialComponentUseCase(UserCheck):
             command.description,
         )
         await self.__material_repository.create(material)
+        return material.material_id()

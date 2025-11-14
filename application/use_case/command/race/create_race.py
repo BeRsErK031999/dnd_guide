@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.race import CreateRaceCommand
 from application.repository import (
     CreatureSizeRepository,
@@ -37,7 +39,7 @@ class CreateRaceUseCase(UserCheck):
         self.__type_repository = creature_type_repository
         self.__source_repository = source_repository
 
-    async def execute(self, command: CreateRaceCommand) -> None:
+    async def execute(self, command: CreateRaceCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__race_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -84,3 +86,4 @@ class CreateRaceUseCase(UserCheck):
             command.source_id,
         )
         await self.__race_repository.create(race)
+        return race.race_id()

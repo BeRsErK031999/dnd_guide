@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.creature_size import CreateCreatureSizeCommand
 from application.repository import CreatureSizeRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
@@ -16,7 +18,7 @@ class CreateCreatureSizeUseCase(UserCheck):
         self.__size_repository = creature_size_repository
         self.__size_service = creature_size_service
 
-    async def execute(self, command: CreateCreatureSizeCommand) -> None:
+    async def execute(self, command: CreateCreatureSizeCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__size_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -26,3 +28,4 @@ class CreateCreatureSizeUseCase(UserCheck):
             await self.__size_repository.next_id(), command.name, command.description
         )
         await self.__size_repository.create(size)
+        return size.size_id()

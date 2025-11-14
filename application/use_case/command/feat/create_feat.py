@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.feat import CreateFeatCommand
 from application.repository import FeatRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
@@ -18,7 +20,7 @@ class CreateFeatUseCase(UserCheck):
         self.__feat_service = feat_service
         self.__feat_repository = feat_repository
 
-    async def execute(self, command: CreateFeatCommand) -> None:
+    async def execute(self, command: CreateFeatCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__feat_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -45,3 +47,4 @@ class CreateFeatUseCase(UserCheck):
             ],
         )
         await self.__feat_repository.create(feat)
+        return feat.feat_id()

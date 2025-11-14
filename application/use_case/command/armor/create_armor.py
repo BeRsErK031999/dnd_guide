@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.armor import CreateArmorCommand
 from application.repository import ArmorRepository, MaterialRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
@@ -21,7 +23,7 @@ class CreateArmorUseCase(UserCheck):
         self.__armor_repository = armor_repository
         self.__material_repository = material_repository
 
-    async def execute(self, command: CreateArmorCommand) -> None:
+    async def execute(self, command: CreateArmorCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__armor_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -52,3 +54,4 @@ class CreateArmorUseCase(UserCheck):
             command.material_id,
         )
         await self.__armor_repository.create(armor)
+        return armor.armor_id()

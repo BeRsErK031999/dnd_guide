@@ -22,7 +22,7 @@ class ClassProficienciesCommand:
     saving_throws: Sequence[str]
     skills: Sequence[str]
     number_skills: int
-    number_tools: int = 1
+    number_tools: int
 
 
 @dataclass

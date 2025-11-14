@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.source import CreateSourceCommand
 from application.repository import SourceRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
@@ -16,7 +18,7 @@ class CreateSourceUseCase(UserCheck):
         self.__source_service = source_service
         self.__source_repository = source_repository
 
-    async def execute(self, command: CreateSourceCommand) -> None:
+    async def execute(self, command: CreateSourceCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__source_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -29,3 +31,4 @@ class CreateSourceUseCase(UserCheck):
             command.name_in_english,
         )
         await self.__source_repository.create(source)
+        return source.source_id()

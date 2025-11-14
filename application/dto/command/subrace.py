@@ -25,7 +25,7 @@ class CreateSubraceCommand:
     description: str
     increase_modifiers: Sequence[SubraceIncreaseModifierCommand]
     name_in_english: str
-    features: Sequence[SubraceFeatureCommand] = []
+    features: Sequence[SubraceFeatureCommand]
 
 
 @dataclass

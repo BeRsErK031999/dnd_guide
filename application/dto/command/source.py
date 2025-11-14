@@ -9,7 +9,7 @@ class CreateSourceCommand:
     user_id: UUID
     name: str
     description: str
-    name_in_english: str = ""
+    name_in_english: str
 
 
 @dataclass

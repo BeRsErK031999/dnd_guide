@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.spell import CreateSpellCommand
 from application.repository import (
     ClassRepository,
@@ -32,7 +34,7 @@ class CreateSpellUseCase(UserCheck):
         self.__subclass_repository = subclass_repository
         self.__source_repository = source_repository
 
-    async def execute(self, command: CreateSpellCommand) -> None:
+    async def execute(self, command: CreateSpellCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__spell_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -102,3 +104,4 @@ class CreateSpellUseCase(UserCheck):
             source_id=command.source_id,
         )
         await self.__spell_repository.create(spell)
+        return spell.spell_id()

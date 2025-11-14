@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.class_feature import CreateClassFeatureCommand
 from application.repository import (
     ClassFeatureRepository,
@@ -22,7 +24,7 @@ class CreateClassFeatureUseCase(UserCheck):
         self.__class_repository = class_repository
         self.__feature_repository = feature_repository
 
-    async def execute(self, command: CreateClassFeatureCommand) -> None:
+    async def execute(self, command: CreateClassFeatureCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__feature_service.can_create_for_class_with_name(
             command.class_id, command.name
@@ -43,3 +45,4 @@ class CreateClassFeatureUseCase(UserCheck):
             command.name_in_english,
         )
         await self.__feature_repository.create(feature)
+        return feature.feature_id()

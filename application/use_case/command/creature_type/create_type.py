@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from application.dto.command.creature_type import CreateCreatureTypeCommand
 from application.repository import CreatureTypeRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
@@ -16,7 +18,7 @@ class CreateCreatureTypeUseCase(UserCheck):
         self.__type_service = creature_type_service
         self.__type_repository = creature_type_repository
 
-    async def execute(self, command: CreateCreatureTypeCommand) -> None:
+    async def execute(self, command: CreateCreatureTypeCommand) -> UUID:
         await self._user_check(command.user_id)
         if not await self.__type_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
@@ -26,3 +28,4 @@ class CreateCreatureTypeUseCase(UserCheck):
             await self.__type_repository.next_id(), command.name, command.description
         )
         await self.__type_repository.create(creature_type)
+        return creature_type.type_id()
