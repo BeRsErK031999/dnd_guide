@@ -38,7 +38,7 @@ class CharacterClass(EntityName, EntityNameInEnglish, EntityDescription, EntityS
     def class_id(self) -> UUID:
         return self.__class_id
 
-    def primary_modifier(self) -> list[Modifier]:
+    def primary_modifiers(self) -> list[Modifier]:
         return self.__primary_modifiers
 
     def hits(self) -> ClassHits:

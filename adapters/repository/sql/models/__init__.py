@@ -2,7 +2,6 @@ from .armor import ArmorModel
 from .character_class import (
     CharacterClassModel,
     ClassArmorTypeModel,
-    ClassHitDiceModel,
     ClassPrimaryModifierModel,
     ClassSavingThrowModel,
     ClassSkillModel,
@@ -46,7 +45,6 @@ __all__ = [
     "ArmorModel",
     "CharacterClassModel",
     "ClassArmorTypeModel",
-    "ClassHitDiceModel",
     "ClassPrimaryModifierModel",
     "ClassSavingThrowModel",
     "ClassSkillModel",
