@@ -2,8 +2,8 @@ from domain.mixin import ValueDescription
 
 
 class ClassLevelPoints(ValueDescription):
-    def __init__(self, points: int, points_description: str) -> None:
-        ValueDescription.__init__(self, points_description)
+    def __init__(self, points: int, description: str) -> None:
+        ValueDescription.__init__(self, description)
         self.__points = points
 
     def points(self) -> int:
