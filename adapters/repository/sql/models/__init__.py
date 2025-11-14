@@ -14,7 +14,12 @@ from .class_feature import ClassFeatureModel
 from .class_level import ClassLevelModel, ClassLevelSpellSlotModel
 from .creature_size import CreatureSizeModel
 from .creature_type import CreatureTypeModel
-from .feat import FeatIncreaseModifierModel, FeatModel, FeatRequiredModifierModel
+from .feat import (
+    FeatIncreaseModifierModel,
+    FeatModel,
+    FeatRequiredArmorTypeModel,
+    FeatRequiredModifierModel,
+)
 from .material import MaterialModel
 from .material_component import MaterialComponentModel
 from .race import RaceFeatureModel, RaceIncreaseModifierModel, RaceModel
@@ -55,6 +60,7 @@ __all__ = [
     "CreatureTypeModel",
     "FeatIncreaseModifierModel",
     "FeatModel",
+    "FeatRequiredArmorTypeModel",
     "FeatRequiredModifierModel",
     "MaterialModel",
     "MaterialComponentModel",
