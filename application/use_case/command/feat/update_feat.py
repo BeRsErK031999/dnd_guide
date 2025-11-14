@@ -1,6 +1,7 @@
 from application.dto.command.feat import UpdateFeatCommand
 from application.repository import FeatRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
+from domain.armor import ArmorType
 from domain.error import DomainError
 from domain.feat import FeatRequiredModifier, FeatService
 from domain.modifier import Modifier
@@ -30,6 +31,15 @@ class UpdateFeatUseCase(UserCheck):
             feat.new_name(command.name)
         if command.description is not None:
             feat.new_description(command.description)
+        if command.is_caster is not None:
+            feat.new_is_caster(command.is_caster)
+        if command.required_armor_types is not None:
+            feat.new_required_armor_types(
+                [
+                    ArmorType.from_str(required_armor_type)
+                    for required_armor_type in command.required_armor_types
+                ]
+            )
         if command.required_modifiers is not None:
             feat.new_required_modifiers(
                 [

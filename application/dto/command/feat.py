@@ -16,6 +16,8 @@ class CreateFeatCommand:
     user_id: UUID
     name: str
     description: str
+    is_caster: bool
+    required_armor_types: Sequence[str]
     required_modifiers: Sequence[FeatRequiredModifierCommand]
     increase_modifiers: Sequence[str]
 
@@ -26,6 +28,8 @@ class UpdateFeatCommand:
     feat_id: UUID
     name: str | None = None
     description: str | None = None
+    is_caster: bool | None = None
+    required_armor_types: Sequence[str] | None = None
     required_modifiers: Sequence[FeatRequiredModifierCommand] | None = None
     increase_modifiers: Sequence[str] | None = None
 
@@ -34,6 +38,8 @@ class UpdateFeatCommand:
             [
                 self.name is None,
                 self.description is None,
+                self.is_caster is None,
+                self.required_armor_types is None,
                 self.required_modifiers is None,
                 self.increase_modifiers is None,
             ]

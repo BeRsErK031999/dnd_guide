@@ -1,6 +1,7 @@
 from application.dto.command.feat import CreateFeatCommand
 from application.repository import FeatRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
+from domain.armor import ArmorType
 from domain.error import DomainError
 from domain.feat import Feat, FeatRequiredModifier, FeatService
 from domain.modifier import Modifier
@@ -24,17 +25,21 @@ class CreateFeatUseCase(UserCheck):
                 f"не возможно создать черту с названием {command.name}"
             )
         feat = Feat(
-            await self.__feat_repository.next_id(),
-            command.name,
-            command.description,
-            [
+            feat_id=await self.__feat_repository.next_id(),
+            name=command.name,
+            description=command.description,
+            is_caster=command.is_caster,
+            required_armor_types=[
+                ArmorType.from_str(at) for at in command.required_armor_types
+            ],
+            required_modifiers=[
                 FeatRequiredModifier(
                     Modifier.from_str(required_modifier.modifier),
                     required_modifier.min_value,
                 )
                 for required_modifier in command.required_modifiers
             ],
-            [
+            increase_modifiers=[
                 Modifier.from_str(increase_modifier)
                 for increase_modifier in command.increase_modifiers
             ],

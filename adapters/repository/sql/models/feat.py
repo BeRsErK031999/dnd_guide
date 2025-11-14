@@ -10,10 +10,15 @@ class FeatModel(Base):
 
     name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
-    increase_modifier: Mapped[FeatIncreaseModifierModel] = relationship(
+    is_caster: Mapped[bool]
+
+    increase_modifiers: Mapped[list[FeatIncreaseModifierModel]] = relationship(
         back_populates="feat"
     )
-    required_modifier: Mapped[FeatRequiredModifierModel] = relationship(
+    required_modifiers: Mapped[list[FeatRequiredModifierModel]] = relationship(
+        back_populates="feat"
+    )
+    required_armor_types: Mapped[list[FeatRequiredArmorTypeModel]] = relationship(
         back_populates="feat"
     )
 
@@ -21,15 +26,26 @@ class FeatModel(Base):
 class FeatIncreaseModifierModel(Base):
     __tablename__ = "feat_increase_modifier"
 
-    name: Mapped[str] = mapped_column(String(50), unique=True)
+    name: Mapped[str] = mapped_column(String(50))
     feat_id: Mapped[UUID] = mapped_column(ForeignKey("feat.id"))
-    feat: Mapped[FeatModel] = relationship(back_populates="increase_modifier")
+
+    feat: Mapped[FeatModel] = relationship(back_populates="increase_modifiers")
 
 
 class FeatRequiredModifierModel(Base):
     __tablename__ = "feat_required_modifier"
 
-    name: Mapped[str] = mapped_column(String(50), unique=True)
+    name: Mapped[str] = mapped_column(String(50))
     min_value: Mapped[int]
     feat_id: Mapped[UUID] = mapped_column(ForeignKey("feat.id"))
-    feat: Mapped[FeatModel] = relationship(back_populates="required_modifier")
+
+    feat: Mapped[FeatModel] = relationship(back_populates="required_modifiers")
+
+
+class FeatRequiredArmorTypeModel(Base):
+    __tablename__ = "feat_required_armor_type"
+
+    name: Mapped[str] = mapped_column(String(50))
+    feat_id: Mapped[UUID] = mapped_column(ForeignKey("feat.id"))
+
+    feat: Mapped[FeatModel] = relationship(back_populates="required_armor_types")
