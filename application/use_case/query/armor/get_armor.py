@@ -5,8 +5,8 @@ from domain.error import DomainError
 
 
 class GetArmorUseCase:
-    def __init__(self, repository: ArmorRepository):
-        self.__repository = repository
+    def __init__(self, armor_repository: ArmorRepository):
+        self.__repository = armor_repository
 
     async def execute(self, query: ArmorQuery) -> Armor:
         if not await self.__repository.id_exists(query.armor_id):
