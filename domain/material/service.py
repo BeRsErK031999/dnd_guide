@@ -1,8 +1,8 @@
-from domain.feat.repository import FeatRepository
+from .repository import MaterialRepository
 
 
 class MaterialService:
-    def __init__(self, material_repository: FeatRepository) -> None:
+    def __init__(self, material_repository: MaterialRepository) -> None:
         self.__repository = material_repository
 
     async def can_create_with_name(self, name: str) -> bool:

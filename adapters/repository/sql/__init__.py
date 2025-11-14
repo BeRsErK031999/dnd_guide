@@ -5,6 +5,7 @@ from .class_feature import SQLClassFeatureRepository
 from .class_level import SQLClassLevelRepository
 from .creature_size import SQLCreatureSizeRepository
 from .creature_type import SQLCreatureTypeRepository
+from .database import DBHelper
 from .feat import SQLFeatRepository
 from .material import SQLMaterialRepository
 from .material_component import SQLMaterialComponentRepository
@@ -27,6 +28,7 @@ __all__ = [
     "SQLClassLevelRepository",
     "SQLCreatureSizeRepository",
     "SQLCreatureTypeRepository",
+    "DBHelper",
     "SQLFeatRepository",
     "SQLMaterialRepository",
     "SQLMaterialComponentRepository",
