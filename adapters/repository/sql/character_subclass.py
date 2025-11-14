@@ -1,0 +1,88 @@
+from typing import Dict
+from uuid import UUID, uuid4
+
+from adapters.repository.sql.database import DBHelper
+from adapters.repository.sql.models import CharacterClassModel, CharacterSubclassModel
+from application.repository import SubclassRepository as AppSubclassRepository
+from domain.character_subclass import CharacterSubclass
+from domain.character_subclass import SubclassRepository as DomainSubclassRepository
+from sqlalchemy import delete, exists, select
+from sqlalchemy.orm import selectinload
+
+
+class SQLSubclassRepository(DomainSubclassRepository, AppSubclassRepository):
+    def __init__(self, db_helper: DBHelper) -> None:
+        self.__helper = db_helper
+
+    async def name_exists(self, name: str) -> bool:
+        async with self.__helper.session as session:
+            query = select(exists().where(CharacterSubclassModel.name == name))
+            result = await session.execute(query)
+            result = result.scalar()
+            return result if result is not None else False
+
+    async def next_id(self) -> UUID:
+        return uuid4()
+
+    async def id_exists(self, subclass_id: UUID) -> bool:
+        async with self.__helper.session as session:
+            query = select(exists().where(CharacterSubclassModel.id == subclass_id))
+            result = await session.execute(query)
+            result = result.scalar()
+            return result if result is not None else False
+
+    async def get_by_id(self, subclass_id: UUID) -> CharacterSubclass:
+        async with self.__helper.session as session:
+            query = (
+                select(CharacterSubclassModel)
+                .where(CharacterSubclassModel.id == subclass_id)
+                .options(selectinload(CharacterSubclassModel.character_class))
+            )
+            result = await session.execute(query)
+            result = result.scalar_one()
+            return result.to_domain()
+
+    async def get_all(self) -> list[CharacterSubclass]:
+        async with self.__helper.session as session:
+            query = select(CharacterSubclassModel).options(
+                selectinload(CharacterSubclassModel.character_class)
+            )
+            result = await session.execute(query)
+            result = result.scalars().all()
+            return [subclass.to_domain() for subclass in result]
+
+    async def create(self, subclass: CharacterSubclass) -> None:
+        async with self.__helper.session as session:
+            model = CharacterSubclassModel.from_domain(subclass)
+            model.character_class = await session.get_one(
+                CharacterClassModel, subclass.class_id()
+            )
+            session.add(model)
+            await session.commit()
+
+    async def update(self, subclass: CharacterSubclass) -> None:
+        async with self.__helper.session as session:
+            model_query = select(CharacterSubclassModel).where(
+                CharacterSubclassModel.id == subclass.subclass_id()
+            )
+            model = await session.execute(model_query)
+            model = model.scalar_one()
+            old_domain = model.to_domain()
+            if old_domain.name() != subclass.name():
+                model.name = subclass.name()
+            if old_domain.name_in_english() != subclass.name_in_english():
+                model.name_in_english = subclass.name_in_english()
+            if old_domain.class_id() != subclass.class_id():
+                model.character_class = await session.get_one(
+                    CharacterClassModel, subclass.class_id()
+                )
+            model.description = subclass.description()
+            await session.commit()
+
+    async def delete(self, subclass_id: UUID) -> None:
+        async with self.__helper.session as session:
+            stmt = delete(CharacterSubclassModel).where(
+                CharacterSubclassModel.id == subclass_id
+            )
+            await session.execute(stmt)
+            await session.commit()
