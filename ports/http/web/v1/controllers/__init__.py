@@ -7,6 +7,7 @@ from .class_feature import ClassFeatureController
 from .class_level import ClassLevelController
 from .creature_size import CreatureSizeController
 from .creature_type import CreatureTypeController
+from .feat import FeatController
 from .material import MaterialController
 
 router = Router(
@@ -19,6 +20,7 @@ router = Router(
         ClassLevelController,
         CreatureSizeController,
         CreatureTypeController,
+        FeatController,
         MaterialController,
     ],
 )
