@@ -11,6 +11,7 @@ from .feat import FeatController
 from .material import MaterialController
 from .material_component import MaterialComponentController
 from .race import RaceController
+from .source import SourceController
 
 router = Router(
     path="/api/v1",
@@ -26,5 +27,6 @@ router = Router(
         MaterialController,
         MaterialComponentController,
         RaceController,
+        SourceController,
     ],
 )
