@@ -29,26 +29,29 @@ class ClassController(Controller):
     async def get_class(
         self, class_id: UUID, use_cases: ClassUseCases
     ) -> ReadClassSchema:
-        armor = await use_cases.get_one.execute(ClassQuery(class_id=class_id))
-        return ReadClassSchema.from_domain(armor)
+        character_class = await use_cases.get_one.execute(ClassQuery(class_id=class_id))
+        return ReadClassSchema.from_domain(character_class)
 
     @get()
     async def get_classes(self, use_cases: ClassUseCases) -> list[ReadClassSchema]:
-        armors = await use_cases.get_all.execute()
-        return [ReadClassSchema.from_domain(armor) for armor in armors]
+        classes = await use_cases.get_all.execute()
+        return [ReadClassSchema.from_domain(armor) for armor in classes]
 
     @post(dto=CreateClassDTO)
     async def create_class(
-        self, armor: CreateClassSchema, use_cases: ClassUseCases
+        self, character_class: CreateClassSchema, use_cases: ClassUseCases
     ) -> UUID:
-        command = CreateClassCommand(user_id=uuid4(), **asdict(armor))
+        command = CreateClassCommand(user_id=uuid4(), **asdict(character_class))
         return await use_cases.create.execute(command)
 
     @put("/{class_id:uuid}", dto=UpdateClassDTO)
     async def update_class(
-        self, class_id: UUID, armor: UpdateClassSchema, use_cases: ClassUseCases
+        self,
+        class_id: UUID,
+        character_class: UpdateClassSchema,
+        use_cases: ClassUseCases,
     ) -> None:
-        command = UpdateClassCommand(class_id=class_id, **asdict(armor))
+        command = UpdateClassCommand(class_id=class_id, **asdict(character_class))
         await use_cases.update.execute(command)
 
     @delete("/{class_id:uuid}")
