@@ -26,7 +26,7 @@ class MaterialController(Controller):
     path = "/materials"
     tags = ["material"]
 
-    dependencies = {"container": Provide(di_container)}
+    dependencies = {"container": Provide(di_container, sync_to_thread=True)}
 
     @get("/{material_id:uuid}")
     async def get_material(

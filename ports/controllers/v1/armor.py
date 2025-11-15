@@ -24,7 +24,7 @@ class ArmorController(Controller):
     path = "/armors"
     tags = ["armors"]
 
-    dependencies = {"container": Provide(di_container)}
+    dependencies = {"container": Provide(di_container, sync_to_thread=True)}
 
     @get("/{armor_id:uuid}")
     async def get_armor(self, armor_id: UUID, container: Container) -> ReadArmorSchema:

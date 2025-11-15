@@ -1,5 +1,5 @@
 from di import Container, container
 
 
-async def di_container() -> Container:
+def di_container() -> Container:
     return container
