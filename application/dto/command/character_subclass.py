@@ -5,7 +5,7 @@ from domain.error import DomainError
 
 
 @dataclass
-class SubclassCreateCommand:
+class CreateSubclassCommand:
     user_id: UUID
     class_id: UUID
     name: str
@@ -14,7 +14,7 @@ class SubclassCreateCommand:
 
 
 @dataclass
-class SubclassUpdateCommand:
+class UpdateSubclassCommand:
     user_id: UUID
     subclass_id: UUID
     class_id: UUID | None
@@ -37,6 +37,6 @@ class SubclassUpdateCommand:
 
 
 @dataclass
-class SubclassDeleteCommand:
+class DeleteSubclassCommand:
     user_id: UUID
     subclass_id: UUID

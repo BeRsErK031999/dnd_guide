@@ -17,7 +17,7 @@ class ClassHitsCommand:
 @dataclass
 class ClassProficienciesCommand:
     armors: Sequence[str]
-    weapon: Sequence[UUID]
+    weapons: Sequence[UUID]
     tools: Sequence[UUID]
     saving_throws: Sequence[str]
     skills: Sequence[str]

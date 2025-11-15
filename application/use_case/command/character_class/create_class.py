@@ -45,7 +45,7 @@ class CreateClassUseCase(UserCheck):
             raise DomainError.invalid_data(
                 f"класс с названием {command.name} уже существует"
             )
-        for weapon_id in command.proficiencies.weapon:
+        for weapon_id in command.proficiencies.weapons:
             if not await self.__weapon_repository.id_exists(weapon_id):
                 raise DomainError.invalid_data(f"оружия с id {weapon_id} не существует")
         for tool_id in command.proficiencies.tools:
@@ -76,7 +76,7 @@ class CreateClassUseCase(UserCheck):
                     ArmorType.from_str(armor_type)
                     for armor_type in command.proficiencies.armors
                 ],
-                command.proficiencies.weapon,
+                command.proficiencies.weapons,
                 command.proficiencies.tools,
                 [
                     Modifier.from_str(saving_throw)

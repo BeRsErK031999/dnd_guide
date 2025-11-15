@@ -59,7 +59,7 @@ class UpdateClassUseCase(UserCheck):
                 )
             )
         if command.proficiencies is not None:
-            for weapon_id in command.proficiencies.weapon:
+            for weapon_id in command.proficiencies.weapons:
                 if not await self.__weapon_repository.id_exists(weapon_id):
                     raise DomainError.invalid_data(
                         f"оружия с id {weapon_id} не существует"
@@ -75,7 +75,7 @@ class UpdateClassUseCase(UserCheck):
                         ArmorType.from_str(armor)
                         for armor in command.proficiencies.armors
                     ],
-                    command.proficiencies.weapon,
+                    command.proficiencies.weapons,
                     command.proficiencies.tools,
                     [
                         Modifier.from_str(modifier)
