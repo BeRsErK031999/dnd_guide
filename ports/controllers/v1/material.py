@@ -38,25 +38,25 @@ class MaterialController(Controller):
         return ReadMaterialSchema.from_domain(material)
 
     @get()
-    async def get_armors(self, container: Container) -> list[ReadMaterialSchema]:
+    async def get_materials(self, container: Container) -> list[ReadMaterialSchema]:
         materials = await container.use_cases.get_materials.execute()
         return [ReadMaterialSchema.from_domain(material) for material in materials]
 
     @post(dto=CreateMaterialDTO)
-    async def create_armor(
+    async def create_material(
         self, material: CreateMaterialSchema, container: Container
     ) -> UUID:
         command = CreateMaterialCommand(user_id=uuid4(), **asdict(material))
         return await container.use_cases.create_material.execute(command)
 
     @put("/{material_id:uuid}", dto=UpdateMaterialDTO)
-    async def update_armor(
+    async def update_material(
         self, material_id: UUID, material: UpdateMaterialSchema, container: Container
     ) -> None:
         command = UpdateMaterialCommand(material_id=material_id, **asdict(material))
         await container.use_cases.update_material.execute(command)
 
     @delete("/{material_id:uuid}")
-    async def delete_armor(self, material_id: UUID, container: Container) -> None:
+    async def delete_material(self, material_id: UUID, container: Container) -> None:
         command = DeleteMaterialCommand(user_id=uuid4(), material_id=material_id)
         await container.use_cases.delete_material.execute(command)
