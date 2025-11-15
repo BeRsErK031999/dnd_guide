@@ -19,10 +19,11 @@ class SQLSubclassFeatureRepository(
     def __init__(self, db_helper: DBHelper) -> None:
         self.__db_helper = db_helper
 
-    async def name_exists(self, name: str) -> bool:
+    async def name_for_class_exists(self, subclass_id: UUID, name: str) -> bool:
         async with self.__db_helper.session as session:
             query = select(exists(SubclassFeatureModel)).where(
-                SubclassFeatureModel.name == name
+                SubclassFeatureModel.name == name,
+                SubclassFeatureModel.character_subclass_id == subclass_id,
             )
             result = await session.execute(query)
             result = result.scalar()

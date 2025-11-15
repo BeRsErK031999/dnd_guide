@@ -1,9 +1,9 @@
-from .create_kind import CreateWeaponKindCommand
-from .delete_kind import DeleteWeaponKindCommand
-from .update_kind import UpdateWeaponKindCommand
+from .create_kind import CreateWeaponKindUseCase
+from .delete_kind import DeleteWeaponKindUseCase
+from .update_kind import UpdateWeaponKindUseCase
 
 __all__ = [
-    "CreateWeaponKindCommand",
-    "DeleteWeaponKindCommand",
-    "UpdateWeaponKindCommand",
+    "CreateWeaponKindUseCase",
+    "DeleteWeaponKindUseCase",
+    "UpdateWeaponKindUseCase",
 ]

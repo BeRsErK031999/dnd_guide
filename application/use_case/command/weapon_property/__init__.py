@@ -1,9 +1,9 @@
-from .create_property import CreateWeaponPropertyCommand
-from .delete_property import DeleteWeaponPropertyCommand
-from .update_property import UpdateWeaponPropertyCommand
+from .create_property import CreateWeaponPropertyUseCase
+from .delete_property import DeleteWeaponPropertyUseCase
+from .update_property import UpdateWeaponPropertyUseCase
 
 __all__ = [
-    "CreateWeaponPropertyCommand",
-    "DeleteWeaponPropertyCommand",
-    "UpdateWeaponPropertyCommand",
+    "CreateWeaponPropertyUseCase",
+    "DeleteWeaponPropertyUseCase",
+    "UpdateWeaponPropertyUseCase",
 ]
