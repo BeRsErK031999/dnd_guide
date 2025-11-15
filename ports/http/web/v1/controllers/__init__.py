@@ -10,6 +10,7 @@ from .creature_type import CreatureTypeController
 from .feat import FeatController
 from .material import MaterialController
 from .material_component import MaterialComponentController
+from .race import RaceController
 
 router = Router(
     path="/api/v1",
@@ -24,5 +25,6 @@ router = Router(
         FeatController,
         MaterialController,
         MaterialComponentController,
+        RaceController,
     ],
 )
