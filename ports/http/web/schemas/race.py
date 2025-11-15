@@ -4,7 +4,7 @@ from uuid import UUID
 
 from domain.race import Race, RaceAge, RaceFeature, RaceIncreaseModifier, RaceSpeed
 from litestar.dto import DataclassDTO
-from ports.schemas.length import LengthSchema
+from ports.http.web.schemas.length import LengthSchema
 
 
 @dataclass

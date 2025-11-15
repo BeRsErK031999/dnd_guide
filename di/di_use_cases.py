@@ -67,9 +67,4 @@ class UseCases:
         )
 
 
-class Container:
-    def __init__(self) -> None:
-        self.use_cases = UseCases()
-
-
-container = Container()
+use_cases = UseCases()

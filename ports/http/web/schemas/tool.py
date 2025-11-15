@@ -4,8 +4,8 @@ from uuid import UUID
 
 from domain.tool import Tool, ToolUtilize
 from litestar.dto import DataclassDTO
-from ports.schemas.coin import CoinSchema
-from ports.schemas.weight import WeightSchema
+from ports.http.web.schemas.coin import CoinSchema
+from ports.http.web.schemas.weight import WeightSchema
 
 
 @dataclass

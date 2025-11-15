@@ -10,8 +10,8 @@ from domain.class_level import (
     ClassLevelPoints,
 )
 from litestar.dto import DataclassDTO
-from ports.schemas.dice import DiceSchema
-from ports.schemas.length import LengthSchema
+from ports.http.web.schemas.dice import DiceSchema
+from ports.http.web.schemas.length import LengthSchema
 
 
 @dataclass

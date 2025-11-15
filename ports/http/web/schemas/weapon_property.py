@@ -5,8 +5,8 @@ from domain.dice import Dice
 from domain.length import Length
 from domain.weapon_property import WeaponProperty
 from litestar.dto import DataclassDTO
-from ports.schemas.dice import DiceSchema
-from ports.schemas.length import LengthSchema
+from ports.http.web.schemas.dice import DiceSchema
+from ports.http.web.schemas.length import LengthSchema
 
 
 @dataclass

@@ -4,9 +4,9 @@ from uuid import UUID
 
 from domain.weapon import Weapon, WeaponDamage
 from litestar.dto import DataclassDTO
-from ports.schemas.coin import CoinSchema
-from ports.schemas.dice import DiceSchema
-from ports.schemas.weight import WeightSchema
+from ports.http.web.schemas.coin import CoinSchema
+from ports.http.web.schemas.dice import DiceSchema
+from ports.http.web.schemas.weight import WeightSchema
 
 
 @dataclass

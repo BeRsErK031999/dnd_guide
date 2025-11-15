@@ -4,7 +4,7 @@ from uuid import UUID
 
 from domain.character_class import CharacterClass, ClassHits, ClassProficiencies
 from litestar.dto import DataclassDTO
-from ports.schemas.dice import DiceSchema
+from ports.http.web.schemas.dice import DiceSchema
 
 
 @dataclass
