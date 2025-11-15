@@ -16,6 +16,9 @@ from .spell import SpellController
 from .subclass_feature import SubclassFeatureController
 from .subrace import SubraceController
 from .tool import ToolController
+from .weapon import WeaponController
+from .weapon_kind import WeaponKindController
+from .weapon_property import WeaponPropertyController
 
 router = Router(
     path="/api/v1",
@@ -36,5 +39,8 @@ router = Router(
         SubclassFeatureController,
         SubraceController,
         ToolController,
+        WeaponKindController,
+        WeaponPropertyController,
+        WeaponController,
     ],
 )

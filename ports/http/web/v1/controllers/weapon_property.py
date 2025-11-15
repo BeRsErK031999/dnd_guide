@@ -1,0 +1,82 @@
+from dataclasses import asdict
+from uuid import UUID, uuid4
+
+from application.dto.command.weapon_property import (
+    CreateWeaponPropertyCommand,
+    DeleteWeaponPropertyCommand,
+    UpdateWeaponPropertyCommand,
+)
+from application.dto.query.weapon_property import WeaponPropertyQuery
+from litestar import Controller, delete, get, post, put
+from litestar.di import Provide
+from ports.http.web.v1.providers.di_use_cases import (
+    WeaponPropertyUseCases,
+    di_weapon_property_use_cases,
+)
+from ports.http.web.v1.schemas.weapon_property import (
+    CreateWeaponPropertyDTO,
+    CreateWeaponPropertySchema,
+    ReadWeaponPropertySchema,
+    UpdateWeaponPropertyDTO,
+    UpdateWeaponPropertySchema,
+)
+
+
+class WeaponPropertyController(Controller):
+    path = "/weapon_properties"
+    tags = ["weapon property"]
+
+    dependencies = {
+        "use_cases": Provide(di_weapon_property_use_cases, sync_to_thread=True)
+    }
+
+    @get("/{weapon_property_id:uuid}")
+    async def get_weapon_property(
+        self, weapon_property_id: UUID, use_cases: WeaponPropertyUseCases
+    ) -> ReadWeaponPropertySchema:
+        weapon_property = await use_cases.get_one.execute(
+            WeaponPropertyQuery(weapon_property_id=weapon_property_id)
+        )
+        return ReadWeaponPropertySchema.from_domain(weapon_property)
+
+    @get()
+    async def get_weapon_properties(
+        self, use_cases: WeaponPropertyUseCases
+    ) -> list[ReadWeaponPropertySchema]:
+        weapon_properties = await use_cases.get_all.execute()
+        return [
+            ReadWeaponPropertySchema.from_domain(weapon_property)
+            for weapon_property in weapon_properties
+        ]
+
+    @post(dto=CreateWeaponPropertyDTO)
+    async def create_weapon_property(
+        self,
+        weapon_property: CreateWeaponPropertySchema,
+        use_cases: WeaponPropertyUseCases,
+    ) -> UUID:
+        command = CreateWeaponPropertyCommand(
+            user_id=uuid4(), **asdict(weapon_property)
+        )
+        return await use_cases.create.execute(command)
+
+    @put("/{weapon_property_id:uuid}", dto=UpdateWeaponPropertyDTO)
+    async def update_weapon_property(
+        self,
+        weapon_property_id: UUID,
+        weapon_property: UpdateWeaponPropertySchema,
+        use_cases: WeaponPropertyUseCases,
+    ) -> None:
+        command = UpdateWeaponPropertyCommand(
+            weapon_property_id=weapon_property_id, **asdict(weapon_property)
+        )
+        await use_cases.update.execute(command)
+
+    @delete("/{weapon_property_id:uuid}")
+    async def delete_weapon_property(
+        self, weapon_property_id: UUID, use_cases: WeaponPropertyUseCases
+    ) -> None:
+        command = DeleteWeaponPropertyCommand(
+            user_id=uuid4(), weapon_property_id=weapon_property_id
+        )
+        await use_cases.delete.execute(command)

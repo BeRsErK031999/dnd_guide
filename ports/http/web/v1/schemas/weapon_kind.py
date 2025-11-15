@@ -6,14 +6,14 @@ from litestar.dto import DataclassDTO
 
 
 @dataclass
-class ReadWeaponKindSchema(DataclassDTO):
+class ReadWeaponKindSchema:
     weapon_kind_id: UUID
     weapon_type: str
     name: str
     description: str
 
     @staticmethod
-    def from_domain(weapon_kind: WeaponKind) -> "ReadWeaponKindSchema":
+    def from_domain(weapon_kind: WeaponKind) -> ReadWeaponKindSchema:
         return ReadWeaponKindSchema(
             weapon_kind_id=weapon_kind.weapon_kind_id(),
             weapon_type=weapon_kind.weapon_type(),
