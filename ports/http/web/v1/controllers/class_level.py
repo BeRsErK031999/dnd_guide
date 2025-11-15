@@ -24,7 +24,7 @@ from ports.http.web.v1.schemas.class_level import (
 
 class ClassLevelController(Controller):
     path = "/class-levels"
-    tags = ["class levels"]
+    tags = ["class level"]
 
     dependencies = {"use_cases": Provide(di_class_level_use_cases, sync_to_thread=True)}
 

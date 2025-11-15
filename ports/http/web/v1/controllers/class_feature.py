@@ -24,7 +24,7 @@ from ports.http.web.v1.schemas.class_feature import (
 
 class ClassFeatureController(Controller):
     path = "/class-features"
-    tags = ["class features"]
+    tags = ["class feature"]
 
     dependencies = {
         "use_cases": Provide(di_class_feature_use_cases, sync_to_thread=True)
