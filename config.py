@@ -6,17 +6,17 @@ load_dotenv()
 
 
 class Config:
-    DB_HOST = os.getenv("DB_HOST")
-    DB_PORT = os.getenv("DB_PORT")
-    DB_USER = os.getenv("DB_USER")
-    DB_PASSWORD = os.getenv("DB_PASSWORD")
-    DB_NAME = os.getenv("DB_NAME")
-    DEBUG = os.getenv("DEBUG", "false").lower() == "true"
+    DB_HOST: str = os.getenv("DB_HOST", "127.0.0.1")
+    DB_PORT: int = int(os.getenv("DB_PORT", 5432))
+    DB_USER: str = os.getenv("DB_USER", "dnd_guide")
+    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "dnd_guide")
+    DB_NAME: str = os.getenv("DB_NAME", "dnd_guide")
+    DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
 
     @property
     def db_url(self) -> str:
         return (
-            f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@"
+            f"postgresql+psycopg://{self.DB_USER}:{self.DB_PASSWORD}@"
             f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
         )
 

@@ -1,4 +1,5 @@
 from .armor import ArmorModel
+from .base import Base
 from .character_class import (
     CharacterClassModel,
     ClassArmorTypeModel,
@@ -43,6 +44,7 @@ from .weapon import (
 
 __all__ = [
     "ArmorModel",
+    "Base",
     "CharacterClassModel",
     "ClassArmorTypeModel",
     "ClassPrimaryModifierModel",

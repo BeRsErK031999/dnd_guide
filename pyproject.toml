@@ -5,10 +5,17 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "alembic>=1.17.2",
     "asyncpg>=0.30.0",
     "litestar[standard]>=2.18.0",
-    "pytest>=8.4.2",
-    "pytest-asyncio>=1.2.0",
+    "psycopg[binary]>=3.2.12",
     "python-dotenv>=1.2.1",
     "sqlalchemy>=2.0.44",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.11.0",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
 ]
