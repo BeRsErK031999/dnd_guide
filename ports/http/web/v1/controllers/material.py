@@ -9,11 +9,11 @@ from application.dto.command.material import (
 from application.dto.query.material import MaterialQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
-from ports.http.web.providers.di_use_cases import (
+from ports.http.web.v1.providers.di_use_cases import (
     MaterialUseCases,
     di_material_use_cases,
 )
-from ports.http.web.schemas.material import (
+from ports.http.web.v1.schemas.material import (
     CreateMaterialDTO,
     CreateMaterialSchema,
     ReadMaterialSchema,

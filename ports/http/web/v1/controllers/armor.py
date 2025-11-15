@@ -9,8 +9,8 @@ from application.dto.command.armor import (
 from application.dto.query.armor import ArmorQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
-from ports.http.web.providers.di_use_cases import ArmorUseCases, di_armor_use_cases
-from ports.http.web.schemas.armor import (
+from ports.http.web.v1.providers.di_use_cases import ArmorUseCases, di_armor_use_cases
+from ports.http.web.v1.schemas.armor import (
     CreateArmorDTO,
     CreateArmorSchema,
     ReadArmorSchema,

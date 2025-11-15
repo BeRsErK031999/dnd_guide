@@ -7,8 +7,8 @@ from domain.game_time import GameTime
 from domain.length import Length
 from domain.spell import Spell, SpellComponents
 from litestar.dto import DataclassDTO
-from ports.http.web.schemas.game_time import GameTimeSchema
-from ports.http.web.schemas.length import LengthSchema
+from ports.http.web.v1.schemas.game_time import GameTimeSchema
+from ports.http.web.v1.schemas.length import LengthSchema
 
 
 @dataclass
