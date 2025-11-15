@@ -14,6 +14,7 @@ from .race import RaceController
 from .source import SourceController
 from .spell import SpellController
 from .subclass_feature import SubclassFeatureController
+from .subrace import SubraceController
 
 router = Router(
     path="/api/v1",
@@ -32,5 +33,6 @@ router = Router(
         SourceController,
         SpellController,
         SubclassFeatureController,
+        SubraceController,
     ],
 )
