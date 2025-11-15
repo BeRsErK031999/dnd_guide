@@ -5,8 +5,8 @@ from domain.source import Source
 
 
 class GetSourceUseCase:
-    def __init__(self, class_repository: SourceRepository):
-        self.__class_repository = class_repository
+    def __init__(self, source_repository: SourceRepository):
+        self.__class_repository = source_repository
 
     async def execute(self, query: SourceQuery) -> Source:
         if not await self.__class_repository.id_exists(query.source_id):

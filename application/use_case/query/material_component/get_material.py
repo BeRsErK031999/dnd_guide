@@ -5,8 +5,8 @@ from domain.material_component import MaterialComponent
 
 
 class GetMaterialComponentUseCase:
-    def __init__(self, class_repository: MaterialComponentRepository):
-        self.__repository = class_repository
+    def __init__(self, material_repository: MaterialComponentRepository):
+        self.__repository = material_repository
 
     async def execute(self, query: MaterialComponentQuery) -> MaterialComponent:
         if not await self.__repository.id_exists(query.material_id):

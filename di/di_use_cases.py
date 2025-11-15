@@ -119,6 +119,12 @@ class ClassUseCases:
             user_repository=user_repo,
             class_repository=character_class_repo,
         )
+        self.get_one = query.character_class.GetClassUseCase(
+            class_repository=character_class_repo,
+        )
+        self.get_all = query.character_class.GetClassesUseCase(
+            class_repository=character_class_repo,
+        )
 
 
 class SubclassUseCases:
@@ -137,6 +143,12 @@ class SubclassUseCases:
         )
         self.delete = command.character_subclass.DeleteSubclassUseCase(
             user_repository=user_repo,
+            subclass_repository=character_subclass_repo,
+        )
+        self.get_one = query.character_subclass.GetSubclassUseCase(
+            subclass_repository=character_subclass_repo,
+        )
+        self.get_all = query.character_subclass.GetSubclassesUseCase(
             subclass_repository=character_subclass_repo,
         )
 
@@ -159,6 +171,12 @@ class ClassFeatureUseCases:
             user_repository=user_repo,
             feature_repository=class_feature_repo,
         )
+        self.get_one = query.class_feature.GetClassFeatureUseCase(
+            feature_repository=class_feature_repo,
+        )
+        self.get_all = query.class_feature.GetClassFeaturesUseCase(
+            feature_repository=class_feature_repo,
+        )
 
 
 class ClassLevelUseCases:
@@ -179,6 +197,12 @@ class ClassLevelUseCases:
             user_repository=user_repo,
             class_level_repository=class_level_repo,
         )
+        self.get_one = query.class_level.GetClassLevelUseCase(
+            class_level_repository=class_level_repo,
+        )
+        self.get_all = query.class_level.GetClassLevelsUseCase(
+            class_level_repository=class_level_repo,
+        )
 
 
 class CreatureSizeUseCases:
@@ -195,6 +219,12 @@ class CreatureSizeUseCases:
         )
         self.delete = command.creature_size.DeleteCreatureSizeUseCase(
             user_repository=user_repo,
+            creature_size_repository=creature_size_repo,
+        )
+        self.get_one = query.creature_size.GetCreatureSizeUseCase(
+            creature_size_repository=creature_size_repo,
+        )
+        self.get_all = query.creature_size.GetCreatureSizesUseCase(
             creature_size_repository=creature_size_repo,
         )
 
@@ -215,6 +245,12 @@ class CreatureTypeUseCases:
             user_repository=user_repo,
             creature_type_repository=creature_type_repo,
         )
+        self.get_one = query.creature_type.GetCreatureTypeUseCase(
+            creature_type_repository=creature_type_repo,
+        )
+        self.get_all = query.creature_type.GetCreatureTypesUseCase(
+            creature_type_repository=creature_type_repo,
+        )
 
 
 class FeatUseCases:
@@ -231,6 +267,12 @@ class FeatUseCases:
         )
         self.delete = command.feat.DeleteFeatUseCase(
             user_repository=user_repo,
+            feat_repository=feat_repo,
+        )
+        self.get_one = query.feat.GetFeatUseCase(
+            feat_repository=feat_repo,
+        )
+        self.get_all = query.feat.GetFeatsUseCase(
             feat_repository=feat_repo,
         )
 
@@ -275,6 +317,12 @@ class MaterialComponentUseCases:
             user_repository=user_repo,
             material_repository=material_component_repo,
         )
+        self.get_one = query.material_component.GetMaterialComponentUseCase(
+            material_repository=material_component_repo,
+        )
+        self.get_all = query.material_component.GetMaterialComponentsUseCase(
+            material_repository=material_component_repo,
+        )
 
 
 class RaceUseCases:
@@ -299,6 +347,12 @@ class RaceUseCases:
             user_repository=user_repo,
             race_repository=race_repo,
         )
+        self.get_one = query.race.GetRaceUseCase(
+            race_repository=race_repo,
+        )
+        self.get_all = query.race.GetRacesUseCase(
+            race_repository=race_repo,
+        )
 
 
 class SourceUseCases:
@@ -315,6 +369,12 @@ class SourceUseCases:
         )
         self.delete = command.source.DeleteSourceUseCase(
             user_repository=user_repo,
+            source_repository=source_repo,
+        )
+        self.get_one = query.source.GetSourceUseCase(
+            source_repository=source_repo,
+        )
+        self.get_all = query.source.GetSourcesUseCase(
             source_repository=source_repo,
         )
 
@@ -341,6 +401,12 @@ class SpellUseCases:
             user_repository=user_repo,
             spell_repository=spell_repo,
         )
+        self.get_one = query.spell.GetSpellUseCase(
+            spell_repository=spell_repo,
+        )
+        self.get_all = query.spell.GetSpellsUseCase(
+            spell_repository=spell_repo,
+        )
 
 
 class SubclassFeatureUseCases:
@@ -359,6 +425,12 @@ class SubclassFeatureUseCases:
         )
         self.delete = command.subclass_feature.DeleteSubclassFeatureUseCase(
             user_repository=user_repo,
+            feature_repository=subclass_feature_repo,
+        )
+        self.get_one = query.subclass_feature.GetSubclassFeatureUseCase(
+            feature_repository=subclass_feature_repo,
+        )
+        self.get_all = query.subclass_feature.GetSubclassFeaturesUseCase(
             feature_repository=subclass_feature_repo,
         )
 
@@ -381,6 +453,12 @@ class SubraceUseCases:
             user_repository=user_repo,
             subrace_repository=subrace_repo,
         )
+        self.get_one = query.subrace.GetSubraceUseCase(
+            subrace_repository=subrace_repo,
+        )
+        self.get_all = query.subrace.GetSubracesUseCase(
+            subrace_repository=subrace_repo,
+        )
 
 
 class ToolUseCases:
@@ -397,6 +475,12 @@ class ToolUseCases:
         )
         self.delete = command.tool.DeleteToolUseCase(
             user_repository=user_repo,
+            tool_repository=tool_repo,
+        )
+        self.get_one = query.tool.GetToolUseCase(
+            tool_repository=tool_repo,
+        )
+        self.get_all = query.tool.GetToolsUseCase(
             tool_repository=tool_repo,
         )
 
@@ -423,6 +507,12 @@ class WeaponUseCases:
             user_repository=user_repo,
             weapon_repository=weapon_repo,
         )
+        self.get_one = query.weapon.GetWeaponUseCase(
+            weapon_repository=weapon_repo,
+        )
+        self.get_all = query.weapon.GetWeaponsUseCase(
+            weapon_repository=weapon_repo,
+        )
 
 
 class WeaponKindUseCases:
@@ -441,6 +531,12 @@ class WeaponKindUseCases:
             user_repository=user_repo,
             weapon_kind_repository=weapon_kind_repo,
         )
+        self.get_one = query.weapon_kind.GetWeaponKindUseCase(
+            weapon_kind_repository=weapon_kind_repo,
+        )
+        self.get_all = query.weapon_kind.GetWeaponKindsUseCase(
+            weapon_kind_repository=weapon_kind_repo,
+        )
 
 
 class WeaponPropertyUseCases:
@@ -457,6 +553,12 @@ class WeaponPropertyUseCases:
         )
         self.delete = command.weapon_property.DeleteWeaponPropertyUseCase(
             user_repository=user_repo,
+            weapon_property_repository=weapon_property_repo,
+        )
+        self.get_one = query.weapon_property.GetWeaponPropertyUseCase(
+            weapon_property_repository=weapon_property_repo,
+        )
+        self.get_all = query.weapon_property.GetWeaponPropertiesUseCase(
             weapon_property_repository=weapon_property_repo,
         )
 
