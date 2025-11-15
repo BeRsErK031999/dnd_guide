@@ -9,6 +9,7 @@ from .creature_size import CreatureSizeController
 from .creature_type import CreatureTypeController
 from .feat import FeatController
 from .material import MaterialController
+from .material_component import MaterialComponentController
 
 router = Router(
     path="/api/v1",
@@ -22,5 +23,6 @@ router = Router(
         CreatureTypeController,
         FeatController,
         MaterialController,
+        MaterialComponentController,
     ],
 )
