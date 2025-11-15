@@ -42,7 +42,7 @@ class SubclassController(Controller):
         self, use_cases: SubclassUseCases
     ) -> list[ReadSubclassSchema]:
         subclasses = await use_cases.get_all.execute()
-        return [ReadSubclassSchema.from_domain(armor) for armor in subclasses]
+        return [ReadSubclassSchema.from_domain(subclass) for subclass in subclasses]
 
     @post(dto=CreateSubclassDTO)
     async def create_subclass(

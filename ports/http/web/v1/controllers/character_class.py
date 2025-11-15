@@ -35,7 +35,9 @@ class ClassController(Controller):
     @get()
     async def get_classes(self, use_cases: ClassUseCases) -> list[ReadClassSchema]:
         classes = await use_cases.get_all.execute()
-        return [ReadClassSchema.from_domain(armor) for armor in classes]
+        return [
+            ReadClassSchema.from_domain(character_class) for character_class in classes
+        ]
 
     @post(dto=CreateClassDTO)
     async def create_class(
