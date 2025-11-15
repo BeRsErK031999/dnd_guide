@@ -22,7 +22,7 @@ from ports.schemas.armor import (
 
 class ArmorController(Controller):
     path = "/armors"
-    tags = ["armors"]
+    tags = ["armor"]
 
     dependencies = {"container": Provide(di_container, sync_to_thread=True)}
 
