@@ -41,7 +41,8 @@ class SQLSubraceRepository(DomainSubraceRepository, AppSubraceRepository):
                 select(SubraceModel)
                 .where(SubraceModel.id == subrace_id)
                 .options(
-                    selectinload(SubraceModel.increase_modifiers, SubraceModel.features)
+                    selectinload(SubraceModel.increase_modifiers),
+                    selectinload(SubraceModel.features),
                 )
             )
             result = await session.execute(query)
@@ -51,7 +52,8 @@ class SQLSubraceRepository(DomainSubraceRepository, AppSubraceRepository):
     async def get_all(self) -> list[Subrace]:
         async with self.__db_helper.session as session:
             query = select(SubraceModel).options(
-                selectinload(SubraceModel.increase_modifiers, SubraceModel.features)
+                selectinload(SubraceModel.increase_modifiers),
+                selectinload(SubraceModel.features),
             )
             result = await session.execute(query)
             result = result.scalars().all()
@@ -78,7 +80,8 @@ class SQLSubraceRepository(DomainSubraceRepository, AppSubraceRepository):
                 select(SubraceModel)
                 .where(SubraceModel.id == subrace.subrace_id())
                 .options(
-                    selectinload(SubraceModel.increase_modifiers, SubraceModel.features)
+                    selectinload(SubraceModel.increase_modifiers),
+                    selectinload(SubraceModel.features),
                 )
             )
             model = await session.execute(subrace_query)

@@ -15,7 +15,7 @@ from application.repository import ClassRepository as AppClassRepository
 from domain.character_class import CharacterClass
 from domain.character_class import ClassRepository as DomainClassRepository
 from sqlalchemy import delete, exists, select
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import joinedload, selectinload
 
 
 class SQLClassRepository(DomainClassRepository, AppClassRepository):
@@ -45,15 +45,13 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
                 select(CharacterClassModel)
                 .where(CharacterClassModel.id == class_id)
                 .options(
-                    selectinload(
-                        CharacterClassModel.primary_modifiers,
-                        CharacterClassModel.armor_types,
-                        CharacterClassModel.saving_throws,
-                        CharacterClassModel.skills,
-                        CharacterClassModel.weapons,
-                        CharacterClassModel.tools,
-                        CharacterClassModel.source,
-                    )
+                    selectinload(CharacterClassModel.primary_modifiers),
+                    selectinload(CharacterClassModel.armor_types),
+                    selectinload(CharacterClassModel.saving_throws),
+                    selectinload(CharacterClassModel.skills),
+                    selectinload(CharacterClassModel.weapons),
+                    selectinload(CharacterClassModel.tools),
+                    joinedload(CharacterClassModel.source),
                 )
             )
             result = await session.execute(query)
@@ -63,15 +61,13 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
     async def get_all(self) -> list[CharacterClass]:
         async with self.__helper.session as session:
             query = select(CharacterClassModel).options(
-                selectinload(
-                    CharacterClassModel.primary_modifiers,
-                    CharacterClassModel.armor_types,
-                    CharacterClassModel.saving_throws,
-                    CharacterClassModel.skills,
-                    CharacterClassModel.weapons,
-                    CharacterClassModel.tools,
-                    CharacterClassModel.source,
-                )
+                selectinload(CharacterClassModel.primary_modifiers),
+                selectinload(CharacterClassModel.armor_types),
+                selectinload(CharacterClassModel.saving_throws),
+                selectinload(CharacterClassModel.skills),
+                selectinload(CharacterClassModel.weapons),
+                selectinload(CharacterClassModel.tools),
+                joinedload(CharacterClassModel.source),
             )
             result = await session.execute(query)
             result = result.scalars().all()
@@ -127,15 +123,13 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
                 select(CharacterClassModel)
                 .where(CharacterClassModel.id == character_class.class_id())
                 .options(
-                    selectinload(
-                        CharacterClassModel.primary_modifiers,
-                        CharacterClassModel.armor_types,
-                        CharacterClassModel.saving_throws,
-                        CharacterClassModel.skills,
-                        CharacterClassModel.weapons,
-                        CharacterClassModel.tools,
-                        CharacterClassModel.source,
-                    )
+                    selectinload(CharacterClassModel.primary_modifiers),
+                    selectinload(CharacterClassModel.armor_types),
+                    selectinload(CharacterClassModel.saving_throws),
+                    selectinload(CharacterClassModel.skills),
+                    selectinload(CharacterClassModel.weapons),
+                    selectinload(CharacterClassModel.tools),
+                    joinedload(CharacterClassModel.source),
                 )
             )
             model = await session.execute(model_query)

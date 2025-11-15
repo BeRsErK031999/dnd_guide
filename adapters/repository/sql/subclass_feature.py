@@ -43,12 +43,20 @@ class SQLSubclassFeatureRepository(
 
     async def get_by_id(self, feature_id: UUID) -> SubclassFeature:
         async with self.__db_helper.session as session:
-            model = await session.get_one(SubclassFeatureModel, feature_id)
+            query = (
+                select(SubclassFeatureModel)
+                .where(SubclassFeatureModel.id == feature_id)
+                .options(selectinload(SubclassFeatureModel.character_subclass))
+            )
+            result = await session.execute(query)
+            model = result.scalar_one()
             return model.to_domain()
 
     async def get_all(self) -> list[SubclassFeature]:
         async with self.__db_helper.session as session:
-            query = select(SubclassFeatureModel)
+            query = select(SubclassFeatureModel).options(
+                selectinload(SubclassFeatureModel.character_subclass)
+            )
             result = await session.execute(query)
             result = result.scalars().all()
             return [model.to_domain() for model in result]

@@ -1,7 +1,5 @@
-from contextlib import asynccontextmanager
-from typing import TYPE_CHECKING, AsyncGenerator
+from typing import TYPE_CHECKING
 
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 if TYPE_CHECKING:

@@ -43,12 +43,10 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
                 select(SpellModel)
                 .where(SpellModel.id == spell_id)
                 .options(
-                    selectinload(
-                        SpellModel.saving_throws,
-                        SpellModel.character_classes,
-                        SpellModel.character_subclasses,
-                        SpellModel.materials,
-                    )
+                    selectinload(SpellModel.saving_throws),
+                    selectinload(SpellModel.character_classes),
+                    selectinload(SpellModel.character_subclasses),
+                    selectinload(SpellModel.materials),
                 )
             )
             result = await session.execute(query)
@@ -58,12 +56,10 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
     async def get_all(self) -> list[Spell]:
         async with self.__db_helper.session as session:
             query = select(SpellModel).options(
-                selectinload(
-                    SpellModel.saving_throws,
-                    SpellModel.character_classes,
-                    SpellModel.character_subclasses,
-                    SpellModel.materials,
-                )
+                selectinload(SpellModel.saving_throws),
+                selectinload(SpellModel.character_classes),
+                selectinload(SpellModel.character_subclasses),
+                selectinload(SpellModel.materials),
             )
             result = await session.execute(query)
             result = result.scalars().all()
@@ -112,12 +108,10 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
                 select(SpellModel)
                 .where(SpellModel.id == spell.spell_id())
                 .options(
-                    selectinload(
-                        SpellModel.saving_throws,
-                        SpellModel.character_classes,
-                        SpellModel.character_subclasses,
-                        SpellModel.materials,
-                    )
+                    selectinload(SpellModel.saving_throws),
+                    selectinload(SpellModel.character_classes),
+                    selectinload(SpellModel.character_subclasses),
+                    selectinload(SpellModel.materials),
                 )
             )
             model = await session.execute(model_query)

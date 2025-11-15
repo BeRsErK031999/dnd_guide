@@ -125,7 +125,7 @@ class ClassPrimaryModifierModel(Base):
     name: Mapped[str] = mapped_column(String(50))
     class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
 
-    character_class: Mapped["CharacterClassModel"] = relationship(
+    character_class: Mapped[CharacterClassModel] = relationship(
         back_populates="primary_modifiers"
     )
 
@@ -143,7 +143,7 @@ class ClassArmorTypeModel(Base):
     name: Mapped[str] = mapped_column(String(50))
     class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
 
-    character_class: Mapped["CharacterClassModel"] = relationship(
+    character_class: Mapped[CharacterClassModel] = relationship(
         back_populates="armor_types"
     )
 

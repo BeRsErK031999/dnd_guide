@@ -24,7 +24,7 @@ class ToolModel(Base):
     tool_type: Mapped[str]
 
     utilizes: Mapped[list[ToolUtilizeModel]] = relationship(
-        back_populates="tools", cascade="all, delete-orphan"
+        back_populates="tool", cascade="all, delete-orphan"
     )
     character_classes: Mapped[list[CharacterClassModel]] = relationship(
         back_populates="tools", secondary="rel_class_tool"

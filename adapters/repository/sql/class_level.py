@@ -10,7 +10,7 @@ from application.repository import ClassLevelRepository as AppClassLevelReposito
 from domain.class_level import ClassLevel
 from domain.class_level import ClassLevelRepository as DomainClassLevelRepository
 from sqlalchemy import delete, exists, select
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import joinedload
 
 
 class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepository):
@@ -45,10 +45,8 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
                 select(ClassLevelModel)
                 .where(ClassLevelModel.id == level_id)
                 .options(
-                    selectinload(
-                        ClassLevelModel.class_level_spell_slot,
-                        ClassLevelModel.character_class,
-                    )
+                    joinedload(ClassLevelModel.class_level_spell_slot),
+                    joinedload(ClassLevelModel.character_class),
                 )
             )
             result = await session.execute(query)
@@ -58,10 +56,8 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
     async def get_all(self) -> list[ClassLevel]:
         async with self.__helper.session as session:
             query = select(ClassLevelModel).options(
-                selectinload(
-                    ClassLevelModel.class_level_spell_slot,
-                    ClassLevelModel.character_class,
-                )
+                joinedload(ClassLevelModel.class_level_spell_slot),
+                joinedload(ClassLevelModel.character_class),
             )
             result = await session.execute(query)
             result = result.scalars().all()
@@ -88,10 +84,8 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
                 select(ClassLevelModel)
                 .where(ClassLevelModel.id == level.level_id())
                 .options(
-                    selectinload(
-                        ClassLevelModel.class_level_spell_slot,
-                        ClassLevelModel.character_class,
-                    )
+                    joinedload(ClassLevelModel.class_level_spell_slot),
+                    joinedload(ClassLevelModel.character_class),
                 )
             )
             model = await session.execute(model_query)

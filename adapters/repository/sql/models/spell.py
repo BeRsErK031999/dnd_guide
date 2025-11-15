@@ -168,5 +168,5 @@ class RelSpellCharacterSubclassModel(Base):
 class RelSpellMaterialModel(Base):
     __tablename__ = "rel_spell_material"
 
-    material_id: Mapped[UUID] = mapped_column(ForeignKey("material.id"))
+    material_id: Mapped[UUID] = mapped_column(ForeignKey("material_component.id"))
     spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"))

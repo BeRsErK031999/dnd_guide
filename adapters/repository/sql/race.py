@@ -42,7 +42,10 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
             query = (
                 select(RaceModel)
                 .where(RaceModel.id == race_id)
-                .options(selectinload(RaceModel.increase_modifiers, RaceModel.features))
+                .options(
+                    selectinload(RaceModel.increase_modifiers),
+                    selectinload(RaceModel.features),
+                )
             )
             result = await session.execute(query)
             result = result.scalar_one()
@@ -51,7 +54,8 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
     async def get_all(self) -> list[Race]:
         async with self.__db_helper.session as session:
             query = select(RaceModel).options(
-                selectinload(RaceModel.increase_modifiers, RaceModel.features)
+                selectinload(RaceModel.increase_modifiers),
+                selectinload(RaceModel.features),
             )
             result = await session.execute(query)
             result = result.scalars().all()
@@ -87,7 +91,10 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
             race_query = (
                 select(RaceModel)
                 .where(RaceModel.id == race.race_id())
-                .options(selectinload(RaceModel.increase_modifiers, RaceModel.features))
+                .options(
+                    selectinload(RaceModel.increase_modifiers),
+                    selectinload(RaceModel.features),
+                )
             )
             model = await session.execute(race_query)
             model = model.scalar_one()

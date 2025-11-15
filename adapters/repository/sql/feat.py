@@ -41,11 +41,9 @@ class SQLFeatRepository(DomainFeatRepository, AppFeatRepository):
                 select(FeatModel)
                 .where(FeatModel.id == feat_id)
                 .options(
-                    selectinload(
-                        FeatModel.required_armor_types,
-                        FeatModel.required_modifiers,
-                        FeatModel.increase_modifiers,
-                    )
+                    selectinload(FeatModel.required_armor_types),
+                    selectinload(FeatModel.required_modifiers),
+                    selectinload(FeatModel.increase_modifiers),
                 )
             )
             result = await session.execute(query)
@@ -55,11 +53,9 @@ class SQLFeatRepository(DomainFeatRepository, AppFeatRepository):
     async def get_all(self) -> list[Feat]:
         async with self.__helper.session as session:
             query = select(FeatModel).options(
-                selectinload(
-                    FeatModel.required_armor_types,
-                    FeatModel.required_modifiers,
-                    FeatModel.increase_modifiers,
-                )
+                selectinload(FeatModel.required_armor_types),
+                selectinload(FeatModel.required_modifiers),
+                selectinload(FeatModel.increase_modifiers),
             )
             result = await session.execute(query)
             result = result.scalars().all()
@@ -100,11 +96,9 @@ class SQLFeatRepository(DomainFeatRepository, AppFeatRepository):
                 select(FeatModel)
                 .where(FeatModel.id == feat.feat_id())
                 .options(
-                    selectinload(
-                        FeatModel.required_armor_types,
-                        FeatModel.required_modifiers,
-                        FeatModel.increase_modifiers,
-                    )
+                    selectinload(FeatModel.required_armor_types),
+                    selectinload(FeatModel.required_modifiers),
+                    selectinload(FeatModel.increase_modifiers),
                 )
             )
             model = await session.execute(feat_query)

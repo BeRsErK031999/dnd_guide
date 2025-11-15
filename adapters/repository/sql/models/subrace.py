@@ -21,9 +21,9 @@ class SubraceModel(Base):
 
     race: Mapped[RaceModel] = relationship(back_populates="subraces")
     increase_modifiers: Mapped[list[SubraceIncreaseModifierModel]] = relationship(
-        back_populates="race"
+        back_populates="subrace"
     )
-    features: Mapped[list[SubraceFeatureModel]] = relationship(back_populates="race")
+    features: Mapped[list[SubraceFeatureModel]] = relationship(back_populates="subrace")
 
     def to_domain(self) -> Subrace:
         return Subrace(
@@ -52,9 +52,9 @@ class SubraceIncreaseModifierModel(Base):
 
     name: Mapped[str] = mapped_column(String(50))
     bonus: Mapped[int]
-    race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
+    subrace_id: Mapped[UUID] = mapped_column(ForeignKey("subrace.id"))
 
-    race: Mapped[SubraceModel] = relationship(back_populates="increase_modifiers")
+    subrace: Mapped[SubraceModel] = relationship(back_populates="increase_modifiers")
 
     def to_domain(self) -> SubraceIncreaseModifier:
         return SubraceIncreaseModifier(
@@ -73,9 +73,9 @@ class SubraceFeatureModel(Base):
 
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str]
-    race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
+    subrace_id: Mapped[UUID] = mapped_column(ForeignKey("subrace.id"))
 
-    race: Mapped[SubraceModel] = relationship(back_populates="features")
+    subrace: Mapped[SubraceModel] = relationship(back_populates="features")
 
     def to_domain(self) -> SubraceFeature:
         return SubraceFeature(name=self.name, description=self.description)

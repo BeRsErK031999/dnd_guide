@@ -27,7 +27,7 @@ class CharacterSubclassModel(Base):
         back_populates="character_subclass"
     )
     spells: Mapped[list[SpellModel]] = relationship(
-        back_populates="character_subclass", secondary="character_subclass_spell"
+        back_populates="character_subclasses", secondary="rel_spell_character_subclass"
     )
 
     def to_domain(self) -> CharacterSubclass:
