@@ -36,8 +36,8 @@ class CreateClassFeatureSchema:
 
 @dataclass
 class UpdateClassFeatureSchema:
-    class_id: UUID | None
-    name: str | None
-    description: str | None
-    level: int | None
-    name_in_english: str | None
+    class_id: UUID | None = None
+    name: str | None = None
+    description: str | None = None
+    level: int | None = None
+    name_in_english: str | None = None

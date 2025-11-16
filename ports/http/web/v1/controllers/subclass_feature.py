@@ -58,7 +58,9 @@ class SubclassFeatureController(Controller):
         data: UpdateSubclassFeatureSchema,
         use_cases: SubclassFeatureUseCases,
     ) -> None:
-        command = UpdateSubclassFeatureCommand(feature_id=feature_id, **asdict(data))
+        command = UpdateSubclassFeatureCommand(
+            user_id=uuid4(), feature_id=feature_id, **asdict(data)
+        )
         await use_cases.update.execute(command)
 
     @delete("/{feature_id:uuid}")

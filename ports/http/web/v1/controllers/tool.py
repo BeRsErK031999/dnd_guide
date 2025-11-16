@@ -48,7 +48,7 @@ class ToolController(Controller):
         data: UpdateToolSchema,
         use_cases: ToolUseCases,
     ) -> None:
-        command = UpdateToolCommand(tool_id=tool_id, **asdict(data))
+        command = UpdateToolCommand(user_id=uuid4(), tool_id=tool_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{tool_id:uuid}")

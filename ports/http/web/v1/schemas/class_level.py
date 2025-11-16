@@ -74,14 +74,14 @@ class ReadClassLevelSchema:
     class_level_id: UUID
     class_id: UUID
     level: int
-    dice: ClassLevelDiceSchema | None
-    spell_slots: Sequence[int] | None
-    number_cantrips_know: int | None
-    number_spells_know: int | None
-    number_arcanums_know: int | None
-    points: ClassLevelPointsSchema | None
-    bonus_damage: ClassLevelBonusDamageSchema | None
-    increase_speed: ClassLevelIncreaseSpeedSchema | None
+    dice: ClassLevelDiceSchema | None = None
+    spell_slots: Sequence[int] | None = None
+    number_cantrips_know: int | None = None
+    number_spells_know: int | None = None
+    number_arcanums_know: int | None = None
+    points: ClassLevelPointsSchema | None = None
+    bonus_damage: ClassLevelBonusDamageSchema | None = None
+    increase_speed: ClassLevelIncreaseSpeedSchema | None = None
 
     @staticmethod
     def from_domain(level: ClassLevel) -> "ReadClassLevelSchema":
@@ -120,25 +120,25 @@ class ReadClassLevelSchema:
 @dataclass
 class CreateClassLevelSchema:
     level: int
-    dice: ClassLevelDiceSchema | None
-    spell_slots: Sequence[int] | None
-    number_cantrips_know: int | None
-    number_spells_know: int | None
-    number_arcanums_know: int | None
-    points: ClassLevelPointsSchema | None
-    bonus_damage: ClassLevelBonusDamageSchema | None
-    increase_speed: ClassLevelIncreaseSpeedSchema | None
+    dice: ClassLevelDiceSchema | None = None
+    spell_slots: Sequence[int] | None = None
+    number_cantrips_know: int | None = None
+    number_spells_know: int | None = None
+    number_arcanums_know: int | None = None
+    points: ClassLevelPointsSchema | None = None
+    bonus_damage: ClassLevelBonusDamageSchema | None = None
+    increase_speed: ClassLevelIncreaseSpeedSchema | None = None
 
 
 @dataclass
 class UpdateClassLevelSchema:
-    class_id: UUID | None
-    level: int | None
-    dice: ClassLevelDiceSchema | None
-    spell_slots: Sequence[int] | None
-    number_cantrips_know: int | None
-    number_spells_know: int | None
-    number_arcanums_know: int | None
-    points: ClassLevelPointsSchema | None
-    bonus_damage: ClassLevelBonusDamageSchema | None
-    increase_speed: ClassLevelIncreaseSpeedSchema | None
+    class_id: UUID | None = None
+    level: int | None = None
+    dice: ClassLevelDiceSchema | None = None
+    spell_slots: Sequence[int] | None = None
+    number_cantrips_know: int | None = None
+    number_spells_know: int | None = None
+    number_arcanums_know: int | None = None
+    points: ClassLevelPointsSchema | None = None
+    bonus_damage: ClassLevelBonusDamageSchema | None = None
+    increase_speed: ClassLevelIncreaseSpeedSchema | None = None

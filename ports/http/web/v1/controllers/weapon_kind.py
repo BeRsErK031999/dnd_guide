@@ -59,7 +59,9 @@ class WeaponKindController(Controller):
         data: UpdateWeaponKindSchema,
         use_cases: WeaponKindUseCases,
     ) -> None:
-        command = UpdateWeaponKindCommand(weapon_kind_id=weapon_kind_id, **asdict(data))
+        command = UpdateWeaponKindCommand(
+            user_id=uuid4(), weapon_kind_id=weapon_kind_id, **asdict(data)
+        )
         await use_cases.update.execute(command)
 
     @delete("/{weapon_kind_id:uuid}")

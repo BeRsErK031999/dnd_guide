@@ -23,8 +23,8 @@ class ReadArmorTypeSchema:
 @dataclass
 class ArmorClassSchema:
     base_class: int
-    modifier: str | None = None
-    max_modifier_bonus: int | None = None
+    modifier: str | None
+    max_modifier_bonus: int | None
 
     @staticmethod
     def from_domain(armor_class: ArmorClass) -> "ArmorClassSchema":
@@ -80,7 +80,7 @@ class CreateArmorSchema:
 
 @dataclass
 class UpdateArmorSchema:
-    armor_id: UUID
+    armor_id: UUID | None = None
     armor_type: str | None = None
     name: str | None = None
     description: str | None = None

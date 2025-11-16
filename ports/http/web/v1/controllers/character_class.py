@@ -51,7 +51,7 @@ class ClassController(Controller):
         data: UpdateClassSchema,
         use_cases: ClassUseCases,
     ) -> None:
-        command = UpdateClassCommand(class_id=class_id, **asdict(data))
+        command = UpdateClassCommand(user_id=uuid4(), class_id=class_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{class_id:uuid}")

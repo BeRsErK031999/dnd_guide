@@ -59,7 +59,9 @@ class MaterialController(Controller):
         data: UpdateMaterialSchema,
         use_cases: MaterialUseCases,
     ) -> None:
-        command = UpdateMaterialCommand(material_id=material_id, **asdict(data))
+        command = UpdateMaterialCommand(
+            user_id=uuid4(), material_id=material_id, **asdict(data)
+        )
         await use_cases.update.execute(command)
 
     @delete("/{material_id:uuid}")

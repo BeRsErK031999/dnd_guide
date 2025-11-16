@@ -49,7 +49,7 @@ class SpellController(Controller):
         data: UpdateSpellSchema,
         use_cases: SpellUseCases,
     ) -> None:
-        command = UpdateSpellCommand(spell_id=spell_id, **asdict(data))
+        command = UpdateSpellCommand(user_id=uuid4(), spell_id=spell_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{spell_id:uuid}")

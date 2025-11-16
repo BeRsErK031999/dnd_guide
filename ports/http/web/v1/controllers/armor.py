@@ -47,7 +47,7 @@ class ArmorController(Controller):
     async def update_armor(
         self, armor_id: UUID, data: UpdateArmorSchema, use_cases: ArmorUseCases
     ) -> None:
-        command = UpdateArmorCommand(armor_id=armor_id, **asdict(data))
+        command = UpdateArmorCommand(user_id=uuid4(), armor_id=armor_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{armor_id:uuid}")

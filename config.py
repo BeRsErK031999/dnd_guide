@@ -18,7 +18,7 @@ class Config:
         ","
     )
     ALLOWED_ORIGINS: list[str] = os.getenv(
-        "ALLOWED_ORIGINS", ("http//127.0.0.1:8000" ",http//localhost:8000")
+        "ALLOWED_ORIGINS", ("http://127.0.0.1:8000" ",http://localhost:8000")
     ).split(",")
 
     @property

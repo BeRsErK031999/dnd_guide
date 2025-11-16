@@ -58,7 +58,9 @@ class ClassFeatureController(Controller):
         data: UpdateClassFeatureSchema,
         use_cases: ClassFeatureUseCases,
     ) -> None:
-        command = UpdateClassFeatureCommand(feature_id=feature_id, **asdict(data))
+        command = UpdateClassFeatureCommand(
+            user_id=uuid4(), feature_id=feature_id, **asdict(data)
+        )
         await use_cases.update.execute(command)
 
     @delete("/{feature_id:uuid}")

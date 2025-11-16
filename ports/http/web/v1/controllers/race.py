@@ -47,7 +47,7 @@ class RaceController(Controller):
         data: UpdateRaceSchema,
         use_cases: RaceUseCases,
     ) -> None:
-        command = UpdateRaceCommand(race_id=race_id, **asdict(data))
+        command = UpdateRaceCommand(user_id=uuid4(), race_id=race_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{race_id:uuid}")

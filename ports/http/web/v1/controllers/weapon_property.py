@@ -65,7 +65,7 @@ class WeaponPropertyController(Controller):
         use_cases: WeaponPropertyUseCases,
     ) -> None:
         command = UpdateWeaponPropertyCommand(
-            weapon_property_id=weapon_property_id, **asdict(data)
+            user_id=uuid4(), weapon_property_id=weapon_property_id, **asdict(data)
         )
         await use_cases.update.execute(command)
 

@@ -47,7 +47,7 @@ class FeatController(Controller):
         data: UpdateFeatSchema,
         use_cases: FeatUseCases,
     ) -> None:
-        command = UpdateFeatCommand(feat_id=feat_id, **asdict(data))
+        command = UpdateFeatCommand(user_id=uuid4(), feat_id=feat_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{feat_id:uuid}")

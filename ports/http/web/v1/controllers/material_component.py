@@ -63,7 +63,7 @@ class MaterialComponentController(Controller):
         use_cases: MaterialComponentUseCases,
     ) -> None:
         command = UpdateMaterialComponentCommand(
-            material_id=material_id, **asdict(data)
+            user_id=uuid4(), material_id=material_id, **asdict(data)
         )
         await use_cases.update.execute(command)
 

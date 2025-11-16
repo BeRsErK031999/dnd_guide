@@ -52,7 +52,9 @@ class SubraceController(Controller):
         data: UpdateSubraceSchema,
         use_cases: SubraceUseCases,
     ) -> None:
-        subrace = UpdateSubraceCommand(subrace_id=subrace_id, **asdict(data))
+        subrace = UpdateSubraceCommand(
+            user_id=uuid4(), subrace_id=subrace_id, **asdict(data)
+        )
         await use_cases.update.execute(subrace)
 
     @delete("/{subrace_id:uuid}")

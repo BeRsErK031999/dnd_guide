@@ -56,7 +56,9 @@ class SubclassController(Controller):
         data: UpdateSubclassSchema,
         use_cases: SubclassUseCases,
     ) -> None:
-        command = UpdateSubclassCommand(subclass_id=subclass_id, **asdict(data))
+        command = UpdateSubclassCommand(
+            user_id=uuid4(), subclass_id=subclass_id, **asdict(data)
+        )
         await use_cases.update.execute(command)
 
     @delete("/{subclass_id:uuid}")

@@ -49,7 +49,9 @@ class SourceController(Controller):
         data: UpdateSourceSchema,
         use_cases: SourceUseCases,
     ) -> None:
-        command = UpdateSourceCommand(source_id=source_id, **asdict(data))
+        command = UpdateSourceCommand(
+            user_id=uuid4(), source_id=source_id, **asdict(data)
+        )
         await use_cases.update.execute(command)
 
     @delete("/{source_id:uuid}")

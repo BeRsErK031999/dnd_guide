@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from domain.material import Material
+from litestar.dto import DataclassDTO
 
 
 @dataclass
@@ -27,5 +28,5 @@ class CreateMaterialSchema:
 
 @dataclass
 class UpdateMaterialSchema:
-    name: str | None
-    description: str | None
+    name: str | None = None
+    description: str | None = None

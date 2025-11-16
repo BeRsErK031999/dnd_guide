@@ -61,7 +61,9 @@ class CreatureTypeController(Controller):
         data: UpdateCreatureTypeSchema,
         use_cases: CreatureTypeUseCases,
     ) -> None:
-        command = UpdateCreatureTypeCommand(type_id=type_id, **asdict(data))
+        command = UpdateCreatureTypeCommand(
+            user_id=uuid4(), type_id=type_id, **asdict(data)
+        )
         await use_cases.update.execute(command)
 
     @delete("/{type_id:uuid}")

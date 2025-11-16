@@ -30,6 +30,6 @@ class CreateSubclassSchema:
 
 @dataclass
 class UpdateSubclassSchema:
-    name: str | None
-    description: str | None
-    name_in_english: str | None
+    name: str | None = None
+    description: str | None = None
+    name_in_english: str | None = None

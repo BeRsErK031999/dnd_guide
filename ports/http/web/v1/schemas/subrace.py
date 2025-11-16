@@ -74,7 +74,7 @@ class CreateSubraceSchema:
 
 @dataclass
 class UpdateSubraceSchema:
-    race_id: UUID
+    race_id: UUID | None = None
     name: str | None = None
     description: str | None = None
     increase_modifiers: Sequence[SubraceIncreaseModifierSchema] | None = None

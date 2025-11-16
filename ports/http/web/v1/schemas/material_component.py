@@ -27,5 +27,5 @@ class CreateMaterialComponentSchema:
 
 @dataclass
 class UpdateMaterialComponentSchema:
-    name: str | None
-    description: str | None
+    name: str | None = None
+    description: str | None = None

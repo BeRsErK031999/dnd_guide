@@ -61,7 +61,9 @@ class CreatureSizeController(Controller):
         data: UpdateCreatureSizeSchema,
         use_cases: CreatureSizeUseCases,
     ) -> None:
-        command = UpdateCreatureSizeCommand(size_id=size_id, **asdict(data))
+        command = UpdateCreatureSizeCommand(
+            user_id=uuid4(), size_id=size_id, **asdict(data)
+        )
         await use_cases.update.execute(command)
 
     @delete("/{size_id:uuid}")
