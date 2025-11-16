@@ -6,7 +6,7 @@ from application.dto.command.material import (
     DeleteMaterialCommand,
     UpdateMaterialCommand,
 )
-from application.dto.query.material import MaterialQuery
+from application.dto.query.material import MaterialQuery, MaterialsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import (
@@ -37,9 +37,12 @@ class MaterialController(Controller):
 
     @get()
     async def get_materials(
-        self, use_cases: MaterialUseCases
+        self, name: str | None, use_cases: MaterialUseCases
     ) -> list[ReadMaterialSchema]:
-        materials = await use_cases.get_all.execute()
+        query = MaterialsQuery()
+        if name is not None:
+            query.name = name
+        materials = await use_cases.get_all.execute(query)
         return [ReadMaterialSchema.from_domain(material) for material in materials]
 
     @post()

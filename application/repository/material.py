@@ -22,6 +22,10 @@ class MaterialRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def search(self, name: str) -> list[Material]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, material: Material) -> None:
         raise NotImplemented
 
