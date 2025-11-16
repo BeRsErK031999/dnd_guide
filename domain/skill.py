@@ -83,7 +83,7 @@ class Skill(StrEnum):
                 | Skill.NATURE
                 | Skill.RELIGION
             ):
-                return Modifier.INTELLIGENT
+                return Modifier.INTELLECT
 
             case (
                 Skill.ANIMAL_HANDLING

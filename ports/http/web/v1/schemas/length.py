@@ -4,6 +4,16 @@ from domain.length import Length, LengthUnit
 
 
 @dataclass
+class ReadLengthUnitSchema:
+    ft: str
+    m: str
+
+    @staticmethod
+    def from_domain() -> ReadLengthUnitSchema:
+        return ReadLengthUnitSchema(ft=LengthUnit.FT.value, m=LengthUnit.M.value)
+
+
+@dataclass
 class LengthSchema:
     count: float
     unit: str

@@ -17,6 +17,7 @@ from ports.http.web.v1.schemas.weapon import (
     UpdateWeaponDTO,
     UpdateWeaponSchema,
 )
+from ports.http.web.v1.schemas.weapon_kind import ReadWeaponTypeSchema
 
 
 class WeaponController(Controller):
@@ -58,3 +59,7 @@ class WeaponController(Controller):
     async def delete_weapon(self, weapon_id: UUID, use_cases: WeaponUseCases) -> None:
         command = DeleteWeaponCommand(user_id=uuid4(), weapon_id=weapon_id)
         await use_cases.delete.execute(command)
+
+    @get("/types")
+    async def get_weapon_types(self) -> ReadWeaponTypeSchema:
+        return ReadWeaponTypeSchema.from_domain()

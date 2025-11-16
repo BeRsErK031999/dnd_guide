@@ -14,7 +14,9 @@ class Config:
 
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
 
-    ALLOWED_HOSTS: list[str] = os.getenv("ALLOWED_HOSTS", "").split(",")
+    ALLOWED_HOSTS: list[str] = os.getenv("ALLOWED_HOSTS", "127.0.0.1, localhost").split(
+        ","
+    )
 
     @property
     def db_url(self) -> str:

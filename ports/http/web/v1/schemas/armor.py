@@ -1,10 +1,24 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from domain.armor import Armor, ArmorClass
+from domain.armor import Armor, ArmorClass, ArmorType
 from litestar.dto import DataclassDTO
 from ports.http.web.v1.schemas.coin import CoinSchema
 from ports.http.web.v1.schemas.weight import WeightSchema
+
+
+@dataclass
+class ReadArmorTypeSchema:
+    light_armor: str
+    medium_armor: str
+    heavy_armor: str
+    shield: str
+
+    @staticmethod
+    def from_domain() -> ReadArmorTypeSchema:
+        return ReadArmorTypeSchema(
+            **{armor_type.name.lower(): armor_type.value for armor_type in ArmorType}
+        )
 
 
 @dataclass

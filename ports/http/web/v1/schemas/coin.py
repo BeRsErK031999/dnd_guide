@@ -4,6 +4,21 @@ from domain.coin import Coins, PieceType
 
 
 @dataclass
+class ReadPieceTypeSchema:
+    copper: str
+    silver: str
+    electrum: str
+    gold: str
+    platinum: str
+
+    @staticmethod
+    def from_domain() -> ReadPieceTypeSchema:
+        return ReadPieceTypeSchema(
+            **{name.name.lower(): name.value for name in PieceType}
+        )
+
+
+@dataclass
 class CoinSchema:
     count: int
     piece_type: str

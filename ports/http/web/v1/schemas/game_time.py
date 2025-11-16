@@ -1,6 +1,21 @@
 from dataclasses import dataclass
 
-from domain.game_time import GameTime
+from domain.game_time import GameTime, GameTimeUnit
+
+
+@dataclass
+class ReadGameTimeUnitSchema:
+    action: str
+    bonus_action: str
+    reaction: str
+    minute: str
+    hour: str
+
+    @staticmethod
+    def from_domain() -> ReadGameTimeUnitSchema:
+        return ReadGameTimeUnitSchema(
+            **{name.name.lower(): name.value for name in GameTimeUnit}
+        )
 
 
 @dataclass

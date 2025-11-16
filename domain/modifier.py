@@ -7,7 +7,7 @@ class Modifier(StrEnum):
     STRENGTH = "сила"
     DEXTERITY = "ловкость"
     CONSTITUTION = "телосложение"
-    INTELLIGENT = "интеллект"
+    INTELLECT = "интеллект"
     WISDOM = "мудрость"
     CHARISMA = "харизма"
 
@@ -20,8 +20,8 @@ class Modifier(StrEnum):
                 return Modifier.DEXTERITY
             case Modifier.CONSTITUTION.name:
                 return Modifier.CONSTITUTION
-            case Modifier.INTELLIGENT.name:
-                return Modifier.INTELLIGENT
+            case Modifier.INTELLECT.name:
+                return Modifier.INTELLECT
             case Modifier.WISDOM.name:
                 return Modifier.WISDOM
             case Modifier.CHARISMA.name:

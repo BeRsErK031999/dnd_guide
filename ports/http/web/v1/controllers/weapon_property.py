@@ -16,6 +16,7 @@ from ports.http.web.v1.providers.di_use_cases import (
 from ports.http.web.v1.schemas.weapon_property import (
     CreateWeaponPropertyDTO,
     CreateWeaponPropertySchema,
+    ReadWeaponPropertyNameSchema,
     ReadWeaponPropertySchema,
     UpdateWeaponPropertyDTO,
     UpdateWeaponPropertySchema,
@@ -80,3 +81,7 @@ class WeaponPropertyController(Controller):
             user_id=uuid4(), weapon_property_id=weapon_property_id
         )
         await use_cases.delete.execute(command)
+
+    @get("/names")
+    async def get_weapon_property_names(self) -> ReadWeaponPropertyNameSchema:
+        return ReadWeaponPropertyNameSchema.from_domain()

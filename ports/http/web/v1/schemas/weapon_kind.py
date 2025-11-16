@@ -1,8 +1,25 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from domain.weapon_kind import WeaponKind
+from domain.weapon_kind import WeaponKind, WeaponType
 from litestar.dto import DataclassDTO
+
+
+@dataclass
+class ReadWeaponTypeSchema:
+    simple_range: str
+    simple_melee: str
+    martial_range: str
+    martial_melee: str
+
+    @staticmethod
+    def from_domain() -> ReadWeaponTypeSchema:
+        return ReadWeaponTypeSchema(
+            **{
+                weapon_type.name.lower(): weapon_type.value
+                for weapon_type in WeaponType
+            }
+        )
 
 
 @dataclass

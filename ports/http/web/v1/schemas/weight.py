@@ -4,6 +4,16 @@ from domain.weight import Weight, WeightUnit
 
 
 @dataclass
+class ReadWeightUnitSchema:
+    lb: str
+    kg: str
+
+    @staticmethod
+    def from_domain() -> ReadWeightUnitSchema:
+        return ReadWeightUnitSchema(lb=WeightUnit.LB.value, kg=WeightUnit.KG.value)
+
+
+@dataclass
 class WeightSchema:
     count: float
     unit: str

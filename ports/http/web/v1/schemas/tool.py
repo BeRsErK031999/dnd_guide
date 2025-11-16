@@ -2,10 +2,29 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
-from domain.tool import Tool, ToolUtilize
+from domain.tool import Tool, ToolType, ToolUtilize
 from litestar.dto import DataclassDTO
 from ports.http.web.v1.schemas.coin import CoinSchema
 from ports.http.web.v1.schemas.weight import WeightSchema
+
+
+@dataclass
+class ReadToolTypeSchema:
+    artisans_tools: str
+    gaming_sets: str
+    musical_instruments: str
+    thieves_tools: str
+    disguise_kit: str
+    forgery_kit: str
+    herbalism_kit: str
+    navigators_tools: str
+    poisoners_kit: str
+
+    @staticmethod
+    def from_domain() -> ReadToolTypeSchema:
+        return ReadToolTypeSchema(
+            **{tool_type.name.lower(): tool_type.value for tool_type in ToolType}
+        )
 
 
 @dataclass

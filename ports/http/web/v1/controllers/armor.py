@@ -14,6 +14,7 @@ from ports.http.web.v1.schemas.armor import (
     CreateArmorDTO,
     CreateArmorSchema,
     ReadArmorSchema,
+    ReadArmorTypeSchema,
     UpdateArmorDTO,
     UpdateArmorSchema,
 )
@@ -55,3 +56,7 @@ class ArmorController(Controller):
     async def delete_armor(self, armor_id: UUID, use_cases: ArmorUseCases) -> None:
         command = DeleteArmorCommand(user_id=uuid4(), armor_id=armor_id)
         await use_cases.delete.execute(command)
+
+    @get("/types")
+    async def get_armor_types(self) -> ReadArmorTypeSchema:
+        return ReadArmorTypeSchema.from_domain()

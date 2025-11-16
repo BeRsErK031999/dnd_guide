@@ -14,6 +14,7 @@ from ports.http.web.v1.schemas.tool import (
     CreateToolDTO,
     CreateToolSchema,
     ReadToolSchema,
+    ReadToolTypeSchema,
     UpdateToolDTO,
     UpdateToolSchema,
 )
@@ -56,3 +57,7 @@ class ToolController(Controller):
     async def delete_tool(self, tool_id: UUID, use_cases: ToolUseCases) -> None:
         command = DeleteToolCommand(user_id=uuid4(), tool_id=tool_id)
         await use_cases.delete.execute(command)
+
+    @get("/types")
+    async def get_tool_types(self) -> ReadToolTypeSchema:
+        return ReadToolTypeSchema.from_domain()

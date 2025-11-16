@@ -11,7 +11,7 @@ class ArmorType(StrEnum):
 
     @staticmethod
     def from_str(name: str) -> ArmorType:
-        match name:
+        match name.upper():
             case ArmorType.LIGHT_ARMOR.name:
                 return ArmorType.LIGHT_ARMOR
             case ArmorType.MEDIUM_ARMOR.name:

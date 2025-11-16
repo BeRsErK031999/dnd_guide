@@ -3,10 +3,30 @@ from uuid import UUID
 
 from domain.dice import Dice
 from domain.length import Length
-from domain.weapon_property import WeaponProperty
+from domain.weapon_property import WeaponProperty, WeaponPropertyName
 from litestar.dto import DataclassDTO
 from ports.http.web.v1.schemas.dice import DiceSchema
 from ports.http.web.v1.schemas.length import LengthSchema
+
+
+@dataclass
+class ReadWeaponPropertyNameSchema:
+    ammunition: str
+    finesse: str
+    heavy: str
+    light: str
+    reach: str
+    special: str
+    thrown: str
+    two_handed: str
+    versatile: str
+    distance: str
+
+    @staticmethod
+    def from_domain() -> ReadWeaponPropertyNameSchema:
+        return ReadWeaponPropertyNameSchema(
+            **{name.name.lower(): name.value for name in WeaponPropertyName}
+        )
 
 
 @dataclass
