@@ -11,10 +11,8 @@ from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import SpellUseCases, di_spell_use_cases
 from ports.http.web.v1.schemas.spell import (
-    CreateSpellDTO,
     CreateSpellSchema,
     ReadSpellSchema,
-    UpdateSpellDTO,
     UpdateSpellSchema,
 )
 
@@ -37,21 +35,21 @@ class SpellController(Controller):
         spells = await use_cases.get_all.execute()
         return [ReadSpellSchema.from_domain(spell) for spell in spells]
 
-    @post(dto=CreateSpellDTO)
+    @post()
     async def create_spell(
-        self, spell: CreateSpellSchema, use_cases: SpellUseCases
+        self, data: CreateSpellSchema, use_cases: SpellUseCases
     ) -> UUID:
-        command = CreateSpellCommand(user_id=uuid4(), **asdict(spell))
+        command = CreateSpellCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{spell_id:uuid}", dto=UpdateSpellDTO)
+    @put("/{spell_id:uuid}")
     async def update_spell(
         self,
         spell_id: UUID,
-        spell: UpdateSpellSchema,
+        data: UpdateSpellSchema,
         use_cases: SpellUseCases,
     ) -> None:
-        command = UpdateSpellCommand(spell_id=spell_id, **asdict(spell))
+        command = UpdateSpellCommand(spell_id=spell_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{spell_id:uuid}")

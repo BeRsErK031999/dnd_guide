@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from domain.material_component import MaterialComponent
-from litestar.dto import DataclassDTO
 
 
 @dataclass
@@ -26,15 +25,7 @@ class CreateMaterialComponentSchema:
     description: str
 
 
-class CreateMaterialComponentDTO(DataclassDTO[CreateMaterialComponentSchema]):
-    pass
-
-
 @dataclass
 class UpdateMaterialComponentSchema:
     name: str | None
     description: str | None
-
-
-class UpdateMaterialComponentDTO(DataclassDTO[UpdateMaterialComponentSchema]):
-    pass

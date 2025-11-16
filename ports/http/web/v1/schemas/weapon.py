@@ -3,7 +3,6 @@ from typing import Sequence
 from uuid import UUID
 
 from domain.weapon import Weapon, WeaponDamage
-from litestar.dto import DataclassDTO
 from ports.http.web.v1.schemas.coin import CoinSchema
 from ports.http.web.v1.schemas.dice import DiceSchema
 from ports.http.web.v1.schemas.weight import WeightSchema
@@ -63,10 +62,6 @@ class CreateWeaponSchema:
     material_id: UUID
 
 
-class CreateWeaponDTO(DataclassDTO[CreateWeaponSchema]):
-    pass
-
-
 @dataclass
 class UpdateWeaponSchema:
     weapon_kind_id: UUID | None = None
@@ -77,7 +72,3 @@ class UpdateWeaponSchema:
     weight: WeightSchema | None = None
     weapon_property_ids: Sequence[UUID] | None = None
     material_id: UUID | None = None
-
-
-class UpdateWeaponDTO(DataclassDTO[UpdateWeaponSchema]):
-    pass

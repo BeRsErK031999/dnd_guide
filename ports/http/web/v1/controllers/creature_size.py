@@ -14,10 +14,8 @@ from ports.http.web.v1.providers.di_use_cases import (
     di_creature_size_use_cases,
 )
 from ports.http.web.v1.schemas.creature_size import (
-    CreateCreatureSizeDTO,
     CreateCreatureSizeSchema,
     ReadCreatureSizeSchema,
-    UpdateCreatureSizeDTO,
     UpdateCreatureSizeSchema,
 )
 
@@ -49,21 +47,21 @@ class CreatureSizeController(Controller):
             for creature_size in creature_sizes
         ]
 
-    @post(dto=CreateCreatureSizeDTO)
+    @post()
     async def create_size(
-        self, size: CreateCreatureSizeSchema, use_cases: CreatureSizeUseCases
+        self, data: CreateCreatureSizeSchema, use_cases: CreatureSizeUseCases
     ) -> UUID:
-        command = CreateCreatureSizeCommand(user_id=uuid4(), **asdict(size))
+        command = CreateCreatureSizeCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{size_id:uuid}", dto=UpdateCreatureSizeDTO)
+    @put("/{size_id:uuid}")
     async def update_size(
         self,
         size_id: UUID,
-        size: UpdateCreatureSizeSchema,
+        data: UpdateCreatureSizeSchema,
         use_cases: CreatureSizeUseCases,
     ) -> None:
-        command = UpdateCreatureSizeCommand(size_id=size_id, **asdict(size))
+        command = UpdateCreatureSizeCommand(size_id=size_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{size_id:uuid}")

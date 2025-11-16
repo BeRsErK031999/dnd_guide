@@ -14,10 +14,8 @@ from ports.http.web.v1.providers.di_use_cases import (
     di_class_level_use_cases,
 )
 from ports.http.web.v1.schemas.class_level import (
-    CreateClassLevelDTO,
     CreateClassLevelSchema,
     ReadClassLevelSchema,
-    UpdateClassLevelDTO,
     UpdateClassLevelSchema,
 )
 
@@ -44,23 +42,21 @@ class ClassLevelController(Controller):
         levels = await use_cases.get_all.execute()
         return [ReadClassLevelSchema.from_domain(level) for level in levels]
 
-    @post(dto=CreateClassLevelDTO)
+    @post()
     async def create_class_level(
-        self, class_level: CreateClassLevelSchema, use_cases: ClassLevelUseCases
+        self, data: CreateClassLevelSchema, use_cases: ClassLevelUseCases
     ) -> UUID:
-        command = CreateClassLevelCommand(user_id=uuid4(), **asdict(class_level))
+        command = CreateClassLevelCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{class_level_id:uuid}", dto=UpdateClassLevelDTO)
+    @put("/{class_level_id:uuid}")
     async def update_class_level(
         self,
         class_level_id: UUID,
-        class_level: UpdateClassLevelSchema,
+        data: UpdateClassLevelSchema,
         use_cases: ClassLevelUseCases,
     ) -> None:
-        command = UpdateClassLevelCommand(
-            class_level_id=class_level_id, **asdict(class_level)
-        )
+        command = UpdateClassLevelCommand(class_level_id=class_level_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{class_level_id:uuid}")

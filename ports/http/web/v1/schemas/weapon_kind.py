@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from domain.weapon_kind import WeaponKind, WeaponType
-from litestar.dto import DataclassDTO
 
 
 @dataclass
@@ -46,16 +45,8 @@ class CreateWeaponKindSchema:
     description: str
 
 
-class CreateWeaponKindDTO(DataclassDTO[CreateWeaponKindSchema]):
-    pass
-
-
 @dataclass
 class UpdateWeaponKindSchema:
     weapon_type: str | None = None
     name: str | None = None
     description: str | None = None
-
-
-class UpdateWeaponKindDTO(DataclassDTO[UpdateWeaponKindSchema]):
-    pass

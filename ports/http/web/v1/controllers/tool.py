@@ -11,11 +11,9 @@ from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import ToolUseCases, di_tool_use_cases
 from ports.http.web.v1.schemas.tool import (
-    CreateToolDTO,
     CreateToolSchema,
     ReadToolSchema,
     ReadToolTypeSchema,
-    UpdateToolDTO,
     UpdateToolSchema,
 )
 
@@ -36,21 +34,21 @@ class ToolController(Controller):
         tools = await use_cases.get_all.execute()
         return [ReadToolSchema.from_domain(tool) for tool in tools]
 
-    @post(dto=CreateToolDTO)
+    @post()
     async def create_tool(
-        self, tool: CreateToolSchema, use_cases: ToolUseCases
+        self, data: CreateToolSchema, use_cases: ToolUseCases
     ) -> UUID:
-        command = CreateToolCommand(user_id=uuid4(), **asdict(tool))
+        command = CreateToolCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{tool_id:uuid}", dto=UpdateToolDTO)
+    @put("/{tool_id:uuid}")
     async def update_tool(
         self,
         tool_id: UUID,
-        tool: UpdateToolSchema,
+        data: UpdateToolSchema,
         use_cases: ToolUseCases,
     ) -> None:
-        command = UpdateToolCommand(tool_id=tool_id, **asdict(tool))
+        command = UpdateToolCommand(tool_id=tool_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{tool_id:uuid}")

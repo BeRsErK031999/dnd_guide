@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from domain.class_feature import ClassFeature
-from litestar.dto import DataclassDTO
 
 
 @dataclass
@@ -35,10 +34,6 @@ class CreateClassFeatureSchema:
     name_in_english: str
 
 
-class CreateClassFeatureDTO(DataclassDTO[CreateClassFeatureSchema]):
-    pass
-
-
 @dataclass
 class UpdateClassFeatureSchema:
     class_id: UUID | None
@@ -46,7 +41,3 @@ class UpdateClassFeatureSchema:
     description: str | None
     level: int | None
     name_in_english: str | None
-
-
-class UpdateClassFeatureDTO(DataclassDTO[UpdateClassFeatureSchema]):
-    pass

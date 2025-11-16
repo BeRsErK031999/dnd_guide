@@ -11,10 +11,8 @@ from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import ClassUseCases, di_class_use_cases
 from ports.http.web.v1.schemas.character_class import (
-    CreateClassDTO,
     CreateClassSchema,
     ReadClassSchema,
-    UpdateClassDTO,
     UpdateClassSchema,
 )
 
@@ -39,21 +37,21 @@ class ClassController(Controller):
             ReadClassSchema.from_domain(character_class) for character_class in classes
         ]
 
-    @post(dto=CreateClassDTO)
+    @post()
     async def create_class(
-        self, character_class: CreateClassSchema, use_cases: ClassUseCases
+        self, data: CreateClassSchema, use_cases: ClassUseCases
     ) -> UUID:
-        command = CreateClassCommand(user_id=uuid4(), **asdict(character_class))
+        command = CreateClassCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{class_id:uuid}", dto=UpdateClassDTO)
+    @put("/{class_id:uuid}")
     async def update_class(
         self,
         class_id: UUID,
-        character_class: UpdateClassSchema,
+        data: UpdateClassSchema,
         use_cases: ClassUseCases,
     ) -> None:
-        command = UpdateClassCommand(class_id=class_id, **asdict(character_class))
+        command = UpdateClassCommand(class_id=class_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{class_id:uuid}")

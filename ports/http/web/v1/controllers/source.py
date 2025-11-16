@@ -11,10 +11,8 @@ from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import SourceUseCases, di_source_use_cases
 from ports.http.web.v1.schemas.source import (
-    CreateSourceDTO,
     CreateSourceSchema,
     ReadSourceSchema,
-    UpdateSourceDTO,
     UpdateSourceSchema,
 )
 
@@ -37,21 +35,21 @@ class SourceController(Controller):
         sources = await use_cases.get_all.execute()
         return [ReadSourceSchema.from_domain(source) for source in sources]
 
-    @post(dto=CreateSourceDTO)
+    @post()
     async def create_source(
-        self, source: CreateSourceSchema, use_cases: SourceUseCases
+        self, data: CreateSourceSchema, use_cases: SourceUseCases
     ) -> UUID:
-        command = CreateSourceCommand(user_id=uuid4(), **asdict(source))
+        command = CreateSourceCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{source_id:uuid}", dto=UpdateSourceDTO)
+    @put("/{source_id:uuid}")
     async def update_source(
         self,
         source_id: UUID,
-        source: UpdateSourceSchema,
+        data: UpdateSourceSchema,
         use_cases: SourceUseCases,
     ) -> None:
-        command = UpdateSourceCommand(source_id=source_id, **asdict(source))
+        command = UpdateSourceCommand(source_id=source_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{source_id:uuid}")

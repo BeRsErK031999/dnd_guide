@@ -11,10 +11,8 @@ from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import FeatUseCases, di_feat_use_cases
 from ports.http.web.v1.schemas.feat import (
-    CreateFeatDTO,
     CreateFeatSchema,
     ReadFeatSchema,
-    UpdateFeatDTO,
     UpdateFeatSchema,
 )
 
@@ -35,21 +33,21 @@ class FeatController(Controller):
         feats = await use_cases.get_all.execute()
         return [ReadFeatSchema.from_domain(feat) for feat in feats]
 
-    @post(dto=CreateFeatDTO)
+    @post()
     async def create_feat(
-        self, feat: CreateFeatSchema, use_cases: FeatUseCases
+        self, data: CreateFeatSchema, use_cases: FeatUseCases
     ) -> UUID:
-        command = CreateFeatCommand(user_id=uuid4(), **asdict(feat))
+        command = CreateFeatCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{feat_id:uuid}", dto=UpdateFeatDTO)
+    @put("/{feat_id:uuid}")
     async def update_feat(
         self,
         feat_id: UUID,
-        feat: UpdateFeatSchema,
+        data: UpdateFeatSchema,
         use_cases: FeatUseCases,
     ) -> None:
-        command = UpdateFeatCommand(feat_id=feat_id, **asdict(feat))
+        command = UpdateFeatCommand(feat_id=feat_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{feat_id:uuid}")

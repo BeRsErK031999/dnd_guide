@@ -14,10 +14,8 @@ from ports.http.web.v1.providers.di_use_cases import (
     di_subrace_use_cases,
 )
 from ports.http.web.v1.schemas.subrace import (
-    CreateSubraceDTO,
     CreateSubraceSchema,
     ReadSubraceSchema,
-    UpdateSubraceDTO,
     UpdateSubraceSchema,
 )
 
@@ -40,21 +38,21 @@ class SubraceController(Controller):
         subraces = await use_cases.get_all.execute()
         return [ReadSubraceSchema.from_domain(subrace) for subrace in subraces]
 
-    @post(dto=CreateSubraceDTO)
+    @post()
     async def create_subrace(
-        self, subrace: CreateSubraceSchema, use_cases: SubraceUseCases
+        self, data: CreateSubraceSchema, use_cases: SubraceUseCases
     ) -> UUID:
-        command = CreateSubraceCommand(user_id=uuid4(), **asdict(subrace))
+        command = CreateSubraceCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{subrace_id:uuid}", dto=UpdateSubraceDTO)
+    @put("/{subrace_id:uuid}")
     async def update_subrace(
         self,
         subrace_id: UUID,
-        feature: UpdateSubraceSchema,
+        data: UpdateSubraceSchema,
         use_cases: SubraceUseCases,
     ) -> None:
-        subrace = UpdateSubraceCommand(subrace_id=subrace_id, **asdict(feature))
+        subrace = UpdateSubraceCommand(subrace_id=subrace_id, **asdict(data))
         await use_cases.update.execute(subrace)
 
     @delete("/{subrace_id:uuid}")

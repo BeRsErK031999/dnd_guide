@@ -14,10 +14,8 @@ from ports.http.web.v1.providers.di_use_cases import (
     di_class_feature_use_cases,
 )
 from ports.http.web.v1.schemas.class_feature import (
-    CreateClassFeatureDTO,
     CreateClassFeatureSchema,
     ReadClassFeatureSchema,
-    UpdateClassFeatureDTO,
     UpdateClassFeatureSchema,
 )
 
@@ -46,21 +44,21 @@ class ClassFeatureController(Controller):
         features = await use_cases.get_all.execute()
         return [ReadClassFeatureSchema.from_domain(feature) for feature in features]
 
-    @post(dto=CreateClassFeatureDTO)
+    @post()
     async def create_feature(
-        self, feature: CreateClassFeatureSchema, use_cases: ClassFeatureUseCases
+        self, data: CreateClassFeatureSchema, use_cases: ClassFeatureUseCases
     ) -> UUID:
-        command = CreateClassFeatureCommand(user_id=uuid4(), **asdict(feature))
+        command = CreateClassFeatureCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{feature_id:uuid}", dto=UpdateClassFeatureDTO)
+    @put("/{feature_id:uuid}")
     async def update_feature(
         self,
         feature_id: UUID,
-        feature: UpdateClassFeatureSchema,
+        data: UpdateClassFeatureSchema,
         use_cases: ClassFeatureUseCases,
     ) -> None:
-        command = UpdateClassFeatureCommand(feature_id=feature_id, **asdict(feature))
+        command = UpdateClassFeatureCommand(feature_id=feature_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{feature_id:uuid}")

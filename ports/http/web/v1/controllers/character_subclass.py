@@ -14,10 +14,8 @@ from ports.http.web.v1.providers.di_use_cases import (
     di_subclass_use_cases,
 )
 from ports.http.web.v1.schemas.character_subclass import (
-    CreateSubclassDTO,
     CreateSubclassSchema,
     ReadSubclassSchema,
-    UpdateSubclassDTO,
     UpdateSubclassSchema,
 )
 
@@ -44,21 +42,21 @@ class SubclassController(Controller):
         subclasses = await use_cases.get_all.execute()
         return [ReadSubclassSchema.from_domain(subclass) for subclass in subclasses]
 
-    @post(dto=CreateSubclassDTO)
+    @post()
     async def create_subclass(
-        self, subclass: CreateSubclassSchema, use_cases: SubclassUseCases
+        self, data: CreateSubclassSchema, use_cases: SubclassUseCases
     ) -> UUID:
-        command = CreateSubclassCommand(user_id=uuid4(), **asdict(subclass))
+        command = CreateSubclassCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{subclass_id:uuid}", dto=UpdateSubclassDTO)
+    @put("/{subclass_id:uuid}")
     async def update_subclass(
         self,
         subclass_id: UUID,
-        subclass: UpdateSubclassSchema,
+        data: UpdateSubclassSchema,
         use_cases: SubclassUseCases,
     ) -> None:
-        command = UpdateSubclassCommand(subclass_id=subclass_id, **asdict(subclass))
+        command = UpdateSubclassCommand(subclass_id=subclass_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{subclass_id:uuid}")

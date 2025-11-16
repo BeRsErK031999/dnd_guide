@@ -14,10 +14,8 @@ from ports.http.web.v1.providers.di_use_cases import (
     di_creature_type_use_cases,
 )
 from ports.http.web.v1.schemas.creature_type import (
-    CreateCreatureTypeDTO,
     CreateCreatureTypeSchema,
     ReadCreatureTypeSchema,
-    UpdateCreatureTypeDTO,
     UpdateCreatureTypeSchema,
 )
 
@@ -49,21 +47,21 @@ class CreatureTypeController(Controller):
             for creature_type in creature_types
         ]
 
-    @post(dto=CreateCreatureTypeDTO)
+    @post()
     async def create_type(
-        self, feature: CreateCreatureTypeSchema, use_cases: CreatureTypeUseCases
+        self, data: CreateCreatureTypeSchema, use_cases: CreatureTypeUseCases
     ) -> UUID:
-        command = CreateCreatureTypeCommand(user_id=uuid4(), **asdict(feature))
+        command = CreateCreatureTypeCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{type_id:uuid}", dto=UpdateCreatureTypeDTO)
+    @put("/{type_id:uuid}")
     async def update_type(
         self,
         type_id: UUID,
-        creature_type: UpdateCreatureTypeSchema,
+        data: UpdateCreatureTypeSchema,
         use_cases: CreatureTypeUseCases,
     ) -> None:
-        command = UpdateCreatureTypeCommand(type_id=type_id, **asdict(creature_type))
+        command = UpdateCreatureTypeCommand(type_id=type_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{type_id:uuid}")

@@ -3,7 +3,6 @@ from typing import Sequence
 from uuid import UUID
 
 from domain.tool import Tool, ToolType, ToolUtilize
-from litestar.dto import DataclassDTO
 from ports.http.web.v1.schemas.coin import CoinSchema
 from ports.http.web.v1.schemas.weight import WeightSchema
 
@@ -75,10 +74,6 @@ class CreateToolSchema:
     utilizes: Sequence[ToolUtilizesSchema]
 
 
-class CreateToolDTO(DataclassDTO[CreateToolSchema]):
-    pass
-
-
 @dataclass
 class UpdateToolSchema:
     tool_type: str | None = None
@@ -87,7 +82,3 @@ class UpdateToolSchema:
     cost: CoinSchema | None = None
     weight: WeightSchema | None = None
     utilizes: Sequence[ToolUtilizesSchema] | None = None
-
-
-class UpdateToolDTO(DataclassDTO[UpdateToolSchema]):
-    pass

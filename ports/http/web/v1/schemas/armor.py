@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from domain.armor import Armor, ArmorClass, ArmorType
-from litestar.dto import DataclassDTO
 from ports.http.web.v1.schemas.coin import CoinSchema
 from ports.http.web.v1.schemas.weight import WeightSchema
 
@@ -79,10 +78,6 @@ class CreateArmorSchema:
     material_id: UUID
 
 
-class CreateArmorDTO(DataclassDTO[CreateArmorSchema]):
-    pass
-
-
 @dataclass
 class UpdateArmorSchema:
     armor_id: UUID
@@ -95,7 +90,3 @@ class UpdateArmorSchema:
     weight: WeightSchema | None = None
     cost: CoinSchema | None = None
     material_id: UUID | None = None
-
-
-class UpdateArmorDTO(DataclassDTO[UpdateArmorSchema]):
-    pass

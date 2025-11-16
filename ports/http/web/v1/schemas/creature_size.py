@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from domain.creature_size import CreatureSize
-from litestar.dto import DataclassDTO
 
 
 @dataclass
@@ -26,15 +25,7 @@ class CreateCreatureSizeSchema:
     description: str
 
 
-class CreateCreatureSizeDTO(DataclassDTO[CreateCreatureSizeSchema]):
-    pass
-
-
 @dataclass
 class UpdateCreatureSizeSchema:
     name: str | None
     description: str | None
-
-
-class UpdateCreatureSizeDTO(DataclassDTO[UpdateCreatureSizeSchema]):
-    pass

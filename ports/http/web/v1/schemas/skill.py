@@ -1,8 +1,5 @@
 from dataclasses import dataclass
-from enum import StrEnum
 
-from domain.error import DomainError
-from domain.modifier import Modifier
 from domain.skill import Skill
 
 

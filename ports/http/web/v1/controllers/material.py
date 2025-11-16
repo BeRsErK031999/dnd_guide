@@ -14,10 +14,8 @@ from ports.http.web.v1.providers.di_use_cases import (
     di_material_use_cases,
 )
 from ports.http.web.v1.schemas.material import (
-    CreateMaterialDTO,
     CreateMaterialSchema,
     ReadMaterialSchema,
-    UpdateMaterialDTO,
     UpdateMaterialSchema,
 )
 
@@ -44,21 +42,21 @@ class MaterialController(Controller):
         materials = await use_cases.get_all.execute()
         return [ReadMaterialSchema.from_domain(material) for material in materials]
 
-    @post(dto=CreateMaterialDTO)
+    @post()
     async def create_material(
-        self, material: CreateMaterialSchema, use_cases: MaterialUseCases
+        self, data: CreateMaterialSchema, use_cases: MaterialUseCases
     ) -> UUID:
-        command = CreateMaterialCommand(user_id=uuid4(), **asdict(material))
+        command = CreateMaterialCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{material_id:uuid}", dto=UpdateMaterialDTO)
+    @put("/{material_id:uuid}")
     async def update_material(
         self,
         material_id: UUID,
-        material: UpdateMaterialSchema,
+        data: UpdateMaterialSchema,
         use_cases: MaterialUseCases,
     ) -> None:
-        command = UpdateMaterialCommand(material_id=material_id, **asdict(material))
+        command = UpdateMaterialCommand(material_id=material_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{material_id:uuid}")

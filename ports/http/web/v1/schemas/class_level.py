@@ -9,7 +9,6 @@ from domain.class_level import (
     ClassLevelIncreaseSpeed,
     ClassLevelPoints,
 )
-from litestar.dto import DataclassDTO
 from ports.http.web.v1.schemas.dice import DiceSchema
 from ports.http.web.v1.schemas.length import LengthSchema
 
@@ -131,10 +130,6 @@ class CreateClassLevelSchema:
     increase_speed: ClassLevelIncreaseSpeedSchema | None
 
 
-class CreateClassLevelDTO(DataclassDTO[CreateClassLevelSchema]):
-    pass
-
-
 @dataclass
 class UpdateClassLevelSchema:
     class_id: UUID | None
@@ -147,7 +142,3 @@ class UpdateClassLevelSchema:
     points: ClassLevelPointsSchema | None
     bonus_damage: ClassLevelBonusDamageSchema | None
     increase_speed: ClassLevelIncreaseSpeedSchema | None
-
-
-class UpdateClassLevelDTO(DataclassDTO[UpdateClassLevelSchema]):
-    pass

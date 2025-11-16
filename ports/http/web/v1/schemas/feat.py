@@ -3,7 +3,6 @@ from typing import Sequence
 from uuid import UUID
 
 from domain.feat import Feat, FeatRequiredModifier
-from litestar.dto import DataclassDTO
 
 
 @dataclass
@@ -58,10 +57,6 @@ class CreateFeatSchema:
     increase_modifiers: Sequence[str]
 
 
-class CreateFeatDTO(DataclassDTO[CreateFeatSchema]):
-    pass
-
-
 @dataclass
 class UpdateFeatSchema:
     name: str | None = None
@@ -70,7 +65,3 @@ class UpdateFeatSchema:
     required_armor_types: Sequence[str] | None = None
     required_modifiers: Sequence[FeatRequiredModifierSchema] | None = None
     increase_modifiers: Sequence[str] | None = None
-
-
-class UpdateFeatDTO(DataclassDTO[UpdateFeatSchema]):
-    pass

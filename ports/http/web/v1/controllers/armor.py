@@ -11,11 +11,9 @@ from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import ArmorUseCases, di_armor_use_cases
 from ports.http.web.v1.schemas.armor import (
-    CreateArmorDTO,
     CreateArmorSchema,
     ReadArmorSchema,
     ReadArmorTypeSchema,
-    UpdateArmorDTO,
     UpdateArmorSchema,
 )
 
@@ -38,18 +36,18 @@ class ArmorController(Controller):
         armors = await use_cases.get_all.execute()
         return [ReadArmorSchema.from_domain(armor) for armor in armors]
 
-    @post(dto=CreateArmorDTO)
+    @post()
     async def create_armor(
-        self, armor: CreateArmorSchema, use_cases: ArmorUseCases
+        self, data: CreateArmorSchema, use_cases: ArmorUseCases
     ) -> UUID:
-        command = CreateArmorCommand(user_id=uuid4(), **asdict(armor))
+        command = CreateArmorCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{armor_id:uuid}", dto=UpdateArmorDTO)
+    @put("/{armor_id:uuid}")
     async def update_armor(
-        self, armor_id: UUID, armor: UpdateArmorSchema, use_cases: ArmorUseCases
+        self, armor_id: UUID, data: UpdateArmorSchema, use_cases: ArmorUseCases
     ) -> None:
-        command = UpdateArmorCommand(armor_id=armor_id, **asdict(armor))
+        command = UpdateArmorCommand(armor_id=armor_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{armor_id:uuid}")

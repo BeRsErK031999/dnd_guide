@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from domain.source import Source
-from litestar.dto import DataclassDTO
 
 
 @dataclass
@@ -29,16 +28,8 @@ class CreateSourceSchema:
     name_in_english: str
 
 
-class CreateSourceDTO(DataclassDTO[CreateSourceSchema]):
-    pass
-
-
 @dataclass
 class UpdateSourceSchema:
     name: str | None = None
     description: str | None = None
     name_in_english: str | None = None
-
-
-class UpdateSourceDTO(DataclassDTO[UpdateSourceSchema]):
-    pass

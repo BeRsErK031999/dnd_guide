@@ -3,7 +3,6 @@ from typing import Sequence
 from uuid import UUID
 
 from domain.race import Race, RaceAge, RaceFeature, RaceIncreaseModifier, RaceSpeed
-from litestar.dto import DataclassDTO
 from ports.http.web.v1.schemas.length import LengthSchema
 
 
@@ -109,10 +108,6 @@ class CreateRaceSchema:
     name_in_english: str
 
 
-class CreateRaceDTO(DataclassDTO[CreateRaceSchema]):
-    pass
-
-
 @dataclass
 class UpdateRaceSchema:
     name: str | None = None
@@ -127,7 +122,3 @@ class UpdateRaceSchema:
     remove_features: Sequence[str] | None = None
     name_in_english: str | None = None
     source_id: UUID | None = None
-
-
-class UpdateRaceDTO(DataclassDTO[UpdateRaceSchema]):
-    pass

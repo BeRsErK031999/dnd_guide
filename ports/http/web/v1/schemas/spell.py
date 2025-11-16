@@ -6,7 +6,6 @@ from domain.damage_type import DamageType
 from domain.game_time import GameTime
 from domain.length import Length
 from domain.spell import Spell, SpellComponents
-from litestar.dto import DataclassDTO
 from ports.http.web.v1.schemas.game_time import GameTimeSchema
 from ports.http.web.v1.schemas.length import LengthSchema
 
@@ -135,10 +134,6 @@ class CreateSpellSchema:
     source_id: UUID
 
 
-class CreateSpellDTO(DataclassDTO[CreateSpellSchema]):
-    pass
-
-
 @dataclass
 class UpdateSpellSchema:
     class_ids: Sequence[UUID] | None = None
@@ -159,7 +154,3 @@ class UpdateSpellSchema:
     saving_throws: Sequence[str] | None = None
     name_in_english: str | None = None
     source_id: UUID | None = None
-
-
-class UpdateSpellDTO(DataclassDTO[UpdateSpellSchema]):
-    pass

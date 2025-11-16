@@ -14,10 +14,8 @@ from ports.http.web.v1.providers.di_use_cases import (
     di_weapon_kind_use_cases,
 )
 from ports.http.web.v1.schemas.weapon_kind import (
-    CreateWeaponKindDTO,
     CreateWeaponKindSchema,
     ReadWeaponKindSchema,
-    UpdateWeaponKindDTO,
     UpdateWeaponKindSchema,
 )
 
@@ -47,23 +45,21 @@ class WeaponKindController(Controller):
             for weapon_kind in weapon_kinds
         ]
 
-    @post(dto=CreateWeaponKindDTO)
+    @post()
     async def create_weapon_kind(
-        self, weapon_kind: CreateWeaponKindSchema, use_cases: WeaponKindUseCases
+        self, data: CreateWeaponKindSchema, use_cases: WeaponKindUseCases
     ) -> UUID:
-        command = CreateWeaponKindCommand(user_id=uuid4(), **asdict(weapon_kind))
+        command = CreateWeaponKindCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{weapon_kind_id:uuid}", dto=UpdateWeaponKindDTO)
+    @put("/{weapon_kind_id:uuid}")
     async def update_weapon_kind(
         self,
         weapon_kind_id: UUID,
-        weapon_kind: UpdateWeaponKindSchema,
+        data: UpdateWeaponKindSchema,
         use_cases: WeaponKindUseCases,
     ) -> None:
-        command = UpdateWeaponKindCommand(
-            weapon_kind_id=weapon_kind_id, **asdict(weapon_kind)
-        )
+        command = UpdateWeaponKindCommand(weapon_kind_id=weapon_kind_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{weapon_kind_id:uuid}")

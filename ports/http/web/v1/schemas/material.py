@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 from domain.material import Material
-from litestar.dto import DataclassDTO
 
 
 @dataclass
@@ -23,15 +22,7 @@ class CreateMaterialSchema:
     description: str
 
 
-class CreateMaterialDTO(DataclassDTO[CreateMaterialSchema]):
-    pass
-
-
 @dataclass
 class UpdateMaterialSchema:
     name: str | None
     description: str | None
-
-
-class UpdateMaterialDTO(DataclassDTO[CreateMaterialSchema]):
-    pass

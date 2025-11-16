@@ -3,7 +3,6 @@ from typing import Sequence
 from uuid import UUID
 
 from domain.character_class import CharacterClass, ClassHits, ClassProficiencies
-from litestar.dto import DataclassDTO
 from ports.http.web.v1.schemas.dice import DiceSchema
 
 
@@ -85,10 +84,6 @@ class CreateClassSchema:
     source_id: UUID
 
 
-class CreateClassDTO(DataclassDTO[CreateClassSchema]):
-    pass
-
-
 @dataclass
 class UpdateClassSchema:
     name: str | None = None
@@ -98,7 +93,3 @@ class UpdateClassSchema:
     proficiencies: ClassProficienciesSchema | None = None
     name_in_english: str | None = None
     source_id: UUID | None = None
-
-
-class UpdateClassDTO(DataclassDTO[UpdateClassSchema]):
-    pass

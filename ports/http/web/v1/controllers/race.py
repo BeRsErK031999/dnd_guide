@@ -11,10 +11,8 @@ from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import RaceUseCases, di_race_use_cases
 from ports.http.web.v1.schemas.race import (
-    CreateRaceDTO,
     CreateRaceSchema,
     ReadRaceSchema,
-    UpdateRaceDTO,
     UpdateRaceSchema,
 )
 
@@ -35,21 +33,21 @@ class RaceController(Controller):
         races = await use_cases.get_all.execute()
         return [ReadRaceSchema.from_domain(race) for race in races]
 
-    @post(dto=CreateRaceDTO)
+    @post()
     async def create_race(
-        self, race: CreateRaceSchema, use_cases: RaceUseCases
+        self, data: CreateRaceSchema, use_cases: RaceUseCases
     ) -> UUID:
-        command = CreateRaceCommand(user_id=uuid4(), **asdict(race))
+        command = CreateRaceCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{race_id:uuid}", dto=UpdateRaceDTO)
+    @put("/{race_id:uuid}")
     async def update_race(
         self,
         race_id: UUID,
-        race: UpdateRaceSchema,
+        data: UpdateRaceSchema,
         use_cases: RaceUseCases,
     ) -> None:
-        command = UpdateRaceCommand(race_id=race_id, **asdict(race))
+        command = UpdateRaceCommand(race_id=race_id, **asdict(data))
         await use_cases.update.execute(command)
 
     @delete("/{race_id:uuid}")

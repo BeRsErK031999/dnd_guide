@@ -3,7 +3,6 @@ from typing import Sequence
 from uuid import UUID
 
 from domain.subrace import Subrace, SubraceFeature, SubraceIncreaseModifier
-from litestar.dto import DataclassDTO
 
 
 @dataclass
@@ -71,10 +70,6 @@ class CreateSubraceSchema:
     features: Sequence[SubraceFeatureSchema]
 
 
-class CreateSubraceDTO(DataclassDTO[CreateSubraceSchema]):
-    pass
-
-
 @dataclass
 class UpdateSubraceSchema:
     race_id: UUID
@@ -85,7 +80,3 @@ class UpdateSubraceSchema:
     add_features: Sequence[SubraceFeatureSchema] | None = None
     remove_features: Sequence[str] | None = None
     name_in_english: str | None = None
-
-
-class UpdateSubraceDTO(DataclassDTO[UpdateSubraceSchema]):
-    pass

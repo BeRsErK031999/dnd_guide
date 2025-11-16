@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from uuid import UUID
 
 from domain.character_subclass import CharacterSubclass
-from litestar.dto import DataclassDTO
 
 
 @dataclass
@@ -29,16 +28,8 @@ class CreateSubclassSchema:
     name_in_english: str
 
 
-class CreateSubclassDTO(DataclassDTO[CreateSubclassSchema]):
-    pass
-
-
 @dataclass
 class UpdateSubclassSchema:
     name: str | None
     description: str | None
     name_in_english: str | None
-
-
-class UpdateSubclassDTO(DataclassDTO[UpdateSubclassSchema]):
-    pass

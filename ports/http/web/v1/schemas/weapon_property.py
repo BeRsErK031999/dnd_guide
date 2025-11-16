@@ -4,7 +4,6 @@ from uuid import UUID
 from domain.dice import Dice
 from domain.length import Length
 from domain.weapon_property import WeaponProperty, WeaponPropertyName
-from litestar.dto import DataclassDTO
 from ports.http.web.v1.schemas.dice import DiceSchema
 from ports.http.web.v1.schemas.length import LengthSchema
 
@@ -101,10 +100,6 @@ class CreateWeaponPropertySchema:
     second_hand_dice: WeaponPropertySecondHandDiceSchema | None = None
 
 
-class CreateWeaponPropertyDTO(DataclassDTO[CreateWeaponPropertySchema]):
-    pass
-
-
 @dataclass
 class UpdateWeaponPropertySchema:
     name: str | None = None
@@ -112,7 +107,3 @@ class UpdateWeaponPropertySchema:
     base_range: WeaponPropertyBaseRangeSchema | None = None
     max_range: WeaponPropertyMaxRangeSchema | None = None
     second_hand_dice: WeaponPropertySecondHandDiceSchema | None = None
-
-
-class UpdateWeaponPropertyDTO(DataclassDTO[UpdateWeaponPropertySchema]):
-    pass

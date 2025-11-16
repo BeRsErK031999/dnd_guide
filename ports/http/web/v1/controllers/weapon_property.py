@@ -14,11 +14,9 @@ from ports.http.web.v1.providers.di_use_cases import (
     di_weapon_property_use_cases,
 )
 from ports.http.web.v1.schemas.weapon_property import (
-    CreateWeaponPropertyDTO,
     CreateWeaponPropertySchema,
     ReadWeaponPropertyNameSchema,
     ReadWeaponPropertySchema,
-    UpdateWeaponPropertyDTO,
     UpdateWeaponPropertySchema,
 )
 
@@ -50,26 +48,24 @@ class WeaponPropertyController(Controller):
             for weapon_property in weapon_properties
         ]
 
-    @post(dto=CreateWeaponPropertyDTO)
+    @post()
     async def create_weapon_property(
         self,
-        weapon_property: CreateWeaponPropertySchema,
+        data: CreateWeaponPropertySchema,
         use_cases: WeaponPropertyUseCases,
     ) -> UUID:
-        command = CreateWeaponPropertyCommand(
-            user_id=uuid4(), **asdict(weapon_property)
-        )
+        command = CreateWeaponPropertyCommand(user_id=uuid4(), **asdict(data))
         return await use_cases.create.execute(command)
 
-    @put("/{weapon_property_id:uuid}", dto=UpdateWeaponPropertyDTO)
+    @put("/{weapon_property_id:uuid}")
     async def update_weapon_property(
         self,
         weapon_property_id: UUID,
-        weapon_property: UpdateWeaponPropertySchema,
+        data: UpdateWeaponPropertySchema,
         use_cases: WeaponPropertyUseCases,
     ) -> None:
         command = UpdateWeaponPropertyCommand(
-            weapon_property_id=weapon_property_id, **asdict(weapon_property)
+            weapon_property_id=weapon_property_id, **asdict(data)
         )
         await use_cases.update.execute(command)
 
