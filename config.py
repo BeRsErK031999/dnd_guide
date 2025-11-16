@@ -11,7 +11,10 @@ class Config:
     DB_USER: str = os.getenv("DB_USER", "dnd_guide")
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "dnd_guide")
     DB_NAME: str = os.getenv("DB_NAME", "dnd_guide")
+
     DEBUG: bool = os.getenv("DEBUG", "false").lower() == "true"
+
+    ALLOWED_HOSTS: list[str] = os.getenv("ALLOWED_HOSTS", "").split(",")
 
     @property
     def db_url(self) -> str:
