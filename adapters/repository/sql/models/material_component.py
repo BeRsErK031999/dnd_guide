@@ -16,7 +16,7 @@ class MaterialComponentModel(Base):
     name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
 
-    spells: Mapped[list[SpellModel]] = relationship(
+    spells: Mapped[list["SpellModel"]] = relationship(
         back_populates="materials", secondary="rel_spell_material"
     )
 
@@ -28,7 +28,7 @@ class MaterialComponentModel(Base):
         )
 
     @staticmethod
-    def from_domain(material: MaterialComponent) -> MaterialComponentModel:
+    def from_domain(material: MaterialComponent) -> "MaterialComponentModel":
         return MaterialComponentModel(
             id=material.material_id(),
             name=material.name(),

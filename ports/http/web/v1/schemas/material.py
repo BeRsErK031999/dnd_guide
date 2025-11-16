@@ -1,16 +1,19 @@
 from dataclasses import dataclass
+from uuid import UUID
 
 from domain.material import Material
 
 
 @dataclass
 class ReadMaterialSchema:
+    material_id: UUID
     name: str
     description: str
 
     @staticmethod
-    def from_domain(material: Material) -> ReadMaterialSchema:
+    def from_domain(material: Material) -> "ReadMaterialSchema":
         return ReadMaterialSchema(
+            material_id=material.material_id(),
             name=material.name(),
             description=material.description(),
         )

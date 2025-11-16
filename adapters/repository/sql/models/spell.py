@@ -40,17 +40,17 @@ class SpellModel(Base):
     material_component: Mapped[bool]
     source_id: Mapped[UUID] = mapped_column(ForeignKey("source.id"))
 
-    source: Mapped[SourceModel] = relationship(back_populates="spells")
-    materials: Mapped[list[MaterialComponentModel]] = relationship(
+    source: Mapped["SourceModel"] = relationship(back_populates="spells")
+    materials: Mapped[list["MaterialComponentModel"]] = relationship(
         back_populates="spells", secondary="rel_spell_material"
     )
-    character_subclasses: Mapped[list[CharacterSubclassModel]] = relationship(
+    character_subclasses: Mapped[list["CharacterSubclassModel"]] = relationship(
         back_populates="spells", secondary="rel_spell_character_subclass"
     )
-    saving_throws: Mapped[list[SpellSavingThrowModel]] = relationship(
+    saving_throws: Mapped[list["SpellSavingThrowModel"]] = relationship(
         back_populates="spell"
     )
-    character_classes: Mapped[list[CharacterClassModel]] = relationship(
+    character_classes: Mapped[list["CharacterClassModel"]] = relationship(
         back_populates="spells", secondary="rel_spell_character_class"
     )
 
@@ -105,7 +105,7 @@ class SpellModel(Base):
         )
 
     @staticmethod
-    def from_domain(spell: Spell) -> SpellModel:
+    def from_domain(spell: Spell) -> "SpellModel":
         damage_type = spell.damage_type()
         duration = spell.duration()
         splash = spell.splash()
@@ -145,7 +145,7 @@ class SpellSavingThrowModel(Base):
         return Modifier.from_str(self.name)
 
     @staticmethod
-    def from_domain(spell_id: UUID, modifier: Modifier) -> SpellSavingThrowModel:
+    def from_domain(spell_id: UUID, modifier: Modifier) -> "SpellSavingThrowModel":
         return SpellSavingThrowModel(name=modifier.name, spell_id=spell_id)
 
 

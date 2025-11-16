@@ -18,7 +18,7 @@ class SpellComponentsSchema:
     materials: list[UUID]
 
     @staticmethod
-    def from_domain(components: SpellComponents) -> SpellComponentsSchema:
+    def from_domain(components: SpellComponents) -> "SpellComponentsSchema":
         return SpellComponentsSchema(
             verbal=components.verbal(),
             symbolic=components.symbolic(),
@@ -32,7 +32,7 @@ class SpellDurationSchema:
     game_time: GameTimeSchema | None
 
     @staticmethod
-    def from_domain(duration: GameTime) -> SpellDurationSchema:
+    def from_domain(duration: GameTime) -> "SpellDurationSchema":
         return SpellDurationSchema(game_time=GameTimeSchema.from_domain(duration))
 
 
@@ -41,7 +41,7 @@ class SpellDamageTypeSchema:
     name: str | None
 
     @staticmethod
-    def from_domain(damage_type: DamageType) -> SpellDamageTypeSchema:
+    def from_domain(damage_type: DamageType) -> "SpellDamageTypeSchema":
         return SpellDamageTypeSchema(name=damage_type.value)
 
 
@@ -50,7 +50,7 @@ class SplashSchema:
     splash: LengthSchema | None
 
     @staticmethod
-    def from_domain(splash: Length) -> SplashSchema:
+    def from_domain(splash: Length) -> "SplashSchema":
         return SplashSchema(splash=LengthSchema.from_domain(splash))
 
 
@@ -77,7 +77,7 @@ class ReadSpellSchema:
     source_id: UUID
 
     @staticmethod
-    def from_domain(spell: Spell) -> ReadSpellSchema:
+    def from_domain(spell: Spell) -> "ReadSpellSchema":
         damage_type = spell.damage_type()
         duration = spell.duration()
         splash = spell.splash()

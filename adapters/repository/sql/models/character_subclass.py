@@ -20,13 +20,13 @@ class CharacterSubclassModel(Base):
     name_in_english: Mapped[str] = mapped_column(String(50))
     character_class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
 
-    character_class: Mapped[CharacterClassModel] = relationship(
+    character_class: Mapped["CharacterClassModel"] = relationship(
         back_populates="character_subclasses"
     )
-    features: Mapped[SubclassFeatureModel] = relationship(
+    features: Mapped["SubclassFeatureModel"] = relationship(
         back_populates="character_subclass"
     )
-    spells: Mapped[list[SpellModel]] = relationship(
+    spells: Mapped[list["SpellModel"]] = relationship(
         back_populates="character_subclasses", secondary="rel_spell_character_subclass"
     )
 
@@ -40,7 +40,7 @@ class CharacterSubclassModel(Base):
         )
 
     @staticmethod
-    def from_domain(character_subclass: CharacterSubclass) -> CharacterSubclassModel:
+    def from_domain(character_subclass: CharacterSubclass) -> "CharacterSubclassModel":
         return CharacterSubclassModel(
             id=character_subclass.subclass_id(),
             character_class_id=character_subclass.class_id(),

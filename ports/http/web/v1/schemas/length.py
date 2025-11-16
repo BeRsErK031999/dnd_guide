@@ -9,7 +9,7 @@ class ReadLengthUnitSchema:
     m: str
 
     @staticmethod
-    def from_domain() -> ReadLengthUnitSchema:
+    def from_domain() -> "ReadLengthUnitSchema":
         return ReadLengthUnitSchema(ft=LengthUnit.FT.value, m=LengthUnit.M.value)
 
 
@@ -19,5 +19,5 @@ class LengthSchema:
     unit: str
 
     @staticmethod
-    def from_domain(length: Length) -> LengthSchema:
+    def from_domain(length: Length) -> "LengthSchema":
         return LengthSchema(count=length.in_ft(), unit=LengthUnit.FT.value)

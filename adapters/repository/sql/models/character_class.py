@@ -35,37 +35,37 @@ class CharacterClassModel(Base):
     number_tools: Mapped[int]
     source_id: Mapped[UUID] = mapped_column(ForeignKey("source.id"))
 
-    primary_modifiers: Mapped[list[ClassPrimaryModifierModel]] = relationship(
+    primary_modifiers: Mapped[list["ClassPrimaryModifierModel"]] = relationship(
         back_populates="character_class"
     )
-    armor_types: Mapped[list[ClassArmorTypeModel]] = relationship(
+    armor_types: Mapped[list["ClassArmorTypeModel"]] = relationship(
         back_populates="character_class"
     )
-    saving_throws: Mapped[list[ClassSavingThrowModel]] = relationship(
+    saving_throws: Mapped[list["ClassSavingThrowModel"]] = relationship(
         back_populates="character_class"
     )
-    skills: Mapped[list[ClassSkillModel]] = relationship(
+    skills: Mapped[list["ClassSkillModel"]] = relationship(
         back_populates="character_class"
     )
-    weapons: Mapped[list[WeaponModel]] = relationship(
+    weapons: Mapped[list["WeaponModel"]] = relationship(
         back_populates="character_classes", secondary="rel_class_weapon"
     )
-    tools: Mapped[list[ToolModel]] = relationship(
+    tools: Mapped[list["ToolModel"]] = relationship(
         back_populates="character_classes", secondary="rel_class_tool"
     )
-    features: Mapped[list[ClassFeatureModel]] = relationship(
+    features: Mapped[list["ClassFeatureModel"]] = relationship(
         back_populates="character_class"
     )
-    character_subclasses: Mapped[list[CharacterSubclassModel]] = relationship(
+    character_subclasses: Mapped[list["CharacterSubclassModel"]] = relationship(
         back_populates="character_class"
     )
-    class_levels: Mapped[list[ClassLevelModel]] = relationship(
+    class_levels: Mapped[list["ClassLevelModel"]] = relationship(
         back_populates="character_class"
     )
-    spells: Mapped[list[SpellModel]] = relationship(
+    spells: Mapped[list["SpellModel"]] = relationship(
         back_populates="character_classes", secondary="rel_spell_character_class"
     )
-    source: Mapped[SourceModel] = relationship(back_populates="character_classes")
+    source: Mapped["SourceModel"] = relationship(back_populates="character_classes")
 
     def to_domain(self) -> CharacterClass:
         hits = ClassHits(
@@ -100,7 +100,7 @@ class CharacterClassModel(Base):
         )
 
     @staticmethod
-    def from_domain(character_class: CharacterClass) -> CharacterClassModel:
+    def from_domain(character_class: CharacterClass) -> "CharacterClassModel":
         hits = character_class.hits()
         prof = character_class.proficiency()
         return CharacterClassModel(
@@ -125,7 +125,7 @@ class ClassPrimaryModifierModel(Base):
     name: Mapped[str] = mapped_column(String(50))
     class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
 
-    character_class: Mapped[CharacterClassModel] = relationship(
+    character_class: Mapped["CharacterClassModel"] = relationship(
         back_populates="primary_modifiers"
     )
 
@@ -133,7 +133,7 @@ class ClassPrimaryModifierModel(Base):
         return Modifier.from_str(self.name)
 
     @staticmethod
-    def from_domain(class_id: UUID, modifier: Modifier) -> ClassPrimaryModifierModel:
+    def from_domain(class_id: UUID, modifier: Modifier) -> "ClassPrimaryModifierModel":
         return ClassPrimaryModifierModel(name=modifier.name, class_id=class_id)
 
 
@@ -143,7 +143,7 @@ class ClassArmorTypeModel(Base):
     name: Mapped[str] = mapped_column(String(50))
     class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
 
-    character_class: Mapped[CharacterClassModel] = relationship(
+    character_class: Mapped["CharacterClassModel"] = relationship(
         back_populates="armor_types"
     )
 
@@ -151,7 +151,7 @@ class ClassArmorTypeModel(Base):
         return ArmorType.from_str(self.name)
 
     @staticmethod
-    def from_domain(class_id: UUID, armor_type: ArmorType) -> ClassArmorTypeModel:
+    def from_domain(class_id: UUID, armor_type: ArmorType) -> "ClassArmorTypeModel":
         return ClassArmorTypeModel(name=armor_type.name, class_id=class_id)
 
 
@@ -169,7 +169,7 @@ class ClassSavingThrowModel(Base):
         return Modifier.from_str(self.name)
 
     @staticmethod
-    def from_domain(class_id: UUID, modifier: Modifier) -> ClassSavingThrowModel:
+    def from_domain(class_id: UUID, modifier: Modifier) -> "ClassSavingThrowModel":
         return ClassSavingThrowModel(name=modifier.name, class_id=class_id)
 
 
@@ -187,7 +187,7 @@ class ClassSkillModel(Base):
         return Skill.from_str(self.name)
 
     @staticmethod
-    def from_domain(class_id: UUID, skill: Skill) -> ClassSkillModel:
+    def from_domain(class_id: UUID, skill: Skill) -> "ClassSkillModel":
         return ClassSkillModel(name=skill.name, class_id=class_id)
 
 

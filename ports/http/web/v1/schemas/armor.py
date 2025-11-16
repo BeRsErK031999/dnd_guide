@@ -14,7 +14,7 @@ class ReadArmorTypeSchema:
     shield: str
 
     @staticmethod
-    def from_domain() -> ReadArmorTypeSchema:
+    def from_domain() -> "ReadArmorTypeSchema":
         return ReadArmorTypeSchema(
             **{armor_type.name.lower(): armor_type.value for armor_type in ArmorType}
         )
@@ -27,7 +27,7 @@ class ArmorClassSchema:
     max_modifier_bonus: int | None = None
 
     @staticmethod
-    def from_domain(armor_class: ArmorClass) -> ArmorClassSchema:
+    def from_domain(armor_class: ArmorClass) -> "ArmorClassSchema":
         modifier = armor_class.modifier()
         return ArmorClassSchema(
             base_class=armor_class.base_class(),
@@ -50,7 +50,7 @@ class ReadArmorSchema:
     material_id: UUID
 
     @staticmethod
-    def from_domain(armor: Armor) -> ReadArmorSchema:
+    def from_domain(armor: Armor) -> "ReadArmorSchema":
         return ReadArmorSchema(
             armor_id=armor.armor_id(),
             armor_type=armor.armor_type().value,

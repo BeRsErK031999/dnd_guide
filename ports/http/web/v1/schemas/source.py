@@ -12,7 +12,7 @@ class ReadSourceSchema:
     name_in_english: str
 
     @staticmethod
-    def from_domain(source: Source) -> ReadSourceSchema:
+    def from_domain(source: Source) -> "ReadSourceSchema":
         return ReadSourceSchema(
             source_id=source.source_id(),
             name=source.name(),

@@ -21,7 +21,7 @@ class SubclassFeatureModel(Base):
         ForeignKey("character_subclass.id")
     )
 
-    character_subclass: Mapped[CharacterSubclassModel] = relationship(
+    character_subclass: Mapped["CharacterSubclassModel"] = relationship(
         back_populates="features"
     )
 
@@ -36,7 +36,7 @@ class SubclassFeatureModel(Base):
         )
 
     @staticmethod
-    def from_domain(feature: SubclassFeature) -> SubclassFeatureModel:
+    def from_domain(feature: SubclassFeature) -> "SubclassFeatureModel":
         return SubclassFeatureModel(
             id=feature.feature_id(),
             name=feature.name(),

@@ -14,7 +14,7 @@ class ClassHitsSchema:
     next_level_hits: int
 
     @staticmethod
-    def from_domain(hits: ClassHits) -> ClassHitsSchema:
+    def from_domain(hits: ClassHits) -> "ClassHitsSchema":
         return ClassHitsSchema(
             hit_dice=DiceSchema.from_domain(hits.dice()),
             starting_hits=hits.starting(),
@@ -34,7 +34,7 @@ class ClassProficienciesSchema:
     number_tools: int
 
     @staticmethod
-    def from_domain(proficiencies: ClassProficiencies) -> ClassProficienciesSchema:
+    def from_domain(proficiencies: ClassProficiencies) -> "ClassProficienciesSchema":
         return ClassProficienciesSchema(
             armors=proficiencies.armors(),
             weapons=proficiencies.weapons(),
@@ -58,7 +58,7 @@ class ReadClassSchema:
     source_id: UUID
 
     @staticmethod
-    def from_domain(character_class: CharacterClass) -> ReadClassSchema:
+    def from_domain(character_class: CharacterClass) -> "ReadClassSchema":
         return ReadClassSchema(
             class_id=character_class.class_id(),
             name=character_class.name(),

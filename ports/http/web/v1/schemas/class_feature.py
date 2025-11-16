@@ -14,7 +14,7 @@ class ReadClassFeatureSchema:
     name_in_english: str
 
     @staticmethod
-    def from_domain(feature: ClassFeature) -> ReadClassFeatureSchema:
+    def from_domain(feature: ClassFeature) -> "ReadClassFeatureSchema":
         return ReadClassFeatureSchema(
             feature_id=feature.feature_id(),
             class_id=feature.class_id(),

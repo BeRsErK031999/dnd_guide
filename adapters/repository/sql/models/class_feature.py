@@ -19,7 +19,7 @@ class ClassFeatureModel(Base):
     level: Mapped[int]
     character_class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
 
-    character_class: Mapped[CharacterClassModel] = relationship(
+    character_class: Mapped["CharacterClassModel"] = relationship(
         back_populates="features"
     )
 
@@ -34,7 +34,7 @@ class ClassFeatureModel(Base):
         )
 
     @staticmethod
-    def from_domain(feature: ClassFeature) -> ClassFeatureModel:
+    def from_domain(feature: ClassFeature) -> "ClassFeatureModel":
         return ClassFeatureModel(
             id=feature.feature_id(),
             name=feature.name(),

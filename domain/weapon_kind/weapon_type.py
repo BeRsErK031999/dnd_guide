@@ -10,7 +10,7 @@ class WeaponType(StrEnum):
     MARTIAL_MELEE = "воинское рукопашное"
 
     @staticmethod
-    def from_str(name: str) -> WeaponType:
+    def from_str(name: str) -> "WeaponType":
         match name.upper():
             case WeaponType.SIMPLE_RANGE.name:
                 return WeaponType.SIMPLE_RANGE

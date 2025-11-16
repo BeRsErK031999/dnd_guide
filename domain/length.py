@@ -8,7 +8,7 @@ class LengthUnit(StrEnum):
     M = "метр"
 
     @staticmethod
-    def from_str(name: str) -> LengthUnit:
+    def from_str(name: str) -> "LengthUnit":
         match name.upper():
             case LengthUnit.FT.name:
                 return LengthUnit.FT

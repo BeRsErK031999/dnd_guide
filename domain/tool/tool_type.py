@@ -15,7 +15,7 @@ class ToolType(StrEnum):
     POISONERS_KIT = "набор отравителя"
 
     @staticmethod
-    def from_str(name: str) -> ToolType:
+    def from_str(name: str) -> "ToolType":
         match name.upper():
             case ToolType.ARTISANS_TOOLS.name:
                 return ToolType.ARTISANS_TOOLS

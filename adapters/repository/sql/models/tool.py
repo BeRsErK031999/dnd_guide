@@ -23,10 +23,10 @@ class ToolModel(Base):
     weight: Mapped[float]
     tool_type: Mapped[str]
 
-    utilizes: Mapped[list[ToolUtilizeModel]] = relationship(
+    utilizes: Mapped[list["ToolUtilizeModel"]] = relationship(
         back_populates="tool", cascade="all, delete-orphan"
     )
-    character_classes: Mapped[list[CharacterClassModel]] = relationship(
+    character_classes: Mapped[list["CharacterClassModel"]] = relationship(
         back_populates="tools", secondary="rel_class_tool"
     )
 
@@ -42,7 +42,7 @@ class ToolModel(Base):
         )
 
     @staticmethod
-    def from_domain(domain_tool: Tool) -> ToolModel:
+    def from_domain(domain_tool: Tool) -> "ToolModel":
         return ToolModel(
             id=domain_tool.tool_id(),
             tool_type=domain_tool.tool_type().name,
@@ -59,7 +59,8 @@ class ToolUtilizeModel(Base):
     action: Mapped[str]
     complexity: Mapped[int]
     tool_id: Mapped[UUID] = mapped_column(ForeignKey("tool.id", ondelete="cascade"))
-    tool: Mapped[ToolModel] = relationship(back_populates="utilizes")
+
+    tool: Mapped["ToolModel"] = relationship(back_populates="utilizes")
 
     def to_domain(self) -> ToolUtilize:
         return ToolUtilize(
@@ -68,7 +69,7 @@ class ToolUtilizeModel(Base):
         )
 
     @staticmethod
-    def from_domain(tool_id: UUID, tool_utilize: ToolUtilize) -> ToolUtilizeModel:
+    def from_domain(tool_id: UUID, tool_utilize: ToolUtilize) -> "ToolUtilizeModel":
         return ToolUtilizeModel(
             action=tool_utilize.action,
             complexity=tool_utilize.complexity,

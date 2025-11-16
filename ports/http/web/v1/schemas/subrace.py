@@ -11,7 +11,7 @@ class SubraceFeatureSchema:
     description: str
 
     @staticmethod
-    def from_domain(feature: SubraceFeature) -> SubraceFeatureSchema:
+    def from_domain(feature: SubraceFeature) -> "SubraceFeatureSchema":
         return SubraceFeatureSchema(
             name=feature.name(),
             description=feature.description(),
@@ -24,7 +24,9 @@ class SubraceIncreaseModifierSchema:
     bonus: int
 
     @staticmethod
-    def from_domain(modifier: SubraceIncreaseModifier) -> SubraceIncreaseModifierSchema:
+    def from_domain(
+        modifier: SubraceIncreaseModifier,
+    ) -> "SubraceIncreaseModifierSchema":
         return SubraceIncreaseModifierSchema(
             modifier=modifier.modifier().value,
             bonus=modifier.bonus(),
@@ -42,7 +44,7 @@ class ReadSubraceSchema:
     features: Sequence[SubraceFeatureSchema]
 
     @staticmethod
-    def from_domain(subrace: Subrace) -> ReadSubraceSchema:
+    def from_domain(subrace: Subrace) -> "ReadSubraceSchema":
         return ReadSubraceSchema(
             subrace_id=subrace.subrace_id(),
             race_id=subrace.race_id(),

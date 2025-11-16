@@ -31,12 +31,12 @@ class RaceModel(Base):
 
     creature_type: Mapped["CreatureTypeModel"] = relationship(back_populates="races")
     creature_size: Mapped["CreatureSizeModel"] = relationship(back_populates="races")
-    increase_modifiers: Mapped[list[RaceIncreaseModifierModel]] = relationship(
+    increase_modifiers: Mapped[list["RaceIncreaseModifierModel"]] = relationship(
         back_populates="race"
     )
-    features: Mapped[list[RaceFeatureModel]] = relationship(back_populates="race")
-    source: Mapped[SourceModel] = relationship(back_populates="races")
-    subraces: Mapped[list[SubraceModel]] = relationship(back_populates="race")
+    features: Mapped[list["RaceFeatureModel"]] = relationship(back_populates="race")
+    source: Mapped["SourceModel"] = relationship(back_populates="races")
+    subraces: Mapped[list["SubraceModel"]] = relationship(back_populates="race")
 
     def to_domain(self) -> Race:
         return Race(
@@ -57,7 +57,7 @@ class RaceModel(Base):
         )
 
     @staticmethod
-    def from_domain(race: Race) -> RaceModel:
+    def from_domain(race: Race) -> "RaceModel":
         return RaceModel(
             id=race.race_id(),
             name=race.name(),
@@ -79,7 +79,8 @@ class RaceIncreaseModifierModel(Base):
     name: Mapped[str] = mapped_column(String(50))
     bonus: Mapped[int]
     race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
-    race: Mapped[RaceModel] = relationship(back_populates="increase_modifiers")
+
+    race: Mapped["RaceModel"] = relationship(back_populates="increase_modifiers")
 
     def to_domain(self) -> RaceIncreaseModifier:
         return RaceIncreaseModifier(
@@ -90,7 +91,7 @@ class RaceIncreaseModifierModel(Base):
     @staticmethod
     def from_domain(
         race_id: UUID, increase_modifier: RaceIncreaseModifier
-    ) -> RaceIncreaseModifierModel:
+    ) -> "RaceIncreaseModifierModel":
         return RaceIncreaseModifierModel(
             name=increase_modifier.modifier().name,
             bonus=increase_modifier.bonus(),
@@ -104,7 +105,8 @@ class RaceFeatureModel(Base):
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str]
     race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
-    race: Mapped[RaceModel] = relationship(back_populates="features")
+
+    race: Mapped["RaceModel"] = relationship(back_populates="features")
 
     def to_domain(self) -> RaceFeature:
         return RaceFeature(
@@ -113,7 +115,7 @@ class RaceFeatureModel(Base):
         )
 
     @staticmethod
-    def from_domain(race_id: UUID, feature: RaceFeature) -> RaceFeatureModel:
+    def from_domain(race_id: UUID, feature: RaceFeature) -> "RaceFeatureModel":
         return RaceFeatureModel(
             name=feature.name(),
             description=feature.description(),

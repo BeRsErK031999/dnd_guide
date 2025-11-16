@@ -11,7 +11,7 @@ class GameTimeUnit(StrEnum):
     HOUR = "час"
 
     @staticmethod
-    def from_str(name: str) -> GameTimeUnit:
+    def from_str(name: str) -> "GameTimeUnit":
         match name.upper():
             case GameTimeUnit.ACTION.name:
                 return GameTimeUnit.ACTION

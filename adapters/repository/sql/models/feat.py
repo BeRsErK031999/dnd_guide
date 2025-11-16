@@ -15,13 +15,13 @@ class FeatModel(Base):
     description: Mapped[str]
     is_caster: Mapped[bool]
 
-    increase_modifiers: Mapped[list[FeatIncreaseModifierModel]] = relationship(
+    increase_modifiers: Mapped[list["FeatIncreaseModifierModel"]] = relationship(
         back_populates="feat"
     )
-    required_modifiers: Mapped[list[FeatRequiredModifierModel]] = relationship(
+    required_modifiers: Mapped[list["FeatRequiredModifierModel"]] = relationship(
         back_populates="feat"
     )
-    required_armor_types: Mapped[list[FeatRequiredArmorTypeModel]] = relationship(
+    required_armor_types: Mapped[list["FeatRequiredArmorTypeModel"]] = relationship(
         back_populates="feat"
     )
 
@@ -46,7 +46,7 @@ class FeatModel(Base):
         )
 
     @staticmethod
-    def from_domain(feat: Feat) -> FeatModel:
+    def from_domain(feat: Feat) -> "FeatModel":
         return FeatModel(
             name=feat.name(),
             description=feat.description(),
@@ -60,13 +60,13 @@ class FeatIncreaseModifierModel(Base):
     name: Mapped[str] = mapped_column(String(50))
     feat_id: Mapped[UUID] = mapped_column(ForeignKey("feat.id"))
 
-    feat: Mapped[FeatModel] = relationship(back_populates="increase_modifiers")
+    feat: Mapped["FeatModel"] = relationship(back_populates="increase_modifiers")
 
     def to_domain(self) -> Modifier:
         return Modifier.from_str(self.name)
 
     @staticmethod
-    def from_domain(feat_id: UUID, modifier: Modifier) -> FeatIncreaseModifierModel:
+    def from_domain(feat_id: UUID, modifier: Modifier) -> "FeatIncreaseModifierModel":
         return FeatIncreaseModifierModel(name=modifier.name, feat_id=feat_id)
 
 
@@ -77,7 +77,7 @@ class FeatRequiredModifierModel(Base):
     min_value: Mapped[int]
     feat_id: Mapped[UUID] = mapped_column(ForeignKey("feat.id"))
 
-    feat: Mapped[FeatModel] = relationship(back_populates="required_modifiers")
+    feat: Mapped["FeatModel"] = relationship(back_populates="required_modifiers")
 
     def to_domain(self) -> FeatRequiredModifier:
         return FeatRequiredModifier(
@@ -88,7 +88,7 @@ class FeatRequiredModifierModel(Base):
     @staticmethod
     def from_domain(
         feat_id: UUID, required_modifier: FeatRequiredModifier
-    ) -> FeatRequiredModifierModel:
+    ) -> "FeatRequiredModifierModel":
         return FeatRequiredModifierModel(
             name=required_modifier.modifier().name,
             min_value=required_modifier.min_value(),
@@ -102,11 +102,13 @@ class FeatRequiredArmorTypeModel(Base):
     name: Mapped[str] = mapped_column(String(50))
     feat_id: Mapped[UUID] = mapped_column(ForeignKey("feat.id"))
 
-    feat: Mapped[FeatModel] = relationship(back_populates="required_armor_types")
+    feat: Mapped["FeatModel"] = relationship(back_populates="required_armor_types")
 
     def to_domain(self) -> ArmorType:
         return ArmorType.from_str(self.name)
 
     @staticmethod
-    def from_domain(feat_id: UUID, armor_type: ArmorType) -> FeatRequiredArmorTypeModel:
+    def from_domain(
+        feat_id: UUID, armor_type: ArmorType
+    ) -> "FeatRequiredArmorTypeModel":
         return FeatRequiredArmorTypeModel(feat_id=feat_id, name=armor_type.name)

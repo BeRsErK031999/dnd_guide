@@ -16,7 +16,7 @@ class WeaponPropertyName(StrEnum):
     DISTANCE = "дистанция"
 
     @staticmethod
-    def from_str(name: str) -> WeaponPropertyName:
+    def from_str(name: str) -> "WeaponPropertyName":
         match name.upper():
             case WeaponPropertyName.AMMUNITION.name:
                 return WeaponPropertyName.AMMUNITION

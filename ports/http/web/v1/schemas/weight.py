@@ -9,7 +9,7 @@ class ReadWeightUnitSchema:
     kg: str
 
     @staticmethod
-    def from_domain() -> ReadWeightUnitSchema:
+    def from_domain() -> "ReadWeightUnitSchema":
         return ReadWeightUnitSchema(lb=WeightUnit.LB.value, kg=WeightUnit.KG.value)
 
 
@@ -19,7 +19,7 @@ class WeightSchema:
     unit: str
 
     @staticmethod
-    def from_domain(weight: Weight) -> WeightSchema:
+    def from_domain(weight: Weight) -> "WeightSchema":
         return WeightSchema(
             count=weight.in_lb(),
             unit=WeightUnit.LB.value,

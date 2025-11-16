@@ -11,7 +11,7 @@ class PieceType(StrEnum):
     PLATINUM = "платиновые"
 
     @staticmethod
-    def from_str(name: str) -> PieceType:
+    def from_str(name: str) -> "PieceType":
         match name.upper():
             case PieceType.COPPER.name:
                 return PieceType.COPPER

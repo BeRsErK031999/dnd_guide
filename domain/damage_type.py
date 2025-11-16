@@ -19,7 +19,7 @@ class DamageType(StrEnum):
     THUNDER = "звук"
 
     @staticmethod
-    def from_str(name: str) -> DamageType:
+    def from_str(name: str) -> "DamageType":
         match name.upper():
             case DamageType.ACID.name:
                 return DamageType.ACID

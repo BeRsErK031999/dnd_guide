@@ -20,7 +20,7 @@ class ReadToolTypeSchema:
     poisoners_kit: str
 
     @staticmethod
-    def from_domain() -> ReadToolTypeSchema:
+    def from_domain() -> "ReadToolTypeSchema":
         return ReadToolTypeSchema(
             **{tool_type.name.lower(): tool_type.value for tool_type in ToolType}
         )
@@ -32,7 +32,7 @@ class ToolUtilizesSchema:
     complexity: int
 
     @staticmethod
-    def from_domain(tool_utilize: ToolUtilize) -> ToolUtilizesSchema:
+    def from_domain(tool_utilize: ToolUtilize) -> "ToolUtilizesSchema":
         return ToolUtilizesSchema(
             action=tool_utilize.action(),
             complexity=tool_utilize.complexity(),
@@ -50,7 +50,7 @@ class ReadToolSchema:
     utilizes: Sequence[ToolUtilizesSchema]
 
     @staticmethod
-    def from_domain(tool: Tool) -> ReadToolSchema:
+    def from_domain(tool: Tool) -> "ReadToolSchema":
         return ReadToolSchema(
             tool_id=tool.tool_id(),
             tool_type=tool.tool_type().value,

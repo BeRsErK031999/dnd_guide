@@ -11,7 +11,7 @@ class ReadCreatureSizeSchema:
     description: str
 
     @staticmethod
-    def from_domain(size: CreatureSize) -> ReadCreatureSizeSchema:
+    def from_domain(size: CreatureSize) -> "ReadCreatureSizeSchema":
         return ReadCreatureSizeSchema(
             size_id=size.size_id(),
             name=size.name(),

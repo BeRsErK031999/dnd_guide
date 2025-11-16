@@ -25,7 +25,7 @@ class Skill(StrEnum):
     PERSUASION = "убеждение"
 
     @staticmethod
-    def from_str(name: str) -> Skill:
+    def from_str(name: str) -> "Skill":
         match name.upper():
             case Skill.ACROBATICS.name:
                 return Skill.ACROBATICS

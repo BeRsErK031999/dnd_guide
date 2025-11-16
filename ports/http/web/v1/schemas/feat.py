@@ -11,7 +11,7 @@ class FeatRequiredModifierSchema:
     min_value: int
 
     @staticmethod
-    def from_domain(modifier: FeatRequiredModifier) -> FeatRequiredModifierSchema:
+    def from_domain(modifier: FeatRequiredModifier) -> "FeatRequiredModifierSchema":
         return FeatRequiredModifierSchema(
             modifier=modifier.modifier().value, min_value=modifier.min_value()
         )
@@ -28,7 +28,7 @@ class ReadFeatSchema:
     increase_modifiers: Sequence[str]
 
     @staticmethod
-    def from_domain(feat: Feat) -> ReadFeatSchema:
+    def from_domain(feat: Feat) -> "ReadFeatSchema":
         return ReadFeatSchema(
             feat_id=feat.feat_id(),
             name=feat.name(),

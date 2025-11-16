@@ -12,7 +12,7 @@ class ReadSubclassSchema:
     name_in_english: str
 
     @staticmethod
-    def from_domain(subclass: CharacterSubclass) -> ReadSubclassSchema:
+    def from_domain(subclass: CharacterSubclass) -> "ReadSubclassSchema":
         return ReadSubclassSchema(
             subclass_id=subclass.subclass_id(),
             name=subclass.name(),

@@ -9,7 +9,7 @@ class SkillSchema:
     modifiers: str
 
     @staticmethod
-    def from_domain(skill: Skill) -> SkillSchema:
+    def from_domain(skill: Skill) -> "SkillSchema":
         return SkillSchema(value=skill.value, modifiers=skill.modifier().value)
 
 
@@ -35,7 +35,7 @@ class ReadSkillSchema:
     persuasion: SkillSchema
 
     @staticmethod
-    def from_domain() -> ReadSkillSchema:
+    def from_domain() -> "ReadSkillSchema":
         return ReadSkillSchema(
             **{skill.name.lower(): SkillSchema.from_domain(skill) for skill in Skill}
         )

@@ -12,7 +12,7 @@ class ReadGameTimeUnitSchema:
     hour: str
 
     @staticmethod
-    def from_domain() -> ReadGameTimeUnitSchema:
+    def from_domain() -> "ReadGameTimeUnitSchema":
         return ReadGameTimeUnitSchema(
             **{name.name.lower(): name.value for name in GameTimeUnit}
         )
@@ -24,5 +24,5 @@ class GameTimeSchema:
     unit: str
 
     @staticmethod
-    def from_domain(game_time: GameTime) -> GameTimeSchema:
+    def from_domain(game_time: GameTime) -> "GameTimeSchema":
         return GameTimeSchema(count=game_time.count(), unit=game_time.units().name)

@@ -17,27 +17,27 @@ class DomainError(Exception):
         self.msg = msg
 
     @classmethod
-    def not_found(cls, msg: str) -> DomainError:
+    def not_found(cls, msg: str) -> "DomainError":
         return cls(status=DomainErrorStatus.NOT_FOUND, msg=msg)
 
     @classmethod
-    def invalid_data(cls, msg: str) -> DomainError:
+    def invalid_data(cls, msg: str) -> "DomainError":
         return cls(status=DomainErrorStatus.INVALID_DATA, msg=msg)
 
     @classmethod
-    def access(cls, msg: str) -> DomainError:
+    def access(cls, msg: str) -> "DomainError":
         if len(msg) == 0:
             msg = "у вас недостаточно прав для совершения операции"
         return cls(status=DomainErrorStatus.ACCESS, msg=msg)
 
     @classmethod
-    def idempotent(cls, msg: str) -> DomainError:
+    def idempotent(cls, msg: str) -> "DomainError":
         return cls(status=DomainErrorStatus.IDEMPOTENT, msg=msg)
 
     @classmethod
-    def policy(cls, msg: str) -> DomainError:
+    def policy(cls, msg: str) -> "DomainError":
         return cls(status=DomainErrorStatus.POLICY, msg=msg)
 
     @classmethod
-    def internal(cls, msg: str) -> DomainError:
+    def internal(cls, msg: str) -> "DomainError":
         return cls(status=DomainErrorStatus.INTERNAL, msg=msg)

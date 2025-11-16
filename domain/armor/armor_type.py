@@ -10,7 +10,7 @@ class ArmorType(StrEnum):
     SHIELD = "щит"
 
     @staticmethod
-    def from_str(name: str) -> ArmorType:
+    def from_str(name: str) -> "ArmorType":
         match name.upper():
             case ArmorType.LIGHT_ARMOR.name:
                 return ArmorType.LIGHT_ARMOR

@@ -11,7 +11,7 @@ class ReadCreatureTypeSchema:
     description: str
 
     @staticmethod
-    def from_domain(type: CreatureType) -> ReadCreatureTypeSchema:
+    def from_domain(type: CreatureType) -> "ReadCreatureTypeSchema":
         return ReadCreatureTypeSchema(
             type_id=type.type_id(),
             name=type.name(),

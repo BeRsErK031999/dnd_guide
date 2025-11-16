@@ -19,11 +19,13 @@ class SubraceModel(Base):
     name_in_english: Mapped[str] = mapped_column(String(50))
     race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
 
-    race: Mapped[RaceModel] = relationship(back_populates="subraces")
-    increase_modifiers: Mapped[list[SubraceIncreaseModifierModel]] = relationship(
+    race: Mapped["RaceModel"] = relationship(back_populates="subraces")
+    increase_modifiers: Mapped[list["SubraceIncreaseModifierModel"]] = relationship(
         back_populates="subrace"
     )
-    features: Mapped[list[SubraceFeatureModel]] = relationship(back_populates="subrace")
+    features: Mapped[list["SubraceFeatureModel"]] = relationship(
+        back_populates="subrace"
+    )
 
     def to_domain(self) -> Subrace:
         return Subrace(
@@ -37,7 +39,7 @@ class SubraceModel(Base):
         )
 
     @staticmethod
-    def from_domain(subrace: Subrace) -> SubraceModel:
+    def from_domain(subrace: Subrace) -> "SubraceModel":
         return SubraceModel(
             id=subrace.subrace_id(),
             name=subrace.name(),
@@ -54,7 +56,7 @@ class SubraceIncreaseModifierModel(Base):
     bonus: Mapped[int]
     subrace_id: Mapped[UUID] = mapped_column(ForeignKey("subrace.id"))
 
-    subrace: Mapped[SubraceModel] = relationship(back_populates="increase_modifiers")
+    subrace: Mapped["SubraceModel"] = relationship(back_populates="increase_modifiers")
 
     def to_domain(self) -> SubraceIncreaseModifier:
         return SubraceIncreaseModifier(
@@ -62,7 +64,9 @@ class SubraceIncreaseModifierModel(Base):
         )
 
     @staticmethod
-    def from_domain(modifier: SubraceIncreaseModifier) -> SubraceIncreaseModifierModel:
+    def from_domain(
+        modifier: SubraceIncreaseModifier,
+    ) -> "SubraceIncreaseModifierModel":
         return SubraceIncreaseModifierModel(
             name=modifier.modifier().name, bonus=modifier.bonus()
         )
@@ -75,13 +79,13 @@ class SubraceFeatureModel(Base):
     description: Mapped[str]
     subrace_id: Mapped[UUID] = mapped_column(ForeignKey("subrace.id"))
 
-    subrace: Mapped[SubraceModel] = relationship(back_populates="features")
+    subrace: Mapped["SubraceModel"] = relationship(back_populates="features")
 
     def to_domain(self) -> SubraceFeature:
         return SubraceFeature(name=self.name, description=self.description)
 
     @staticmethod
-    def from_domain(feature: SubraceFeature) -> SubraceFeatureModel:
+    def from_domain(feature: SubraceFeature) -> "SubraceFeatureModel":
         return SubraceFeatureModel(
             name=feature.name(), description=feature.description()
         )

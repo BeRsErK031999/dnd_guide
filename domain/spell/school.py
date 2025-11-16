@@ -14,7 +14,7 @@ class SpellSchool(StrEnum):
     TRANSMUTATION = "преобразование"
 
     @staticmethod
-    def from_str(name: str) -> SpellSchool:
+    def from_str(name: str) -> "SpellSchool":
         match name.upper():
             case SpellSchool.ABJURATION.name:
                 return SpellSchool.ABJURATION

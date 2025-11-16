@@ -13,7 +13,7 @@ class ReadModifierSchema:
     charisma: str
 
     @staticmethod
-    def from_domain() -> ReadModifierSchema:
+    def from_domain() -> "ReadModifierSchema":
         return ReadModifierSchema(
             **{modifier.name.lower(): modifier.value for modifier in Modifier}
         )

@@ -20,7 +20,7 @@ class ReadDamageTypeSchema:
     thunder: str
 
     @staticmethod
-    def from_domain() -> ReadDamageTypeSchema:
+    def from_domain() -> "ReadDamageTypeSchema":
         return ReadDamageTypeSchema(
             **{
                 damage_type.name.lower(): damage_type.value

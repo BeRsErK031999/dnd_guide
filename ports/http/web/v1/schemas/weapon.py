@@ -15,7 +15,7 @@ class WeaponDamageSchema:
     bonus_damage: int
 
     @staticmethod
-    def from_domain(weapon_damage: WeaponDamage) -> WeaponDamageSchema:
+    def from_domain(weapon_damage: WeaponDamage) -> "WeaponDamageSchema":
         return WeaponDamageSchema(
             dice=DiceSchema.from_domain(weapon_damage.dice()),
             damage_type=weapon_damage.damage_type(),
@@ -36,7 +36,7 @@ class ReadWeaponSchema:
     material_id: UUID
 
     @staticmethod
-    def from_domain(weapon: Weapon) -> ReadWeaponSchema:
+    def from_domain(weapon: Weapon) -> "ReadWeaponSchema":
         return ReadWeaponSchema(
             weapon_id=weapon.weapon_id(),
             weapon_kind_id=weapon.kind_id(),

@@ -12,7 +12,7 @@ class Modifier(StrEnum):
     CHARISMA = "харизма"
 
     @staticmethod
-    def from_str(name: str) -> Modifier:
+    def from_str(name: str) -> "Modifier":
         match name.upper():
             case Modifier.STRENGTH.name:
                 return Modifier.STRENGTH

@@ -11,7 +11,7 @@ class ReadMaterialComponentSchema:
     description: str
 
     @staticmethod
-    def from_domain(material: MaterialComponent) -> ReadMaterialComponentSchema:
+    def from_domain(material: MaterialComponent) -> "ReadMaterialComponentSchema":
         return ReadMaterialComponentSchema(
             material_id=material.material_id(),
             name=material.name(),

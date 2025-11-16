@@ -12,7 +12,7 @@ class ReadWeaponTypeSchema:
     martial_melee: str
 
     @staticmethod
-    def from_domain() -> ReadWeaponTypeSchema:
+    def from_domain() -> "ReadWeaponTypeSchema":
         return ReadWeaponTypeSchema(
             **{
                 weapon_type.name.lower(): weapon_type.value
@@ -29,7 +29,7 @@ class ReadWeaponKindSchema:
     description: str
 
     @staticmethod
-    def from_domain(weapon_kind: WeaponKind) -> ReadWeaponKindSchema:
+    def from_domain(weapon_kind: WeaponKind) -> "ReadWeaponKindSchema":
         return ReadWeaponKindSchema(
             weapon_kind_id=weapon_kind.weapon_kind_id(),
             weapon_type=weapon_kind.weapon_type(),

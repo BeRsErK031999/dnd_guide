@@ -13,7 +13,7 @@ class DiceType(IntEnum):
     D100 = 100
 
     @staticmethod
-    def from_str(name: str) -> DiceType:
+    def from_str(name: str) -> "DiceType":
         match name.upper():
             case DiceType.D4.name:
                 return DiceType.D4

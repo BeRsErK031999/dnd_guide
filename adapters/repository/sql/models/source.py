@@ -18,11 +18,11 @@ class SourceModel(Base):
     description: Mapped[str]
     name_in_english: Mapped[str] = mapped_column(String(100))
 
-    races: Mapped[list[RaceModel]] = relationship(back_populates="source")
-    character_classes: Mapped[list[CharacterClassModel]] = relationship(
+    races: Mapped[list["RaceModel"]] = relationship(back_populates="source")
+    character_classes: Mapped[list["CharacterClassModel"]] = relationship(
         back_populates="source"
     )
-    spells: Mapped[list[SpellModel]] = relationship(back_populates="source")
+    spells: Mapped[list["SpellModel"]] = relationship(back_populates="source")
 
     def to_domain(self) -> Source:
         return Source(
@@ -33,7 +33,7 @@ class SourceModel(Base):
         )
 
     @staticmethod
-    def from_domain(source: Source) -> SourceModel:
+    def from_domain(source: Source) -> "SourceModel":
         return SourceModel(
             id=source.source_id(),
             name=source.name(),

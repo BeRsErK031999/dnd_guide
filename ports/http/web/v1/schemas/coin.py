@@ -12,7 +12,7 @@ class ReadPieceTypeSchema:
     platinum: str
 
     @staticmethod
-    def from_domain() -> ReadPieceTypeSchema:
+    def from_domain() -> "ReadPieceTypeSchema":
         return ReadPieceTypeSchema(
             **{name.name.lower(): name.value for name in PieceType}
         )
@@ -24,7 +24,7 @@ class CoinSchema:
     piece_type: str
 
     @staticmethod
-    def from_domain(coin: Coins) -> CoinSchema:
+    def from_domain(coin: Coins) -> "CoinSchema":
         return CoinSchema(
             count=coin.in_copper(),
             piece_type=PieceType.COPPER.name,

@@ -15,7 +15,7 @@ class CreatureTypeModel(Base):
     name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
 
-    races: Mapped[list[RaceModel]] = relationship(back_populates="creature_type")
+    races: Mapped[list["RaceModel"]] = relationship(back_populates="creature_type")
 
     def to_domain(self) -> CreatureType:
         return CreatureType(
@@ -25,7 +25,7 @@ class CreatureTypeModel(Base):
         )
 
     @staticmethod
-    def from_domain(size: CreatureType) -> CreatureTypeModel:
+    def from_domain(size: CreatureType) -> "CreatureTypeModel":
         return CreatureTypeModel(
             id=size.type_id(),
             name=size.name(),

@@ -12,7 +12,7 @@ class RaceFeatureSchema:
     description: str
 
     @staticmethod
-    def from_domain(feature: RaceFeature) -> RaceFeatureSchema:
+    def from_domain(feature: RaceFeature) -> "RaceFeatureSchema":
         return RaceFeatureSchema(
             name=feature.name(),
             description=feature.description(),
@@ -25,7 +25,7 @@ class RaceAgeSchema:
     description: str
 
     @staticmethod
-    def from_domain(age: RaceAge) -> RaceAgeSchema:
+    def from_domain(age: RaceAge) -> "RaceAgeSchema":
         return RaceAgeSchema(
             max_age=age.max_age(),
             description=age.description(),
@@ -38,7 +38,7 @@ class RaceSpeedSchema:
     description: str
 
     @staticmethod
-    def from_domain(speed: RaceSpeed) -> RaceSpeedSchema:
+    def from_domain(speed: RaceSpeed) -> "RaceSpeedSchema":
         return RaceSpeedSchema(
             base_speed=LengthSchema.from_domain(speed.base_speed()),
             description=speed.description(),
@@ -51,7 +51,7 @@ class RaceIncreaseModifierSchema:
     bonus: int
 
     @staticmethod
-    def from_domain(modifier: RaceIncreaseModifier) -> RaceIncreaseModifierSchema:
+    def from_domain(modifier: RaceIncreaseModifier) -> "RaceIncreaseModifierSchema":
         return RaceIncreaseModifierSchema(
             modifier=modifier.modifier(),
             bonus=modifier.bonus(),
@@ -73,7 +73,7 @@ class ReadRaceSchema:
     name_in_english: str
 
     @staticmethod
-    def from_domain(race: Race) -> ReadRaceSchema:
+    def from_domain(race: Race) -> "ReadRaceSchema":
         return ReadRaceSchema(
             race_id=race.race_id(),
             name=race.name(),

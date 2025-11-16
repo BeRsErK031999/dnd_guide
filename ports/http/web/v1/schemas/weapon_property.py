@@ -22,7 +22,7 @@ class ReadWeaponPropertyNameSchema:
     distance: str
 
     @staticmethod
-    def from_domain() -> ReadWeaponPropertyNameSchema:
+    def from_domain() -> "ReadWeaponPropertyNameSchema":
         return ReadWeaponPropertyNameSchema(
             **{name.name.lower(): name.value for name in WeaponPropertyName}
         )
@@ -33,7 +33,7 @@ class WeaponPropertyBaseRangeSchema:
     range: LengthSchema | None
 
     @staticmethod
-    def from_domain(range: Length) -> WeaponPropertyBaseRangeSchema:
+    def from_domain(range: Length) -> "WeaponPropertyBaseRangeSchema":
         return WeaponPropertyBaseRangeSchema(range=LengthSchema.from_domain(range))
 
 
@@ -42,7 +42,7 @@ class WeaponPropertyMaxRangeSchema:
     range: LengthSchema | None
 
     @staticmethod
-    def from_domain(range: Length) -> WeaponPropertyMaxRangeSchema:
+    def from_domain(range: Length) -> "WeaponPropertyMaxRangeSchema":
         return WeaponPropertyMaxRangeSchema(range=LengthSchema.from_domain(range))
 
 
@@ -51,7 +51,7 @@ class WeaponPropertySecondHandDiceSchema:
     dice: DiceSchema | None
 
     @staticmethod
-    def from_domain(dice: Dice) -> WeaponPropertySecondHandDiceSchema:
+    def from_domain(dice: Dice) -> "WeaponPropertySecondHandDiceSchema":
         return WeaponPropertySecondHandDiceSchema(dice=DiceSchema.from_domain(dice))
 
 
@@ -65,7 +65,7 @@ class ReadWeaponPropertySchema:
     second_hand_dice: WeaponPropertySecondHandDiceSchema | None = None
 
     @staticmethod
-    def from_domain(weapon_property: WeaponProperty) -> ReadWeaponPropertySchema:
+    def from_domain(weapon_property: WeaponProperty) -> "ReadWeaponPropertySchema":
         base_range = weapon_property.base_range()
         max_range = weapon_property.max_range()
         second_hand_dice = weapon_property.second_hand_dice()

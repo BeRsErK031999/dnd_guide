@@ -19,7 +19,7 @@ class ClassLevelDiceSchema:
     description: str
 
     @staticmethod
-    def from_domain(level_dice: ClassLevelDice) -> ClassLevelDiceSchema:
+    def from_domain(level_dice: ClassLevelDice) -> "ClassLevelDiceSchema":
         return ClassLevelDiceSchema(
             dice=DiceSchema.from_domain(level_dice.dice()),
             description=level_dice.description(),
@@ -32,7 +32,7 @@ class ClassLevelPointsSchema:
     description: str
 
     @staticmethod
-    def from_domain(level_points: ClassLevelPoints) -> ClassLevelPointsSchema:
+    def from_domain(level_points: ClassLevelPoints) -> "ClassLevelPointsSchema":
         return ClassLevelPointsSchema(
             points=level_points.points(),
             description=level_points.description(),
@@ -47,7 +47,7 @@ class ClassLevelBonusDamageSchema:
     @staticmethod
     def from_domain(
         level_bonus_damage: ClassLevelBonusDamage,
-    ) -> ClassLevelBonusDamageSchema:
+    ) -> "ClassLevelBonusDamageSchema":
         return ClassLevelBonusDamageSchema(
             damage=level_bonus_damage.damage(),
             description=level_bonus_damage.description(),
@@ -62,7 +62,7 @@ class ClassLevelIncreaseSpeedSchema:
     @staticmethod
     def from_domain(
         level_increase_speed: ClassLevelIncreaseSpeed,
-    ) -> ClassLevelIncreaseSpeedSchema:
+    ) -> "ClassLevelIncreaseSpeedSchema":
         return ClassLevelIncreaseSpeedSchema(
             speed=LengthSchema.from_domain(level_increase_speed.speed()),
             description=level_increase_speed.description(),
@@ -84,7 +84,7 @@ class ReadClassLevelSchema:
     increase_speed: ClassLevelIncreaseSpeedSchema | None
 
     @staticmethod
-    def from_domain(level: ClassLevel) -> ReadClassLevelSchema:
+    def from_domain(level: ClassLevel) -> "ReadClassLevelSchema":
         dice = level.dice()
         slots = level.spell_slots()
         points = level.points()

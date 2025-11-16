@@ -8,7 +8,7 @@ class WeightUnit(StrEnum):
     KG = "килограмм"
 
     @staticmethod
-    def from_str(name: str) -> WeightUnit:
+    def from_str(name: str) -> "WeightUnit":
         match name.upper():
             case WeightUnit.LB.name:
                 return WeightUnit.LB

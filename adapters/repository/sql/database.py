@@ -14,9 +14,9 @@ class DBHelper:
         )
 
     @property
-    def engine(self) -> AsyncEngine:
+    def engine(self) -> "AsyncEngine":
         return self._engine
 
     @property
-    def session(self) -> AsyncSession:
+    def session(self) -> "AsyncSession":
         return self._session_factory()

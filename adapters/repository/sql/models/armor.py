@@ -28,7 +28,7 @@ class ArmorModel(Base):
     max_modifier_bonus: Mapped[int | None]
     material_id: Mapped[UUID] = mapped_column(ForeignKey("material.id"))
 
-    material: Mapped[MaterialModel] = relationship(back_populates="armors")
+    material: Mapped["MaterialModel"] = relationship(back_populates="armors")
 
     def to_domain(self) -> Armor:
         return Armor(
@@ -53,7 +53,7 @@ class ArmorModel(Base):
         )
 
     @staticmethod
-    def from_domain(armor: Armor) -> ArmorModel:
+    def from_domain(armor: Armor) -> "ArmorModel":
         modifier = armor.armor_class().modifier()
         max_modifier_bonus = armor.armor_class().max_modifier_bonus()
         return ArmorModel(
