@@ -14,7 +14,7 @@ from adapters.repository.sql.models import (
 from application.repository import ClassRepository as AppClassRepository
 from domain.character_class import CharacterClass
 from domain.character_class import ClassRepository as DomainClassRepository
-from sqlalchemy import Select, delete, exists, select
+from sqlalchemy import Select, delete, exists, or_, select
 from sqlalchemy.orm import joinedload, selectinload
 
 
@@ -60,7 +60,12 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
             query = self._add_options(select(CharacterClassModel))
             if search_by_name is not None:
                 query = query.where(
-                    CharacterClassModel.name.ilike(f"%{search_by_name}%")
+                    or_(
+                        CharacterClassModel.name.ilike(f"%{search_by_name}%"),
+                        CharacterClassModel.name_in_english.ilike(
+                            f"%{search_by_name}%"
+                        ),
+                    )
                 )
             result = await session.execute(query)
             return [item.to_domain() for item in result.scalars().all()]

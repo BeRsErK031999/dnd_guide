@@ -10,7 +10,7 @@ from adapters.repository.sql.models import (
 from application.repository import RaceRepository as AppRaceRepository
 from domain.race import Race
 from domain.race import RaceRepository as DomainRaceRepository
-from sqlalchemy import Select, delete, exists, select
+from sqlalchemy import Select, delete, exists, or_, select
 from sqlalchemy.orm import selectinload
 
 
@@ -53,7 +53,12 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
         async with self.__db_helper.session as session:
             query = self._add_options(select(RaceModel))
             if search_by_name is not None:
-                query = query.where(RaceModel.name.ilike(f"%{search_by_name}%"))
+                query = query.where(
+                    or_(
+                        RaceModel.name.ilike(f"%{search_by_name}%"),
+                        RaceModel.name_in_english.ilike(f"%{search_by_name}%"),
+                    )
+                )
             result = await session.execute(query)
             result = result.scalars().all()
             return [item.to_domain() for item in result]
