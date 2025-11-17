@@ -39,7 +39,7 @@ class ClassFeatureController(Controller):
 
     @get()
     async def get_features(
-        self, use_cases: ClassFeatureUseCases
+        self, filter_by_class_id: UUID, use_cases: ClassFeatureUseCases
     ) -> list[ReadClassFeatureSchema]:
         features = await use_cases.get_all.execute()
         return [ReadClassFeatureSchema.from_domain(feature) for feature in features]

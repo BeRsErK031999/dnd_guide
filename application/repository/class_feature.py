@@ -22,6 +22,12 @@ class ClassFeatureRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def filter(
+        self, filter_by_class_id: UUID | None = None
+    ) -> list[ClassFeature]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, feature: ClassFeature) -> None:
         raise NotImplemented
 
