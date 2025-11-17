@@ -6,7 +6,10 @@ from application.dto.command.material_component import (
     DeleteMaterialComponentCommand,
     UpdateMaterialComponentCommand,
 )
-from application.dto.query.material_component import MaterialComponentQuery
+from application.dto.query.material_component import (
+    MaterialComponentQuery,
+    MaterialComponentsQuery,
+)
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import (
@@ -39,9 +42,10 @@ class MaterialComponentController(Controller):
 
     @get()
     async def get_materials(
-        self, use_cases: MaterialComponentUseCases
+        self, search_by_name: str | None, use_cases: MaterialComponentUseCases
     ) -> list[ReadMaterialComponentSchema]:
-        materials = await use_cases.get_all.execute()
+        query = MaterialComponentsQuery(search_by_name=search_by_name)
+        materials = await use_cases.get_all.execute(query)
         return [
             ReadMaterialComponentSchema.from_domain(material) for material in materials
         ]

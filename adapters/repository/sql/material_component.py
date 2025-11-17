@@ -55,6 +55,15 @@ class SQLMaterialComponentRepository(
             result = result.scalars().all()
             return [item.to_domain() for item in result]
 
+    async def filter(self, search_by_name: str) -> list[MaterialComponent]:
+        async with self.__db_helper.session as session:
+            query = select(MaterialComponentModel).where(
+                MaterialComponentModel.name.ilike(f"%{search_by_name}%")
+            )
+            result = await session.execute(query)
+            result = result.scalars().all()
+            return [item.to_domain() for item in result]
+
     async def create(self, material: MaterialComponent) -> None:
         async with self.__db_helper.session as session:
             material_model = MaterialComponentModel.from_domain(material)

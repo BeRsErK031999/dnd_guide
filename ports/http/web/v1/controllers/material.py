@@ -39,9 +39,7 @@ class MaterialController(Controller):
     async def get_materials(
         self, search_by_name: str | None, use_cases: MaterialUseCases
     ) -> list[ReadMaterialSchema]:
-        query = MaterialsQuery()
-        if search_by_name is not None:
-            query.search_by_name = search_by_name
+        query = MaterialsQuery(search_by_name=search_by_name)
         materials = await use_cases.get_all.execute(query)
         return [ReadMaterialSchema.from_domain(material) for material in materials]
 
