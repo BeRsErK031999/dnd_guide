@@ -63,8 +63,8 @@ class ReadRaceSchema:
     race_id: UUID
     name: str
     description: str
-    type_id: UUID
-    size_id: UUID
+    creature_type: str
+    creature_size: str
     speed: RaceSpeedSchema
     age: RaceAgeSchema
     increase_modifiers: Sequence[RaceIncreaseModifierSchema]
@@ -78,8 +78,8 @@ class ReadRaceSchema:
             race_id=race.race_id(),
             name=race.name(),
             description=race.description(),
-            type_id=race.type_id(),
-            size_id=race.size_id(),
+            creature_type=race.creature_type().value,
+            creature_size=race.creature_size().value,
             speed=RaceSpeedSchema.from_domain(race.speed()),
             age=RaceAgeSchema.from_domain(race.age()),
             increase_modifiers=[
@@ -98,8 +98,8 @@ class ReadRaceSchema:
 class CreateRaceSchema:
     name: str
     description: str
-    type_id: UUID
-    size_id: UUID
+    creature_type: str
+    creature_size: str
     speed: RaceSpeedSchema
     age: RaceAgeSchema
     increase_modifiers: Sequence[RaceIncreaseModifierSchema]
@@ -112,8 +112,8 @@ class CreateRaceSchema:
 class UpdateRaceSchema:
     name: str | None = None
     description: str | None = None
-    type_id: UUID | None = None
-    size_id: UUID | None = None
+    creature_type: str | None = None
+    creature_size: str | None = None
     speed: RaceSpeedSchema | None = None
     age: RaceAgeSchema | None = None
     increase_modifiers: Sequence[RaceIncreaseModifierSchema] | None = None

@@ -1,6 +1,8 @@
 from typing import Sequence
 from uuid import UUID
 
+from domain.creature_size import CreatureSize
+from domain.creature_type import CreatureType
 from domain.error import DomainError
 from domain.mixin import (
     EntityDescription,
@@ -20,8 +22,8 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish, EntitySource):
         race_id: UUID,
         name: str,
         description: str,
-        type_id: UUID,
-        size_id: UUID,
+        creature_type: CreatureType,
+        creature_size: CreatureSize,
         speed: RaceSpeed,
         age: RaceAge,
         increase_modifiers: Sequence[RaceIncreaseModifier],
@@ -36,8 +38,8 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish, EntitySource):
         EntityDescription.__init__(self, description)
         EntitySource.__init__(self, source_id)
         self.__race_id = race_id
-        self.__type_id = type_id
-        self.__size_id = size_id
+        self.__creature_type = creature_type
+        self.__creature_size = creature_size
         self.__speed = speed
         self.__age = age
         self.__increase_modifiers = list(increase_modifiers)
@@ -46,11 +48,11 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish, EntitySource):
     def race_id(self) -> UUID:
         return self.__race_id
 
-    def type_id(self) -> UUID:
-        return self.__type_id
+    def creature_type(self) -> CreatureType:
+        return self.__creature_type
 
-    def size_id(self) -> UUID:
-        return self.__size_id
+    def creature_size(self) -> CreatureSize:
+        return self.__creature_size
 
     def speed(self) -> RaceSpeed:
         return self.__speed
@@ -64,17 +66,17 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish, EntitySource):
     def features(self) -> list[RaceFeature]:
         return self.__features
 
-    def new_type_id(self, type_id: UUID) -> None:
-        if self.__type_id == type_id:
+    def new_creature_type(self, creature_type: CreatureType) -> None:
+        if self.__creature_type == creature_type:
             raise DomainError.idempotent("текущий тип расы равен новому типу расы")
-        self.__type_id = type_id
+        self.__creature_type = creature_type
 
-    def new_size_id(self, size_id: UUID) -> None:
-        if self.__size_id == size_id:
+    def new_creature_size(self, creature_size: CreatureSize) -> None:
+        if self.__creature_size == creature_size:
             raise DomainError.idempotent(
                 "текущий размер расы равен новому размеру расы"
             )
-        self.__size_id = size_id
+        self.__creature_size = creature_size
 
     def new_speed(self, speed: RaceSpeed) -> None:
         if self.__speed == speed:

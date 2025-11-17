@@ -12,8 +12,6 @@ from .character_class import (
 from .character_subclass import CharacterSubclassModel
 from .class_feature import ClassFeatureModel
 from .class_level import ClassLevelModel, ClassLevelSpellSlotModel
-from .creature_size import CreatureSizeModel
-from .creature_type import CreatureTypeModel
 from .feat import (
     FeatIncreaseModifierModel,
     FeatModel,
@@ -56,8 +54,6 @@ __all__ = [
     "ClassFeatureModel",
     "ClassLevelModel",
     "ClassLevelSpellSlotModel",
-    "CreatureSizeModel",
-    "CreatureTypeModel",
     "FeatIncreaseModifierModel",
     "FeatModel",
     "FeatRequiredArmorTypeModel",

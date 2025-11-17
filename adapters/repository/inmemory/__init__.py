@@ -3,8 +3,6 @@ from .character_class import InMemoryClassRepository
 from .character_subclass import InMemorySubclassRepository
 from .class_feature import InMemoryClassFeatureRepository
 from .class_level import InMemoryClassLevelRepository
-from .creature_size import InMemoryCreatureSizeRepository
-from .creature_type import InMemoryCreatureTypeRepository
 from .feat import InMemoryFeatRepository
 from .material import InMemoryMaterialRepository
 from .material_component import InMemoryMaterialComponentRepository
@@ -25,8 +23,6 @@ __all__ = [
     "InMemorySubclassRepository",
     "InMemoryClassFeatureRepository",
     "InMemoryClassLevelRepository",
-    "InMemoryCreatureSizeRepository",
-    "InMemoryCreatureTypeRepository",
     "InMemoryFeatRepository",
     "InMemoryMaterialRepository",
     "InMemoryMaterialComponentRepository",

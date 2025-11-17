@@ -6,8 +6,6 @@ from domain.character_class import ClassService
 from domain.character_subclass import SubclassService
 from domain.class_feature import ClassFeatureService
 from domain.class_level import ClassLevelService
-from domain.creature_size import CreatureSizeService
-from domain.creature_type import CreatureTypeService
 from domain.feat import FeatService
 from domain.material import MaterialService
 from domain.material_component import MaterialComponentService
@@ -32,8 +30,6 @@ character_class_repo = sql.SQLClassRepository(db_helper=db_helper)
 character_subclass_repo = sql.SQLSubclassRepository(db_helper=db_helper)
 class_feature_repo = sql.SQLClassFeatureRepository(db_helper=db_helper)
 class_level_repo = sql.SQLClassLevelRepository(db_helper=db_helper)
-creature_size_repo = sql.SQLCreatureSizeRepository(db_helper=db_helper)
-creature_type_repo = sql.SQLCreatureTypeRepository(db_helper=db_helper)
 feat_repo = sql.SQLFeatRepository(db_helper=db_helper)
 material_repo = sql.SQLMaterialRepository(db_helper=db_helper)
 material_component_repo = sql.SQLMaterialComponentRepository(db_helper=db_helper)
@@ -55,8 +51,6 @@ character_class_domain_service = ClassService(character_class_repo)
 character_subclass_domain_service = SubclassService(character_subclass_repo)
 class_feature_domain_service = ClassFeatureService(class_feature_repo)
 class_level_domain_service = ClassLevelService(class_level_repo)
-creature_size_domain_service = CreatureSizeService(creature_size_repo)
-creature_type_domain_service = CreatureTypeService(creature_type_repo)
 feat_domain_service = FeatService(feat_repo)
 material_domain_service = MaterialService(material_repo)
 material_component_domain_service = MaterialComponentService(material_component_repo)
@@ -205,54 +199,6 @@ class ClassLevelUseCases:
         )
 
 
-class CreatureSizeUseCases:
-    def __init__(self) -> None:
-        self.create = command.creature_size.CreateCreatureSizeUseCase(
-            creature_size_service=creature_size_domain_service,
-            user_repository=user_repo,
-            creature_size_repository=creature_size_repo,
-        )
-        self.update = command.creature_size.UpdateCreatureSizeUseCase(
-            creature_size_service=creature_size_domain_service,
-            user_repository=user_repo,
-            creature_size_repository=creature_size_repo,
-        )
-        self.delete = command.creature_size.DeleteCreatureSizeUseCase(
-            user_repository=user_repo,
-            creature_size_repository=creature_size_repo,
-        )
-        self.get_one = query.creature_size.GetCreatureSizeUseCase(
-            creature_size_repository=creature_size_repo,
-        )
-        self.get_all = query.creature_size.GetCreatureSizesUseCase(
-            creature_size_repository=creature_size_repo,
-        )
-
-
-class CreatureTypeUseCases:
-    def __init__(self) -> None:
-        self.create = command.creature_type.CreateCreatureTypeUseCase(
-            creature_type_service=creature_type_domain_service,
-            user_repository=user_repo,
-            creature_type_repository=creature_type_repo,
-        )
-        self.update = command.creature_type.UpdateCreatureTypeUseCase(
-            creature_type_service=creature_type_domain_service,
-            user_repository=user_repo,
-            creature_type_repository=creature_type_repo,
-        )
-        self.delete = command.creature_type.DeleteCreatureTypeUseCase(
-            user_repository=user_repo,
-            creature_type_repository=creature_type_repo,
-        )
-        self.get_one = query.creature_type.GetCreatureTypeUseCase(
-            creature_type_repository=creature_type_repo,
-        )
-        self.get_all = query.creature_type.GetCreatureTypesUseCase(
-            creature_type_repository=creature_type_repo,
-        )
-
-
 class FeatUseCases:
     def __init__(self) -> None:
         self.create = command.feat.CreateFeatUseCase(
@@ -331,16 +277,12 @@ class RaceUseCases:
             race_service=race_domain_service,
             user_repository=user_repo,
             race_repository=race_repo,
-            creature_size_repository=creature_size_repo,
-            creature_type_repository=creature_type_repo,
             source_repository=source_repo,
         )
         self.update = command.race.UpdateRaceUseCase(
             race_service=race_domain_service,
             user_repository=user_repo,
             race_repository=race_repo,
-            creature_size_repository=creature_size_repo,
-            creature_type_repository=creature_type_repo,
             source_repository=source_repo,
         )
         self.delete = command.race.DeleteRaceUseCase(
@@ -568,8 +510,6 @@ class_use_cases = ClassUseCases()
 subclass_use_cases = SubclassUseCases()
 class_feature_use_cases = ClassFeatureUseCases()
 class_level_use_cases = ClassLevelUseCases()
-creature_size_use_cases = CreatureSizeUseCases()
-creature_type_use_cases = CreatureTypeUseCases()
 feat_use_cases = FeatUseCases()
 material_use_cases = MaterialUseCases()
 material_component_use_cases = MaterialComponentUseCases()

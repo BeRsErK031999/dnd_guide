@@ -6,8 +6,8 @@ from .character_subclass import SubclassController
 from .class_feature import ClassFeatureController
 from .class_level import ClassLevelController
 from .coin import get_piece_types
-from .creature_size import CreatureSizeController
-from .creature_type import CreatureTypeController
+from .creature_size import get_creature_types
+from .creature_type import get_creature_sizes
 from .damage_type import get_damage_types
 from .dice import get_dice_types
 from .feat import FeatController
@@ -36,8 +36,6 @@ router = Router(
         SubclassController,
         ClassFeatureController,
         ClassLevelController,
-        CreatureSizeController,
-        CreatureTypeController,
         FeatController,
         MaterialController,
         MaterialComponentController,
@@ -58,5 +56,7 @@ router = Router(
         get_damage_types,
         get_modifiers,
         get_skills,
+        get_creature_types,
+        get_creature_sizes,
     ],
 )

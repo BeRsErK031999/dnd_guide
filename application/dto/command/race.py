@@ -35,8 +35,8 @@ class CreateRaceCommand:
     user_id: UUID
     name: str
     description: str
-    type_id: UUID
-    size_id: UUID
+    creature_type: str
+    creature_size: str
     speed: RaceSpeedCommand
     age: RaceAgeCommand
     increase_modifiers: Sequence[RaceIncreaseModifierCommand]
@@ -51,8 +51,8 @@ class UpdateRaceCommand:
     race_id: UUID
     name: str | None = None
     description: str | None = None
-    type_id: UUID | None = None
-    size_id: UUID | None = None
+    creature_size: str | None = None
+    creature_type: str | None = None
     speed: RaceSpeedCommand | None = None
     age: RaceAgeCommand | None = None
     increase_modifiers: Sequence[RaceIncreaseModifierCommand] | None = None
@@ -67,8 +67,8 @@ class UpdateRaceCommand:
             [
                 self.name is None,
                 self.description is None,
-                self.type_id is None,
-                self.size_id is None,
+                self.creature_type is None,
+                self.creature_size is None,
                 self.speed is None,
                 self.age is None,
                 self.increase_modifiers is None,

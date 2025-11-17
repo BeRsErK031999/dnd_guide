@@ -1,14 +1,10 @@
 from uuid import UUID
 
 from application.dto.command.race import CreateRaceCommand
-from application.repository import (
-    CreatureSizeRepository,
-    CreatureTypeRepository,
-    RaceRepository,
-    SourceRepository,
-    UserRepository,
-)
+from application.repository import RaceRepository, SourceRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
+from domain.creature_size import CreatureSize
+from domain.creature_type import CreatureType
 from domain.error import DomainError
 from domain.length import Length, LengthUnit
 from domain.modifier import Modifier
@@ -28,15 +24,11 @@ class CreateRaceUseCase(UserCheck):
         race_service: RaceService,
         user_repository: UserRepository,
         race_repository: RaceRepository,
-        creature_size_repository: CreatureSizeRepository,
-        creature_type_repository: CreatureTypeRepository,
         source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
         self.__race_service = race_service
         self.__race_repository = race_repository
-        self.__size_repository = creature_size_repository
-        self.__type_repository = creature_type_repository
         self.__source_repository = source_repository
 
     async def execute(self, command: CreateRaceCommand) -> UUID:
@@ -45,45 +37,37 @@ class CreateRaceUseCase(UserCheck):
             raise DomainError.invalid_data(
                 f"не возможно создать расу с названием {command.name}"
             )
-        if not await self.__size_repository.id_exists(command.size_id):
-            raise DomainError.invalid_data(
-                f"размера существ с id {command.size_id} не существует"
-            )
-        if not await self.__type_repository.id_exists(command.type_id):
-            raise DomainError.invalid_data(
-                f"типа существ с id {command.type_id} не существует"
-            )
         if not await self.__source_repository.id_exists(command.source_id):
             raise DomainError.invalid_data(
                 f"источник с id {command.source_id} не существует"
             )
         race = Race(
-            await self.__race_repository.next_id(),
-            command.name,
-            command.description,
-            command.type_id,
-            command.size_id,
-            RaceSpeed(
+            race_id=await self.__race_repository.next_id(),
+            name=command.name,
+            description=command.description,
+            creature_type=CreatureType.from_str(command.creature_type),
+            creature_size=CreatureSize.from_str(command.creature_size),
+            speed=RaceSpeed(
                 Length(
                     command.speed.base_speed.count,
                     LengthUnit.from_str(command.speed.base_speed.unit),
                 ),
                 command.speed.description,
             ),
-            RaceAge(command.age.max_age, command.age.description),
-            [
+            age=RaceAge(command.age.max_age, command.age.description),
+            increase_modifiers=[
                 RaceIncreaseModifier(
                     Modifier.from_str(increase_modifier.modifier),
                     increase_modifier.bonus,
                 )
                 for increase_modifier in command.increase_modifiers
             ],
-            [
+            features=[
                 RaceFeature(feature.name, feature.description)
                 for feature in command.features
             ],
-            command.name_in_english,
-            command.source_id,
+            name_in_english=command.name_in_english,
+            source_id=command.source_id,
         )
         await self.__race_repository.create(race)
         return race.race_id()

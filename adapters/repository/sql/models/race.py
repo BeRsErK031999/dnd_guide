@@ -2,6 +2,8 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
+from domain.creature_size import CreatureSize
+from domain.creature_type import CreatureType
 from domain.length import Length, LengthUnit
 from domain.modifier import Modifier
 from domain.race import Race, RaceAge, RaceFeature, RaceIncreaseModifier, RaceSpeed
@@ -9,8 +11,6 @@ from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
-    from adapters.repository.sql.models.creature_size import CreatureSizeModel
-    from adapters.repository.sql.models.creature_type import CreatureTypeModel
     from adapters.repository.sql.models.source import SourceModel
     from adapters.repository.sql.models.subrace import SubraceModel
 
@@ -25,12 +25,10 @@ class RaceModel(Base):
     speed_description: Mapped[str]
     max_age: Mapped[int]
     age_description: Mapped[str]
-    creature_type_id: Mapped[UUID] = mapped_column(ForeignKey("creature_type.id"))
-    creature_size_id: Mapped[UUID] = mapped_column(ForeignKey("creature_size.id"))
+    creature_type: Mapped[str] = mapped_column(String(50))
+    creature_size: Mapped[str] = mapped_column(String(50))
     source_id: Mapped[UUID] = mapped_column(ForeignKey("source.id"))
 
-    creature_type: Mapped["CreatureTypeModel"] = relationship(back_populates="races")
-    creature_size: Mapped["CreatureSizeModel"] = relationship(back_populates="races")
     increase_modifiers: Mapped[list["RaceIncreaseModifierModel"]] = relationship(
         back_populates="race"
     )
@@ -43,8 +41,8 @@ class RaceModel(Base):
             race_id=self.id,
             name=self.name,
             description=self.description,
-            type_id=self.creature_type_id,
-            size_id=self.creature_size_id,
+            creature_type=CreatureType.from_str(self.creature_type),
+            creature_size=CreatureSize.from_str(self.creature_size),
             speed=RaceSpeed(
                 Length(count=self.base_speed, unit=LengthUnit.FT),
                 self.speed_description,
@@ -67,8 +65,8 @@ class RaceModel(Base):
             speed_description=race.speed().description(),
             max_age=race.age().max_age(),
             age_description=race.age().description(),
-            creature_type_id=race.type_id(),
-            creature_size_id=race.size_id(),
+            creature_type=race.creature_type().name,
+            creature_size=race.creature_size().name,
             source_id=race.source_id(),
         )
 

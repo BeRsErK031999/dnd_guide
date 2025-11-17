@@ -2,8 +2,6 @@ from uuid import UUID, uuid4
 
 from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models import (
-    CreatureSizeModel,
-    CreatureTypeModel,
     RaceFeatureModel,
     RaceIncreaseModifierModel,
     RaceModel,
@@ -65,12 +63,8 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
         async with self.__db_helper.session as session:
             model = RaceModel.from_domain(race)
             model.source = await session.get_one(SourceModel, race.source_id())
-            model.creature_size = await session.get_one(
-                CreatureSizeModel, race.size_id()
-            )
-            model.creature_type = await session.get_one(
-                CreatureTypeModel, race.type_id()
-            )
+            model.creature_size = race.creature_size().name
+            model.creature_type = race.creature_type().name
             model.increase_modifiers.extend(
                 [
                     RaceIncreaseModifierModel.from_domain(race.race_id(), im)
@@ -99,14 +93,10 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
             model = await session.execute(race_query)
             model = model.scalar_one()
             old_domain = model.to_domain()
-            if old_domain.type_id() != race.type_id():
-                model.creature_type = await session.get_one(
-                    CreatureTypeModel, race.type_id()
-                )
-            if old_domain.size_id() != race.size_id():
-                model.creature_size = await session.get_one(
-                    CreatureSizeModel, race.size_id()
-                )
+            if old_domain.creature_type() != race.creature_type():
+                model.creature_type = race.creature_type().name
+            if old_domain.creature_size() != race.creature_size():
+                model.creature_size = race.creature_size().name
             if old_domain.speed() != race.speed():
                 model.base_speed = race.speed().base_speed().in_ft()
                 model.speed_description = race.speed().description()

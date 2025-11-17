@@ -1,12 +1,8 @@
 from application.dto.command.race import UpdateRaceCommand
-from application.repository import (
-    CreatureSizeRepository,
-    CreatureTypeRepository,
-    RaceRepository,
-    SourceRepository,
-    UserRepository,
-)
+from application.repository import RaceRepository, SourceRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
+from domain.creature_size import CreatureSize
+from domain.creature_type import CreatureType
 from domain.error import DomainError
 from domain.length import Length, LengthUnit
 from domain.modifier import Modifier
@@ -25,15 +21,11 @@ class UpdateRaceUseCase(UserCheck):
         race_service: RaceService,
         user_repository: UserRepository,
         race_repository: RaceRepository,
-        creature_size_repository: CreatureSizeRepository,
-        creature_type_repository: CreatureTypeRepository,
         source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
         self.__race_service = race_service
         self.__race_repository = race_repository
-        self.__size_repository = creature_size_repository
-        self.__type_repository = creature_type_repository
         self.__source_repository = source_repository
 
     async def execute(self, command: UpdateRaceCommand) -> None:
@@ -50,18 +42,10 @@ class UpdateRaceUseCase(UserCheck):
             race.new_name(command.name)
         if command.description is not None:
             race.new_description(command.description)
-        if command.size_id is not None:
-            if not await self.__size_repository.id_exists(command.size_id):
-                raise DomainError.invalid_data(
-                    f"размера существ с id {command.size_id} не существует"
-                )
-            race.new_size_id(command.size_id)
-        if command.type_id is not None:
-            if not await self.__type_repository.id_exists(command.type_id):
-                raise DomainError.invalid_data(
-                    f"типа существ с id {command.type_id} не существует"
-                )
-            race.new_type_id(command.type_id)
+        if command.creature_size is not None:
+            race.new_creature_size(CreatureSize.from_str(command.creature_size))
+        if command.creature_type is not None:
+            race.new_creature_type(CreatureType.from_str(command.creature_type))
         if command.speed is not None:
             race.new_speed(
                 RaceSpeed(

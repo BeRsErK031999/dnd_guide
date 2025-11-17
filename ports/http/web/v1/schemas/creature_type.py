@@ -1,31 +1,32 @@
 from dataclasses import dataclass
-from uuid import UUID
 
 from domain.creature_type import CreatureType
 
 
 @dataclass
 class ReadCreatureTypeSchema:
-    type_id: UUID
-    name: str
-    description: str
+    aberration: str
+    beast: str
+    celestial: str
+    construct: str
+    dragon: str
+    elemental: str
+    fey: str
+    fiend: str
+    giant: str
+    humanoid: str
+    monstrosity: str
+    ooze: str
+    plant: str
+    undead: str
+    transport: str
+    object: str
 
     @staticmethod
-    def from_domain(type: CreatureType) -> "ReadCreatureTypeSchema":
+    def from_domain() -> "ReadCreatureTypeSchema":
         return ReadCreatureTypeSchema(
-            type_id=type.type_id(),
-            name=type.name(),
-            description=type.description(),
+            **{
+                creature_type.name.lower(): creature_type.value
+                for creature_type in CreatureType
+            }
         )
-
-
-@dataclass
-class CreateCreatureTypeSchema:
-    name: str
-    description: str
-
-
-@dataclass
-class UpdateCreatureTypeSchema:
-    name: str | None = None
-    description: str | None = None

@@ -4,8 +4,6 @@ from di import (
     ClassFeatureUseCases,
     ClassLevelUseCases,
     ClassUseCases,
-    CreatureSizeUseCases,
-    CreatureTypeUseCases,
     FeatUseCases,
     MaterialComponentUseCases,
     MaterialUseCases,
@@ -26,8 +24,6 @@ __all__ = [
     "ClassFeatureUseCases",
     "ClassLevelUseCases",
     "ClassUseCases",
-    "CreatureSizeUseCases",
-    "CreatureTypeUseCases",
     "FeatUseCases",
     "MaterialComponentUseCases",
     "MaterialUseCases",
@@ -81,14 +77,6 @@ def di_class_feature_use_cases() -> di.ClassFeatureUseCases:
 
 def di_class_level_use_cases() -> di.ClassLevelUseCases:
     return di.class_level_use_cases
-
-
-def di_creature_size_use_cases() -> di.CreatureSizeUseCases:
-    return di.creature_size_use_cases
-
-
-def di_creature_type_use_cases() -> di.CreatureTypeUseCases:
-    return di.creature_type_use_cases
 
 
 def di_feat_use_cases() -> di.FeatUseCases:

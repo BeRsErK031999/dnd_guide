@@ -1,31 +1,19 @@
 from dataclasses import dataclass
-from uuid import UUID
 
 from domain.creature_size import CreatureSize
 
 
 @dataclass
 class ReadCreatureSizeSchema:
-    size_id: UUID
-    name: str
-    description: str
+    tiny: str
+    small: str
+    medium: str
+    large: str
+    huge: str
+    gargantuan: str
 
     @staticmethod
-    def from_domain(size: CreatureSize) -> "ReadCreatureSizeSchema":
+    def from_domain() -> "ReadCreatureSizeSchema":
         return ReadCreatureSizeSchema(
-            size_id=size.size_id(),
-            name=size.name(),
-            description=size.description(),
+            **{size.name.lower(): size.value for size in CreatureSize}
         )
-
-
-@dataclass
-class CreateCreatureSizeSchema:
-    name: str
-    description: str
-
-
-@dataclass
-class UpdateCreatureSizeSchema:
-    name: str | None = None
-    description: str | None = None
