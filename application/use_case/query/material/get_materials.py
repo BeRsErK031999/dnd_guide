@@ -8,6 +8,4 @@ class GetMaterialsUseCase:
         self.__repository = material_repository
 
     async def execute(self, query: MaterialsQuery) -> list[Material]:
-        if query.search_by_name is None:
-            return await self.__repository.get_all()
-        return await self.__repository.filter(query.search_by_name)
+        return await self.__repository.filter(search_by_name=query.search_by_name)
