@@ -10,7 +10,7 @@ from adapters.repository.sql.models import (
 from application.repository import RaceRepository as AppRaceRepository
 from domain.race import Race
 from domain.race import RaceRepository as DomainRaceRepository
-from sqlalchemy import delete, exists, select
+from sqlalchemy import Select, delete, exists, select
 from sqlalchemy.orm import selectinload
 
 
@@ -37,24 +37,23 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
 
     async def get_by_id(self, race_id: UUID) -> Race:
         async with self.__db_helper.session as session:
-            query = (
-                select(RaceModel)
-                .where(RaceModel.id == race_id)
-                .options(
-                    selectinload(RaceModel.increase_modifiers),
-                    selectinload(RaceModel.features),
-                )
-            )
+            query = self._add_options(select(RaceModel).where(RaceModel.id == race_id))
             result = await session.execute(query)
             result = result.scalar_one()
             return result.to_domain()
 
     async def get_all(self) -> list[Race]:
         async with self.__db_helper.session as session:
-            query = select(RaceModel).options(
-                selectinload(RaceModel.increase_modifiers),
-                selectinload(RaceModel.features),
-            )
+            query = self._add_options(select(RaceModel))
+            result = await session.execute(query)
+            result = result.scalars().all()
+            return [item.to_domain() for item in result]
+
+    async def filter(self, search_by_name: str | None = None) -> list[Race]:
+        async with self.__db_helper.session as session:
+            query = self._add_options(select(RaceModel))
+            if search_by_name is not None:
+                query = query.where(RaceModel.name.ilike(f"%{search_by_name}%"))
             result = await session.execute(query)
             result = result.scalars().all()
             return [item.to_domain() for item in result]
@@ -82,13 +81,8 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
 
     async def update(self, race: Race) -> None:
         async with self.__db_helper.session as session:
-            race_query = (
-                select(RaceModel)
-                .where(RaceModel.id == race.race_id())
-                .options(
-                    selectinload(RaceModel.increase_modifiers),
-                    selectinload(RaceModel.features),
-                )
+            race_query = self._add_options(
+                select(RaceModel).where(RaceModel.id == race.race_id())
             )
             model = await session.execute(race_query)
             model = model.scalar_one()
@@ -131,3 +125,9 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
             query = delete(RaceModel).where(RaceModel.id == race_id)
             await session.execute(query)
             await session.commit()
+
+    def _add_options(self, query: Select) -> Select:
+        return query.options(
+            selectinload(RaceModel.increase_modifiers),
+            selectinload(RaceModel.features),
+        )

@@ -22,6 +22,10 @@ class RaceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def filter(self, search_by_name: str | None = None) -> list[Race]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, race: Race) -> None:
         raise NotImplemented
 

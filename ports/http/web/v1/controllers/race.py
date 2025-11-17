@@ -6,7 +6,7 @@ from application.dto.command.race import (
     DeleteRaceCommand,
     UpdateRaceCommand,
 )
-from application.dto.query.race import RaceQuery
+from application.dto.query.race import RaceQuery, RacesQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import RaceUseCases, di_race_use_cases
@@ -29,8 +29,11 @@ class RaceController(Controller):
         return ReadRaceSchema.from_domain(race)
 
     @get()
-    async def get_races(self, use_cases: RaceUseCases) -> list[ReadRaceSchema]:
-        races = await use_cases.get_all.execute()
+    async def get_races(
+        self, search_by_name: str | None, use_cases: RaceUseCases
+    ) -> list[ReadRaceSchema]:
+        query = RacesQuery(search_by_name=search_by_name)
+        races = await use_cases.get_all.execute(query)
         return [ReadRaceSchema.from_domain(race) for race in races]
 
     @post()
