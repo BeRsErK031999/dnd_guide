@@ -22,7 +22,7 @@ class ReadFeatSchema:
     feat_id: UUID
     name: str
     description: str
-    is_caster: bool
+    caster: bool
     required_armor_types: Sequence[str]
     required_modifiers: Sequence[FeatRequiredModifierSchema]
     increase_modifiers: Sequence[str]
@@ -33,7 +33,7 @@ class ReadFeatSchema:
             feat_id=feat.feat_id(),
             name=feat.name(),
             description=feat.description(),
-            is_caster=feat.is_caster(),
+            caster=feat.caster(),
             required_armor_types=[
                 armor_type.value for armor_type in feat.required_armor_types()
             ],
@@ -51,7 +51,7 @@ class ReadFeatSchema:
 class CreateFeatSchema:
     name: str
     description: str
-    is_caster: bool
+    caster: bool
     required_armor_types: Sequence[str]
     required_modifiers: Sequence[FeatRequiredModifierSchema]
     increase_modifiers: Sequence[str]
@@ -61,7 +61,7 @@ class CreateFeatSchema:
 class UpdateFeatSchema:
     name: str | None = None
     description: str | None = None
-    is_caster: bool | None = None
+    caster: bool | None = None
     required_armor_types: Sequence[str] | None = None
     required_modifiers: Sequence[FeatRequiredModifierSchema] | None = None
     increase_modifiers: Sequence[str] | None = None

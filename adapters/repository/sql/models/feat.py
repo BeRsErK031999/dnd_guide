@@ -13,7 +13,7 @@ class FeatModel(Base):
 
     name: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
-    is_caster: Mapped[bool]
+    caster: Mapped[bool]
 
     increase_modifiers: Mapped[list["FeatIncreaseModifierModel"]] = relationship(
         back_populates="feat"
@@ -30,7 +30,7 @@ class FeatModel(Base):
             feat_id=self.id,
             name=self.name,
             description=self.description,
-            is_caster=self.is_caster,
+            caster=self.caster,
             increase_modifiers=[
                 increase_modifier.to_domain()
                 for increase_modifier in self.increase_modifiers
@@ -50,7 +50,7 @@ class FeatModel(Base):
         return FeatModel(
             name=feat.name(),
             description=feat.description(),
-            is_caster=feat.is_caster(),
+            caster=feat.caster(),
         )
 
 

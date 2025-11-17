@@ -106,8 +106,8 @@ class SQLFeatRepository(DomainFeatRepository, AppFeatRepository):
             old_domain = model.to_domain()
             if old_domain.name() != feat.name():
                 model.name = feat.name()
-            if old_domain.is_caster() != feat.is_caster():
-                model.is_caster = feat.is_caster()
+            if old_domain.caster() != feat.caster():
+                model.caster = feat.caster()
             model.description = feat.description()
             model.increase_modifiers.clear()
             if len(feat.increase_modifiers()) > 0:

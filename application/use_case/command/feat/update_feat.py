@@ -31,8 +31,8 @@ class UpdateFeatUseCase(UserCheck):
             feat.new_name(command.name)
         if command.description is not None:
             feat.new_description(command.description)
-        if command.is_caster is not None:
-            feat.new_is_caster(command.is_caster)
+        if command.caster is not None:
+            feat.new_is_caster(command.caster)
         if command.required_armor_types is not None:
             feat.new_required_armor_types(
                 [

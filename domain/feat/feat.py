@@ -14,7 +14,7 @@ class Feat(EntityName, EntityDescription):
         feat_id: UUID,
         name: str,
         description: str,
-        is_caster: bool,
+        caster: bool,
         required_modifiers: Sequence[FeatRequiredModifier],
         required_armor_types: Sequence[ArmorType],
         increase_modifiers: Sequence[Modifier],
@@ -31,7 +31,7 @@ class Feat(EntityName, EntityDescription):
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
         self.__feat_id = feat_id
-        self.__is_caster = is_caster
+        self.__is_caster = caster
         self.__required_modifiers = list(required_modifiers)
         self.__required_armor_types = list(required_armor_types)
         self.__increase_modifiers = list(increase_modifiers)
@@ -39,7 +39,7 @@ class Feat(EntityName, EntityDescription):
     def feat_id(self) -> UUID:
         return self.__feat_id
 
-    def is_caster(self) -> bool:
+    def caster(self) -> bool:
         return self.__is_caster
 
     def required_modifiers(self) -> list[FeatRequiredModifier]:
@@ -51,10 +51,10 @@ class Feat(EntityName, EntityDescription):
     def increase_modifiers(self) -> list[Modifier]:
         return self.__increase_modifiers
 
-    def new_is_caster(self, is_caster: bool) -> None:
-        if self.__is_caster == is_caster:
+    def new_is_caster(self, caster: bool) -> None:
+        if self.__is_caster == caster:
             raise DomainError.idempotent("статус заклинателя не изменился")
-        self.__is_caster = is_caster
+        self.__is_caster = caster
 
     def new_required_modifiers(
         self, required_modifiers: Sequence[FeatRequiredModifier]

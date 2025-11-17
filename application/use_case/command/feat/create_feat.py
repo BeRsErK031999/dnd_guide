@@ -30,7 +30,7 @@ class CreateFeatUseCase(UserCheck):
             feat_id=await self.__feat_repository.next_id(),
             name=command.name,
             description=command.description,
-            is_caster=command.is_caster,
+            caster=command.caster,
             required_armor_types=[
                 ArmorType.from_str(at) for at in command.required_armor_types
             ],
