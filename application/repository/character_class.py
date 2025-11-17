@@ -22,6 +22,10 @@ class ClassRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def filter(self, search_by_name: str | None = None) -> list[CharacterClass]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, character_class: CharacterClass) -> None:
         raise NotImplemented
 

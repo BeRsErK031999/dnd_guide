@@ -14,7 +14,7 @@ from adapters.repository.sql.models import (
 from application.repository import ClassRepository as AppClassRepository
 from domain.character_class import CharacterClass
 from domain.character_class import ClassRepository as DomainClassRepository
-from sqlalchemy import delete, exists, select
+from sqlalchemy import Select, delete, exists, select
 from sqlalchemy.orm import joinedload, selectinload
 
 
@@ -41,18 +41,8 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
 
     async def get_by_id(self, class_id: UUID) -> CharacterClass:
         async with self.__helper.session as session:
-            query = (
-                select(CharacterClassModel)
-                .where(CharacterClassModel.id == class_id)
-                .options(
-                    selectinload(CharacterClassModel.primary_modifiers),
-                    selectinload(CharacterClassModel.armor_types),
-                    selectinload(CharacterClassModel.saving_throws),
-                    selectinload(CharacterClassModel.skills),
-                    selectinload(CharacterClassModel.weapons),
-                    selectinload(CharacterClassModel.tools),
-                    joinedload(CharacterClassModel.source),
-                )
+            query = self._add_options(
+                select(CharacterClassModel).where(CharacterClassModel.id == class_id)
             )
             result = await session.execute(query)
             result = result.scalar_one()
@@ -60,18 +50,20 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
 
     async def get_all(self) -> list[CharacterClass]:
         async with self.__helper.session as session:
-            query = select(CharacterClassModel).options(
-                selectinload(CharacterClassModel.primary_modifiers),
-                selectinload(CharacterClassModel.armor_types),
-                selectinload(CharacterClassModel.saving_throws),
-                selectinload(CharacterClassModel.skills),
-                selectinload(CharacterClassModel.weapons),
-                selectinload(CharacterClassModel.tools),
-                joinedload(CharacterClassModel.source),
-            )
+            query = self._add_options(select(CharacterClassModel))
             result = await session.execute(query)
             result = result.scalars().all()
             return [item.to_domain() for item in result]
+
+    async def filter(self, search_by_name: str | None = None) -> list[CharacterClass]:
+        async with self.__helper.session as session:
+            query = self._add_options(select(CharacterClassModel))
+            if search_by_name is not None:
+                query = query.where(
+                    CharacterClassModel.name.ilike(f"%{search_by_name}%")
+                )
+            result = await session.execute(query)
+            return [item.to_domain() for item in result.scalars().all()]
 
     async def create(self, character_class: CharacterClass) -> None:
         async with self.__helper.session as session:
@@ -119,17 +111,9 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
 
     async def update(self, character_class: CharacterClass) -> None:
         async with self.__helper.session as session:
-            model_query = (
-                select(CharacterClassModel)
-                .where(CharacterClassModel.id == character_class.class_id())
-                .options(
-                    selectinload(CharacterClassModel.primary_modifiers),
-                    selectinload(CharacterClassModel.armor_types),
-                    selectinload(CharacterClassModel.saving_throws),
-                    selectinload(CharacterClassModel.skills),
-                    selectinload(CharacterClassModel.weapons),
-                    selectinload(CharacterClassModel.tools),
-                    joinedload(CharacterClassModel.source),
+            model_query = self._add_options(
+                select(CharacterClassModel).where(
+                    CharacterClassModel.id == character_class.class_id()
                 )
             )
             model = await session.execute(model_query)
@@ -220,3 +204,14 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
             stmt = delete(CharacterClassModel).where(CharacterClassModel.id == class_id)
             await session.execute(stmt)
             await session.commit()
+
+    def _add_options(self, query: Select) -> Select:
+        return query.options(
+            selectinload(CharacterClassModel.primary_modifiers),
+            selectinload(CharacterClassModel.armor_types),
+            selectinload(CharacterClassModel.saving_throws),
+            selectinload(CharacterClassModel.skills),
+            selectinload(CharacterClassModel.weapons),
+            selectinload(CharacterClassModel.tools),
+            joinedload(CharacterClassModel.source),
+        )

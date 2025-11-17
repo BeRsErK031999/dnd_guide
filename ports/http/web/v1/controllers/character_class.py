@@ -6,7 +6,7 @@ from application.dto.command.character_class import (
     DeleteClassCommand,
     UpdateClassCommand,
 )
-from application.dto.query.character_class import ClassQuery
+from application.dto.query.character_class import ClassesQuery, ClassQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import ClassUseCases, di_class_use_cases
@@ -31,8 +31,11 @@ class ClassController(Controller):
         return ReadClassSchema.from_domain(character_class)
 
     @get()
-    async def get_classes(self, use_cases: ClassUseCases) -> list[ReadClassSchema]:
-        classes = await use_cases.get_all.execute()
+    async def get_classes(
+        self, search_by_name: str | None, use_cases: ClassUseCases
+    ) -> list[ReadClassSchema]:
+        query = ClassesQuery(search_by_name=search_by_name)
+        classes = await use_cases.get_all.execute(query)
         return [
             ReadClassSchema.from_domain(character_class) for character_class in classes
         ]
