@@ -6,7 +6,7 @@ from application.dto.command.character_subclass import (
     DeleteSubclassCommand,
     UpdateSubclassCommand,
 )
-from application.dto.query.character_subclass import SubclassQuery
+from application.dto.query.character_subclass import SubclassesQuery, SubclassQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import (
@@ -37,9 +37,10 @@ class SubclassController(Controller):
 
     @get()
     async def get_subclasses(
-        self, use_cases: SubclassUseCases
+        self, filter_by_class_id: UUID, use_cases: SubclassUseCases
     ) -> list[ReadSubclassSchema]:
-        subclasses = await use_cases.get_all.execute()
+        query = SubclassesQuery(filter_by_class_id=filter_by_class_id)
+        subclasses = await use_cases.get_all.execute(query)
         return [ReadSubclassSchema.from_domain(subclass) for subclass in subclasses]
 
     @post()

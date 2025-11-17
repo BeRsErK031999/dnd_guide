@@ -35,14 +35,14 @@ class ArmorController(Controller):
     async def get_armors(
         self,
         search_by_name: str | None,
-        filter_by_armor_type: list[str] | None,
-        filter_by_material_id: list[UUID] | None,
+        filter_by_armor_types: list[str] | None,
+        filter_by_material_ids: list[UUID] | None,
         use_cases: ArmorUseCases,
     ) -> list[ReadArmorSchema]:
         query = ArmorsQuery(
             search_by_name=search_by_name,
-            filter_by_armor_type=filter_by_armor_type,
-            filter_by_material_id=filter_by_material_id,
+            filter_by_armor_types=filter_by_armor_types,
+            filter_by_material_ids=filter_by_material_ids,
         )
         armors = await use_cases.get_all.execute(query)
         return [ReadArmorSchema.from_domain(armor) for armor in armors]

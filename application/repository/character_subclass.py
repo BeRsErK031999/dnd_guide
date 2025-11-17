@@ -22,6 +22,12 @@ class SubclassRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def filter(
+        self, filter_by_class_id: UUID | None = None
+    ) -> list[CharacterSubclass]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, subclass: CharacterSubclass) -> None:
         raise NotImplemented
 

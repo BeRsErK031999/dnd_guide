@@ -10,6 +10,6 @@ class GetArmorsUseCase:
     async def execute(self, query: ArmorsQuery) -> list[Armor]:
         return await self.__repository.filter(
             search_by_name=query.search_by_name,
-            filter_by_armor_type=query.filter_by_armor_type,
-            filter_by_material_id=query.filter_by_material_id,
+            filter_by_armor_types=query.filter_by_armor_types,
+            filter_by_material_ids=query.filter_by_material_ids,
         )

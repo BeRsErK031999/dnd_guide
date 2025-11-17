@@ -51,6 +51,21 @@ class SQLSubclassRepository(DomainSubclassRepository, AppSubclassRepository):
             result = result.scalars().all()
             return [subclass.to_domain() for subclass in result]
 
+    async def filter(
+        self, filter_by_class_id: UUID | None = None
+    ) -> list[CharacterSubclass]:
+        async with self.__helper.session as session:
+            query = select(CharacterSubclassModel).options(
+                selectinload(CharacterSubclassModel.character_class)
+            )
+            if filter_by_class_id is not None:
+                query = query.where(
+                    CharacterSubclassModel.character_class_id == filter_by_class_id
+                )
+            result = await session.execute(query)
+            result = result.scalars().all()
+            return [subclass.to_domain() for subclass in result]
+
     async def create(self, subclass: CharacterSubclass) -> None:
         async with self.__helper.session as session:
             model = CharacterSubclassModel.from_domain(subclass)

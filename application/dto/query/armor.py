@@ -10,5 +10,5 @@ class ArmorQuery:
 @dataclass
 class ArmorsQuery:
     search_by_name: str | None = None
-    filter_by_armor_type: list[str] | None = None
-    filter_by_material_id: list[UUID] | None = None
+    filter_by_armor_types: list[str] | None = None
+    filter_by_material_ids: list[UUID] | None = None
