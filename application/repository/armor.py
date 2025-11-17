@@ -22,6 +22,10 @@ class ArmorRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def filter(self, search_by_name: str | None = None) -> list[Armor]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, armor: Armor) -> None:
         raise NotImplemented
 

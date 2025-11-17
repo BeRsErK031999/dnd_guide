@@ -43,6 +43,14 @@ class SQLArmorRepository(DomainArmorRepository, AppArmorRepository):
             result = result.scalars().all()
             return [armor.to_domain() for armor in result]
 
+    async def filter(self, search_by_name: str | None = None) -> list[Armor]:
+        async with self.__helper.session as session:
+            query = select(ArmorModel)
+            if search_by_name is not None:
+                query = query.where(ArmorModel.name.ilike(f"%{search_by_name}%"))
+            result = await session.execute(query)
+            return [armor.to_domain() for armor in result.scalars().all()]
+
     async def create(self, armor: Armor) -> None:
         async with self.__helper.session as session:
             model = ArmorModel.from_domain(armor)

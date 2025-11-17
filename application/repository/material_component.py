@@ -22,7 +22,9 @@ class MaterialComponentRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def filter(self, search_by_name: str) -> list[MaterialComponent]:
+    async def filter(
+        self, search_by_name: str | None = None
+    ) -> list[MaterialComponent]:
         raise NotImplemented
 
     @abstractmethod

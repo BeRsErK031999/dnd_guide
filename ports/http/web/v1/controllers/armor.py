@@ -6,7 +6,7 @@ from application.dto.command.armor import (
     DeleteArmorCommand,
     UpdateArmorCommand,
 )
-from application.dto.query.armor import ArmorQuery
+from application.dto.query.armor import ArmorQuery, ArmorsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import ArmorUseCases, di_armor_use_cases
@@ -32,8 +32,11 @@ class ArmorController(Controller):
         return ReadArmorSchema.from_domain(armor)
 
     @get()
-    async def get_armors(self, use_cases: ArmorUseCases) -> list[ReadArmorSchema]:
-        armors = await use_cases.get_all.execute()
+    async def get_armors(
+        self, search_by_name: str | None, use_cases: ArmorUseCases
+    ) -> list[ReadArmorSchema]:
+        query = ArmorsQuery(search_by_name=search_by_name)
+        armors = await use_cases.get_all.execute(query)
         return [ReadArmorSchema.from_domain(armor) for armor in armors]
 
     @post()
