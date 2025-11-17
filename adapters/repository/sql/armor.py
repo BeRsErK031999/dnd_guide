@@ -51,12 +51,15 @@ class SQLArmorRepository(DomainArmorRepository, AppArmorRepository):
     ) -> list[Armor]:
         async with self.__helper.session as session:
             query = select(ArmorModel)
+            conditions = list()
             if search_by_name is not None:
-                query = query.where(ArmorModel.name.ilike(f"%{search_by_name}%"))
+                conditions.append(ArmorModel.name.ilike(f"%{search_by_name}%"))
             if filter_by_armor_types is not None:
-                query = query.where(ArmorModel.armor_type.in_(filter_by_armor_types))
+                conditions.append(ArmorModel.armor_type.in_(filter_by_armor_types))
             if filter_by_material_ids is not None:
-                query = query.where(ArmorModel.material_id.in_(filter_by_material_ids))
+                conditions.append(ArmorModel.material_id.in_(filter_by_material_ids))
+            if len(conditions) > 0:
+                query = query.where(*conditions)
             result = await session.execute(query)
             return [armor.to_domain() for armor in result.scalars().all()]
 

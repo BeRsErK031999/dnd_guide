@@ -6,7 +6,7 @@ from application.dto.command.feat import (
     DeleteFeatCommand,
     UpdateFeatCommand,
 )
-from application.dto.query.feat import FeatQuery
+from application.dto.query.feat import FeatQuery, FeatsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import FeatUseCases, di_feat_use_cases
@@ -29,8 +29,23 @@ class FeatController(Controller):
         return ReadFeatSchema.from_domain(feat)
 
     @get()
-    async def get_feats(self, use_cases: FeatUseCases) -> list[ReadFeatSchema]:
-        feats = await use_cases.get_all.execute()
+    async def get_feats(
+        self,
+        search_by_name: str | None,
+        filter_by_caster: bool | None,
+        filter_by_required_armor_types: list[str] | None,
+        filter_by_required_modifiers: list[str] | None,
+        filter_by_increase_modifiers: list[str] | None,
+        use_cases: FeatUseCases,
+    ) -> list[ReadFeatSchema]:
+        query = FeatsQuery(
+            search_by_name=search_by_name,
+            filter_by_caster=filter_by_caster,
+            filter_by_required_armor_types=filter_by_required_armor_types,
+            filter_by_required_modifiers=filter_by_required_modifiers,
+            filter_by_increase_modifiers=filter_by_increase_modifiers,
+        )
+        feats = await use_cases.get_all.execute(query)
         return [ReadFeatSchema.from_domain(feat) for feat in feats]
 
     @post()

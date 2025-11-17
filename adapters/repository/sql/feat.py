@@ -10,7 +10,7 @@ from adapters.repository.sql.models import (
 from application.repository import FeatRepository as AppFeatRepository
 from domain.feat import FeatRepository as DomainFeatRepository
 from domain.feat.feat import Feat
-from sqlalchemy import delete, exists, select
+from sqlalchemy import Select, delete, exists, select
 from sqlalchemy.orm import selectinload
 
 
@@ -37,26 +37,55 @@ class SQLFeatRepository(DomainFeatRepository, AppFeatRepository):
 
     async def get_by_id(self, feat_id: UUID) -> Feat:
         async with self.__helper.session as session:
-            query = (
-                select(FeatModel)
-                .where(FeatModel.id == feat_id)
-                .options(
-                    selectinload(FeatModel.required_armor_types),
-                    selectinload(FeatModel.required_modifiers),
-                    selectinload(FeatModel.increase_modifiers),
-                )
-            )
+            query = self._add_options(select(FeatModel).where(FeatModel.id == feat_id))
             result = await session.execute(query)
             result = result.scalar_one()
             return result.to_domain()
 
     async def get_all(self) -> list[Feat]:
         async with self.__helper.session as session:
-            query = select(FeatModel).options(
-                selectinload(FeatModel.required_armor_types),
-                selectinload(FeatModel.required_modifiers),
-                selectinload(FeatModel.increase_modifiers),
-            )
+            query = self._add_options(select(FeatModel))
+            result = await session.execute(query)
+            result = result.scalars().all()
+            return [item.to_domain() for item in result]
+
+    async def filter(
+        self,
+        search_by_name: str | None = None,
+        filter_by_caster: bool | None = None,
+        filter_by_required_armor_types: list[str] | None = None,
+        filter_by_required_modifiers: list[str] | None = None,
+        filter_by_increase_modifiers: list[str] | None = None,
+    ) -> list[Feat]:
+        async with self.__helper.session as session:
+            query = self._add_options(select(FeatModel))
+            conditions = list()
+            if search_by_name is not None:
+                conditions.append(FeatModel.name.ilike(f"%{search_by_name}%"))
+            if filter_by_caster is not None:
+                conditions.append(FeatModel.caster == filter_by_caster)
+            if filter_by_required_armor_types is not None:
+                conditions.append(
+                    FeatModel.required_armor_types.any(
+                        FeatRequiredArmorTypeModel.name.in_(
+                            filter_by_required_armor_types
+                        )
+                    )
+                )
+            if filter_by_required_modifiers is not None:
+                conditions.append(
+                    FeatModel.required_modifiers.any(
+                        FeatRequiredModifierModel.name.in_(filter_by_required_modifiers)
+                    )
+                )
+            if filter_by_increase_modifiers is not None:
+                conditions.append(
+                    FeatModel.increase_modifiers.any(
+                        FeatIncreaseModifierModel.name.in_(filter_by_increase_modifiers)
+                    )
+                )
+            if len(conditions) > 0:
+                query = query.where(*conditions)
             result = await session.execute(query)
             result = result.scalars().all()
             return [item.to_domain() for item in result]
@@ -92,14 +121,8 @@ class SQLFeatRepository(DomainFeatRepository, AppFeatRepository):
 
     async def update(self, feat: Feat) -> None:
         async with self.__helper.session as session:
-            feat_query = (
-                select(FeatModel)
-                .where(FeatModel.id == feat.feat_id())
-                .options(
-                    selectinload(FeatModel.required_armor_types),
-                    selectinload(FeatModel.required_modifiers),
-                    selectinload(FeatModel.increase_modifiers),
-                )
+            feat_query = self._add_options(
+                select(FeatModel).where(FeatModel.id == feat.feat_id())
             )
             model = await session.execute(feat_query)
             model = model.scalar_one()
@@ -142,3 +165,10 @@ class SQLFeatRepository(DomainFeatRepository, AppFeatRepository):
             stmt = delete(FeatModel).where(FeatModel.id == feat_id)
             await session.execute(stmt)
             await session.commit()
+
+    def _add_options(self, query: Select) -> Select:
+        return query.options(
+            selectinload(FeatModel.required_armor_types),
+            selectinload(FeatModel.required_modifiers),
+            selectinload(FeatModel.increase_modifiers),
+        )
