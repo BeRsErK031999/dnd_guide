@@ -9,4 +9,4 @@ class MaterialQuery:
 
 @dataclass
 class MaterialsQuery:
-    name: str | None = None
+    search_by_name: str | None = None
