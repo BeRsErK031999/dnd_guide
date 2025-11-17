@@ -6,7 +6,7 @@ from application.dto.command.class_feature import (
     DeleteClassFeatureCommand,
     UpdateClassFeatureCommand,
 )
-from application.dto.query.class_feature import ClassFeatureQuery
+from application.dto.query.class_feature import ClassFeatureQuery, ClassFeaturesQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import (
@@ -41,7 +41,8 @@ class ClassFeatureController(Controller):
     async def get_features(
         self, filter_by_class_id: UUID, use_cases: ClassFeatureUseCases
     ) -> list[ReadClassFeatureSchema]:
-        features = await use_cases.get_all.execute()
+        query = ClassFeaturesQuery(filter_by_class_id=filter_by_class_id)
+        features = await use_cases.get_all.execute(query)
         return [ReadClassFeatureSchema.from_domain(feature) for feature in features]
 
     @post()
