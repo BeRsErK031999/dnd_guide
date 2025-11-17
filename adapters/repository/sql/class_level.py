@@ -9,7 +9,7 @@ from adapters.repository.sql.models import (
 from application.repository import ClassLevelRepository as AppClassLevelRepository
 from domain.class_level import ClassLevel
 from domain.class_level import ClassLevelRepository as DomainClassLevelRepository
-from sqlalchemy import delete, exists, select
+from sqlalchemy import Select, delete, exists, select
 from sqlalchemy.orm import joinedload
 
 
@@ -41,13 +41,8 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
 
     async def get_by_id(self, level_id: UUID) -> ClassLevel:
         async with self.__helper.session as session:
-            query = (
-                select(ClassLevelModel)
-                .where(ClassLevelModel.id == level_id)
-                .options(
-                    joinedload(ClassLevelModel.class_level_spell_slot),
-                    joinedload(ClassLevelModel.character_class),
-                )
+            query = self._add_options(
+                select(ClassLevelModel).where(ClassLevelModel.id == level_id)
             )
             result = await session.execute(query)
             result = result.scalar_one()
@@ -55,10 +50,19 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
 
     async def get_all(self) -> list[ClassLevel]:
         async with self.__helper.session as session:
-            query = select(ClassLevelModel).options(
-                joinedload(ClassLevelModel.class_level_spell_slot),
-                joinedload(ClassLevelModel.character_class),
-            )
+            query = self._add_options(select(ClassLevelModel))
+            result = await session.execute(query)
+            result = result.scalars().all()
+            return [level.to_domain() for level in result]
+
+    async def filter(self, filter_by_class_id: UUID | None = None) -> list[ClassLevel]:
+        async with self.__helper.session as session:
+            query = select(ClassLevelModel)
+            if filter_by_class_id is not None:
+                query = query.where(
+                    ClassLevelModel.character_class_id == filter_by_class_id
+                )
+            query = self._add_options(query)
             result = await session.execute(query)
             result = result.scalars().all()
             return [level.to_domain() for level in result]
@@ -80,13 +84,8 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
 
     async def update(self, level: ClassLevel) -> None:
         async with self.__helper.session as session:
-            model_query = (
-                select(ClassLevelModel)
-                .where(ClassLevelModel.id == level.level_id())
-                .options(
-                    joinedload(ClassLevelModel.class_level_spell_slot),
-                    joinedload(ClassLevelModel.character_class),
-                )
+            model_query = self._add_options(
+                select(ClassLevelModel).where(ClassLevelModel.id == level.level_id())
             )
             model = await session.execute(model_query)
             model = model.scalar_one()
@@ -153,3 +152,9 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
             stmt = delete(ClassLevelModel).where(ClassLevelModel.id == level_id)
             await session.execute(stmt)
             await session.commit()
+
+    def _add_options(self, query: Select) -> Select:
+        return query.options(
+            joinedload(ClassLevelModel.class_level_spell_slot),
+            joinedload(ClassLevelModel.character_class),
+        )

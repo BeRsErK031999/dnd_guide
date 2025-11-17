@@ -22,6 +22,10 @@ class ClassLevelRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def filter(self, filter_by_class_id: UUID | None = None) -> list[ClassLevel]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, level: ClassLevel) -> None:
         raise NotImplemented
 

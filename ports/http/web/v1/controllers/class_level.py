@@ -6,7 +6,7 @@ from application.dto.command.class_level import (
     DeleteClassLevelCommand,
     UpdateClassLevelCommand,
 )
-from application.dto.query.class_level import ClassLevelQuery
+from application.dto.query.class_level import ClassLevelQuery, ClassLevelsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import (
@@ -37,9 +37,10 @@ class ClassLevelController(Controller):
 
     @get()
     async def get_class_levels(
-        self, use_cases: ClassLevelUseCases
+        self, filter_by_class_id: UUID, use_cases: ClassLevelUseCases
     ) -> list[ReadClassLevelSchema]:
-        levels = await use_cases.get_all.execute()
+        query = ClassLevelsQuery(filter_by_class_id=filter_by_class_id)
+        levels = await use_cases.get_all.execute(query)
         return [ReadClassLevelSchema.from_domain(level) for level in levels]
 
     @post()
