@@ -6,7 +6,10 @@ from application.dto.command.weapon_property import (
     DeleteWeaponPropertyCommand,
     UpdateWeaponPropertyCommand,
 )
-from application.dto.query.weapon_property import WeaponPropertyQuery
+from application.dto.query.weapon_property import (
+    WeaponPropertiesQuery,
+    WeaponPropertyQuery,
+)
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import (
@@ -40,9 +43,10 @@ class WeaponPropertyController(Controller):
 
     @get()
     async def get_weapon_properties(
-        self, use_cases: WeaponPropertyUseCases
+        self, search_by_name: str | None, use_cases: WeaponPropertyUseCases
     ) -> list[ReadWeaponPropertySchema]:
-        weapon_properties = await use_cases.get_all.execute()
+        query = WeaponPropertiesQuery(search_by_name=search_by_name)
+        weapon_properties = await use_cases.get_all.execute(query)
         return [
             ReadWeaponPropertySchema.from_domain(weapon_property)
             for weapon_property in weapon_properties

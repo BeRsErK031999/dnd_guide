@@ -55,6 +55,17 @@ class SQLWeaponPropertyRepository(
             result = result.scalars().all()
             return [item.to_domain() for item in result]
 
+    async def filter(self, search_by_name: str | None = None) -> list[WeaponProperty]:
+        async with self.__helper.session as session:
+            query = select(WeaponPropertyModel)
+            if search_by_name is not None:
+                query = query.where(
+                    WeaponPropertyModel.name.ilike(f"%{search_by_name}%")
+                )
+            result = await session.execute(query)
+            result = result.scalars().all()
+            return [item.to_domain() for item in result]
+
     async def create(self, weapon_property: WeaponProperty) -> None:
         async with self.__helper.session as session:
             session.add(WeaponPropertyModel.from_domain(weapon_property))

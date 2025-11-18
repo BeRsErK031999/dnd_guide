@@ -22,6 +22,10 @@ class WeaponPropertyRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def filter(self, search_by_name: str | None = None) -> list[WeaponProperty]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, weapon_property: WeaponProperty) -> None:
         raise NotImplemented
 
