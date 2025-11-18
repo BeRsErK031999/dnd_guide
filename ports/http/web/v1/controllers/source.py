@@ -6,7 +6,7 @@ from application.dto.command.source import (
     DeleteSourceCommand,
     UpdateSourceCommand,
 )
-from application.dto.query.source import SourceQuery
+from application.dto.query.source import SourceQuery, SourcesQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import SourceUseCases, di_source_use_cases
@@ -31,8 +31,11 @@ class SourceController(Controller):
         return ReadSourceSchema.from_domain(source)
 
     @get()
-    async def get_sources(self, use_cases: SourceUseCases) -> list[ReadSourceSchema]:
-        sources = await use_cases.get_all.execute()
+    async def get_sources(
+        self, search_by_name: str | None, use_cases: SourceUseCases
+    ) -> list[ReadSourceSchema]:
+        query = SourcesQuery(search_by_name=search_by_name)
+        sources = await use_cases.get_all.execute(query)
         return [ReadSourceSchema.from_domain(source) for source in sources]
 
     @post()

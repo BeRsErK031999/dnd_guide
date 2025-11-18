@@ -22,6 +22,10 @@ class SourceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def filter(self, search_by_name: str | None = None) -> list[Source]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, source: Source) -> None:
         raise NotImplemented
 

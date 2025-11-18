@@ -5,7 +5,7 @@ from adapters.repository.sql.models import SourceModel
 from application.repository import SourceRepository as AppSourceRepository
 from domain.source import Source
 from domain.source import SourceRepository as DomainSourceRepository
-from sqlalchemy import delete, exists, select
+from sqlalchemy import delete, exists, or_, select
 
 
 class SQLSourceRepository(DomainSourceRepository, AppSourceRepository):
@@ -35,6 +35,20 @@ class SQLSourceRepository(DomainSourceRepository, AppSourceRepository):
             result = await session.execute(query)
             result = result.scalar_one()
             return result.to_domain()
+
+    async def filter(self, search_by_name: str | None = None) -> list[Source]:
+        async with self.__db_helper.session as session:
+            query = select(SourceModel)
+            if search_by_name:
+                query = query.where(
+                    or_(
+                        SourceModel.name.ilike(f"%{search_by_name}%"),
+                        SourceModel.name_in_english.ilike(f"%{search_by_name}%"),
+                    )
+                )
+            result = await session.execute(query)
+            result = result.scalars().all()
+            return [source.to_domain() for source in result]
 
     async def get_all(self) -> list[Source]:
         async with self.__db_helper.session as session:
