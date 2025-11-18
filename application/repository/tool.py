@@ -22,6 +22,10 @@ class ToolRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def filter(self, search_by_name: str | None = None) -> list[Tool]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, tool: Tool) -> None:
         raise NotImplemented
 

@@ -6,7 +6,7 @@ from application.dto.command.tool import (
     DeleteToolCommand,
     UpdateToolCommand,
 )
-from application.dto.query.tool import ToolQuery
+from application.dto.query.tool import ToolQuery, ToolsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import ToolUseCases, di_tool_use_cases
@@ -30,8 +30,11 @@ class ToolController(Controller):
         return ReadToolSchema.from_domain(tool)
 
     @get()
-    async def get_tools(self, use_cases: ToolUseCases) -> list[ReadToolSchema]:
-        tools = await use_cases.get_all.execute()
+    async def get_tools(
+        self, search_by_name: str | None, use_cases: ToolUseCases
+    ) -> list[ReadToolSchema]:
+        query = ToolsQuery(search_by_name=search_by_name)
+        tools = await use_cases.get_all.execute(query)
         return [ReadToolSchema.from_domain(tool) for tool in tools]
 
     @post()

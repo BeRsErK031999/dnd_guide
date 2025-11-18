@@ -47,6 +47,14 @@ class SQLToolRepository(DomainToolRepository, AppToolRepository):
             result = await session.execute(stmt)
             return [tool_model.to_domain() for tool_model in result.scalars().all()]
 
+    async def filter(self, search_by_name: str | None = None) -> list[Tool]:
+        async with self.__helper.session as session:
+            query = select(ToolModel).options(selectinload(ToolModel.utilizes))
+            if search_by_name is not None:
+                query = query.where(ToolModel.name.ilike(f"%{search_by_name}%"))
+            result = await session.execute(query)
+            return [tool_model.to_domain() for tool_model in result.scalars().all()]
+
     async def create(self, tool: Tool) -> None:
         async with self.__helper.session as session:
             model = ToolModel.from_domain(tool)
