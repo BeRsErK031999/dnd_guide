@@ -6,7 +6,7 @@ from application.dto.command.subrace import (
     DeleteSubraceCommand,
     UpdateSubraceCommand,
 )
-from application.dto.query.subrace import SubraceQuery
+from application.dto.query.subrace import SubraceQuery, SubracesQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import (
@@ -34,8 +34,11 @@ class SubraceController(Controller):
         return ReadSubraceSchema.from_domain(subrace)
 
     @get()
-    async def get_subraces(self, use_cases: SubraceUseCases) -> list[ReadSubraceSchema]:
-        subraces = await use_cases.get_all.execute()
+    async def get_subraces(
+        self, search_by_name: str | None, use_cases: SubraceUseCases
+    ) -> list[ReadSubraceSchema]:
+        query = SubracesQuery(search_by_name=search_by_name)
+        subraces = await use_cases.get_all.execute(query)
         return [ReadSubraceSchema.from_domain(subrace) for subrace in subraces]
 
     @post()

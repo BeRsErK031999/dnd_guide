@@ -22,6 +22,10 @@ class SubraceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def filter(self, search_by_name: str | None = None) -> list[Subrace]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, subrace: Subrace) -> None:
         raise NotImplemented
 
