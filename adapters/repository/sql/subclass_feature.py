@@ -61,6 +61,21 @@ class SQLSubclassFeatureRepository(
             result = result.scalars().all()
             return [model.to_domain() for model in result]
 
+    async def filter(
+        self, filter_by_subclass_id: UUID | None = None
+    ) -> list[SubclassFeature]:
+        async with self.__db_helper.session as session:
+            query = select(SubclassFeatureModel).options(
+                selectinload(SubclassFeatureModel.character_subclass)
+            )
+            if filter_by_subclass_id is not None:
+                query = query.where(
+                    SubclassFeatureModel.character_subclass_id == filter_by_subclass_id
+                )
+            result = await session.execute(query)
+            result = result.scalars().all()
+            return [model.to_domain() for model in result]
+
     async def create(self, feature: SubclassFeature) -> None:
         async with self.__db_helper.session as session:
             session.add(SubclassFeatureModel.from_domain(feature))

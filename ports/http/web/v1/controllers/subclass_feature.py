@@ -6,7 +6,10 @@ from application.dto.command.subclass_feature import (
     DeleteSubclassFeatureCommand,
     UpdateSubclassFeatureCommand,
 )
-from application.dto.query.subclass_feature import SubclassFeatureQuery
+from application.dto.query.subclass_feature import (
+    SubclassFeatureQuery,
+    SubclassFeaturesQuery,
+)
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import (
@@ -39,9 +42,10 @@ class SubclassFeatureController(Controller):
 
     @get()
     async def get_features(
-        self, use_cases: SubclassFeatureUseCases
+        self, filter_by_subclass_id: UUID, use_cases: SubclassFeatureUseCases
     ) -> list[ReadSubclassFeatureSchema]:
-        features = await use_cases.get_all.execute()
+        query = SubclassFeaturesQuery(filter_by_subclass_id=filter_by_subclass_id)
+        features = await use_cases.get_all.execute(query)
         return [ReadSubclassFeatureSchema.from_domain(feature) for feature in features]
 
     @post()
