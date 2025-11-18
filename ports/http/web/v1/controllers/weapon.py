@@ -6,7 +6,7 @@ from application.dto.command.weapon import (
     DeleteWeaponCommand,
     UpdateWeaponCommand,
 )
-from application.dto.query.weapon import WeaponQuery
+from application.dto.query.weapon import WeaponQuery, WeaponsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import WeaponUseCases, di_weapon_use_cases
@@ -32,8 +32,23 @@ class WeaponController(Controller):
         return ReadWeaponSchema.from_domain(weapon)
 
     @get()
-    async def get_weapons(self, use_cases: WeaponUseCases) -> list[ReadWeaponSchema]:
-        weapons = await use_cases.get_all.execute()
+    async def get_weapons(
+        self,
+        search_by_name: str | None,
+        filter_by_kind_ids: list[UUID] | None,
+        filter_by_damage_types: list[str] | None,
+        filter_by_property_ids: list[UUID] | None,
+        filter_by_material_ids: list[UUID] | None,
+        use_cases: WeaponUseCases,
+    ) -> list[ReadWeaponSchema]:
+        query = WeaponsQuery(
+            search_by_name=search_by_name,
+            filter_by_kind_ids=filter_by_kind_ids,
+            filter_by_damage_types=filter_by_damage_types,
+            filter_by_property_ids=filter_by_property_ids,
+            filter_by_material_ids=filter_by_material_ids,
+        )
+        weapons = await use_cases.get_all.execute(query)
         return [ReadWeaponSchema.from_domain(weapon) for weapon in weapons]
 
     @post()

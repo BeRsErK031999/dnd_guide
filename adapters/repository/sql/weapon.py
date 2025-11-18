@@ -12,7 +12,7 @@ from application.repository import WeaponRepository as AppWeaponRepository
 from domain.error import DomainError
 from domain.weapon import Weapon
 from domain.weapon import WeaponRepository as DomainWeaponRepository
-from sqlalchemy import delete, exists, select
+from sqlalchemy import delete, exists, or_, select
 from sqlalchemy.orm import selectinload
 
 
@@ -54,6 +54,39 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
                 selectinload(WeaponModel.properties)
             )
             weapons = await session.execute(weapons_query)
+            weapons = weapons.scalars().all()
+            return [w.to_domain() for w in weapons]
+
+    async def filter(
+        self,
+        search_by_name: str | None = None,
+        filter_by_kind_ids: list[UUID] | None = None,
+        filter_by_damage_types: list[str] | None = None,
+        filter_by_property_ids: list[UUID] | None = None,
+        filter_by_material_ids: list[UUID] | None = None,
+    ) -> list[Weapon]:
+        async with self.__helper.session as session:
+            query = select(WeaponModel).options(selectinload(WeaponModel.properties))
+            conditions = list()
+            if search_by_name is not None:
+                conditions.append(WeaponModel.name.ilike(f"%{search_by_name}%"))
+            if filter_by_kind_ids is not None:
+                conditions.append(WeaponModel.kind_id.in_(filter_by_kind_ids))
+            if filter_by_damage_types is not None:
+                conditions.append(WeaponModel.damage_type.in_(filter_by_damage_types))
+            if filter_by_property_ids is not None:
+                conditions.append(
+                    WeaponModel.properties.any(
+                        RelWeaponPropertyModel.weapon_property_id.in_(
+                            filter_by_property_ids
+                        )
+                    )
+                )
+            if filter_by_material_ids is not None:
+                conditions.append(WeaponModel.material_id.in_(filter_by_material_ids))
+            if len(conditions) > 0:
+                query = query.where(or_(*conditions))
+            weapons = await session.execute(query)
             weapons = weapons.scalars().all()
             return [w.to_domain() for w in weapons]
 
