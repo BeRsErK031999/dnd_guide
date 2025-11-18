@@ -26,7 +26,7 @@ def domain_handler(request: Request, exc: DomainError) -> Response:
         content={
             "status_code": status,
             "detail": f"Validation failed for {request.method} {request.url.path}",
-            "extra": {"message": exc.msg},
+            "extra": [{"message": exc.msg}],
         },
         status_code=status,
     )
