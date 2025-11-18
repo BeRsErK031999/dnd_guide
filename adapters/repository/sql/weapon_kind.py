@@ -45,6 +45,24 @@ class SQLWeaponKindRepository(DomainWeaponKindRepository, AppWeaponKindRepositor
             result = result.scalars().all()
             return [item.to_domain() for item in result]
 
+    async def filter(
+        self,
+        search_by_name: str | None = None,
+        filter_by_types: list[str] | None = None,
+    ) -> list[WeaponKind]:
+        async with self.__helper.session as session:
+            query = select(WeaponKindModel)
+            conditions = list()
+            if search_by_name is not None:
+                conditions.append(WeaponKindModel.name.ilike(f"%{search_by_name}%"))
+            if filter_by_types is not None:
+                conditions.append(WeaponKindModel.weapon_type.in_(filter_by_types))
+            if len(conditions) > 0:
+                query = query.where(*conditions)
+            result = await session.execute(query)
+            result = result.scalars().all()
+            return [item.to_domain() for item in result]
+
     async def create(self, weapon_kind: WeaponKind) -> None:
         async with self.__helper.session as session:
             session.add(WeaponKindModel.from_domain(weapon_kind))

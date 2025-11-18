@@ -22,6 +22,14 @@ class WeaponKindRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
+    async def filter(
+        self,
+        search_by_name: str | None = None,
+        filter_by_types: list[str] | None = None,
+    ) -> list[WeaponKind]:
+        raise NotImplemented
+
+    @abstractmethod
     async def create(self, weapon_kind: WeaponKind) -> None:
         raise NotImplemented
 

@@ -6,7 +6,7 @@ from application.dto.command.weapon_kind import (
     DeleteWeaponKindCommand,
     UpdateWeaponKindCommand,
 )
-from application.dto.query.weapon_kind import WeaponKindQuery
+from application.dto.query.weapon_kind import WeaponKindQuery, WeaponKindsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import (
@@ -37,9 +37,15 @@ class WeaponKindController(Controller):
 
     @get()
     async def get_weapon_kinds(
-        self, use_cases: WeaponKindUseCases
+        self,
+        search_by_name: str | None,
+        filter_by_types: list[str] | None,
+        use_cases: WeaponKindUseCases,
     ) -> list[ReadWeaponKindSchema]:
-        weapon_kinds = await use_cases.get_all.execute()
+        query = WeaponKindsQuery(
+            search_by_name=search_by_name, filter_by_types=filter_by_types
+        )
+        weapon_kinds = await use_cases.get_all.execute(query)
         return [
             ReadWeaponKindSchema.from_domain(weapon_kind)
             for weapon_kind in weapon_kinds
