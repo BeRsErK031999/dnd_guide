@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: d30c69c7e3e8
+Revision ID: 83fa423d5579
 Revises:
-Create Date: 2025-11-17 21:59:33.844064
+Create Date: 2025-11-18 16:44:07.450140
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "d30c69c7e3e8"
+revision: str = "83fa423d5579"
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -375,7 +375,7 @@ def upgrade() -> None:
         sa.Column("concentration", sa.Boolean(), nullable=False),
         sa.Column("ritual", sa.Boolean(), nullable=False),
         sa.Column("verbal_component", sa.Boolean(), nullable=False),
-        sa.Column("symbol_component", sa.Boolean(), nullable=False),
+        sa.Column("symbolic_component", sa.Boolean(), nullable=False),
         sa.Column("material_component", sa.Boolean(), nullable=False),
         sa.Column("source_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),

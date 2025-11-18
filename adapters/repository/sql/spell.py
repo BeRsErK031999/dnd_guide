@@ -12,7 +12,7 @@ from adapters.repository.sql.models import (
 from application.repository import SpellRepository as AppSpellRepository
 from domain.spell import Spell
 from domain.spell import SpellRepository as DomainSpellRepository
-from sqlalchemy import delete, exists, select
+from sqlalchemy import Select, delete, exists, or_, select
 from sqlalchemy.orm import selectinload
 
 
@@ -39,15 +39,8 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
 
     async def get_by_id(self, spell_id: UUID) -> Spell:
         async with self.__db_helper.session as session:
-            query = (
-                select(SpellModel)
-                .where(SpellModel.id == spell_id)
-                .options(
-                    selectinload(SpellModel.saving_throws),
-                    selectinload(SpellModel.character_classes),
-                    selectinload(SpellModel.character_subclasses),
-                    selectinload(SpellModel.materials),
-                )
+            query = self._add_options(
+                select(SpellModel).where(SpellModel.id == spell_id)
             )
             result = await session.execute(query)
             result = result.scalar_one()
@@ -55,12 +48,79 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
 
     async def get_all(self) -> list[Spell]:
         async with self.__db_helper.session as session:
-            query = select(SpellModel).options(
-                selectinload(SpellModel.saving_throws),
-                selectinload(SpellModel.character_classes),
-                selectinload(SpellModel.character_subclasses),
-                selectinload(SpellModel.materials),
-            )
+            query = self._add_options(select(SpellModel))
+            result = await session.execute(query)
+            result = result.scalars().all()
+            return [item.to_domain() for item in result]
+
+    async def filter(
+        self,
+        search_by_name: str | None = None,
+        filter_by_class_ids: list[UUID] | None = None,
+        filter_by_subclass_ids: list[UUID] | None = None,
+        filter_by_schools: list[str] | None = None,
+        filter_by_damage_types: list[str] | None = None,
+        filter_by_durations: list[str] | None = None,
+        filter_by_casting_times: list[str] | None = None,
+        filter_by_verbal_component: bool | None = None,
+        filter_by_symbolic_component: bool | None = None,
+        filter_by_material_component: bool | None = None,
+        filter_by_concentration: bool | None = None,
+        filter_by_ritual: bool | None = None,
+        filter_by_source_ids: list[UUID] | None = None,
+    ) -> list[Spell]:
+        async with self.__db_helper.session as session:
+            query = self._add_options(select(SpellModel))
+            conditions = list()
+            if search_by_name is not None:
+                conditions.append(
+                    or_(
+                        SpellModel.name.ilike(f"%{search_by_name}%"),
+                        SpellModel.name_in_english.ilike(f"%{search_by_name}%"),
+                    )
+                )
+            if filter_by_class_ids is not None:
+                conditions.append(
+                    SpellModel.character_classes.any(
+                        CharacterClassModel.id.in_(filter_by_class_ids)
+                    )
+                )
+            if filter_by_subclass_ids is not None:
+                conditions.append(
+                    SpellModel.character_subclasses.any(
+                        CharacterSubclassModel.id.in_(filter_by_subclass_ids)
+                    )
+                )
+            if filter_by_schools is not None:
+                conditions.append(SpellModel.school.in_(filter_by_schools))
+            if filter_by_damage_types is not None:
+                conditions.append(SpellModel.damage_type.in_(filter_by_damage_types))
+            if filter_by_durations is not None:
+                conditions.append(SpellModel.duration_unit.in_(filter_by_durations))
+            if filter_by_casting_times is not None:
+                conditions.append(
+                    SpellModel.casting_time_unit.in_(filter_by_casting_times)
+                )
+            if filter_by_verbal_component:
+                conditions.append(
+                    SpellModel.verbal_component == filter_by_verbal_component
+                )
+            if filter_by_symbolic_component:
+                conditions.append(
+                    SpellModel.symbolic_component == filter_by_symbolic_component
+                )
+            if filter_by_material_component:
+                conditions.append(
+                    SpellModel.material_component == filter_by_material_component
+                )
+            if filter_by_concentration:
+                conditions.append(SpellModel.concentration == filter_by_concentration)
+            if filter_by_ritual:
+                conditions.append(SpellModel.ritual == filter_by_ritual)
+            if filter_by_source_ids is not None:
+                conditions.append(SpellModel.source_id.in_(filter_by_source_ids))
+            if len(conditions) > 0:
+                query = query.where(*conditions)
             result = await session.execute(query)
             result = result.scalars().all()
             return [item.to_domain() for item in result]
@@ -104,15 +164,8 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
 
     async def update(self, spell: Spell) -> None:
         async with self.__db_helper.session as session:
-            model_query = (
-                select(SpellModel)
-                .where(SpellModel.id == spell.spell_id())
-                .options(
-                    selectinload(SpellModel.saving_throws),
-                    selectinload(SpellModel.character_classes),
-                    selectinload(SpellModel.character_subclasses),
-                    selectinload(SpellModel.materials),
-                )
+            model_query = self._add_options(
+                select(SpellModel).where(SpellModel.id == spell.spell_id())
             )
             model = await session.execute(model_query)
             model = model.scalar_one()
@@ -196,3 +249,11 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
             stmt = delete(SpellModel).where(SpellModel.id == spell_id)
             await session.execute(stmt)
             await session.commit()
+
+    def _add_options(self, query: Select) -> Select:
+        return query.options(
+            selectinload(SpellModel.saving_throws),
+            selectinload(SpellModel.character_classes),
+            selectinload(SpellModel.character_subclasses),
+            selectinload(SpellModel.materials),
+        )

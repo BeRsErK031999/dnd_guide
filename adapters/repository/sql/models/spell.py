@@ -36,7 +36,7 @@ class SpellModel(Base):
     concentration: Mapped[bool]
     ritual: Mapped[bool]
     verbal_component: Mapped[bool]
-    symbol_component: Mapped[bool]
+    symbolic_component: Mapped[bool]
     material_component: Mapped[bool]
     source_id: Mapped[UUID] = mapped_column(ForeignKey("source.id"))
 
@@ -91,7 +91,7 @@ class SpellModel(Base):
             splash=splash,
             components=SpellComponents(
                 verbal=self.verbal_component,
-                symbolic=self.symbol_component,
+                symbolic=self.symbolic_component,
                 material=self.material_component,
                 materials=[material.id for material in self.materials],
             ),

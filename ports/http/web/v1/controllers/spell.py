@@ -6,7 +6,7 @@ from application.dto.command.spell import (
     DeleteSpellCommand,
     UpdateSpellCommand,
 )
-from application.dto.query.spell import SpellQuery
+from application.dto.query.spell import SpellQuery, SpellsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
 from ports.http.web.v1.providers.di_use_cases import SpellUseCases, di_spell_use_cases
@@ -31,8 +31,39 @@ class SpellController(Controller):
         return ReadSpellSchema.from_domain(spell)
 
     @get()
-    async def get_spells(self, use_cases: SpellUseCases) -> list[ReadSpellSchema]:
-        spells = await use_cases.get_all.execute()
+    async def get_spells(
+        self,
+        search_by_name: str | None,
+        filter_by_class_ids: list[UUID] | None,
+        filter_by_subclass_ids: list[UUID] | None,
+        filter_by_schools: list[str] | None,
+        filter_by_damage_types: list[str] | None,
+        filter_by_durations: list[str] | None,
+        filter_by_casting_times: list[str] | None,
+        filter_by_verbal_component: bool | None,
+        filter_by_symbolic_component: bool | None,
+        filter_by_material_component: bool | None,
+        filter_by_concentration: bool | None,
+        filter_by_ritual: bool | None,
+        filter_by_source_ids: list[UUID] | None,
+        use_cases: SpellUseCases,
+    ) -> list[ReadSpellSchema]:
+        query = SpellsQuery(
+            search_by_name=search_by_name,
+            filter_by_class_ids=filter_by_class_ids,
+            filter_by_subclass_ids=filter_by_subclass_ids,
+            filter_by_schools=filter_by_schools,
+            filter_by_damage_types=filter_by_damage_types,
+            filter_by_durations=filter_by_durations,
+            filter_by_casting_times=filter_by_casting_times,
+            filter_by_verbal_component=filter_by_verbal_component,
+            filter_by_symbolic_component=filter_by_symbolic_component,
+            filter_by_material_component=filter_by_material_component,
+            filter_by_concentration=filter_by_concentration,
+            filter_by_ritual=filter_by_ritual,
+            filter_by_source_ids=filter_by_source_ids,
+        )
+        spells = await use_cases.get_all.execute(query)
         return [ReadSpellSchema.from_domain(spell) for spell in spells]
 
     @post()
