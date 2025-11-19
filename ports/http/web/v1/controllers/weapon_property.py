@@ -25,7 +25,7 @@ from ports.http.web.v1.schemas.weapon_property import (
 
 
 class WeaponPropertyController(Controller):
-    path = "/weapon_properties"
+    path = "/weapon-properties"
     tags = ["weapon property"]
 
     dependencies = {
