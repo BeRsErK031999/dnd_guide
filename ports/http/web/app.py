@@ -12,4 +12,5 @@ app = Litestar(
     exception_handlers={DomainError: domain_handler},
     allowed_hosts=config.ALLOWED_HOSTS,
     cors_config=cors,
+    debug=config.DEBUG,
 )
