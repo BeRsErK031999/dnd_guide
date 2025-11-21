@@ -4,10 +4,21 @@ volumes:
 services:
   postgres:
     image: postgres:18
-    container_name: dnd_guild_postgres
+    container_name: dnd_guide_postgres
     env_file:
       - .postgres.env
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/18/docker
+  
+  backend:
+    build: .
+    image: dnd_guide_backend:dev
+    container_name: dnd_guide_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .web.env
+    depends_on:
+      - postgres
