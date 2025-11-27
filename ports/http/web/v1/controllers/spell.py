@@ -13,6 +13,7 @@ from ports.http.web.v1.providers.di_use_cases import SpellUseCases, di_spell_use
 from ports.http.web.v1.schemas.spell import (
     CreateSpellSchema,
     ReadSpellSchema,
+    ReadSpellSchoolSchema,
     UpdateSpellSchema,
 )
 
@@ -87,3 +88,7 @@ class SpellController(Controller):
     async def delete_spell(self, spell_id: UUID, use_cases: SpellUseCases) -> None:
         command = DeleteSpellCommand(user_id=uuid4(), spell_id=spell_id)
         await use_cases.delete.execute(command)
+
+    @get("/schools")
+    async def get_schools(self) -> ReadSpellSchoolSchema:
+        return ReadSpellSchoolSchema.from_domain()

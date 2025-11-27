@@ -5,7 +5,7 @@ from uuid import UUID
 from domain.damage_type import DamageType
 from domain.game_time import GameTime
 from domain.length import Length
-from domain.spell import Spell, SpellComponents
+from domain.spell import Spell, SpellComponents, SpellSchool
 from ports.http.web.v1.schemas.game_time import GameTimeSchema
 from ports.http.web.v1.schemas.length import LengthSchema
 
@@ -52,6 +52,24 @@ class SplashSchema:
     @staticmethod
     def from_domain(splash: Length) -> "SplashSchema":
         return SplashSchema(splash=LengthSchema.from_domain(splash))
+
+
+@dataclass
+class ReadSpellSchoolSchema:
+    abjuration: str
+    conjuration: str
+    divination: str
+    enchantment: str
+    evocation: str
+    illusion: str
+    necromancy: str
+    transmutation: str
+
+    @staticmethod
+    def from_domain() -> "ReadSpellSchoolSchema":
+        return ReadSpellSchoolSchema(
+            **{school.name.lower(): school.value for school in SpellSchool}
+        )
 
 
 @dataclass
