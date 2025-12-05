@@ -1,4 +1,5 @@
 from application.dto.command.feat import UpdateFeatCommand
+from application.dto.model.feat import AppFeat
 from application.repository import FeatRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.armor import ArmorType
@@ -22,7 +23,8 @@ class UpdateFeatUseCase(UserCheck):
         await self._user_check(command.user_id)
         if not await self.__feat_repository.id_exists(command.feat_id):
             raise DomainError.not_found(f"черты с id {command.feat_id} не существует")
-        feat = await self.__feat_repository.get_by_id(command.feat_id)
+        app_feat = await self.__feat_repository.get_by_id(command.feat_id)
+        feat = app_feat.to_domain()
         if command.name is not None:
             if not await self.__feat_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
@@ -57,4 +59,4 @@ class UpdateFeatUseCase(UserCheck):
                     for increase_modifier in command.increase_modifiers
                 ]
             )
-        await self.__feat_repository.update(feat)
+        await self.__feat_repository.update(AppFeat.from_domain(feat))

@@ -1,4 +1,5 @@
 from application.dto.command.weapon import UpdateWeaponCommand
+from application.dto.model.weapon import AppWeapon
 from application.repository import (
     MaterialRepository,
     UserRepository,
@@ -38,7 +39,8 @@ class UpdateWeaponUseCase(UserCheck):
             raise DomainError.not_found(
                 f"оружие с id {command.weapon_id} не существует"
             )
-        weapon = await self.__weapon_repository.get_by_id(command.weapon_id)
+        app_weapon = await self.__weapon_repository.get_by_id(command.weapon_id)
+        weapon = app_weapon.to_domain()
         if command.weapon_kind_id is not None:
             if not await self.__kind_repository.id_exists(command.weapon_kind_id):
                 raise DomainError.invalid_data(
@@ -85,4 +87,4 @@ class UpdateWeaponUseCase(UserCheck):
                     f"материал с id {command.material_id} не существует"
                 )
             weapon.new_material_id(command.material_id)
-        await self.__weapon_repository.update(weapon)
+        await self.__weapon_repository.update(AppWeapon.from_domain(weapon))

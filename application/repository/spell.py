@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.spell import Spell
+from application.dto.model.spell import AppSpell
 
 
 class SpellRepository(ABC):
@@ -14,11 +14,11 @@ class SpellRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, spell_id: UUID) -> Spell:
+    async def get_by_id(self, spell_id: UUID) -> AppSpell:
         raise NotImplemented
 
     @abstractmethod
-    async def get_all(self) -> list[Spell]:
+    async def get_all(self) -> list[AppSpell]:
         raise NotImplemented
 
     @abstractmethod
@@ -37,15 +37,15 @@ class SpellRepository(ABC):
         filter_by_concentration: bool | None = None,
         filter_by_ritual: bool | None = None,
         filter_by_source_ids: list[UUID] | None = None,
-    ) -> list[Spell]:
+    ) -> list[AppSpell]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, spell: Spell) -> None:
+    async def create(self, spell: AppSpell) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def update(self, spell: Spell) -> None:
+    async def update(self, spell: AppSpell) -> None:
         raise NotImplemented
 
     @abstractmethod

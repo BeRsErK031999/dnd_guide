@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.tool import Tool
+from application.dto.model.tool import AppTool
 
 
 class ToolRepository(ABC):
@@ -14,23 +14,23 @@ class ToolRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, tool_id: UUID) -> Tool:
+    async def get_by_id(self, tool_id: UUID) -> AppTool:
         raise NotImplemented
 
     @abstractmethod
-    async def get_all(self) -> list[Tool]:
+    async def get_all(self) -> list[AppTool]:
         raise NotImplemented
 
     @abstractmethod
-    async def filter(self, search_by_name: str | None = None) -> list[Tool]:
+    async def filter(self, search_by_name: str | None = None) -> list[AppTool]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, tool: Tool) -> None:
+    async def create(self, tool: AppTool) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def update(self, tool: Tool) -> None:
+    async def update(self, tool: AppTool) -> None:
         raise NotImplemented
 
     @abstractmethod

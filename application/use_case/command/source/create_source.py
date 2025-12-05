@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.source import CreateSourceCommand
+from application.dto.model.source import AppSource
 from application.repository import SourceRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.error import DomainError
@@ -30,5 +31,5 @@ class CreateSourceUseCase(UserCheck):
             command.description,
             command.name_in_english,
         )
-        await self.__source_repository.create(source)
+        await self.__source_repository.create(AppSource.from_domain(source))
         return source.source_id()

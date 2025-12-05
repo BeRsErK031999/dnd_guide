@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.weapon import CreateWeaponCommand
+from application.dto.model.weapon import AppWeapon
 from application.repository import (
     MaterialRepository,
     UserRepository,
@@ -71,5 +72,5 @@ class CreateWeaponUseCase(UserCheck):
             command.weapon_property_ids,
             command.material_id,
         )
-        await self.__weapon_repository.create(weapon)
+        await self.__weapon_repository.create(AppWeapon.from_domain(weapon))
         return weapon.weapon_id()

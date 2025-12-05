@@ -1,4 +1,5 @@
 from application.dto.command.tool import UpdateToolCommand
+from application.dto.model.tool import AppTool
 from application.repository import ToolRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.coin import Coins, PieceType
@@ -24,7 +25,8 @@ class UpdateToolUseCase(UserCheck):
             raise DomainError.not_found(
                 f"инструмент с id {command.tool_id} не существует"
             )
-        tool = await self.__tool_repository.get_by_id(command.tool_id)
+        app_tool = await self.__tool_repository.get_by_id(command.tool_id)
+        tool = app_tool.to_domain()
         if command.tool_type is not None:
             tool.new_tool_type(ToolType.from_str(command.tool_type))
         if command.name is not None:
@@ -50,4 +52,4 @@ class UpdateToolUseCase(UserCheck):
                     for utilize in command.utilizes
                 ]
             )
-        await self.__tool_repository.update(tool)
+        await self.__tool_repository.update(AppTool.from_domain(tool))

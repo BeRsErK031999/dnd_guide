@@ -1,4 +1,5 @@
 from application.dto.command.race import UpdateRaceCommand
+from application.dto.model.race import AppRace
 from application.repository import RaceRepository, SourceRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.creature_size import CreatureSize
@@ -32,7 +33,8 @@ class UpdateRaceUseCase(UserCheck):
         await self._user_check(command.user_id)
         if not await self.__race_repository.id_exists(command.race_id):
             raise DomainError.not_found(f"расы с id {command.race_id} не существует")
-        race = await self.__race_repository.get_by_id(command.race_id)
+        app_race = await self.__race_repository.get_by_id(command.race_id)
+        race = app_race.to_domain()
         if command.name is not None:
             if not await self.__race_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
@@ -92,4 +94,4 @@ class UpdateRaceUseCase(UserCheck):
                     f"источник с id {command.source_id} не существует"
                 )
             race.new_source_id(command.source_id)
-        await self.__race_repository.update(race)
+        await self.__race_repository.update(AppRace.from_domain(race))

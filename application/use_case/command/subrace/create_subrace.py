@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.subrace import CreateSubraceCommand
+from application.dto.model.subrace import AppSubrace
 from application.repository import RaceRepository, UserRepository
 from application.repository.subrace import SubraceRepository
 from application.use_case.command.user_check import UserCheck
@@ -51,5 +52,5 @@ class CreateSubraceUseCase(UserCheck):
             ],
             command.name_in_english,
         )
-        await self.__subrace_repository.create(subrace)
+        await self.__subrace_repository.create(AppSubrace.from_domain(subrace))
         return subrace.subrace_id()

@@ -28,7 +28,7 @@ class AppWeaponPropertyName:
 
 
 @dataclass
-class ReadWeaponPropertySchema:
+class AppWeaponProperty:
     weapon_property_id: UUID
     name: str
     description: str
@@ -37,11 +37,11 @@ class ReadWeaponPropertySchema:
     second_hand_dice: AppDice | None = None
 
     @staticmethod
-    def from_domain(weapon_property: WeaponProperty) -> "ReadWeaponPropertySchema":
+    def from_domain(weapon_property: WeaponProperty) -> "AppWeaponProperty":
         base_range = weapon_property.base_range()
         max_range = weapon_property.max_range()
         second_hand_dice = weapon_property.second_hand_dice()
-        return ReadWeaponPropertySchema(
+        return AppWeaponProperty(
             weapon_property_id=weapon_property.weapon_property_id(),
             name=weapon_property.name(),
             description=weapon_property.description(),

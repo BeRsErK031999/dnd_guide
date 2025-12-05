@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.subclass_feature import CreateSubclassFeatureCommand
+from application.dto.model.subclass_feature import AppSubclassFeature
 from application.repository import (
     SubclassFeatureRepository,
     SubclassRepository,
@@ -44,5 +45,5 @@ class CreateSubclassFeatureUseCase(UserCheck):
             command.level,
             command.name_in_english,
         )
-        await self.__feature_repository.create(feature)
+        await self.__feature_repository.create(AppSubclassFeature.from_domain(feature))
         return feature.feature_id()

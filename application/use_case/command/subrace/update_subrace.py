@@ -1,4 +1,5 @@
 from application.dto.command.subrace import UpdateSubraceCommand
+from application.dto.model.subrace import AppSubrace
 from application.repository import RaceRepository, SubraceRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.error import DomainError
@@ -23,7 +24,8 @@ class UpdateSubraceUseCase(UserCheck):
         await self._user_check(command.user_id)
         if not await self.__subrace_repository.id_exists(command.subrace_id):
             raise DomainError.not_found(f"подрасы с id {command.race_id} не существует")
-        subrace = await self.__subrace_repository.get_by_id(command.subrace_id)
+        app_subrace = await self.__subrace_repository.get_by_id(command.subrace_id)
+        subrace = app_subrace.to_domain()
         if command.race_id is not None:
             if not await self.__race_repository.id_exists(command.race_id):
                 raise DomainError.invalid_data(f"расы с id {command} не существует")
@@ -65,4 +67,4 @@ class UpdateSubraceUseCase(UserCheck):
             subrace.remove_features(command.remove_features)
         if command.name_in_english is not None:
             subrace.new_name_in_english(command.name_in_english)
-        await self.__subrace_repository.update(subrace)
+        await self.__subrace_repository.update(AppSubrace.from_domain(subrace))

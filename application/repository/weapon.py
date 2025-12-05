@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.weapon import Weapon
+from application.dto.model.weapon import AppWeapon
 
 
 class WeaponRepository(ABC):
@@ -14,11 +14,11 @@ class WeaponRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, weapon_id: UUID) -> Weapon:
+    async def get_by_id(self, weapon_id: UUID) -> AppWeapon:
         raise NotImplemented
 
     @abstractmethod
-    async def get_all(self) -> list[Weapon]:
+    async def get_all(self) -> list[AppWeapon]:
         raise NotImplemented
 
     @abstractmethod
@@ -29,15 +29,15 @@ class WeaponRepository(ABC):
         filter_by_damage_types: list[str] | None = None,
         filter_by_property_ids: list[UUID] | None = None,
         filter_by_material_ids: list[UUID] | None = None,
-    ) -> list[Weapon]:
+    ) -> list[AppWeapon]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, weapon: Weapon) -> None:
+    async def create(self, weapon: AppWeapon) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def update(self, weapon: Weapon) -> None:
+    async def update(self, weapon: AppWeapon) -> None:
         raise NotImplemented
 
     @abstractmethod

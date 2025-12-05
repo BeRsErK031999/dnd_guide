@@ -1,13 +1,13 @@
+from application.dto.model.subclass_feature import AppSubclassFeature
 from application.dto.query.subclass_feature import SubclassFeaturesQuery
 from application.repository import SubclassFeatureRepository
-from domain.subclass_feature import SubclassFeature
 
 
 class GetSubclassFeaturesUseCase:
     def __init__(self, feature_repository: SubclassFeatureRepository):
         self.__repository = feature_repository
 
-    async def execute(self, query: SubclassFeaturesQuery) -> list[SubclassFeature]:
+    async def execute(self, query: SubclassFeaturesQuery) -> list[AppSubclassFeature]:
         return await self.__repository.filter(
             filter_by_subclass_id=query.filter_by_subclass_id
         )

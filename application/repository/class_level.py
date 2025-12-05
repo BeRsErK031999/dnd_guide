@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.class_level import ClassLevel
+from application.dto.model.class_level import AppClassLevel
 
 
 class ClassLevelRepository(ABC):
@@ -14,23 +14,25 @@ class ClassLevelRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, level_id: UUID) -> ClassLevel:
+    async def get_by_id(self, level_id: UUID) -> AppClassLevel:
         raise NotImplemented
 
     @abstractmethod
-    async def get_all(self) -> list[ClassLevel]:
+    async def get_all(self) -> list[AppClassLevel]:
         raise NotImplemented
 
     @abstractmethod
-    async def filter(self, filter_by_class_id: UUID | None = None) -> list[ClassLevel]:
+    async def filter(
+        self, filter_by_class_id: UUID | None = None
+    ) -> list[AppClassLevel]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, level: ClassLevel) -> None:
+    async def create(self, level: AppClassLevel) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def update(self, level: ClassLevel) -> None:
+    async def update(self, level: AppClassLevel) -> None:
         raise NotImplemented
 
     @abstractmethod

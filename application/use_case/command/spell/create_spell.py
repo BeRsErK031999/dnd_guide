@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.spell import CreateSpellCommand
+from application.dto.model.spell import AppSpell
 from application.repository import (
     ClassRepository,
     SourceRepository,
@@ -103,5 +104,5 @@ class CreateSpellUseCase(UserCheck):
             name_in_english=command.name_in_english,
             source_id=command.source_id,
         )
-        await self.__spell_repository.create(spell)
+        await self.__spell_repository.create(AppSpell.from_domain(spell))
         return spell.spell_id()

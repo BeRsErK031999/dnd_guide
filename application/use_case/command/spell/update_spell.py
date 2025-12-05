@@ -1,4 +1,5 @@
 from application.dto.command.spell import UpdateSpellCommand
+from application.dto.model.spell import AppSpell
 from application.repository import (
     ClassRepository,
     SourceRepository,
@@ -38,7 +39,8 @@ class UpdateSpellUseCase(UserCheck):
             raise DomainError.not_found(
                 f"заклинание с id {command.spell_id} не существует"
             )
-        spell = await self.__spell_repository.get_by_id(command.spell_id)
+        app_spell = await self.__spell_repository.get_by_id(command.spell_id)
+        spell = app_spell.to_domain()
         if command.class_ids is not None:
             for class_id in command.class_ids:
                 if not await self.__class_repository.id_exists(class_id):
@@ -132,4 +134,4 @@ class UpdateSpellUseCase(UserCheck):
                     f"источник с id {command.source_id} не существует"
                 )
             spell.new_source_id(command.source_id)
-        await self.__spell_repository.update(spell)
+        await self.__spell_repository.update(AppSpell.from_domain(spell))

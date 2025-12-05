@@ -1,4 +1,5 @@
 from application.dto.command.source import UpdateSourceCommand
+from application.dto.model.source import AppSource
 from application.repository import SourceRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.error import DomainError
@@ -22,7 +23,8 @@ class UpdateSourceUseCase(UserCheck):
             raise DomainError.not_found(
                 f"источника с id {command.source_id} не существует"
             )
-        source = await self.__source_repository.get_by_id(command.source_id)
+        app_source = await self.__source_repository.get_by_id(command.source_id)
+        source = app_source.to_domain()
         if command.name is not None:
             if not await self.__source_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
@@ -33,4 +35,4 @@ class UpdateSourceUseCase(UserCheck):
             source.new_description(command.description)
         if command.name_in_english is not None:
             source.new_name_in_english(command.name_in_english)
-        await self.__source_repository.update(source)
+        await self.__source_repository.update(AppSource.from_domain(source))

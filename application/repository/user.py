@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.user import User
+from application.dto.model.user import AppUser
 
 
 class UserRepository(ABC):
@@ -10,11 +10,11 @@ class UserRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    async def get_all(self) -> list[User]:
+    async def get_all(self) -> list[AppUser]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, user: User) -> None:
+    async def create(self, user: AppUser) -> None:
         raise NotImplementedError()
 
     @abstractmethod

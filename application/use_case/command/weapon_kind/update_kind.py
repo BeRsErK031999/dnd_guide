@@ -1,4 +1,5 @@
 from application.dto.command.weapon_kind import UpdateWeaponKindCommand
+from application.dto.model.weapon_kind import AppWeaponKind
 from application.repository import UserRepository, WeaponKindRepository
 from application.use_case.command.user_check import UserCheck
 from domain.error import DomainError
@@ -22,7 +23,8 @@ class UpdateWeaponKindUseCase(UserCheck):
             raise DomainError.not_found(
                 f"вид оружия с id {command.weapon_kind_id} не существует"
             )
-        kind = await self.__kind_repository.get_by_id(command.weapon_kind_id)
+        app_kind = await self.__kind_repository.get_by_id(command.weapon_kind_id)
+        kind = app_kind.to_domain()
         if command.weapon_type is not None:
             kind.new_weapon_type(WeaponType.from_str(command.weapon_type))
         if command.name is not None:
@@ -33,4 +35,4 @@ class UpdateWeaponKindUseCase(UserCheck):
             kind.new_name(command.name)
         if command.description is not None:
             kind.new_description(command.description)
-        await self.__kind_repository.update(kind)
+        await self.__kind_repository.update(AppWeaponKind.from_domain(kind))

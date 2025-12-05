@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.feat import CreateFeatCommand
+from application.dto.model.feat import AppFeat
 from application.repository import FeatRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.armor import ArmorType
@@ -46,5 +47,5 @@ class CreateFeatUseCase(UserCheck):
                 for increase_modifier in command.increase_modifiers
             ],
         )
-        await self.__feat_repository.create(feat)
+        await self.__feat_repository.create(AppFeat.from_domain(feat))
         return feat.feat_id()

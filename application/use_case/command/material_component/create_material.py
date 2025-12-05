@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.material_component import CreateMaterialComponentCommand
+from application.dto.model.material_component import AppMaterialComponent
 from application.repository import MaterialComponentRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.error import DomainError
@@ -29,5 +30,7 @@ class CreateMaterialComponentUseCase(UserCheck):
             command.name,
             command.description,
         )
-        await self.__material_repository.create(material)
+        await self.__material_repository.create(
+            AppMaterialComponent.from_domain(material)
+        )
         return material.material_id()

@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.weapon_property import CreateWeaponPropertyCommand
+from application.dto.model.weapon_property import AppWeaponProperty
 from application.repository import UserRepository, WeaponPropertyRepository
 from application.use_case.command.user_check import UserCheck
 from domain.dice import Dice, DiceType
@@ -61,5 +62,7 @@ class CreateWeaponPropertyUseCase(UserCheck):
                 else None
             ),
         )
-        await self.__property_repository.create(weapon_property)
+        await self.__property_repository.create(
+            AppWeaponProperty.from_domain(weapon_property)
+        )
         return weapon_property.weapon_property_id()

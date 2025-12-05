@@ -1,4 +1,5 @@
 from application.dto.command.class_level import UpdateClassLevelCommand
+from application.dto.model.class_level import AppClassLevel
 from application.repository import ClassLevelRepository, ClassRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.class_level import (
@@ -33,9 +34,10 @@ class UpdateClassLevelUseCase(UserCheck):
             raise DomainError.not_found(
                 f"уровень с id {command.class_level_id} не существует"
             )
-        class_level = await self.__class_level_repository.get_by_id(
+        app_class_level = await self.__class_level_repository.get_by_id(
             command.class_level_id
         )
+        class_level = app_class_level.to_domain()
         if command.class_id is not None and command.level is not None:
             if not await self.__class_repository.id_exists(command.class_id):
                 raise DomainError.invalid_data(
@@ -107,4 +109,6 @@ class UpdateClassLevelUseCase(UserCheck):
             class_level.new_number_spells_know(command.number_spells_know)
         if command.number_arcanums_know is not None:
             class_level.new_number_arcanums_know(command.number_arcanums_know)
-        await self.__class_level_repository.update(class_level)
+        await self.__class_level_repository.update(
+            AppClassLevel.from_domain(class_level)
+        )

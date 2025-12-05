@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.material import Material
+from application.dto.model.material import AppMaterial
 
 
 class MaterialRepository(ABC):
@@ -14,23 +14,23 @@ class MaterialRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, material_id: UUID) -> Material:
+    async def get_by_id(self, material_id: UUID) -> AppMaterial:
         raise NotImplemented
 
     @abstractmethod
-    async def get_all(self) -> list[Material]:
+    async def get_all(self) -> list[AppMaterial]:
         raise NotImplemented
 
     @abstractmethod
-    async def filter(self, search_by_name: str | None = None) -> list[Material]:
+    async def filter(self, search_by_name: str | None = None) -> list[AppMaterial]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, material: Material) -> None:
+    async def create(self, material: AppMaterial) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def update(self, material: Material) -> None:
+    async def update(self, material: AppMaterial) -> None:
         raise NotImplemented
 
     @abstractmethod

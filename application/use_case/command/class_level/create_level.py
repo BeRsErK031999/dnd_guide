@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.class_level import CreateClassLevelCommand
+from application.dto.model.class_level import AppClassLevel
 from application.repository import ClassLevelRepository, ClassRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.class_level import (
@@ -84,5 +85,7 @@ class CreateClassLevelUseCase(UserCheck):
             bonus_damage,
             increase_speed,
         )
-        await self.__class_level_repository.create(class_level)
+        await self.__class_level_repository.create(
+            AppClassLevel.from_domain(class_level)
+        )
         return class_level.level_id()

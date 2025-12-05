@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.subrace import Subrace
+from application.dto.model.subrace import AppSubrace
 
 
 class SubraceRepository(ABC):
@@ -14,23 +14,23 @@ class SubraceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, subrace_id: UUID) -> Subrace:
+    async def get_by_id(self, subrace_id: UUID) -> AppSubrace:
         raise NotImplemented
 
     @abstractmethod
-    async def get_all(self) -> list[Subrace]:
+    async def get_all(self) -> list[AppSubrace]:
         raise NotImplemented
 
     @abstractmethod
-    async def filter(self, search_by_name: str | None = None) -> list[Subrace]:
+    async def filter(self, search_by_name: str | None = None) -> list[AppSubrace]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, subrace: Subrace) -> None:
+    async def create(self, subrace: AppSubrace) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def update(self, subrace: Subrace) -> None:
+    async def update(self, subrace: AppSubrace) -> None:
         raise NotImplemented
 
     @abstractmethod

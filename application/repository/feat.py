@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.feat import Feat
+from application.dto.model.feat import AppFeat
 
 
 class FeatRepository(ABC):
@@ -14,11 +14,11 @@ class FeatRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, feat_id: UUID) -> Feat:
+    async def get_by_id(self, feat_id: UUID) -> AppFeat:
         raise NotImplemented
 
     @abstractmethod
-    async def get_all(self) -> list[Feat]:
+    async def get_all(self) -> list[AppFeat]:
         raise NotImplemented
 
     @abstractmethod
@@ -29,15 +29,15 @@ class FeatRepository(ABC):
         filter_by_required_armor_types: list[str] | None = None,
         filter_by_required_modifiers: list[str] | None = None,
         filter_by_increase_modifiers: list[str] | None = None,
-    ) -> list[Feat]:
+    ) -> list[AppFeat]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, feat: Feat) -> None:
+    async def create(self, feat: AppFeat) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def update(self, feat: Feat) -> None:
+    async def update(self, feat: AppFeat) -> None:
         raise NotImplemented
 
     @abstractmethod

@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.race import CreateRaceCommand
+from application.dto.model.race import AppRace
 from application.repository import RaceRepository, SourceRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.creature_size import CreatureSize
@@ -69,5 +70,5 @@ class CreateRaceUseCase(UserCheck):
             name_in_english=command.name_in_english,
             source_id=command.source_id,
         )
-        await self.__race_repository.create(race)
+        await self.__race_repository.create(AppRace.from_domain(race))
         return race.race_id()

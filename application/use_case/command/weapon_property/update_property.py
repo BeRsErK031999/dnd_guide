@@ -1,4 +1,5 @@
 from application.dto.command.weapon_property import UpdateWeaponPropertyCommand
+from application.dto.model.weapon_property import AppWeaponProperty
 from application.repository import UserRepository, WeaponPropertyRepository
 from application.use_case.command.user_check import UserCheck
 from domain.dice import Dice, DiceType
@@ -24,9 +25,10 @@ class UpdateWeaponPropertyUseCase(UserCheck):
             raise DomainError.not_found(
                 f"свойство с id {command.weapon_property_id} не существует"
             )
-        weapon_property = await self.__property_repository.get_by_id(
+        app_weapon_property = await self.__property_repository.get_by_id(
             command.weapon_property_id
         )
+        weapon_property = app_weapon_property.to_domain()
         if command.name is not None:
             if not await self.__property_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
@@ -97,4 +99,6 @@ class UpdateWeaponPropertyUseCase(UserCheck):
                     else None
                 )
             )
-        await self.__property_repository.update(weapon_property)
+        await self.__property_repository.update(
+            AppWeaponProperty.from_domain(weapon_property)
+        )

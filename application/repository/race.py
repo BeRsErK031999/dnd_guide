@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.race import Race
+from application.dto.model.race import AppRace
 
 
 class RaceRepository(ABC):
@@ -14,23 +14,23 @@ class RaceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, race_id: UUID) -> Race:
+    async def get_by_id(self, race_id: UUID) -> AppRace:
         raise NotImplemented
 
     @abstractmethod
-    async def get_all(self) -> list[Race]:
+    async def get_all(self) -> list[AppRace]:
         raise NotImplemented
 
     @abstractmethod
-    async def filter(self, search_by_name: str | None = None) -> list[Race]:
+    async def filter(self, search_by_name: str | None = None) -> list[AppRace]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, race: Race) -> None:
+    async def create(self, race: AppRace) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def update(self, race: Race) -> None:
+    async def update(self, race: AppRace) -> None:
         raise NotImplemented
 
     @abstractmethod

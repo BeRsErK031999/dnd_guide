@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.class_feature import ClassFeature
+from application.dto.model.class_feature import AppClassFeature
 
 
 class ClassFeatureRepository(ABC):
@@ -14,25 +14,25 @@ class ClassFeatureRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, feature_id: UUID) -> ClassFeature:
+    async def get_by_id(self, feature_id: UUID) -> AppClassFeature:
         raise NotImplemented
 
     @abstractmethod
-    async def get_all(self) -> list[ClassFeature]:
+    async def get_all(self) -> list[AppClassFeature]:
         raise NotImplemented
 
     @abstractmethod
     async def filter(
         self, filter_by_class_id: UUID | None = None
-    ) -> list[ClassFeature]:
+    ) -> list[AppClassFeature]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, feature: ClassFeature) -> None:
+    async def create(self, feature: AppClassFeature) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def update(self, feature: ClassFeature) -> None:
+    async def update(self, feature: AppClassFeature) -> None:
         raise NotImplemented
 
     @abstractmethod

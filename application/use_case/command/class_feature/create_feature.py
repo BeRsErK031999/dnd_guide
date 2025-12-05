@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.class_feature import CreateClassFeatureCommand
+from application.dto.model.class_feature import AppClassFeature
 from application.repository import (
     ClassFeatureRepository,
     ClassRepository,
@@ -44,5 +45,5 @@ class CreateClassFeatureUseCase(UserCheck):
             command.level,
             command.name_in_english,
         )
-        await self.__feature_repository.create(feature)
+        await self.__feature_repository.create(AppClassFeature.from_domain(feature))
         return feature.feature_id()

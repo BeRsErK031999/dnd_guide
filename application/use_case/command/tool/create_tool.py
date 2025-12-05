@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.tool import CreateToolCommand
+from application.dto.model.tool import AppTool
 from application.repository import ToolRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.coin import Coins, PieceType
@@ -38,5 +39,5 @@ class CreateToolUseCase(UserCheck):
                 for utilize in command.utilizes
             ],
         )
-        await self.__tool_repository.create(tool)
+        await self.__tool_repository.create(AppTool.from_domain(tool))
         return tool.tool_id()

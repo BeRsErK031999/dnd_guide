@@ -1,4 +1,5 @@
 from application.dto.command.subclass_feature import UpdateSubclassFeatureCommand
+from application.dto.model.subclass_feature import AppSubclassFeature
 from application.repository import (
     SubclassFeatureRepository,
     SubclassRepository,
@@ -28,7 +29,8 @@ class UpdateSubclassFeatureUseCase(UserCheck):
             raise DomainError.not_found(
                 f"умения подкласса с id {command.feature_id} не существует"
             )
-        feature = await self.__feature_repository.get_by_id(command.feature_id)
+        app_feature = await self.__feature_repository.get_by_id(command.feature_id)
+        feature = app_feature.to_domain()
         if command.name is not None and command.subclass_id is not None:
             if not await self.__feature_service.can_rename_for_class_with_name(
                 command.subclass_id, command.name
@@ -68,4 +70,4 @@ class UpdateSubclassFeatureUseCase(UserCheck):
             feature.new_level(command.level)
         if command.name_in_english is not None:
             feature.new_name_in_english(command.name_in_english)
-        await self.__feature_repository.update(feature)
+        await self.__feature_repository.update(AppSubclassFeature.from_domain(feature))

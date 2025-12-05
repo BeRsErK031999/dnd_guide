@@ -33,7 +33,7 @@ class AppWeaponDamage:
 
 
 @dataclass
-class ReadWeaponSchema:
+class AppWeapon:
     weapon_id: UUID
     weapon_kind_id: UUID
     name: str
@@ -45,8 +45,8 @@ class ReadWeaponSchema:
     material_id: UUID
 
     @staticmethod
-    def from_domain(weapon: Weapon) -> "ReadWeaponSchema":
-        return ReadWeaponSchema(
+    def from_domain(weapon: Weapon) -> "AppWeapon":
+        return AppWeapon(
             weapon_id=weapon.weapon_id(),
             weapon_kind_id=weapon.kind_id(),
             name=weapon.name(),

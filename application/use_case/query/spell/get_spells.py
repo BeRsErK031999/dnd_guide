@@ -1,13 +1,13 @@
+from application.dto.model.spell import AppSpell
 from application.dto.query.spell import SpellsQuery
 from application.repository import SpellRepository
-from domain.spell import Spell
 
 
 class GetSpellsUseCase:
     def __init__(self, spell_repository: SpellRepository):
         self.__repository = spell_repository
 
-    async def execute(self, query: SpellsQuery) -> list[Spell]:
+    async def execute(self, query: SpellsQuery) -> list[AppSpell]:
         return await self.__repository.filter(
             search_by_name=query.search_by_name,
             filter_by_class_ids=query.filter_by_class_ids,

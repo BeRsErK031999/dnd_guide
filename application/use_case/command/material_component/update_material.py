@@ -1,4 +1,5 @@
 from application.dto.command.material_component import UpdateMaterialComponentCommand
+from application.dto.model.material_component import AppMaterialComponent
 from application.repository import MaterialComponentRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.error import DomainError
@@ -22,7 +23,8 @@ class UpdateMaterialComponentUseCase(UserCheck):
             raise DomainError.not_found(
                 f"материала с id {command.material_id} не существует"
             )
-        material = await self.__material_repository.get_by_id(command.material_id)
+        app_material = await self.__material_repository.get_by_id(command.material_id)
+        material = app_material.to_domain()
         if command.name is not None:
             if not await self.__material_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
@@ -31,4 +33,6 @@ class UpdateMaterialComponentUseCase(UserCheck):
             material.new_name(command.name)
         if command.description is not None:
             material.new_description(command.description)
-        await self.__material_repository.update(material)
+        await self.__material_repository.update(
+            AppMaterialComponent.from_domain(material)
+        )

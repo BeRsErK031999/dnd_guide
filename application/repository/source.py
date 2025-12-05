@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from domain.source import Source
+from application.dto.model.source import AppSource
 
 
 class SourceRepository(ABC):
@@ -14,23 +14,23 @@ class SourceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, source_id: UUID) -> Source:
+    async def get_by_id(self, source_id: UUID) -> AppSource:
         raise NotImplemented
 
     @abstractmethod
-    async def get_all(self) -> list[Source]:
+    async def get_all(self) -> list[AppSource]:
         raise NotImplemented
 
     @abstractmethod
-    async def filter(self, search_by_name: str | None = None) -> list[Source]:
+    async def filter(self, search_by_name: str | None = None) -> list[AppSource]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, source: Source) -> None:
+    async def create(self, source: AppSource) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def update(self, source: Source) -> None:
+    async def update(self, source: AppSource) -> None:
         raise NotImplemented
 
     @abstractmethod

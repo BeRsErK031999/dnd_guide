@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.weapon_kind import CreateWeaponKindCommand
+from application.dto.model.weapon_kind import AppWeaponKind
 from application.repository import UserRepository, WeaponKindRepository
 from application.use_case.command.user_check import UserCheck
 from domain.error import DomainError
@@ -30,5 +31,5 @@ class CreateWeaponKindUseCase(UserCheck):
             command.description,
             WeaponType.from_str(command.weapon_type),
         )
-        await self.__kind_repository.create(kind)
+        await self.__kind_repository.create(AppWeaponKind.from_domain(kind))
         return kind.weapon_kind_id()
