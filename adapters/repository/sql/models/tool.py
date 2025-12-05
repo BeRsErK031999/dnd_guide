@@ -2,11 +2,9 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from domain.coin import Coins
-from domain.tool import Tool
-from domain.tool.tool_type import ToolType
-from domain.tool.utilize import ToolUtilize
-from domain.weight import Weight, WeightUnit
+from application.dto.model.coin import AppCoins
+from application.dto.model.tool import AppTool, AppToolUtilizes
+from application.dto.model.weight import AppWeight
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -30,26 +28,26 @@ class ToolModel(Base):
         back_populates="tools", secondary="rel_class_tool"
     )
 
-    def to_domain(self) -> Tool:
-        return Tool(
+    def to_app(self) -> AppTool:
+        return AppTool(
             tool_id=self.id,
-            tool_type=ToolType.from_str(self.tool_type),
+            tool_type=self.tool_type,
             name=self.name,
             description=self.description,
-            cost=Coins(count=self.cost),
-            weight=Weight(count=self.weight, unit=WeightUnit.LB),
-            utilizes=[utilize.to_domain() for utilize in self.utilizes],
+            cost=AppCoins(count=self.cost),
+            weight=AppWeight(count=self.weight),
+            utilizes=[utilize.to_app() for utilize in self.utilizes],
         )
 
     @staticmethod
-    def from_domain(domain_tool: Tool) -> "ToolModel":
+    def from_app(domain_tool: AppTool) -> "ToolModel":
         return ToolModel(
-            id=domain_tool.tool_id(),
-            tool_type=domain_tool.tool_type().name,
-            name=domain_tool.name(),
-            description=domain_tool.description(),
-            cost=domain_tool.cost().in_copper(),
-            weight=domain_tool.weight().in_lb(),
+            id=domain_tool.tool_id,
+            tool_type=domain_tool.tool_type,
+            name=domain_tool.name,
+            description=domain_tool.description,
+            cost=domain_tool.cost.count,
+            weight=domain_tool.weight.count,
         )
 
 
@@ -62,14 +60,14 @@ class ToolUtilizeModel(Base):
 
     tool: Mapped["ToolModel"] = relationship(back_populates="utilizes")
 
-    def to_domain(self) -> ToolUtilize:
-        return ToolUtilize(
+    def to_app(self) -> AppToolUtilizes:
+        return AppToolUtilizes(
             action=self.action,
             complexity=self.complexity,
         )
 
     @staticmethod
-    def from_domain(tool_id: UUID, tool_utilize: ToolUtilize) -> "ToolUtilizeModel":
+    def from_app(tool_id: UUID, tool_utilize: AppToolUtilizes) -> "ToolUtilizeModel":
         return ToolUtilizeModel(
             action=tool_utilize.action,
             complexity=tool_utilize.complexity,

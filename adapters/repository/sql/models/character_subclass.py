@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from domain.character_subclass import CharacterSubclass
+from application.dto.model.character_subclass import AppSubclass
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -30,8 +30,8 @@ class CharacterSubclassModel(Base):
         back_populates="character_subclasses", secondary="rel_spell_character_subclass"
     )
 
-    def to_domain(self) -> CharacterSubclass:
-        return CharacterSubclass(
+    def to_app(self) -> AppSubclass:
+        return AppSubclass(
             subclass_id=self.id,
             class_id=self.character_class_id,
             name=self.name,
@@ -40,11 +40,11 @@ class CharacterSubclassModel(Base):
         )
 
     @staticmethod
-    def from_domain(character_subclass: CharacterSubclass) -> "CharacterSubclassModel":
+    def from_app(subclass: AppSubclass) -> "CharacterSubclassModel":
         return CharacterSubclassModel(
-            id=character_subclass.subclass_id(),
-            character_class_id=character_subclass.class_id(),
-            name=character_subclass.name(),
-            description=character_subclass.description(),
-            name_in_english=character_subclass.name_in_english(),
+            id=subclass.subclass_id,
+            character_class_id=subclass.class_id,
+            name=subclass.name,
+            description=subclass.description,
+            name_in_english=subclass.name_in_english,
         )

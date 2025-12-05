@@ -2,7 +2,7 @@ from os import name
 from typing import TYPE_CHECKING
 
 from adapters.repository.sql.models.base import Base
-from domain.material_component import MaterialComponent
+from application.dto.model.material_component import AppMaterialComponent
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -20,17 +20,15 @@ class MaterialComponentModel(Base):
         back_populates="materials", secondary="rel_spell_material"
     )
 
-    def to_domain(self) -> MaterialComponent:
-        return MaterialComponent(
-            material_id=self.id,
-            name=self.name,
-            description=self.description,
+    def to_app(self) -> "AppMaterialComponent":
+        return AppMaterialComponent(
+            material_id=self.id, name=self.name, description=self.description
         )
 
     @staticmethod
-    def from_domain(material: MaterialComponent) -> "MaterialComponentModel":
+    def from_app(material: AppMaterialComponent) -> "MaterialComponentModel":
         return MaterialComponentModel(
-            id=material.material_id(),
-            name=material.name(),
-            description=material.description(),
+            id=material.material_id,
+            name=material.name,
+            description=material.description,
         )

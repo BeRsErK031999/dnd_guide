@@ -2,16 +2,15 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from domain.class_level import (
-    ClassLevel,
-    ClassLevelBonusDamage,
-    ClassLevelDice,
-    ClassLevelIncreaseSpeed,
-    ClassLevelPoints,
-    ClassLevelSpellSlots,
+from application.dto.model.class_level import (
+    AppClassLevel,
+    AppClassLevelBonusDamage,
+    AppClassLevelDice,
+    AppClassLevelIncreaseSpeed,
+    AppClassLevelPoints,
 )
-from domain.dice import Dice, DiceType
-from domain.length import Length, LengthUnit
+from application.dto.model.dice import AppDice
+from application.dto.model.length import AppLength
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -44,7 +43,7 @@ class ClassLevelModel(Base):
         back_populates="class_level"
     )
 
-    def to_domain(self) -> ClassLevel:
+    def to_app(self) -> "AppClassLevel":
         dice = None
         spell_slots = None
         points = None
@@ -55,73 +54,67 @@ class ClassLevelModel(Base):
             and self.dice_name is not None
             and self.dice_description is not None
         ):
-            dice = ClassLevelDice(
-                dice=Dice(
-                    count=self.dice_count, dice_type=DiceType.from_str(self.dice_name)
-                ),
-                dice_description=self.dice_description,
+            dice = AppClassLevelDice(
+                dice=AppDice(self.dice_count, self.dice_name),
+                description=self.dice_description,
             )
         if self.class_level_spell_slot is not None:
-            spell_slots = self.class_level_spell_slot.to_domain()
+            spell_slots = self.class_level_spell_slot.to_app()
         if self.points is not None and self.points_description is not None:
-            points = ClassLevelPoints(
-                points=self.points, description=self.points_description
-            )
+            points = AppClassLevelPoints(self.points, self.points_description)
         if self.bonus_damage is not None and self.bonus_damage_description is not None:
-            bonus_damage = ClassLevelBonusDamage(
-                damage=self.bonus_damage,
-                description=self.bonus_damage_description,
+            bonus_damage = AppClassLevelBonusDamage(
+                self.bonus_damage, self.bonus_damage_description
             )
         if (
             self.increase_speed is not None
             and self.increase_speed_description is not None
         ):
-            increase_speed = ClassLevelIncreaseSpeed(
-                speed=Length(count=self.increase_speed, unit=LengthUnit.FT),
-                description=self.increase_speed_description,
+            increase_speed = AppClassLevelIncreaseSpeed(
+                AppLength(count=self.increase_speed), self.increase_speed_description
             )
-        return ClassLevel(
-            level_id=self.id,
+        return AppClassLevel(
+            class_level_id=self.id,
             class_id=self.character_class_id,
             level=self.level,
             dice=dice,
             spell_slots=spell_slots,
             number_cantrips_know=self.number_cantrips_know,
-            number_spells_know=self.number_spells_know,
             number_arcanums_know=self.number_arcanums_know,
+            number_spells_know=self.number_spells_know,
             points=points,
             bonus_damage=bonus_damage,
             increase_speed=increase_speed,
         )
 
     @staticmethod
-    def from_domain(class_level: ClassLevel) -> "ClassLevelModel":
-        dice = class_level.dice()
-        points = class_level.points()
-        bonus_damage = class_level.bonus_damage()
-        increase_speed = class_level.increase_speed()
+    def from_app(class_level: AppClassLevel) -> "ClassLevelModel":
+        dice = class_level.dice
+        points = class_level.points
+        bonus_damage = class_level.bonus_damage
+        increase_speed = class_level.increase_speed
         return ClassLevelModel(
-            id=class_level.level_id(),
-            level=class_level.level(),
-            dice_name=dice.dice().dice_type().name if dice is not None else None,
-            dice_count=dice.dice().count() if dice is not None else None,
-            dice_description=dice.description() if dice is not None else None,
-            number_cantrips_know=class_level.number_cantrips_know(),
-            number_spells_know=class_level.number_spells_know(),
-            number_arcanums_know=class_level.number_arcanums_know(),
-            points=points.points() if points is not None else None,
-            points_description=points.description() if points is not None else None,
-            bonus_damage=bonus_damage.damage() if bonus_damage is not None else None,
+            id=class_level.class_level_id,
+            level=class_level.level,
+            dice_name=dice.dice.dice_type if dice is not None else None,
+            dice_count=dice.dice.count if dice is not None else None,
+            dice_description=dice.description if dice is not None else None,
+            number_cantrips_know=class_level.number_cantrips_know,
+            number_spells_know=class_level.number_spells_know,
+            number_arcanums_know=class_level.number_arcanums_know,
+            points=points.points if points is not None else None,
+            points_description=points.description if points is not None else None,
+            bonus_damage=bonus_damage.damage if bonus_damage is not None else None,
             bonus_damage_description=(
-                bonus_damage.description() if bonus_damage is not None else None
+                bonus_damage.description if bonus_damage is not None else None
             ),
             increase_speed=(
-                increase_speed.speed().in_ft() if increase_speed is not None else None
+                increase_speed.speed.count if increase_speed is not None else None
             ),
             increase_speed_description=(
-                increase_speed.description() if increase_speed is not None else None
+                increase_speed.description if increase_speed is not None else None
             ),
-            character_class_id=class_level.class_id(),
+            character_class_id=class_level.class_id,
         )
 
 
@@ -143,26 +136,21 @@ class ClassLevelSpellSlotModel(Base):
         back_populates="class_level_spell_slot"
     )
 
-    def to_domain(self) -> ClassLevelSpellSlots:
-        return ClassLevelSpellSlots(
-            spell_slots=[
-                self.level_1,
-                self.level_2,
-                self.level_3,
-                self.level_4,
-                self.level_5,
-                self.level_6,
-                self.level_7,
-                self.level_8,
-                self.level_9,
-            ]
-        )
+    def to_app(self) -> list[int]:
+        return [
+            self.level_1,
+            self.level_2,
+            self.level_3,
+            self.level_4,
+            self.level_5,
+            self.level_6,
+            self.level_7,
+            self.level_8,
+            self.level_9,
+        ]
 
     @staticmethod
-    def from_domain(
-        class_level_id: UUID, spell_slots: ClassLevelSpellSlots
-    ) -> "ClassLevelSpellSlotModel":
-        slots = spell_slots.slots()
+    def from_app(level_id: UUID, slots: list[int]) -> "ClassLevelSpellSlotModel":
         return ClassLevelSpellSlotModel(
             level_1=slots[0],
             level_2=slots[1],
@@ -173,5 +161,5 @@ class ClassLevelSpellSlotModel(Base):
             level_7=slots[6],
             level_8=slots[7],
             level_9=slots[8],
-            class_level_id=class_level_id,
+            class_level_id=level_id,
         )

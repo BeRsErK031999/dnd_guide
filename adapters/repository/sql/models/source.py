@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from adapters.repository.sql.models.base import Base
+from application.dto.model.source import AppSource
 from domain.source import Source
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -24,8 +25,8 @@ class SourceModel(Base):
     )
     spells: Mapped[list["SpellModel"]] = relationship(back_populates="source")
 
-    def to_domain(self) -> Source:
-        return Source(
+    def to_app(self) -> AppSource:
+        return AppSource(
             source_id=self.id,
             name=self.name,
             description=self.description,
@@ -33,10 +34,10 @@ class SourceModel(Base):
         )
 
     @staticmethod
-    def from_domain(source: Source) -> "SourceModel":
+    def from_app(source: AppSource) -> "SourceModel":
         return SourceModel(
-            id=source.source_id(),
-            name=source.name(),
-            description=source.description(),
-            name_in_english=source.name_in_english(),
+            id=source.source_id,
+            name=source.name,
+            description=source.description,
+            name_in_english=source.name_in_english,
         )

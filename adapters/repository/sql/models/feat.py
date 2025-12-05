@@ -1,9 +1,7 @@
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from domain.armor import ArmorType
-from domain.feat import Feat, FeatRequiredModifier
-from domain.modifier import Modifier
+from application.dto.model.feat import AppFeat, AppFeatRequiredModifier
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -25,32 +23,24 @@ class FeatModel(Base):
         back_populates="feat"
     )
 
-    def to_domain(self) -> Feat:
-        return Feat(
+    def to_app(self) -> AppFeat:
+        return AppFeat(
             feat_id=self.id,
             name=self.name,
             description=self.description,
             caster=self.caster,
-            increase_modifiers=[
-                increase_modifier.to_domain()
-                for increase_modifier in self.increase_modifiers
-            ],
-            required_modifiers=[
-                required_modifier.to_domain()
-                for required_modifier in self.required_modifiers
-            ],
-            required_armor_types=[
-                required_armor_type.to_domain()
-                for required_armor_type in self.required_armor_types
-            ],
+            increase_modifiers=[m.to_app() for m in self.increase_modifiers],
+            required_armor_types=[t.to_app() for t in self.required_armor_types],
+            required_modifiers=[m.to_app() for m in self.required_modifiers],
         )
 
     @staticmethod
-    def from_domain(feat: Feat) -> "FeatModel":
+    def from_app(feat: AppFeat) -> "FeatModel":
         return FeatModel(
-            name=feat.name(),
-            description=feat.description(),
-            caster=feat.caster(),
+            id=feat.feat_id,
+            name=feat.name,
+            description=feat.description,
+            caster=feat.caster,
         )
 
 
@@ -62,12 +52,12 @@ class FeatIncreaseModifierModel(Base):
 
     feat: Mapped["FeatModel"] = relationship(back_populates="increase_modifiers")
 
-    def to_domain(self) -> Modifier:
-        return Modifier.from_str(self.name)
+    def to_app(self) -> str:
+        return self.name
 
     @staticmethod
-    def from_domain(feat_id: UUID, modifier: Modifier) -> "FeatIncreaseModifierModel":
-        return FeatIncreaseModifierModel(name=modifier.name, feat_id=feat_id)
+    def from_app(feat_id: UUID, name: str) -> "FeatIncreaseModifierModel":
+        return FeatIncreaseModifierModel(name=name, feat_id=feat_id)
 
 
 class FeatRequiredModifierModel(Base):
@@ -79,20 +69,15 @@ class FeatRequiredModifierModel(Base):
 
     feat: Mapped["FeatModel"] = relationship(back_populates="required_modifiers")
 
-    def to_domain(self) -> FeatRequiredModifier:
-        return FeatRequiredModifier(
-            modifier=Modifier.from_str(self.name),
-            min_value=self.min_value,
-        )
+    def to_app(self) -> AppFeatRequiredModifier:
+        return AppFeatRequiredModifier(modifier=self.name, min_value=self.min_value)
 
     @staticmethod
-    def from_domain(
-        feat_id: UUID, required_modifier: FeatRequiredModifier
+    def from_app(
+        feat_id: UUID, modifier: AppFeatRequiredModifier
     ) -> "FeatRequiredModifierModel":
         return FeatRequiredModifierModel(
-            name=required_modifier.modifier().name,
-            min_value=required_modifier.min_value(),
-            feat_id=feat_id,
+            name=modifier.modifier, min_value=modifier.min_value, feat_id=feat_id
         )
 
 
@@ -104,11 +89,9 @@ class FeatRequiredArmorTypeModel(Base):
 
     feat: Mapped["FeatModel"] = relationship(back_populates="required_armor_types")
 
-    def to_domain(self) -> ArmorType:
-        return ArmorType.from_str(self.name)
+    def to_app(self) -> str:
+        return self.name
 
     @staticmethod
-    def from_domain(
-        feat_id: UUID, armor_type: ArmorType
-    ) -> "FeatRequiredArmorTypeModel":
-        return FeatRequiredArmorTypeModel(feat_id=feat_id, name=armor_type.name)
+    def from_app(feat_id: UUID, name: str) -> "FeatRequiredArmorTypeModel":
+        return FeatRequiredArmorTypeModel(name=name, feat_id=feat_id)

@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
+from application.dto.model.subclass_feature import AppSubclassFeature
 from domain.subclass_feature import SubclassFeature
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -25,8 +26,8 @@ class SubclassFeatureModel(Base):
         back_populates="features"
     )
 
-    def to_domain(self) -> SubclassFeature:
-        return SubclassFeature(
+    def to_app(self) -> AppSubclassFeature:
+        return AppSubclassFeature(
             feature_id=self.id,
             subclass_id=self.character_subclass_id,
             name=self.name,
@@ -36,12 +37,12 @@ class SubclassFeatureModel(Base):
         )
 
     @staticmethod
-    def from_domain(feature: SubclassFeature) -> "SubclassFeatureModel":
+    def from_app(feature: AppSubclassFeature) -> "SubclassFeatureModel":
         return SubclassFeatureModel(
-            id=feature.feature_id(),
-            name=feature.name(),
-            description=feature.description(),
-            name_in_english=feature.name_in_english(),
-            level=feature.level(),
-            character_subclass_id=feature.subclass_id(),
+            id=feature.feature_id,
+            name=feature.name,
+            description=feature.description,
+            name_in_english=feature.name_in_english,
+            level=feature.level,
+            character_subclass_id=feature.subclass_id,
         )

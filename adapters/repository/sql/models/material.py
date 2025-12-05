@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from adapters.repository.sql.models.base import Base
-from domain.material import Material
+from application.dto.model.material import AppMaterial
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -19,17 +19,17 @@ class MaterialModel(Base):
     armors: Mapped[list["ArmorModel"]] = relationship(back_populates="material")
     weapons: Mapped[list["WeaponModel"]] = relationship(back_populates="material")
 
-    def to_domain(self) -> Material:
-        return Material(
+    def to_app(self) -> "AppMaterial":
+        return AppMaterial(
             material_id=self.id,
             name=self.name,
             description=self.description,
         )
 
     @staticmethod
-    def from_domain(domain_material: Material) -> "MaterialModel":
+    def from_app(material: AppMaterial) -> "MaterialModel":
         return MaterialModel(
-            id=domain_material.material_id(),
-            name=domain_material.name(),
-            description=domain_material.description(),
+            id=material.material_id,
+            name=material.name,
+            description=material.description,
         )

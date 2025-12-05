@@ -1,15 +1,14 @@
-from typing import TYPE_CHECKING, Sequence
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from domain.coin import Coins, PieceType
-from domain.damage_type import DamageType
-from domain.dice import Dice, DiceType
-from domain.length import Length, LengthUnit
-from domain.weapon import Weapon, WeaponDamage
-from domain.weapon_kind import WeaponKind, WeaponType
-from domain.weapon_property import WeaponProperty, WeaponPropertyName
-from domain.weight import Weight, WeightUnit
+from application.dto.model.coin import AppCoins
+from application.dto.model.dice import AppDice
+from application.dto.model.length import AppLength
+from application.dto.model.weapon import AppWeapon, AppWeaponDamage
+from application.dto.model.weapon_kind import AppWeaponKind
+from application.dto.model.weapon_property import AppWeaponProperty
+from application.dto.model.weight import AppWeight
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -41,40 +40,39 @@ class WeaponModel(Base):
         back_populates="weapons", secondary="rel_class_weapon"
     )
 
-    def to_domain(self) -> Weapon:
-        return Weapon(
+    def to_app(self) -> AppWeapon:
+        return AppWeapon(
             weapon_id=self.id,
             weapon_kind_id=self.kind_id,
             name=self.name,
             description=self.description,
-            cost=Coins(count=self.cost, piece_type=PieceType.COPPER),
-            damage=WeaponDamage(
-                dice=Dice(
-                    count=self.damage_dice_count,
-                    dice_type=DiceType.from_str(self.damage_dice_name),
+            cost=AppCoins(count=self.cost),
+            damage=AppWeaponDamage(
+                dice=AppDice(
+                    count=self.damage_dice_count, dice_type=self.damage_dice_name
                 ),
-                damage_type=DamageType.from_str(self.damage_type),
+                damage_type=self.damage_type,
                 bonus_damage=self.bonus_damage,
             ),
-            weight=Weight(count=self.weight, unit=WeightUnit.LB),
+            weight=AppWeight(count=self.weight),
             weapon_property_ids=[p.id for p in self.properties],
             material_id=self.material_id,
         )
 
     @staticmethod
-    def from_domain(weapon: Weapon) -> "WeaponModel":
+    def from_app(weapon: AppWeapon) -> "WeaponModel":
         return WeaponModel(
-            id=weapon.weapon_id(),
-            name=weapon.name(),
-            description=weapon.description(),
-            cost=weapon.cost().in_copper(),
-            damage_dice_name=weapon.damage().dice().dice_type().name,
-            damage_dice_count=weapon.damage().dice().count(),
-            damage_type=weapon.damage().damage_type().name,
-            bonus_damage=weapon.damage().bonus_damage(),
-            weight=weapon.weight().in_lb(),
-            kind_id=weapon.kind_id(),
-            material_id=weapon.material_id(),
+            id=weapon.weapon_id,
+            name=weapon.name,
+            description=weapon.description,
+            cost=weapon.cost.count,
+            damage_dice_name=weapon.damage.dice.dice_type,
+            damage_dice_count=weapon.damage.dice.count,
+            damage_type=weapon.damage.damage_type,
+            bonus_damage=weapon.damage.bonus_damage,
+            weight=weapon.weight.count,
+            kind_id=weapon.weapon_kind_id,
+            material_id=weapon.material_id,
         )
 
 
@@ -92,25 +90,23 @@ class WeaponPropertyModel(Base):
         back_populates="properties", secondary="rel_weapon_property"
     )
 
-    def to_domain(self) -> WeaponProperty:
-        return WeaponProperty(
+    def to_app(self) -> AppWeaponProperty:
+        return AppWeaponProperty(
             weapon_property_id=self.id,
-            name=WeaponPropertyName.from_str(self.name),
+            name=self.name,
             description=self.description,
             base_range=(
-                Length(count=self.base_range, unit=LengthUnit.FT)
+                AppLength(count=self.base_range)
                 if not self.base_range is None
                 else None
             ),
             max_range=(
-                Length(count=self.max_range, unit=LengthUnit.FT)
-                if not self.max_range is None
-                else None
+                AppLength(count=self.max_range) if not self.max_range is None else None
             ),
             second_hand_dice=(
-                Dice(
+                AppDice(
                     count=self.second_hand_dice_count,
-                    dice_type=DiceType.from_str(self.second_hand_dice_name),
+                    dice_type=self.second_hand_dice_name,
                 )
                 if self.second_hand_dice_count is not None
                 and self.second_hand_dice_name is not None
@@ -119,20 +115,20 @@ class WeaponPropertyModel(Base):
         )
 
     @staticmethod
-    def from_domain(
-        weapon_property: WeaponProperty,
+    def from_app(
+        weapon_property: AppWeaponProperty,
     ) -> "WeaponPropertyModel":
-        base_range = weapon_property.base_range()
-        max_range = weapon_property.max_range()
-        dice = weapon_property.second_hand_dice()
+        base_range = weapon_property.base_range
+        max_range = weapon_property.max_range
+        dice = weapon_property.second_hand_dice
         return WeaponPropertyModel(
-            id=weapon_property.weapon_property_id(),
-            name=weapon_property.name().name,
-            description=weapon_property.description(),
-            base_range=base_range.in_ft() if base_range else None,
-            max_range=(max_range.in_ft() if max_range else None),
-            second_hand_dice_name=(dice.dice_type().name if dice is not None else None),
-            second_hand_dace_count=(dice.count() if dice is not None else None),
+            id=weapon_property.weapon_property_id,
+            name=weapon_property.name,
+            description=weapon_property.description,
+            base_range=base_range.count if base_range else None,
+            max_range=max_range.count if max_range else None,
+            second_hand_dice_name=dice.dice_type if dice is not None else None,
+            second_hand_dace_count=dice.count if dice is not None else None,
         )
 
 
@@ -145,21 +141,21 @@ class WeaponKindModel(Base):
 
     weapons: Mapped[list["WeaponModel"]] = relationship(back_populates="kind")
 
-    def to_domain(self) -> WeaponKind:
-        return WeaponKind(
+    def to_app(self) -> AppWeaponKind:
+        return AppWeaponKind(
             weapon_kind_id=self.id,
             name=self.name,
             description=self.description,
-            weapon_type=WeaponType.from_str(self.weapon_type),
+            weapon_type=self.weapon_type,
         )
 
     @staticmethod
-    def from_domain(weapon_kind: WeaponKind) -> "WeaponKindModel":
+    def from_app(weapon_kind: AppWeaponKind) -> "WeaponKindModel":
         return WeaponKindModel(
-            id=weapon_kind.weapon_kind_id(),
-            name=weapon_kind.name(),
-            description=weapon_kind.description(),
-            weapon_type=weapon_kind.weapon_type().name,
+            id=weapon_kind.weapon_kind_id,
+            name=weapon_kind.name,
+            description=weapon_kind.description,
+            weapon_type=weapon_kind.weapon_type,
         )
 
 

@@ -16,7 +16,7 @@ class AppLengthUnit:
 @dataclass
 class AppLength:
     count: float
-    unit: str
+    unit: str = LengthUnit.FT.name.lower()
 
     @staticmethod
     def from_domain(length: Length) -> "AppLength":

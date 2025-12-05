@@ -2,11 +2,9 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from domain.damage_type import DamageType
-from domain.game_time import GameTime, GameTimeUnit
-from domain.length import Length, LengthUnit
-from domain.modifier import Modifier
-from domain.spell import Spell, SpellComponents, SpellSchool
+from application.dto.model.game_time import AppGameTime
+from application.dto.model.length import AppLength
+from application.dto.model.spell import AppSpell, AppSpellComponents
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -54,82 +52,68 @@ class SpellModel(Base):
         back_populates="spells", secondary="rel_spell_character_class"
     )
 
-    def to_domain(self) -> Spell:
-        splash = None
-        damage_type = None
+    def to_app(self) -> AppSpell:
         duration = None
-        if self.damage_type is not None:
-            damage_type = DamageType.from_str(self.damage_type)
-        if self.splash is not None:
-            splash = Length(count=self.splash, unit=LengthUnit.FT)
+        splash = None
         if self.duration_count is not None and self.duration_unit is not None:
-            duration = GameTime(
+            duration = AppGameTime(
                 count=self.duration_count,
-                units=GameTimeUnit.from_str(self.duration_unit),
+                unit=self.duration_unit,
             )
-        return Spell(
+        if self.splash is not None:
+            splash = AppLength(count=self.splash)
+        return AppSpell(
             spell_id=self.id,
-            class_ids=[
-                character_class.id for character_class in self.character_classes
-            ],
-            subclass_ids=[
-                character_subclass.id
-                for character_subclass in self.character_subclasses
-            ],
+            class_ids=[c.id for c in self.character_classes],
+            subclass_ids=[c.id for c in self.character_subclasses],
             name=self.name,
             description=self.description,
             next_level_description=self.next_level_description,
             level=self.level,
-            school=SpellSchool.from_str(self.school),
-            damage_type=damage_type,
+            school=self.school,
+            damage_type=self.damage_type,
             duration=duration,
-            casting_time=GameTime(
-                count=self.casting_time_count,
-                units=GameTimeUnit.from_str(self.casting_time_unit),
-            ),
-            spell_range=(Length(count=self.spell_range, unit=LengthUnit.FT)),
+            casting_time=AppGameTime(self.casting_time_count, self.casting_time_unit),
+            spell_range=AppLength(count=self.spell_range),
             splash=splash,
-            components=SpellComponents(
-                verbal=self.verbal_component,
-                symbolic=self.symbolic_component,
-                material=self.material_component,
-                materials=[material.id for material in self.materials],
+            components=AppSpellComponents(
+                self.verbal_component,
+                self.symbolic_component,
+                self.material_component,
+                [m.id for m in self.materials],
             ),
             concentration=self.concentration,
             ritual=self.ritual,
-            saving_throws=[
-                saving_throw.to_domain() for saving_throw in self.saving_throws
-            ],
+            saving_throws=[m.to_app() for m in self.saving_throws],
             name_in_english=self.name_in_english,
             source_id=self.source_id,
         )
 
     @staticmethod
-    def from_domain(spell: Spell) -> "SpellModel":
-        damage_type = spell.damage_type()
-        duration = spell.duration()
-        splash = spell.splash()
+    def from_app(spell: AppSpell) -> "SpellModel":
+        duration = spell.duration
+        splash = spell.splash
         return SpellModel(
-            id=spell.spell_id(),
-            name=spell.name(),
-            description=spell.description(),
-            name_in_english=spell.name_in_english(),
-            next_level_description=spell.next_level_description(),
-            level=spell.level(),
-            school=spell.school().name,
-            damage_type=damage_type.name if damage_type is not None else None,
-            spell_range=spell.spell_range().in_ft(),
-            splash=splash.in_ft() if splash is not None else None,
-            duration_unit=duration.units() if duration is not None else None,
-            duration_count=duration.count() if duration is not None else None,
-            casting_time_unit=spell.casting_time().units(),
-            casting_time_count=spell.casting_time().count(),
-            concentration=spell.concentration(),
-            ritual=spell.ritual(),
-            verbal_component=spell.components().verbal(),
-            symbol_component=spell.components().symbolic(),
-            material_component=spell.components().material(),
-            source_id=spell.source_id(),
+            id=spell.spell_id,
+            name=spell.name,
+            description=spell.description,
+            name_in_english=spell.name_in_english,
+            next_level_description=spell.next_level_description,
+            level=spell.level,
+            school=spell.school,
+            damage_type=spell.damage_type,
+            spell_range=spell.spell_range.count,
+            splash=splash.count if splash is not None else None,
+            duration_unit=duration.unit if duration is not None else None,
+            duration_count=duration.count if duration is not None else None,
+            casting_time_unit=spell.casting_time.unit,
+            casting_time_count=spell.casting_time.count,
+            concentration=spell.concentration,
+            ritual=spell.ritual,
+            verbal_component=spell.components.verbal,
+            symbol_component=spell.components.symbolic,
+            material_component=spell.components.material,
+            source_id=spell.source_id,
         )
 
 
@@ -141,12 +125,12 @@ class SpellSavingThrowModel(Base):
 
     spell: Mapped["SpellModel"] = relationship(back_populates="saving_throws")
 
-    def to_domain(self) -> Modifier:
-        return Modifier.from_str(self.name)
+    def to_app(self) -> str:
+        return self.name
 
     @staticmethod
-    def from_domain(spell_id: UUID, modifier: Modifier) -> "SpellSavingThrowModel":
-        return SpellSavingThrowModel(name=modifier.name, spell_id=spell_id)
+    def from_app(spell_id: UUID, name: str) -> "SpellSavingThrowModel":
+        return SpellSavingThrowModel(name=name, spell_id=spell_id)
 
 
 class RelSpellCharacterClassModel(Base):

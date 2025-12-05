@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from domain.class_feature import ClassFeature
+from application.dto.model.class_feature import AppClassFeature
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -23,8 +23,8 @@ class ClassFeatureModel(Base):
         back_populates="features"
     )
 
-    def to_domain(self) -> ClassFeature:
-        return ClassFeature(
+    def to_app(self) -> AppClassFeature:
+        return AppClassFeature(
             feature_id=self.id,
             class_id=self.character_class_id,
             name=self.name,
@@ -34,12 +34,12 @@ class ClassFeatureModel(Base):
         )
 
     @staticmethod
-    def from_domain(feature: ClassFeature) -> "ClassFeatureModel":
+    def from_app(feature: AppClassFeature) -> "ClassFeatureModel":
         return ClassFeatureModel(
-            id=feature.feature_id(),
-            name=feature.name(),
-            description=feature.description(),
-            name_in_english=feature.name_in_english(),
-            level=feature.level(),
-            character_class_id=feature.class_id(),
+            id=feature.feature_id,
+            character_class_id=feature.class_id,
+            name=feature.name,
+            description=feature.description,
+            level=feature.level,
+            name_in_english=feature.name_in_english,
         )

@@ -1,4 +1,3 @@
-from turtle import rt
 from typing import TYPE_CHECKING
 from uuid import UUID
 
@@ -9,11 +8,6 @@ from application.dto.model.character_class import (
     AppClassProficiencies,
 )
 from application.dto.model.dice import AppDice
-from domain.armor.armor_type import ArmorType
-from domain.character_class import CharacterClass, ClassHits, ClassProficiencies
-from domain.dice import Dice, DiceType
-from domain.modifier import Modifier
-from domain.skill import Skill
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
