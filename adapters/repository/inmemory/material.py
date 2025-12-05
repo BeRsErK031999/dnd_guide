@@ -24,6 +24,9 @@ class InMemoryMaterialRepository(DomainMaterialRepository, AppMaterialRepository
     async def get_all(self) -> list[Material]:
         return list(self.__store.values())
 
+    async def filter(self, search_by_name: str | None = None) -> list[Material]:
+        return await self.get_all()
+
     async def create(self, material: Material) -> None:
         self.__store[material.material_id()] = material
 

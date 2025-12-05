@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
+from application.dto.model.character_class import AppClass
 from domain.character_class import CharacterClass
 
 
@@ -14,23 +15,23 @@ class ClassRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def get_by_id(self, class_id: UUID) -> CharacterClass:
+    async def get_by_id(self, class_id: UUID) -> AppClass:
         raise NotImplemented
 
     @abstractmethod
-    async def get_all(self) -> list[CharacterClass]:
+    async def get_all(self) -> list[AppClass]:
         raise NotImplemented
 
     @abstractmethod
-    async def filter(self, search_by_name: str | None = None) -> list[CharacterClass]:
+    async def filter(self, search_by_name: str | None = None) -> list[AppClass]:
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, character_class: CharacterClass) -> None:
+    async def create(self, character_class: AppClass) -> None:
         raise NotImplemented
 
     @abstractmethod
-    async def update(self, character_class: CharacterClass) -> None:
+    async def update(self, character_class: AppClass) -> None:
         raise NotImplemented
 
     @abstractmethod

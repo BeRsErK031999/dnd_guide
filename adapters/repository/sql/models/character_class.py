@@ -1,7 +1,14 @@
+from turtle import rt
 from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
+from application.dto.model.character_class import (
+    AppClass,
+    AppClassHits,
+    AppClassProficiencies,
+)
+from application.dto.model.dice import AppDice
 from domain.armor.armor_type import ArmorType
 from domain.character_class import CharacterClass, ClassHits, ClassProficiencies
 from domain.dice import Dice, DiceType
@@ -67,55 +74,48 @@ class CharacterClassModel(Base):
     )
     source: Mapped["SourceModel"] = relationship(back_populates="character_classes")
 
-    def to_domain(self) -> CharacterClass:
-        hits = ClassHits(
-            hit_dice=Dice(
-                count=self.hit_dice_count,
-                dice_type=DiceType.from_str(self.hit_dice_name),
-            ),
-            starting_hits=self.starting_hits,
-            hit_modifier=Modifier.from_str(self.hit_modifier),
-            next_level_hits=self.next_level_hits,
-        )
-        proficiencies = ClassProficiencies(
-            armors=[armor_type.to_domain() for armor_type in self.armor_types],
-            weapons=[weapon.id for weapon in self.weapons],
-            tools=[tool.id for tool in self.tools],
-            saving_throws=[
-                saving_throw.to_domain() for saving_throw in self.saving_throws
-            ],
-            skills=[skill.to_domain() for skill in self.skills],
-            number_skills=self.number_skills,
-            number_tools=self.number_tools,
-        )
-        return CharacterClass(
+    def to_app(self) -> AppClass:
+        return AppClass(
             class_id=self.id,
             name=self.name,
             description=self.description,
-            primary_modifiers=[m.to_domain() for m in self.primary_modifiers],
-            hits=hits,
-            proficiencies=proficiencies,
+            primary_modifiers=[m.to_app() for m in self.primary_modifiers],
+            hits=AppClassHits(
+                hit_dice=AppDice(
+                    count=self.hit_dice_count, dice_type=self.hit_dice_name
+                ),
+                starting_hits=self.starting_hits,
+                hit_modifier=self.hit_modifier,
+                next_level_hits=self.next_level_hits,
+            ),
+            proficiencies=AppClassProficiencies(
+                armors=[a.to_app() for a in self.armor_types],
+                weapons=[w.id for w in self.weapons],
+                tools=[t.id for t in self.tools],
+                saving_throws=[m.to_app() for m in self.saving_throws],
+                skills=[s.to_app() for s in self.skills],
+                number_skills=self.number_skills,
+                number_tools=self.number_tools,
+            ),
             name_in_english=self.name_in_english,
             source_id=self.source_id,
         )
 
     @staticmethod
-    def from_domain(character_class: CharacterClass) -> "CharacterClassModel":
-        hits = character_class.hits()
-        prof = character_class.proficiency()
+    def from_app(app_class: AppClass) -> "CharacterClassModel":
         return CharacterClassModel(
-            id=character_class.class_id(),
-            name=character_class.name(),
-            description=character_class.description(),
-            name_in_english=character_class.name_in_english(),
-            hit_dice_name=hits.dice().dice_type().name,
-            hit_dice_count=hits.dice().count(),
-            starting_hits=hits.starting(),
-            hit_modifier=hits.modifier().name,
-            next_level_hits=hits.standard_next_level(),
-            number_skills=prof.number_skills(),
-            number_tools=prof.number_tools(),
-            source_id=character_class.source_id(),
+            id=app_class.class_id,
+            name=app_class.name,
+            description=app_class.description,
+            name_in_english=app_class.name_in_english,
+            hit_dice_name=app_class.hits.hit_dice.dice_type,
+            hit_dice_count=app_class.hits.hit_dice.count,
+            starting_hits=app_class.hits.starting_hits,
+            hit_modifier=app_class.hits.hit_modifier,
+            next_level_hits=app_class.hits.next_level_hits,
+            number_skills=app_class.proficiencies.number_skills,
+            number_tools=app_class.proficiencies.number_tools,
+            source_id=app_class.source_id,
         )
 
 
@@ -129,12 +129,15 @@ class ClassPrimaryModifierModel(Base):
         back_populates="primary_modifiers"
     )
 
-    def to_domain(self) -> Modifier:
-        return Modifier.from_str(self.name)
+    def to_app(self) -> str:
+        return self.name
 
     @staticmethod
-    def from_domain(class_id: UUID, modifier: Modifier) -> "ClassPrimaryModifierModel":
-        return ClassPrimaryModifierModel(name=modifier.name, class_id=class_id)
+    def from_app(class_id: UUID, name: str) -> "ClassPrimaryModifierModel":
+        return ClassPrimaryModifierModel(
+            name=name,
+            class_id=class_id,
+        )
 
 
 class ClassArmorTypeModel(Base):
@@ -147,12 +150,15 @@ class ClassArmorTypeModel(Base):
         back_populates="armor_types"
     )
 
-    def to_domain(self) -> ArmorType:
-        return ArmorType.from_str(self.name)
+    def to_app(self) -> str:
+        return self.name
 
     @staticmethod
-    def from_domain(class_id: UUID, armor_type: ArmorType) -> "ClassArmorTypeModel":
-        return ClassArmorTypeModel(name=armor_type.name, class_id=class_id)
+    def from_app(class_id: UUID, name: str) -> "ClassArmorTypeModel":
+        return ClassArmorTypeModel(
+            name=name,
+            class_id=class_id,
+        )
 
 
 class ClassSavingThrowModel(Base):
@@ -165,12 +171,15 @@ class ClassSavingThrowModel(Base):
         back_populates="saving_throws"
     )
 
-    def to_domain(self) -> Modifier:
-        return Modifier.from_str(self.name)
+    def to_app(self) -> str:
+        return self.name
 
     @staticmethod
-    def from_domain(class_id: UUID, modifier: Modifier) -> "ClassSavingThrowModel":
-        return ClassSavingThrowModel(name=modifier.name, class_id=class_id)
+    def from_app(class_id: UUID, name: str) -> "ClassSavingThrowModel":
+        return ClassSavingThrowModel(
+            name=name,
+            class_id=class_id,
+        )
 
 
 class ClassSkillModel(Base):
@@ -183,12 +192,15 @@ class ClassSkillModel(Base):
         back_populates="skills"
     )
 
-    def to_domain(self) -> Skill:
-        return Skill.from_str(self.name)
+    def to_app(self) -> str:
+        return self.name
 
     @staticmethod
-    def from_domain(class_id: UUID, skill: Skill) -> "ClassSkillModel":
-        return ClassSkillModel(name=skill.name, class_id=class_id)
+    def from_app(class_id: UUID, name: str) -> "ClassSkillModel":
+        return ClassSkillModel(
+            name=name,
+            class_id=class_id,
+        )
 
 
 class RelClassToolModel(Base):

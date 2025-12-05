@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.character_class import CreateClassCommand
+from application.dto.model.character_class import AppClass
 from application.repository import (
     ClassRepository,
     SourceRepository,
@@ -89,5 +90,5 @@ class CreateClassUseCase(UserCheck):
             command.name_in_english,
             command.source_id,
         )
-        await self.__class_repository.create(new_class)
+        await self.__class_repository.create(AppClass.from_domain(new_class))
         return new_class.class_id()

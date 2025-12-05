@@ -1,4 +1,5 @@
 from application.dto.command.character_class import UpdateClassCommand
+from application.dto.model.character_class import AppClass
 from application.repository import (
     ClassRepository,
     SourceRepository,
@@ -36,7 +37,8 @@ class UpdateClassUseCase(UserCheck):
         await self._user_check(command.user_id)
         if not await self.__class_repository.id_exists(command.class_id):
             raise DomainError.not_found(f"класса с id {command.class_id} не существует")
-        changing_class = await self.__class_repository.get_by_id(command.class_id)
+        app_changing_class = await self.__class_repository.get_by_id(command.class_id)
+        changing_class = app_changing_class.to_domain()
         if command.name is not None:
             await self.__class_service.can_rename_with_name(command.name)
             changing_class.new_name(command.name)
@@ -94,4 +96,4 @@ class UpdateClassUseCase(UserCheck):
                     f"источник с id {command.source_id} не существует"
                 )
             changing_class.new_source_id(command.source_id)
-        await self.__class_repository.update(changing_class)
+        await self.__class_repository.update(AppClass.from_domain(changing_class))

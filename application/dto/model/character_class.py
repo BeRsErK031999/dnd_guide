@@ -70,7 +70,7 @@ class AppClassProficiencies:
 
 
 @dataclass
-class AppReadClass:
+class AppClass:
     class_id: UUID
     name: str
     description: str
@@ -81,8 +81,8 @@ class AppReadClass:
     source_id: UUID
 
     @staticmethod
-    def from_domain(character_class: CharacterClass) -> "AppReadClass":
-        return AppReadClass(
+    def from_domain(character_class: CharacterClass) -> "AppClass":
+        return AppClass(
             class_id=character_class.class_id(),
             name=character_class.name(),
             description=character_class.description(),
