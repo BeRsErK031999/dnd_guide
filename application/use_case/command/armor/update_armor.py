@@ -1,4 +1,5 @@
 from application.dto.command.armor import UpdateArmorCommand
+from application.dto.model.armor import AppArmor
 from application.repository import ArmorRepository, MaterialRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.armor import ArmorClass, ArmorService, ArmorType
@@ -27,7 +28,8 @@ class UpdateArmorUseCase(UserCheck):
             raise DomainError.not_found(
                 f"доспехов с id {command.armor_id} не существует"
             )
-        armor = await self.__armor_repository.get_by_id(command.armor_id)
+        app_armor = await self.__armor_repository.get_by_id(command.armor_id)
+        armor = app_armor.to_domain()
         if command.armor_type is not None:
             armor.new_armor_type(ArmorType.from_str(command.armor_type))
         if command.name is not None:
@@ -68,4 +70,4 @@ class UpdateArmorUseCase(UserCheck):
                     f"материал с id {command.material_id} не существует"
                 )
             armor.new_material_id(command.material_id)
-        await self.__armor_repository.update(armor)
+        await self.__armor_repository.update(AppArmor.from_domain(armor))

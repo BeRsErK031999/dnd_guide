@@ -20,7 +20,7 @@ class AppLength:
 
     @staticmethod
     def from_domain(length: Length) -> "AppLength":
-        return AppLength(count=length.in_ft(), unit=LengthUnit.FT.value)
+        return AppLength(count=length.in_ft(), unit=LengthUnit.FT.name.lower())
 
     def to_domain(self) -> Length:
         return Length(count=self.count, unit=LengthUnit.from_str(self.unit))

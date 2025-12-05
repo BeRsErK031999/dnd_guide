@@ -25,7 +25,7 @@ class AppGameTime:
 
     @staticmethod
     def from_domain(game_time: GameTime) -> "AppGameTime":
-        return AppGameTime(count=game_time.count(), unit=game_time.units().name)
+        return AppGameTime(count=game_time.count(), unit=game_time.units().name.lower())
 
     def to_domain(self) -> GameTime:
         return GameTime(count=self.count, units=GameTimeUnit.from_str(self.unit))

@@ -19,13 +19,13 @@ class AppPieceType:
 @dataclass
 class AppCoins:
     count: int
-    piece_type: str
+    piece_type: str = PieceType.COPPER.name.lower()
 
     @staticmethod
     def from_domain(coin: Coins) -> "AppCoins":
         return AppCoins(
             count=coin.in_copper(),
-            piece_type=PieceType.COPPER.name,
+            piece_type=PieceType.COPPER.name.lower(),
         )
 
     def to_domain(self) -> Coins:

@@ -16,13 +16,13 @@ class AppWeightUnit:
 @dataclass
 class AppWeight:
     count: float
-    unit: str
+    unit: str = WeightUnit.LB.name.lower()
 
     @staticmethod
     def from_domain(weight: Weight) -> "AppWeight":
         return AppWeight(
             count=weight.in_lb(),
-            unit=WeightUnit.LB.value,
+            unit=WeightUnit.LB.name.lower(),
         )
 
     def to_domain(self) -> Weight:

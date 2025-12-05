@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from application.dto.command.armor import CreateArmorCommand
+from application.dto.model.armor import AppArmor
 from application.repository import ArmorRepository, MaterialRepository, UserRepository
 from application.use_case.command.user_check import UserCheck
 from domain.armor import Armor, ArmorClass, ArmorService, ArmorType
@@ -53,5 +54,5 @@ class CreateArmorUseCase(UserCheck):
             Coins(command.cost.count, PieceType.from_str(command.cost.piece_type)),
             command.material_id,
         )
-        await self.__armor_repository.create(armor)
+        await self.__armor_repository.create(AppArmor.from_domain(armor))
         return armor.armor_id()

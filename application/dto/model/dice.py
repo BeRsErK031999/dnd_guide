@@ -29,7 +29,7 @@ class AppDice:
     def from_domain(dice: Dice) -> "AppDice":
         return AppDice(
             count=dice.count(),
-            dice_type=dice.dice_type().name,
+            dice_type=dice.dice_type().name.lower(),
         )
 
     def to_domain(self) -> Dice:

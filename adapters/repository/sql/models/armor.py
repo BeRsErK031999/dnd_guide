@@ -2,10 +2,9 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from adapters.repository.sql.models.base import Base
-from domain.armor import Armor, ArmorClass, ArmorType
-from domain.coin import Coins, PieceType
-from domain.modifier import Modifier
-from domain.weight import Weight, WeightUnit
+from application.dto.model.armor import AppArmor, AppArmorClass
+from application.dto.model.coin import AppCoins
+from application.dto.model.weight import AppWeight
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -30,45 +29,37 @@ class ArmorModel(Base):
 
     material: Mapped["MaterialModel"] = relationship(back_populates="armors")
 
-    def to_domain(self) -> Armor:
-        return Armor(
+    def to_app(self) -> AppArmor:
+        return AppArmor(
             armor_id=self.id,
-            armor_type=ArmorType.from_str(self.armor_type),
+            armor_type=self.armor_type,
             name=self.name,
             description=self.description,
-            armor_class=ArmorClass(
-                self.base_class,
-                Modifier.from_str(self.modifier) if self.modifier is not None else None,
-                (
-                    self.max_modifier_bonus
-                    if self.max_modifier_bonus is not None
-                    else None
-                ),
+            armor_class=AppArmorClass(
+                base_class=self.base_class,
+                modifier=self.modifier,
+                max_modifier_bonus=self.max_modifier_bonus,
             ),
             strength=self.strength,
             stealth=self.stealth,
-            weight=Weight(self.weight, WeightUnit.LB),
-            cost=Coins(self.cost, PieceType.COPPER),
+            weight=AppWeight(count=self.weight),
+            cost=AppCoins(count=self.cost),
             material_id=self.material_id,
         )
 
     @staticmethod
-    def from_domain(armor: Armor) -> "ArmorModel":
-        modifier = armor.armor_class().modifier()
-        max_modifier_bonus = armor.armor_class().max_modifier_bonus()
+    def from_app(armor: AppArmor) -> "ArmorModel":
         return ArmorModel(
-            id=armor.armor_id(),
-            name=armor.name(),
-            description=armor.description(),
-            armor_type=armor.armor_type().name,
-            strength=armor.strength(),
-            stealth=armor.stealth(),
-            weight=armor.weight().in_lb(),
-            cost=armor.cost().in_copper(),
-            base_class=armor.armor_class().base_class(),
-            modifier=modifier.name if modifier is not None else None,
-            max_modifier_bonus=(
-                max_modifier_bonus if max_modifier_bonus is not None else None
-            ),
-            material_id=armor.material_id(),
+            id=armor.armor_id,
+            armor_type=armor.armor_type,
+            name=armor.name,
+            description=armor.description,
+            armor_class=armor.armor_class.base_class,
+            modifier=armor.armor_class.modifier,
+            max_modifier_bonus=armor.armor_class.max_modifier_bonus,
+            strength=armor.strength,
+            stealth=armor.stealth,
+            weight=armor.weight.count,
+            cost=armor.cost.count,
+            material_id=armor.material_id,
         )
