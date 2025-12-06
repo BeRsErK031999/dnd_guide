@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.armor import (
-    CreateArmorCommand,
-    DeleteArmorCommand,
-    UpdateArmorCommand,
-)
+from application.dto.command.armor import DeleteArmorCommand
 from application.dto.query.armor import ArmorQuery, ArmorsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
@@ -51,15 +46,13 @@ class ArmorController(Controller):
     async def create_armor(
         self, data: CreateArmorSchema, use_cases: ArmorUseCases
     ) -> UUID:
-        command = CreateArmorCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{armor_id:uuid}")
     async def update_armor(
         self, armor_id: UUID, data: UpdateArmorSchema, use_cases: ArmorUseCases
     ) -> None:
-        command = UpdateArmorCommand(user_id=uuid4(), armor_id=armor_id, **asdict(data))
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), armor_id))
 
     @delete("/{armor_id:uuid}")
     async def delete_armor(self, armor_id: UUID, use_cases: ArmorUseCases) -> None:

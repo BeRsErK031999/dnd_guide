@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.tool import (
-    CreateToolCommand,
-    DeleteToolCommand,
-    UpdateToolCommand,
-)
+from application.dto.command.tool import DeleteToolCommand
 from application.dto.query.tool import ToolQuery, ToolsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
@@ -41,8 +36,7 @@ class ToolController(Controller):
     async def create_tool(
         self, data: CreateToolSchema, use_cases: ToolUseCases
     ) -> UUID:
-        command = CreateToolCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{tool_id:uuid}")
     async def update_tool(
@@ -51,8 +45,7 @@ class ToolController(Controller):
         data: UpdateToolSchema,
         use_cases: ToolUseCases,
     ) -> None:
-        command = UpdateToolCommand(user_id=uuid4(), tool_id=tool_id, **asdict(data))
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), tool_id))
 
     @delete("/{tool_id:uuid}")
     async def delete_tool(self, tool_id: UUID, use_cases: ToolUseCases) -> None:

@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.spell import (
-    CreateSpellCommand,
-    DeleteSpellCommand,
-    UpdateSpellCommand,
-)
+from application.dto.command.spell import DeleteSpellCommand
 from application.dto.query.spell import SpellQuery, SpellsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
@@ -71,8 +66,7 @@ class SpellController(Controller):
     async def create_spell(
         self, data: CreateSpellSchema, use_cases: SpellUseCases
     ) -> UUID:
-        command = CreateSpellCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{spell_id:uuid}")
     async def update_spell(
@@ -81,8 +75,7 @@ class SpellController(Controller):
         data: UpdateSpellSchema,
         use_cases: SpellUseCases,
     ) -> None:
-        command = UpdateSpellCommand(user_id=uuid4(), spell_id=spell_id, **asdict(data))
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), spell_id))
 
     @delete("/{spell_id:uuid}")
     async def delete_spell(self, spell_id: UUID, use_cases: SpellUseCases) -> None:

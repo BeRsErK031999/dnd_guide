@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.weapon_property import (
-    CreateWeaponPropertyCommand,
-    DeleteWeaponPropertyCommand,
-    UpdateWeaponPropertyCommand,
-)
+from application.dto.command.weapon_property import DeleteWeaponPropertyCommand
 from application.dto.query.weapon_property import (
     WeaponPropertiesQuery,
     WeaponPropertyQuery,
@@ -58,8 +53,7 @@ class WeaponPropertyController(Controller):
         data: CreateWeaponPropertySchema,
         use_cases: WeaponPropertyUseCases,
     ) -> UUID:
-        command = CreateWeaponPropertyCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{weapon_property_id:uuid}")
     async def update_weapon_property(
@@ -68,10 +62,7 @@ class WeaponPropertyController(Controller):
         data: UpdateWeaponPropertySchema,
         use_cases: WeaponPropertyUseCases,
     ) -> None:
-        command = UpdateWeaponPropertyCommand(
-            user_id=uuid4(), weapon_property_id=weapon_property_id, **asdict(data)
-        )
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), weapon_property_id))
 
     @delete("/{weapon_property_id:uuid}")
     async def delete_weapon_property(

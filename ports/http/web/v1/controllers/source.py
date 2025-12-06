@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.source import (
-    CreateSourceCommand,
-    DeleteSourceCommand,
-    UpdateSourceCommand,
-)
+from application.dto.command.source import DeleteSourceCommand
 from application.dto.query.source import SourceQuery, SourcesQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
@@ -42,8 +37,7 @@ class SourceController(Controller):
     async def create_source(
         self, data: CreateSourceSchema, use_cases: SourceUseCases
     ) -> UUID:
-        command = CreateSourceCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{source_id:uuid}")
     async def update_source(
@@ -52,10 +46,7 @@ class SourceController(Controller):
         data: UpdateSourceSchema,
         use_cases: SourceUseCases,
     ) -> None:
-        command = UpdateSourceCommand(
-            user_id=uuid4(), source_id=source_id, **asdict(data)
-        )
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), source_id))
 
     @delete("/{source_id:uuid}")
     async def delete_source(self, source_id: UUID, use_cases: SourceUseCases) -> None:

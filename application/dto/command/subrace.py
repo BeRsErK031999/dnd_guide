@@ -32,7 +32,7 @@ class CreateSubraceCommand:
 class UpdateSubraceCommand:
     user_id: UUID
     subrace_id: UUID
-    race_id: UUID
+    race_id: UUID | None = None
     name: str | None = None
     description: str | None = None
     increase_modifiers: Sequence[SubraceIncreaseModifierCommand] | None = None

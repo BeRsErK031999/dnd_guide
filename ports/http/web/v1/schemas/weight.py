@@ -1,5 +1,6 @@
 from dataclasses import asdict, dataclass
 
+from application.dto.command.weight import WeightCommand
 from application.dto.model.weight import AppWeight, AppWeightUnit
 
 
@@ -21,3 +22,6 @@ class WeightSchema:
     @staticmethod
     def from_app(weight: AppWeight) -> "WeightSchema":
         return WeightSchema(count=weight.count, unit=weight.unit)
+
+    def to_command(self) -> WeightCommand:
+        return WeightCommand(count=self.count, unit=self.unit)

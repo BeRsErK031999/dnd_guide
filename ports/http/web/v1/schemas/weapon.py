@@ -2,6 +2,11 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
+from application.dto.command.weapon import (
+    CreateWeaponCommand,
+    UpdateWeaponCommand,
+    WeaponDamageCommand,
+)
 from application.dto.model.weapon import AppWeapon, AppWeaponDamage
 from ports.http.web.v1.schemas.coin import CoinSchema
 from ports.http.web.v1.schemas.dice import DiceSchema
@@ -20,6 +25,13 @@ class WeaponDamageSchema:
             dice=DiceSchema.from_app(weapon_damage.dice),
             damage_type=weapon_damage.damage_type,
             bonus_damage=weapon_damage.bonus_damage,
+        )
+
+    def to_command(self) -> WeaponDamageCommand:
+        return WeaponDamageCommand(
+            dice=self.dice.to_command(),
+            damage_type=self.damage_type,
+            bonus_damage=self.bonus_damage,
         )
 
 
@@ -61,6 +73,19 @@ class CreateWeaponSchema:
     weapon_property_ids: Sequence[UUID]
     material_id: UUID
 
+    def to_command(self, user_id: UUID) -> CreateWeaponCommand:
+        return CreateWeaponCommand(
+            user_id=user_id,
+            weapon_kind_id=self.weapon_kind_id,
+            name=self.name,
+            description=self.description,
+            cost=self.cost.to_command(),
+            damage=self.damage.to_command(),
+            weight=self.weight.to_command(),
+            weapon_property_ids=self.weapon_property_ids,
+            material_id=self.material_id,
+        )
+
 
 @dataclass
 class UpdateWeaponSchema:
@@ -72,3 +97,17 @@ class UpdateWeaponSchema:
     weight: WeightSchema | None = None
     weapon_property_ids: Sequence[UUID] | None = None
     material_id: UUID | None = None
+
+    def to_command(self, user_id: UUID, weapon_id: UUID) -> UpdateWeaponCommand:
+        return UpdateWeaponCommand(
+            user_id=user_id,
+            weapon_id=weapon_id,
+            weapon_kind_id=self.weapon_kind_id,
+            name=self.name,
+            description=self.description,
+            cost=self.cost.to_command() if self.cost else None,
+            damage=self.damage.to_command() if self.damage else None,
+            weight=self.weight.to_command() if self.weight else None,
+            weapon_property_ids=self.weapon_property_ids,
+            material_id=self.material_id,
+        )

@@ -1,5 +1,6 @@
 from dataclasses import asdict, dataclass
 
+from application.dto.command.coin import CoinCommand
 from application.dto.model.coin import AppCoins, AppPieceType
 
 
@@ -24,3 +25,6 @@ class CoinSchema:
     @staticmethod
     def from_app(coin: AppCoins) -> "CoinSchema":
         return CoinSchema(count=coin.count, piece_type=coin.piece_type)
+
+    def to_command(self) -> CoinCommand:
+        return CoinCommand(count=self.count, piece_type=self.piece_type)

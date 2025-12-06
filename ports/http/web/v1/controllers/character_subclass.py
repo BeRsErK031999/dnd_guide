@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.character_subclass import (
-    CreateSubclassCommand,
-    DeleteSubclassCommand,
-    UpdateSubclassCommand,
-)
+from application.dto.command.character_subclass import DeleteSubclassCommand
 from application.dto.query.character_subclass import SubclassesQuery, SubclassQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
@@ -47,8 +42,7 @@ class SubclassController(Controller):
     async def create_subclass(
         self, data: CreateSubclassSchema, use_cases: SubclassUseCases
     ) -> UUID:
-        command = CreateSubclassCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{subclass_id:uuid}")
     async def update_subclass(
@@ -57,10 +51,7 @@ class SubclassController(Controller):
         data: UpdateSubclassSchema,
         use_cases: SubclassUseCases,
     ) -> None:
-        command = UpdateSubclassCommand(
-            user_id=uuid4(), subclass_id=subclass_id, **asdict(data)
-        )
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), subclass_id))
 
     @delete("/{subclass_id:uuid}")
     async def delete_subclass(

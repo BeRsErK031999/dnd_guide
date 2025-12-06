@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.weapon import (
-    CreateWeaponCommand,
-    DeleteWeaponCommand,
-    UpdateWeaponCommand,
-)
+from application.dto.command.weapon import DeleteWeaponCommand
 from application.dto.query.weapon import WeaponQuery, WeaponsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
@@ -55,8 +50,7 @@ class WeaponController(Controller):
     async def create_weapon(
         self, data: CreateWeaponSchema, use_cases: WeaponUseCases
     ) -> UUID:
-        command = CreateWeaponCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{weapon_id:uuid}")
     async def update_weapon(
@@ -65,10 +59,7 @@ class WeaponController(Controller):
         data: UpdateWeaponSchema,
         use_cases: WeaponUseCases,
     ) -> None:
-        command = UpdateWeaponCommand(
-            user_id=uuid4(), weapon_id=weapon_id, **asdict(data)
-        )
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), weapon_id))
 
     @delete("/{weapon_id:uuid}")
     async def delete_weapon(self, weapon_id: UUID, use_cases: WeaponUseCases) -> None:

@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+from application.dto.command.material_component import (
+    CreateMaterialComponentCommand,
+    UpdateMaterialComponentCommand,
+)
 from application.dto.model.material_component import AppMaterialComponent
 
 
@@ -24,8 +28,23 @@ class CreateMaterialComponentSchema:
     name: str
     description: str
 
+    def to_command(self, user_id: UUID) -> CreateMaterialComponentCommand:
+        return CreateMaterialComponentCommand(
+            user_id=user_id, name=self.name, description=self.description
+        )
+
 
 @dataclass
 class UpdateMaterialComponentSchema:
     name: str | None = None
     description: str | None = None
+
+    def to_command(
+        self, user_id: UUID, material_id: UUID
+    ) -> UpdateMaterialComponentCommand:
+        return UpdateMaterialComponentCommand(
+            user_id=user_id,
+            material_id=material_id,
+            name=self.name,
+            description=self.description,
+        )

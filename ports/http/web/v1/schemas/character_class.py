@@ -2,6 +2,12 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
+from application.dto.command.character_class import (
+    ClassHitsCommand,
+    ClassProficienciesCommand,
+    CreateClassCommand,
+    UpdateClassCommand,
+)
 from application.dto.model.character_class import (
     AppClass,
     AppClassHits,
@@ -26,6 +32,14 @@ class ClassHitsSchema:
             next_level_hits=hits.next_level_hits,
         )
 
+    def to_command(self) -> ClassHitsCommand:
+        return ClassHitsCommand(
+            hit_dice=self.hit_dice.to_command(),
+            starting_hits=self.starting_hits,
+            hit_modifier=self.hit_modifier,
+            next_level_hits=self.next_level_hits,
+        )
+
 
 @dataclass
 class ClassProficienciesSchema:
@@ -47,6 +61,17 @@ class ClassProficienciesSchema:
             skills=proficiencies.skills,
             number_skills=proficiencies.number_skills,
             number_tools=proficiencies.number_tools,
+        )
+
+    def to_command(self) -> ClassProficienciesCommand:
+        return ClassProficienciesCommand(
+            armors=self.armors,
+            weapons=self.weapons,
+            tools=self.tools,
+            saving_throws=self.saving_throws,
+            skills=self.skills,
+            number_skills=self.number_skills,
+            number_tools=self.number_tools,
         )
 
 
@@ -87,6 +112,18 @@ class CreateClassSchema:
     name_in_english: str
     source_id: UUID
 
+    def to_command(self, user_id: UUID) -> CreateClassCommand:
+        return CreateClassCommand(
+            user_id=user_id,
+            name=self.name,
+            description=self.description,
+            primary_modifiers=self.primary_modifiers,
+            hits=self.hits.to_command(),
+            proficiencies=self.proficiencies.to_command(),
+            name_in_english=self.name_in_english,
+            source_id=self.source_id,
+        )
+
 
 @dataclass
 class UpdateClassSchema:
@@ -97,3 +134,18 @@ class UpdateClassSchema:
     proficiencies: ClassProficienciesSchema | None = None
     name_in_english: str | None = None
     source_id: UUID | None = None
+
+    def to_command(self, user_id: UUID, class_id: UUID) -> UpdateClassCommand:
+        return UpdateClassCommand(
+            user_id=user_id,
+            class_id=class_id,
+            name=self.name,
+            description=self.description,
+            primary_modifiers=self.primary_modifiers,
+            hits=self.hits.to_command() if self.hits else None,
+            proficiencies=(
+                self.proficiencies.to_command() if self.proficiencies else None
+            ),
+            name_in_english=self.name_in_english,
+            source_id=self.source_id,
+        )

@@ -2,6 +2,14 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
+from application.dto.command.class_level import (
+    ClassLevelBonusDamageCommand,
+    ClassLevelDiceCommand,
+    ClassLevelIncreaseSpeedCommand,
+    ClassLevelPointsCommand,
+    CreateClassLevelCommand,
+    UpdateClassLevelCommand,
+)
 from application.dto.model.class_level import (
     AppClassLevel,
     AppClassLevelBonusDamage,
@@ -25,6 +33,11 @@ class ClassLevelDiceSchema:
             description=level_dice.description,
         )
 
+    def to_command(self) -> ClassLevelDiceCommand:
+        return ClassLevelDiceCommand(
+            dice=self.dice.to_command(), description=self.description
+        )
+
 
 @dataclass
 class ClassLevelPointsSchema:
@@ -37,6 +50,9 @@ class ClassLevelPointsSchema:
             points=level_points.points,
             description=level_points.description,
         )
+
+    def to_command(self) -> ClassLevelPointsCommand:
+        return ClassLevelPointsCommand(points=self.points, description=self.description)
 
 
 @dataclass
@@ -53,6 +69,11 @@ class ClassLevelBonusDamageSchema:
             description=level_bonus_damage.description,
         )
 
+    def to_command(self) -> ClassLevelBonusDamageCommand:
+        return ClassLevelBonusDamageCommand(
+            damage=self.damage, description=self.description
+        )
+
 
 @dataclass
 class ClassLevelIncreaseSpeedSchema:
@@ -66,6 +87,11 @@ class ClassLevelIncreaseSpeedSchema:
         return ClassLevelIncreaseSpeedSchema(
             speed=LengthSchema.from_app(level_increase_speed.speed),
             description=level_increase_speed.description,
+        )
+
+    def to_command(self) -> ClassLevelIncreaseSpeedCommand:
+        return ClassLevelIncreaseSpeedCommand(
+            speed=self.speed.to_command(), description=self.description
         )
 
 
@@ -120,6 +146,7 @@ class ReadClassLevelSchema:
 
 @dataclass
 class CreateClassLevelSchema:
+    class_id: UUID
     level: int
     dice: ClassLevelDiceSchema | None = None
     spell_slots: Sequence[int] | None = None
@@ -129,6 +156,29 @@ class CreateClassLevelSchema:
     points: ClassLevelPointsSchema | None = None
     bonus_damage: ClassLevelBonusDamageSchema | None = None
     increase_speed: ClassLevelIncreaseSpeedSchema | None = None
+
+    def to_command(self, user_id: UUID) -> CreateClassLevelCommand:
+        return CreateClassLevelCommand(
+            user_id=user_id,
+            class_id=self.class_id,
+            level=self.level,
+            dice=self.dice.to_command() if self.dice is not None else None,
+            spell_slots=self.spell_slots,
+            number_cantrips_know=self.number_cantrips_know,
+            number_spells_know=self.number_spells_know,
+            number_arcanums_know=self.number_arcanums_know,
+            points=self.points.to_command() if self.points is not None else None,
+            bonus_damage=(
+                self.bonus_damage.to_command()
+                if self.bonus_damage is not None
+                else None
+            ),
+            increase_speed=(
+                self.increase_speed.to_command()
+                if self.increase_speed is not None
+                else None
+            ),
+        )
 
 
 @dataclass
@@ -143,3 +193,27 @@ class UpdateClassLevelSchema:
     points: ClassLevelPointsSchema | None = None
     bonus_damage: ClassLevelBonusDamageSchema | None = None
     increase_speed: ClassLevelIncreaseSpeedSchema | None = None
+
+    def to_command(self, user_id: UUID, level_id: UUID) -> UpdateClassLevelCommand:
+        return UpdateClassLevelCommand(
+            user_id=user_id,
+            class_level_id=level_id,
+            class_id=self.class_id,
+            level=self.level,
+            dice=self.dice.to_command() if self.dice is not None else None,
+            spell_slots=self.spell_slots,
+            number_cantrips_know=self.number_cantrips_know,
+            number_spells_know=self.number_spells_know,
+            number_arcanums_know=self.number_arcanums_know,
+            points=self.points.to_command() if self.points is not None else None,
+            bonus_damage=(
+                self.bonus_damage.to_command()
+                if self.bonus_damage is not None
+                else None
+            ),
+            increase_speed=(
+                self.increase_speed.to_command()
+                if self.increase_speed is not None
+                else None
+            ),
+        )

@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+from application.dto.command.character_subclass import (
+    CreateSubclassCommand,
+    UpdateSubclassCommand,
+)
 from application.dto.model.character_subclass import AppSubclass
 
 
@@ -30,6 +34,15 @@ class CreateSubclassSchema:
     description: str
     name_in_english: str
 
+    def to_command(self, user_id: UUID) -> CreateSubclassCommand:
+        return CreateSubclassCommand(
+            user_id=user_id,
+            class_id=self.class_id,
+            name=self.name,
+            description=self.description,
+            name_in_english=self.name_in_english,
+        )
+
 
 @dataclass
 class UpdateSubclassSchema:
@@ -37,3 +50,13 @@ class UpdateSubclassSchema:
     name: str | None = None
     description: str | None = None
     name_in_english: str | None = None
+
+    def to_command(self, user_id: UUID, subclass_id: UUID) -> UpdateSubclassCommand:
+        return UpdateSubclassCommand(
+            user_id=user_id,
+            subclass_id=subclass_id,
+            class_id=self.class_id,
+            name=self.name,
+            description=self.description,
+            name_in_english=self.name_in_english,
+        )

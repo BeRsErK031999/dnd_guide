@@ -1,5 +1,6 @@
 from dataclasses import asdict, dataclass
 
+from application.dto.command.dice import DiceCommand
 from application.dto.model.dice import AppDice, AppDiceType
 
 
@@ -26,3 +27,6 @@ class DiceSchema:
     @staticmethod
     def from_app(dice: AppDice) -> "DiceSchema":
         return DiceSchema(count=dice.count, dice_type=dice.dice_type)
+
+    def to_command(self) -> DiceCommand:
+        return DiceCommand(count=self.count, dice_type=self.dice_type)

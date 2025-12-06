@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.subclass_feature import (
-    CreateSubclassFeatureCommand,
-    DeleteSubclassFeatureCommand,
-    UpdateSubclassFeatureCommand,
-)
+from application.dto.command.subclass_feature import DeleteSubclassFeatureCommand
 from application.dto.query.subclass_feature import (
     SubclassFeatureQuery,
     SubclassFeaturesQuery,
@@ -52,8 +47,7 @@ class SubclassFeatureController(Controller):
     async def create_feature(
         self, data: CreateSubclassFeatureSchema, use_cases: SubclassFeatureUseCases
     ) -> UUID:
-        command = CreateSubclassFeatureCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{feature_id:uuid}")
     async def update_feature(
@@ -62,10 +56,7 @@ class SubclassFeatureController(Controller):
         data: UpdateSubclassFeatureSchema,
         use_cases: SubclassFeatureUseCases,
     ) -> None:
-        command = UpdateSubclassFeatureCommand(
-            user_id=uuid4(), feature_id=feature_id, **asdict(data)
-        )
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), feature_id))
 
     @delete("/{feature_id:uuid}")
     async def delete_feature(

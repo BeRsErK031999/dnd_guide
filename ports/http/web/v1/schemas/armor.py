@@ -1,6 +1,11 @@
 from dataclasses import asdict, dataclass
 from uuid import UUID
 
+from application.dto.command.armor import (
+    ArmorClassCommand,
+    CreateArmorCommand,
+    UpdateArmorCommand,
+)
 from application.dto.model.armor import AppArmor, AppArmorClass, AppArmorType
 from ports.http.web.v1.schemas.coin import CoinSchema
 from ports.http.web.v1.schemas.weight import WeightSchema
@@ -30,6 +35,13 @@ class ArmorClassSchema:
             base_class=armor_class.base_class,
             modifier=armor_class.modifier,
             max_modifier_bonus=armor_class.max_modifier_bonus,
+        )
+
+    def to_command(self) -> ArmorClassCommand:
+        return ArmorClassCommand(
+            base_class=self.base_class,
+            modifier=self.modifier,
+            max_modifier_bonus=self.max_modifier_bonus,
         )
 
 
@@ -74,10 +86,23 @@ class CreateArmorSchema:
     cost: CoinSchema
     material_id: UUID
 
+    def to_command(self, user_id: UUID) -> CreateArmorCommand:
+        return CreateArmorCommand(
+            user_id=user_id,
+            armor_type=self.armor_type,
+            name=self.name,
+            description=self.description,
+            armor_class=self.armor_class.to_command(),
+            strength=self.strength,
+            stealth=self.stealth,
+            weight=self.weight.to_command(),
+            cost=self.cost.to_command(),
+            material_id=self.material_id,
+        )
+
 
 @dataclass
 class UpdateArmorSchema:
-    armor_id: UUID | None = None
     armor_type: str | None = None
     name: str | None = None
     description: str | None = None
@@ -87,3 +112,20 @@ class UpdateArmorSchema:
     weight: WeightSchema | None = None
     cost: CoinSchema | None = None
     material_id: UUID | None = None
+
+    def to_command(self, user_id: UUID, armor_id: UUID) -> UpdateArmorCommand:
+        return UpdateArmorCommand(
+            user_id=user_id,
+            armor_id=armor_id,
+            armor_type=self.armor_type,
+            name=self.name,
+            description=self.description,
+            armor_class=(
+                self.armor_class.to_command() if self.armor_class is not None else None
+            ),
+            strength=self.strength,
+            stealth=self.stealth,
+            weight=self.weight.to_command() if self.weight is not None else None,
+            cost=self.cost.to_command() if self.cost is not None else None,
+            material_id=self.material_id,
+        )

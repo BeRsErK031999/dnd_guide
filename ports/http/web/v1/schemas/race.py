@@ -2,6 +2,14 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
+from application.dto.command.race import (
+    CreateRaceCommand,
+    RaceAgeCommand,
+    RaceFeatureCommand,
+    RaceIncreaseModifierCommand,
+    RaceSpeedCommand,
+    UpdateRaceCommand,
+)
 from application.dto.model.race import (
     AppRace,
     AppRaceAge,
@@ -21,6 +29,9 @@ class RaceFeatureSchema:
     def from_app(feature: AppRaceFeature) -> "RaceFeatureSchema":
         return RaceFeatureSchema(name=feature.name, description=feature.description)
 
+    def to_command(self) -> RaceFeatureCommand:
+        return RaceFeatureCommand(name=self.name, description=self.description)
+
 
 @dataclass
 class RaceAgeSchema:
@@ -30,6 +41,9 @@ class RaceAgeSchema:
     @staticmethod
     def from_app(age: AppRaceAge) -> "RaceAgeSchema":
         return RaceAgeSchema(max_age=age.max_age, description=age.description)
+
+    def to_command(self) -> RaceAgeCommand:
+        return RaceAgeCommand(max_age=self.max_age, description=self.description)
 
 
 @dataclass
@@ -44,6 +58,11 @@ class RaceSpeedSchema:
             description=speed.description,
         )
 
+    def to_command(self) -> RaceSpeedCommand:
+        return RaceSpeedCommand(
+            base_speed=self.base_speed.to_command(), description=self.description
+        )
+
 
 @dataclass
 class RaceIncreaseModifierSchema:
@@ -55,6 +74,9 @@ class RaceIncreaseModifierSchema:
         return RaceIncreaseModifierSchema(
             modifier=modifier.modifier, bonus=modifier.bonus
         )
+
+    def to_command(self) -> RaceIncreaseModifierCommand:
+        return RaceIncreaseModifierCommand(modifier=self.modifier, bonus=self.bonus)
 
 
 @dataclass
@@ -103,6 +125,21 @@ class CreateRaceSchema:
     features: Sequence[RaceFeatureSchema]
     name_in_english: str
 
+    def to_command(self, user_id: UUID) -> CreateRaceCommand:
+        return CreateRaceCommand(
+            user_id=user_id,
+            name=self.name,
+            description=self.description,
+            creature_type=self.creature_type,
+            creature_size=self.creature_size,
+            speed=self.speed.to_command(),
+            age=self.age.to_command(),
+            increase_modifiers=[m.to_command() for m in self.increase_modifiers],
+            source_id=self.source_id,
+            features=[f.to_command() for f in self.features],
+            name_in_english=self.name_in_english,
+        )
+
 
 @dataclass
 class UpdateRaceSchema:
@@ -118,3 +155,30 @@ class UpdateRaceSchema:
     remove_features: Sequence[str] | None = None
     name_in_english: str | None = None
     source_id: UUID | None = None
+
+    def to_command(self, user_id: UUID, race_id: UUID) -> UpdateRaceCommand:
+        im = self.increase_modifiers
+        if im is not None:
+            im = [m.to_command() for m in im]
+        nf = self.new_features
+        if nf is not None:
+            nf = [f.to_command() for f in nf]
+        af = self.add_features
+        if af is not None:
+            af = [f.to_command() for f in af]
+        return UpdateRaceCommand(
+            user_id=user_id,
+            race_id=race_id,
+            name=self.name,
+            description=self.description,
+            creature_type=self.creature_type,
+            creature_size=self.creature_size,
+            speed=self.speed.to_command() if self.speed else None,
+            age=self.age.to_command() if self.age else None,
+            increase_modifiers=im,
+            new_features=nf,
+            add_features=af,
+            remove_features=self.remove_features,
+            name_in_english=self.name_in_english,
+            source_id=self.source_id,
+        )

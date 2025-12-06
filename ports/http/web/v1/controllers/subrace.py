@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.subrace import (
-    CreateSubraceCommand,
-    DeleteSubraceCommand,
-    UpdateSubraceCommand,
-)
+from application.dto.command.subrace import DeleteSubraceCommand
 from application.dto.query.subrace import SubraceQuery, SubracesQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
@@ -45,8 +40,7 @@ class SubraceController(Controller):
     async def create_subrace(
         self, data: CreateSubraceSchema, use_cases: SubraceUseCases
     ) -> UUID:
-        command = CreateSubraceCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{subrace_id:uuid}")
     async def update_subrace(
@@ -55,10 +49,7 @@ class SubraceController(Controller):
         data: UpdateSubraceSchema,
         use_cases: SubraceUseCases,
     ) -> None:
-        subrace = UpdateSubraceCommand(
-            user_id=uuid4(), subrace_id=subrace_id, **asdict(data)
-        )
-        await use_cases.update.execute(subrace)
+        await use_cases.update.execute(data.to_command(uuid4(), subrace_id))
 
     @delete("/{subrace_id:uuid}")
     async def delete_subrace(

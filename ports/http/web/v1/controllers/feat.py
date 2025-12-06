@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.feat import (
-    CreateFeatCommand,
-    DeleteFeatCommand,
-    UpdateFeatCommand,
-)
+from application.dto.command.feat import DeleteFeatCommand
 from application.dto.query.feat import FeatQuery, FeatsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
@@ -52,8 +47,7 @@ class FeatController(Controller):
     async def create_feat(
         self, data: CreateFeatSchema, use_cases: FeatUseCases
     ) -> UUID:
-        command = CreateFeatCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{feat_id:uuid}")
     async def update_feat(
@@ -62,8 +56,7 @@ class FeatController(Controller):
         data: UpdateFeatSchema,
         use_cases: FeatUseCases,
     ) -> None:
-        command = UpdateFeatCommand(user_id=uuid4(), feat_id=feat_id, **asdict(data))
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), feat_id))
 
     @delete("/{feat_id:uuid}")
     async def delete_feat(self, feat_id: UUID, use_cases: FeatUseCases) -> None:

@@ -1,6 +1,13 @@
 from dataclasses import asdict, dataclass
 from uuid import UUID
 
+from application.dto.command.weapon_property import (
+    CreateWeaponPropertyCommand,
+    UpdateWeaponPropertyCommand,
+    WeaponPropertyBaseRangeCommand,
+    WeaponPropertyMaxRangeCommand,
+    WeaponPropertySecondHandDiceCommand,
+)
 from application.dto.model.weapon_property import (
     AppWeaponProperty,
     AppWeaponPropertyName,
@@ -33,15 +40,30 @@ class ReadWeaponPropertyNameSchema:
 class WeaponPropertyBaseRangeSchema:
     range: LengthSchema | None
 
+    def to_command(self) -> WeaponPropertyBaseRangeCommand:
+        return WeaponPropertyBaseRangeCommand(
+            range=self.range.to_command() if self.range is not None else None
+        )
+
 
 @dataclass
 class WeaponPropertyMaxRangeSchema:
     range: LengthSchema | None
 
+    def to_command(self) -> WeaponPropertyMaxRangeCommand:
+        return WeaponPropertyMaxRangeCommand(
+            range=self.range.to_command() if self.range is not None else None
+        )
+
 
 @dataclass
 class WeaponPropertySecondHandDiceSchema:
     dice: DiceSchema | None
+
+    def to_command(self) -> WeaponPropertySecondHandDiceCommand:
+        return WeaponPropertySecondHandDiceCommand(
+            dice=self.dice.to_command() if self.dice is not None else None
+        )
 
 
 @dataclass
@@ -85,6 +107,24 @@ class CreateWeaponPropertySchema:
     max_range: WeaponPropertyMaxRangeSchema | None = None
     second_hand_dice: WeaponPropertySecondHandDiceSchema | None = None
 
+    def to_command(self, user_id: UUID) -> CreateWeaponPropertyCommand:
+        return CreateWeaponPropertyCommand(
+            user_id=user_id,
+            name=self.name,
+            description=self.description,
+            base_range=(
+                self.base_range.to_command() if self.base_range is not None else None
+            ),
+            max_range=(
+                self.max_range.to_command() if self.max_range is not None else None
+            ),
+            second_hand_dice=(
+                self.second_hand_dice.to_command()
+                if self.second_hand_dice is not None
+                else None
+            ),
+        )
+
 
 @dataclass
 class UpdateWeaponPropertySchema:
@@ -93,3 +133,24 @@ class UpdateWeaponPropertySchema:
     base_range: WeaponPropertyBaseRangeSchema | None = None
     max_range: WeaponPropertyMaxRangeSchema | None = None
     second_hand_dice: WeaponPropertySecondHandDiceSchema | None = None
+
+    def to_command(
+        self, user_id: UUID, property_id: UUID
+    ) -> UpdateWeaponPropertyCommand:
+        return UpdateWeaponPropertyCommand(
+            user_id=user_id,
+            weapon_property_id=property_id,
+            name=self.name,
+            description=self.description,
+            base_range=(
+                self.base_range.to_command() if self.base_range is not None else None
+            ),
+            max_range=(
+                self.max_range.to_command() if self.max_range is not None else None
+            ),
+            second_hand_dice=(
+                self.second_hand_dice.to_command()
+                if self.second_hand_dice is not None
+                else None
+            ),
+        )

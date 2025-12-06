@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.material import (
-    CreateMaterialCommand,
-    DeleteMaterialCommand,
-    UpdateMaterialCommand,
-)
+from application.dto.command.material import DeleteMaterialCommand
 from application.dto.query.material import MaterialQuery, MaterialsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
@@ -47,8 +42,7 @@ class MaterialController(Controller):
     async def create_material(
         self, data: CreateMaterialSchema, use_cases: MaterialUseCases
     ) -> UUID:
-        command = CreateMaterialCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{material_id:uuid}")
     async def update_material(
@@ -57,10 +51,7 @@ class MaterialController(Controller):
         data: UpdateMaterialSchema,
         use_cases: MaterialUseCases,
     ) -> None:
-        command = UpdateMaterialCommand(
-            user_id=uuid4(), material_id=material_id, **asdict(data)
-        )
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), material_id))
 
     @delete("/{material_id:uuid}")
     async def delete_material(

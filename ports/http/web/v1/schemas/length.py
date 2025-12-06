@@ -1,5 +1,6 @@
 from dataclasses import asdict, dataclass
 
+from application.dto.command.length import LengthCommand
 from application.dto.model.length import AppLength, AppLengthUnit
 
 
@@ -21,3 +22,6 @@ class LengthSchema:
     @staticmethod
     def from_app(length: AppLength) -> "LengthSchema":
         return LengthSchema(count=length.count, unit=length.unit)
+
+    def to_command(self) -> LengthCommand:
+        return LengthCommand(count=self.count, unit=self.unit)

@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.material_component import (
-    CreateMaterialComponentCommand,
-    DeleteMaterialComponentCommand,
-    UpdateMaterialComponentCommand,
-)
+from application.dto.command.material_component import DeleteMaterialComponentCommand
 from application.dto.query.material_component import (
     MaterialComponentQuery,
     MaterialComponentsQuery,
@@ -56,8 +51,7 @@ class MaterialComponentController(Controller):
         data: CreateMaterialComponentSchema,
         use_cases: MaterialComponentUseCases,
     ) -> UUID:
-        command = CreateMaterialComponentCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{material_id:uuid}")
     async def update_material(
@@ -66,10 +60,7 @@ class MaterialComponentController(Controller):
         data: UpdateMaterialComponentSchema,
         use_cases: MaterialComponentUseCases,
     ) -> None:
-        command = UpdateMaterialComponentCommand(
-            user_id=uuid4(), material_id=material_id, **asdict(data)
-        )
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), material_id))
 
     @delete("/{material_id:uuid}")
     async def delete_material(

@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+from application.dto.command.subclass_feature import (
+    CreateSubclassFeatureCommand,
+    UpdateSubclassFeatureCommand,
+)
 from application.dto.model.subclass_feature import AppSubclassFeature
 
 
@@ -33,6 +37,16 @@ class CreateSubclassFeatureSchema:
     level: int
     name_in_english: str
 
+    def to_command(self, user_id: UUID) -> CreateSubclassFeatureCommand:
+        return CreateSubclassFeatureCommand(
+            user_id=user_id,
+            subclass_id=self.subclass_id,
+            name=self.name,
+            description=self.description,
+            level=self.level,
+            name_in_english=self.name_in_english,
+        )
+
 
 @dataclass
 class UpdateSubclassFeatureSchema:
@@ -41,3 +55,16 @@ class UpdateSubclassFeatureSchema:
     description: str | None = None
     level: int | None = None
     name_in_english: str | None = None
+
+    def to_command(
+        self, user_id: UUID, feature_id: UUID
+    ) -> UpdateSubclassFeatureCommand:
+        return UpdateSubclassFeatureCommand(
+            user_id=user_id,
+            feature_id=feature_id,
+            subclass_id=self.subclass_id,
+            name=self.name,
+            description=self.description,
+            level=self.level,
+            name_in_english=self.name_in_english,
+        )

@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.race import (
-    CreateRaceCommand,
-    DeleteRaceCommand,
-    UpdateRaceCommand,
-)
+from application.dto.command.race import DeleteRaceCommand
 from application.dto.query.race import RaceQuery, RacesQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
@@ -40,8 +35,7 @@ class RaceController(Controller):
     async def create_race(
         self, data: CreateRaceSchema, use_cases: RaceUseCases
     ) -> UUID:
-        command = CreateRaceCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{race_id:uuid}")
     async def update_race(
@@ -50,8 +44,7 @@ class RaceController(Controller):
         data: UpdateRaceSchema,
         use_cases: RaceUseCases,
     ) -> None:
-        command = UpdateRaceCommand(user_id=uuid4(), race_id=race_id, **asdict(data))
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), race_id))
 
     @delete("/{race_id:uuid}")
     async def delete_race(self, race_id: UUID, use_cases: RaceUseCases) -> None:

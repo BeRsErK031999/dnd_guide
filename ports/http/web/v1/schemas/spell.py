@@ -2,6 +2,14 @@ from dataclasses import asdict, dataclass
 from typing import Sequence
 from uuid import UUID
 
+from application.dto.command.spell import (
+    CreateSpellCommand,
+    SpellComponentsCommand,
+    SpellDamageTypeCommand,
+    SpellDurationCommand,
+    SplashCommand,
+    UpdateSpellCommand,
+)
 from application.dto.model.spell import AppSpell, AppSpellComponents, AppSpellSchool
 from ports.http.web.v1.schemas.game_time import GameTimeSchema
 from ports.http.web.v1.schemas.length import LengthSchema
@@ -23,20 +31,43 @@ class SpellComponentsSchema:
             materials=components.materials,
         )
 
+    def to_command(self) -> SpellComponentsCommand:
+        return SpellComponentsCommand(
+            verbal=self.verbal,
+            symbolic=self.symbolic,
+            material=self.material,
+            materials=self.materials,
+        )
+
 
 @dataclass
 class SpellDurationSchema:
     game_time: GameTimeSchema | None
+
+    def to_command(self) -> SpellDurationCommand:
+        return SpellDurationCommand(
+            game_time=(
+                self.game_time.to_command() if self.game_time is not None else None
+            )
+        )
 
 
 @dataclass
 class SpellDamageTypeSchema:
     name: str | None
 
+    def to_command(self) -> SpellDamageTypeCommand:
+        return SpellDamageTypeCommand(name=self.name)
+
 
 @dataclass
 class SplashSchema:
     splash: LengthSchema | None
+
+    def to_command(self) -> SplashCommand:
+        return SplashCommand(
+            splash=self.splash.to_command() if self.splash is not None else None
+        )
 
 
 @dataclass
@@ -131,6 +162,29 @@ class CreateSpellSchema:
     name_in_english: str
     source_id: UUID
 
+    def to_command(self, user_id: UUID) -> CreateSpellCommand:
+        return CreateSpellCommand(
+            user_id=user_id,
+            class_ids=self.class_ids,
+            subclass_ids=self.subclass_ids,
+            name=self.name,
+            description=self.description,
+            next_level_description=self.next_level_description,
+            level=self.level,
+            school=self.school,
+            damage_type=self.damage_type.to_command(),
+            duration=self.duration.to_command(),
+            casting_time=self.casting_time.to_command(),
+            spell_range=self.spell_range.to_command(),
+            splash=self.splash.to_command(),
+            components=self.components.to_command(),
+            concentration=self.concentration,
+            ritual=self.ritual,
+            saving_throws=self.saving_throws,
+            name_in_english=self.name_in_english,
+            source_id=self.source_id,
+        )
+
 
 @dataclass
 class UpdateSpellSchema:
@@ -152,3 +206,37 @@ class UpdateSpellSchema:
     saving_throws: Sequence[str] | None = None
     name_in_english: str | None = None
     source_id: UUID | None = None
+
+    def to_command(self, user_id: UUID, spell_id: UUID) -> UpdateSpellCommand:
+        return UpdateSpellCommand(
+            user_id=user_id,
+            spell_id=spell_id,
+            class_ids=self.class_ids,
+            subclass_ids=self.subclass_ids,
+            name=self.name,
+            description=self.description,
+            next_level_description=self.next_level_description,
+            level=self.level,
+            school=self.school,
+            damage_type=(
+                self.damage_type.to_command() if self.damage_type is not None else None
+            ),
+            duration=self.duration.to_command() if self.duration is not None else None,
+            casting_time=(
+                self.casting_time.to_command()
+                if self.casting_time is not None
+                else None
+            ),
+            spell_range=(
+                self.spell_range.to_command() if self.spell_range is not None else None
+            ),
+            splash=self.splash.to_command() if self.splash is not None else None,
+            components=(
+                self.components.to_command() if self.components is not None else None
+            ),
+            concentration=self.concentration,
+            ritual=self.ritual,
+            saving_throws=self.saving_throws,
+            name_in_english=self.name_in_english,
+            source_id=self.source_id,
+        )

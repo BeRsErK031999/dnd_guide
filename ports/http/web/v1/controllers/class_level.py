@@ -1,11 +1,6 @@
-from dataclasses import asdict
 from uuid import UUID, uuid4
 
-from application.dto.command.class_level import (
-    CreateClassLevelCommand,
-    DeleteClassLevelCommand,
-    UpdateClassLevelCommand,
-)
+from application.dto.command.class_level import DeleteClassLevelCommand
 from application.dto.query.class_level import ClassLevelQuery, ClassLevelsQuery
 from litestar import Controller, delete, get, post, put
 from litestar.di import Provide
@@ -47,8 +42,7 @@ class ClassLevelController(Controller):
     async def create_class_level(
         self, data: CreateClassLevelSchema, use_cases: ClassLevelUseCases
     ) -> UUID:
-        command = CreateClassLevelCommand(user_id=uuid4(), **asdict(data))
-        return await use_cases.create.execute(command)
+        return await use_cases.create.execute(data.to_command(uuid4()))
 
     @put("/{class_level_id:uuid}")
     async def update_class_level(
@@ -57,10 +51,7 @@ class ClassLevelController(Controller):
         data: UpdateClassLevelSchema,
         use_cases: ClassLevelUseCases,
     ) -> None:
-        command = UpdateClassLevelCommand(
-            user_id=uuid4(), class_level_id=class_level_id, **asdict(data)
-        )
-        await use_cases.update.execute(command)
+        await use_cases.update.execute(data.to_command(uuid4(), class_level_id))
 
     @delete("/{class_level_id:uuid}")
     async def delete_class_level(

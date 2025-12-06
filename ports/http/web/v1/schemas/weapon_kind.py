@@ -1,6 +1,10 @@
 from dataclasses import asdict, dataclass
 from uuid import UUID
 
+from application.dto.command.weapon_kind import (
+    CreateWeaponKindCommand,
+    UpdateWeaponKindCommand,
+)
 from application.dto.model.weapon_kind import AppWeaponKind, AppWeaponType
 
 
@@ -39,9 +43,26 @@ class CreateWeaponKindSchema:
     name: str
     description: str
 
+    def to_command(self, user_id: UUID) -> CreateWeaponKindCommand:
+        return CreateWeaponKindCommand(
+            user_id=user_id,
+            weapon_type=self.weapon_type,
+            name=self.name,
+            description=self.description,
+        )
+
 
 @dataclass
 class UpdateWeaponKindSchema:
     weapon_type: str | None = None
     name: str | None = None
     description: str | None = None
+
+    def to_command(self, user_id: UUID, kind_id: UUID) -> UpdateWeaponKindCommand:
+        return UpdateWeaponKindCommand(
+            user_id=user_id,
+            weapon_kind_id=kind_id,
+            weapon_type=self.weapon_type,
+            name=self.name,
+            description=self.description,
+        )
