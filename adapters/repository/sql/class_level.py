@@ -6,8 +6,8 @@ from adapters.repository.sql.models import (
     ClassLevelModel,
     ClassLevelSpellSlotModel,
 )
+from application.dto.model.class_level import AppClassLevel
 from application.repository import ClassLevelRepository as AppClassLevelRepository
-from domain.class_level import ClassLevel
 from domain.class_level import ClassLevelRepository as DomainClassLevelRepository
 from sqlalchemy import Select, delete, exists, select
 from sqlalchemy.orm import joinedload
@@ -39,23 +39,25 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
             result = result.scalar()
             return result if result is not None else False
 
-    async def get_by_id(self, level_id: UUID) -> ClassLevel:
+    async def get_by_id(self, level_id: UUID) -> AppClassLevel:
         async with self.__helper.session as session:
             query = self._add_options(
                 select(ClassLevelModel).where(ClassLevelModel.id == level_id)
             )
             result = await session.execute(query)
             result = result.scalar_one()
-            return result.to_domain()
+            return result.to_app()
 
-    async def get_all(self) -> list[ClassLevel]:
+    async def get_all(self) -> list[AppClassLevel]:
         async with self.__helper.session as session:
             query = self._add_options(select(ClassLevelModel))
             result = await session.execute(query)
             result = result.scalars().all()
-            return [level.to_domain() for level in result]
+            return [level.to_app() for level in result]
 
-    async def filter(self, filter_by_class_id: UUID | None = None) -> list[ClassLevel]:
+    async def filter(
+        self, filter_by_class_id: UUID | None = None
+    ) -> list[AppClassLevel]:
         async with self.__helper.session as session:
             query = select(ClassLevelModel)
             if filter_by_class_id is not None:
@@ -65,83 +67,83 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
             query = self._add_options(query)
             result = await session.execute(query)
             result = result.scalars().all()
-            return [level.to_domain() for level in result]
+            return [level.to_app() for level in result]
 
-    async def create(self, level: ClassLevel) -> None:
+    async def create(self, level: AppClassLevel) -> None:
         async with self.__helper.session as session:
-            model = ClassLevelModel.from_domain(level)
-            spell_slots = level.spell_slots()
+            model = ClassLevelModel.from_app(level)
+            spell_slots = level.spell_slots
             if spell_slots is not None:
-                model.class_level_spell_slot = ClassLevelSpellSlotModel.from_domain(
-                    level.level_id(), spell_slots
+                model.class_level_spell_slot = ClassLevelSpellSlotModel.from_app(
+                    level.class_level_id, spell_slots
                 )
-            character_class = await session.get_one(
-                CharacterClassModel, level.class_id()
-            )
+            character_class = await session.get_one(CharacterClassModel, level.class_id)
             model.character_class = character_class
             session.add(model)
             await session.commit()
 
-    async def update(self, level: ClassLevel) -> None:
+    async def update(self, level: AppClassLevel) -> None:
         async with self.__helper.session as session:
             model_query = self._add_options(
-                select(ClassLevelModel).where(ClassLevelModel.id == level.level_id())
+                select(ClassLevelModel).where(
+                    ClassLevelModel.id == level.class_level_id
+                )
             )
             model = await session.execute(model_query)
             model = model.scalar_one()
-            old_domain = model.to_domain()
-            if old_domain.class_id() != level.class_id():
+            old = model.to_app()
+            if old.class_id != level.class_id:
                 character_class = await session.get_one(
-                    CharacterClassModel, level.class_id()
+                    CharacterClassModel, level.class_id
                 )
                 model.character_class = character_class
-            if old_domain.level() != level.level():
-                model.level = level.level()
-            if old_domain.dice() != level.dice():
-                dice = level.dice()
+            if old.level != level.level:
+                model.level = level.level
+            if old.dice != level.dice:
+                dice = level.dice
                 if dice is not None:
-                    model.dice_count = dice.dice().count()
-                    model.dice_name = dice.dice().dice_type().name
-                    model.dice_description = dice.description()
+                    model.dice_count = dice.dice.count
+                    model.dice_name = dice.dice.dice_type
+                    model.dice_description = dice.description
                 else:
                     model.dice_count = None
                     model.dice_name = None
                     model.dice_description = None
-            if old_domain.spell_slots() != level.spell_slots():
-                spell_slots = level.spell_slots()
+            if old.spell_slots != level.spell_slots:
+                spell_slots = level.spell_slots
                 if spell_slots is not None:
-                    model.class_level_spell_slot = ClassLevelSpellSlotModel.from_domain(
-                        level.level_id(), spell_slots
+                    model.class_level_spell_slot = ClassLevelSpellSlotModel.from_app(
+                        level.class_level_id, spell_slots
                     )
                 else:
                     model.class_level_spell_slot = None
-            if old_domain.number_cantrips_know() != level.number_cantrips_know():
-                model.number_cantrips_know = level.number_cantrips_know()
-            if old_domain.number_spells_know() != level.number_spells_know():
-                model.number_spells_know = level.number_spells_know()
-            if old_domain.number_arcanums_know() != level.number_arcanums_know():
-                model.number_arcanums_know = level.number_arcanums_know()
-            if old_domain.points() != level.points():
-                points = level.points()
+            if old.number_cantrips_know != level.number_cantrips_know:
+                model.number_cantrips_know = level.number_cantrips_know
+            if old.number_spells_know != level.number_spells_know:
+                model.number_spells_know = level.number_spells_know
+            if old.number_arcanums_know != level.number_arcanums_know:
+                model.number_arcanums_know = level.number_arcanums_know
+            if old.points != level.points:
+                points = level.points
                 if points is not None:
-                    model.points = points.points()
-                    model.points_description = points.description()
+                    model.points = points.points
+                    model.points_description = points.description
                 else:
                     model.points = None
                     model.points_description = None
-            if old_domain.bonus_damage() != level.bonus_damage():
-                bonus_damage = level.bonus_damage()
+            if old.bonus_damage != level.bonus_damage:
+                bonus_damage = level.bonus_damage
                 if bonus_damage is not None:
-                    model.bonus_damage = bonus_damage.damage()
-                    model.bonus_damage_description = bonus_damage.description()
+                    model.bonus_damage = bonus_damage.damage
+                    model.bonus_damage_description = bonus_damage.description
                 else:
                     model.bonus_damage = None
                     model.bonus_damage_description = None
-            if old_domain.increase_speed() != level.increase_speed():
-                increase_speed = level.increase_speed()
+            if old.increase_speed != level.increase_speed:
+                increase_speed = level.increase_speed
                 if increase_speed is not None:
-                    model.increase_speed = increase_speed.speed().in_ft()
-                    model.increase_speed_description = increase_speed.description()
+                    model.increase_speed = increase_speed.speed.count
+                    model.increase_speed_description = increase_speed.description
                 else:
                     model.increase_speed = None
                     model.increase_speed_description = None
@@ -153,7 +155,9 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
             await session.execute(stmt)
             await session.commit()
 
-    def _add_options(self, query: Select) -> Select:
+    def _add_options(
+        self, query: Select[tuple[ClassLevelModel]]
+    ) -> Select[tuple[ClassLevelModel]]:
         return query.options(
             joinedload(ClassLevelModel.class_level_spell_slot),
             joinedload(ClassLevelModel.character_class),

@@ -2,10 +2,10 @@ from uuid import UUID, uuid4
 
 from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models import CharacterSubclassModel, SubclassFeatureModel
+from application.dto.model.subclass_feature import AppSubclassFeature
 from application.repository import (
     SubclassFeatureRepository as AppSubclassFeatureRepository,
 )
-from domain.subclass_feature import SubclassFeature
 from domain.subclass_feature import (
     SubclassFeatureRepository as DomainSubclassFeatureRepository,
 )
@@ -41,7 +41,7 @@ class SQLSubclassFeatureRepository(
             result = result.scalar()
             return result if result is not None else False
 
-    async def get_by_id(self, feature_id: UUID) -> SubclassFeature:
+    async def get_by_id(self, feature_id: UUID) -> AppSubclassFeature:
         async with self.__db_helper.session as session:
             query = (
                 select(SubclassFeatureModel)
@@ -50,20 +50,20 @@ class SQLSubclassFeatureRepository(
             )
             result = await session.execute(query)
             model = result.scalar_one()
-            return model.to_domain()
+            return model.to_app()
 
-    async def get_all(self) -> list[SubclassFeature]:
+    async def get_all(self) -> list[AppSubclassFeature]:
         async with self.__db_helper.session as session:
             query = select(SubclassFeatureModel).options(
                 selectinload(SubclassFeatureModel.character_subclass)
             )
             result = await session.execute(query)
             result = result.scalars().all()
-            return [model.to_domain() for model in result]
+            return [model.to_app() for model in result]
 
     async def filter(
         self, filter_by_subclass_id: UUID | None = None
-    ) -> list[SubclassFeature]:
+    ) -> list[AppSubclassFeature]:
         async with self.__db_helper.session as session:
             query = select(SubclassFeatureModel).options(
                 selectinload(SubclassFeatureModel.character_subclass)
@@ -74,34 +74,34 @@ class SQLSubclassFeatureRepository(
                 )
             result = await session.execute(query)
             result = result.scalars().all()
-            return [model.to_domain() for model in result]
+            return [model.to_app() for model in result]
 
-    async def create(self, feature: SubclassFeature) -> None:
+    async def create(self, feature: AppSubclassFeature) -> None:
         async with self.__db_helper.session as session:
-            session.add(SubclassFeatureModel.from_domain(feature))
+            session.add(SubclassFeatureModel.from_app(feature))
             await session.commit()
 
-    async def update(self, feature: SubclassFeature) -> None:
+    async def update(self, feature: AppSubclassFeature) -> None:
         async with self.__db_helper.session as session:
             feature_query = (
                 select(SubclassFeatureModel)
-                .where(SubclassFeatureModel.id == feature.feature_id())
+                .where(SubclassFeatureModel.id == feature.feature_id)
                 .options(selectinload(SubclassFeatureModel.character_subclass))
             )
             model = await session.execute(feature_query)
             model = model.scalar_one()
-            old_domain = model.to_domain()
-            if old_domain.subclass_id() != feature.subclass_id():
+            old_domain = model.to_app()
+            if old_domain.subclass_id != feature.subclass_id:
                 model.character_subclass = await session.get_one(
-                    CharacterSubclassModel, feature.subclass_id()
+                    CharacterSubclassModel, feature.subclass_id
                 )
-            if old_domain.level() != feature.level():
-                model.level = feature.level()
-            if old_domain.name() != feature.name():
-                model.name = feature.name()
-            if old_domain.name_in_english() != feature.name_in_english():
-                model.name_in_english = feature.name_in_english()
-            model.description = feature.description()
+            if old_domain.level != feature.level:
+                model.level = feature.level
+            if old_domain.name != feature.name:
+                model.name = feature.name
+            if old_domain.name_in_english != feature.name_in_english:
+                model.name_in_english = feature.name_in_english
+            model.description = feature.description
             await session.commit()
 
     async def delete(self, feature_id: UUID) -> None:

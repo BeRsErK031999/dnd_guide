@@ -8,9 +8,9 @@ from adapters.repository.sql.models import (
     WeaponModel,
     WeaponPropertyModel,
 )
+from application.dto.model.weapon import AppWeapon
 from application.repository import WeaponRepository as AppWeaponRepository
 from domain.error import DomainError
-from domain.weapon import Weapon
 from domain.weapon import WeaponRepository as DomainWeaponRepository
 from sqlalchemy import delete, exists, or_, select
 from sqlalchemy.orm import selectinload
@@ -37,7 +37,7 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
             result = result.scalar()
             return result if result is not None else False
 
-    async def get_by_id(self, weapon_id: UUID) -> Weapon:
+    async def get_by_id(self, weapon_id: UUID) -> AppWeapon:
         async with self.__helper.session as session:
             weapon_query = (
                 select(WeaponModel)
@@ -46,16 +46,16 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
             )
             weapon = await session.execute(weapon_query)
             weapon = weapon.scalar_one()
-            return weapon.to_domain()
+            return weapon.to_app()
 
-    async def get_all(self) -> list[Weapon]:
+    async def get_all(self) -> list[AppWeapon]:
         async with self.__helper.session as session:
             weapons_query = select(WeaponModel).options(
                 selectinload(WeaponModel.properties)
             )
             weapons = await session.execute(weapons_query)
             weapons = weapons.scalars().all()
-            return [w.to_domain() for w in weapons]
+            return [w.to_app() for w in weapons]
 
     async def filter(
         self,
@@ -64,7 +64,7 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
         filter_by_damage_types: list[str] | None = None,
         filter_by_property_ids: list[UUID] | None = None,
         filter_by_material_ids: list[UUID] | None = None,
-    ) -> list[Weapon]:
+    ) -> list[AppWeapon]:
         async with self.__helper.session as session:
             query = select(WeaponModel).options(selectinload(WeaponModel.properties))
             conditions = list()
@@ -88,22 +88,22 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
                 query = query.where(or_(*conditions))
             weapons = await session.execute(query)
             weapons = weapons.scalars().all()
-            return [w.to_domain() for w in weapons]
+            return [w.to_app() for w in weapons]
 
-    async def create(self, weapon: Weapon) -> None:
+    async def create(self, weapon: AppWeapon) -> None:
         async with self.__helper.session as session:
-            model = WeaponModel.from_domain(weapon)
-            model.kind = await session.get_one(WeaponKindModel, weapon.kind_id())
-            model.material = await session.get_one(MaterialModel, weapon.material_id())
+            model = WeaponModel.from_app(weapon)
+            model.kind = await session.get_one(WeaponKindModel, weapon.weapon_kind_id)
+            model.material = await session.get_one(MaterialModel, weapon.material_id)
             await session.flush()
-            if len(weapon.property_ids()) > 0:
+            if len(weapon.weapon_property_ids) > 0:
                 property_query = select(WeaponPropertyModel).where(
-                    WeaponPropertyModel.id.in_(weapon.property_ids())
+                    WeaponPropertyModel.id.in_(weapon.weapon_property_ids)
                 )
                 property_model = await session.execute(property_query)
                 property_model = property_model.scalars().all()
-                if len(weapon.property_ids()) != len(property_model):
-                    not_exists_ids = set(weapon.property_ids()) - set(
+                if len(weapon.weapon_property_ids) != len(property_model):
+                    not_exists_ids = set(weapon.weapon_property_ids) - set(
                         [p.id for p in property_model]
                     )
                     raise DomainError.invalid_data(
@@ -112,38 +112,40 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
                 model.properties.extend(property_model)
             await session.commit()
 
-    async def update(self, weapon: Weapon) -> None:
+    async def update(self, weapon: AppWeapon) -> None:
         async with self.__helper.session as session:
             query = (
                 select(WeaponModel)
-                .where(WeaponModel.id == weapon.weapon_id())
+                .where(WeaponModel.id == weapon.weapon_id)
                 .options(selectinload(WeaponModel.properties))
             )
             model = await session.execute(query)
             model = model.scalar_one()
-            old_domain = model.to_domain()
-            if old_domain.kind_id() != weapon.kind_id():
-                model.kind = await session.get_one(WeaponKindModel, weapon.kind_id())
-            if old_domain.cost() != weapon.cost():
-                model.cost = weapon.cost().in_copper()
-            if old_domain.damage() != weapon.damage():
-                damage_dice = weapon.damage().dice()
-                model.damage_type = weapon.damage().damage_type().name
-                model.damage_dice_name = damage_dice.dice_type().name
-                model.damage_dice_count = damage_dice.count()
-            if old_domain.weight() != weapon.weight():
-                model.weight = weapon.weight().in_lb()
-            if old_domain.material_id() != weapon.material_id():
+            old = model.to_app()
+            if old.weapon_kind_id != weapon.weapon_kind_id:
+                model.kind = await session.get_one(
+                    WeaponKindModel, weapon.weapon_kind_id
+                )
+            if old.cost != weapon.cost:
+                model.cost = weapon.cost.count
+            if old.damage != weapon.damage:
+                damage_dice = weapon.damage.dice
+                model.damage_type = weapon.damage.damage_type
+                model.damage_dice_name = damage_dice.dice_type
+                model.damage_dice_count = damage_dice.count
+            if old.weight != weapon.weight:
+                model.weight = weapon.weight.count
+            if old.material_id != weapon.material_id:
                 model.material = await session.get_one(
-                    MaterialModel, weapon.material_id()
+                    MaterialModel, weapon.material_id
                 )
             property_query = select(WeaponPropertyModel).where(
-                WeaponPropertyModel.id.in_(weapon.property_ids())
+                WeaponPropertyModel.id.in_(weapon.weapon_property_ids)
             )
             property_model = await session.execute(property_query)
             property_model = property_model.scalars().all()
-            if len(weapon.property_ids()) != len(property_model):
-                not_exists_ids = set(weapon.property_ids()) - set(
+            if len(weapon.weapon_property_ids) != len(property_model):
+                not_exists_ids = set(weapon.weapon_property_ids) - set(
                     [p.id for p in property_model]
                 )
                 raise DomainError.invalid_data(

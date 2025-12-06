@@ -1,10 +1,9 @@
-from typing import Dict
 from uuid import UUID, uuid4
 
 from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models import CharacterClassModel, CharacterSubclassModel
+from application.dto.model.character_subclass import AppSubclass
 from application.repository import SubclassRepository as AppSubclassRepository
-from domain.character_subclass import CharacterSubclass
 from domain.character_subclass import SubclassRepository as DomainSubclassRepository
 from sqlalchemy import delete, exists, select
 from sqlalchemy.orm import selectinload
@@ -31,7 +30,7 @@ class SQLSubclassRepository(DomainSubclassRepository, AppSubclassRepository):
             result = result.scalar()
             return result if result is not None else False
 
-    async def get_by_id(self, subclass_id: UUID) -> CharacterSubclass:
+    async def get_by_id(self, subclass_id: UUID) -> AppSubclass:
         async with self.__helper.session as session:
             query = (
                 select(CharacterSubclassModel)
@@ -40,20 +39,18 @@ class SQLSubclassRepository(DomainSubclassRepository, AppSubclassRepository):
             )
             result = await session.execute(query)
             result = result.scalar_one()
-            return result.to_domain()
+            return result.to_app()
 
-    async def get_all(self) -> list[CharacterSubclass]:
+    async def get_all(self) -> list[AppSubclass]:
         async with self.__helper.session as session:
             query = select(CharacterSubclassModel).options(
                 selectinload(CharacterSubclassModel.character_class)
             )
             result = await session.execute(query)
             result = result.scalars().all()
-            return [subclass.to_domain() for subclass in result]
+            return [subclass.to_app() for subclass in result]
 
-    async def filter(
-        self, filter_by_class_id: UUID | None = None
-    ) -> list[CharacterSubclass]:
+    async def filter(self, filter_by_class_id: UUID | None = None) -> list[AppSubclass]:
         async with self.__helper.session as session:
             query = select(CharacterSubclassModel).options(
                 selectinload(CharacterSubclassModel.character_class)
@@ -64,34 +61,34 @@ class SQLSubclassRepository(DomainSubclassRepository, AppSubclassRepository):
                 )
             result = await session.execute(query)
             result = result.scalars().all()
-            return [subclass.to_domain() for subclass in result]
+            return [subclass.to_app() for subclass in result]
 
-    async def create(self, subclass: CharacterSubclass) -> None:
+    async def create(self, subclass: AppSubclass) -> None:
         async with self.__helper.session as session:
-            model = CharacterSubclassModel.from_domain(subclass)
+            model = CharacterSubclassModel.from_app(subclass)
             model.character_class = await session.get_one(
-                CharacterClassModel, subclass.class_id()
+                CharacterClassModel, subclass.class_id
             )
             session.add(model)
             await session.commit()
 
-    async def update(self, subclass: CharacterSubclass) -> None:
+    async def update(self, subclass: AppSubclass) -> None:
         async with self.__helper.session as session:
             model_query = select(CharacterSubclassModel).where(
-                CharacterSubclassModel.id == subclass.subclass_id()
+                CharacterSubclassModel.id == subclass.subclass_id
             )
             model = await session.execute(model_query)
             model = model.scalar_one()
-            old_domain = model.to_domain()
-            if old_domain.name() != subclass.name():
-                model.name = subclass.name()
-            if old_domain.name_in_english() != subclass.name_in_english():
-                model.name_in_english = subclass.name_in_english()
-            if old_domain.class_id() != subclass.class_id():
+            old = model.to_app()
+            if old.name != subclass.name:
+                model.name = subclass.name
+            if old.name_in_english != subclass.name_in_english:
+                model.name_in_english = subclass.name_in_english
+            if old.class_id != subclass.class_id:
                 model.character_class = await session.get_one(
-                    CharacterClassModel, subclass.class_id()
+                    CharacterClassModel, subclass.class_id
                 )
-            model.description = subclass.description()
+            model.description = subclass.description
             await session.commit()
 
     async def delete(self, subclass_id: UUID) -> None:

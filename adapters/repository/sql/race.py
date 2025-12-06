@@ -7,8 +7,8 @@ from adapters.repository.sql.models import (
     RaceModel,
     SourceModel,
 )
+from application.dto.model.race import AppRace
 from application.repository import RaceRepository as AppRaceRepository
-from domain.race import Race
 from domain.race import RaceRepository as DomainRaceRepository
 from sqlalchemy import Select, delete, exists, or_, select
 from sqlalchemy.orm import selectinload
@@ -35,21 +35,21 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
             result = result.scalar()
             return result if result is not None else False
 
-    async def get_by_id(self, race_id: UUID) -> Race:
+    async def get_by_id(self, race_id: UUID) -> AppRace:
         async with self.__db_helper.session as session:
             query = self._add_options(select(RaceModel).where(RaceModel.id == race_id))
             result = await session.execute(query)
             result = result.scalar_one()
-            return result.to_domain()
+            return result.to_app()
 
-    async def get_all(self) -> list[Race]:
+    async def get_all(self) -> list[AppRace]:
         async with self.__db_helper.session as session:
             query = self._add_options(select(RaceModel))
             result = await session.execute(query)
             result = result.scalars().all()
-            return [item.to_domain() for item in result]
+            return [item.to_app() for item in result]
 
-    async def filter(self, search_by_name: str | None = None) -> list[Race]:
+    async def filter(self, search_by_name: str | None = None) -> list[AppRace]:
         async with self.__db_helper.session as session:
             query = self._add_options(select(RaceModel))
             if search_by_name is not None:
@@ -61,67 +61,61 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
                 )
             result = await session.execute(query)
             result = result.scalars().all()
-            return [item.to_domain() for item in result]
+            return [item.to_app() for item in result]
 
-    async def create(self, race: Race) -> None:
+    async def create(self, race: AppRace) -> None:
         async with self.__db_helper.session as session:
-            model = RaceModel.from_domain(race)
-            model.source = await session.get_one(SourceModel, race.source_id())
-            model.creature_size = race.creature_size().name
-            model.creature_type = race.creature_type().name
+            model = RaceModel.from_app(race)
+            model.source = await session.get_one(SourceModel, race.source_id)
+            model.creature_size = race.creature_size
+            model.creature_type = race.creature_type
             model.increase_modifiers.extend(
                 [
-                    RaceIncreaseModifierModel.from_domain(race.race_id(), im)
-                    for im in race.increase_modifiers()
+                    RaceIncreaseModifierModel.from_app(race.race_id, im)
+                    for im in race.increase_modifiers
                 ]
             )
             model.features.extend(
-                [
-                    RaceFeatureModel.from_domain(race.race_id(), f)
-                    for f in race.features()
-                ]
+                [RaceFeatureModel.from_app(race.race_id, f) for f in race.features]
             )
             session.add(model)
             await session.commit()
 
-    async def update(self, race: Race) -> None:
+    async def update(self, race: AppRace) -> None:
         async with self.__db_helper.session as session:
             race_query = self._add_options(
-                select(RaceModel).where(RaceModel.id == race.race_id())
+                select(RaceModel).where(RaceModel.id == race.race_id)
             )
             model = await session.execute(race_query)
             model = model.scalar_one()
-            old_domain = model.to_domain()
-            if old_domain.creature_type() != race.creature_type():
-                model.creature_type = race.creature_type().name
-            if old_domain.creature_size() != race.creature_size():
-                model.creature_size = race.creature_size().name
-            if old_domain.speed() != race.speed():
-                model.base_speed = race.speed().base_speed().in_ft()
-                model.speed_description = race.speed().description()
-            if old_domain.age() != race.age():
-                model.max_age = race.age().max_age()
-                model.age_description = race.age().description()
-            if old_domain.name() != race.name():
-                model.name = race.name()
-            if old_domain.name_in_english() != race.name_in_english():
-                model.name_in_english = race.name_in_english()
-            if old_domain.source_id() != race.source_id():
-                model.source = await session.get_one(SourceModel, race.source_id())
-            model.description = race.description()
+            old = model.to_app()
+            if old.creature_type != race.creature_type:
+                model.creature_type = race.creature_type
+            if old.creature_size != race.creature_size:
+                model.creature_size = race.creature_size
+            if old.speed != race.speed:
+                model.base_speed = race.speed.base_speed.count
+                model.speed_description = race.speed.description
+            if old.age != race.age:
+                model.max_age = race.age.max_age
+                model.age_description = race.age.description
+            if old.name != race.name:
+                model.name = race.name
+            if old.name_in_english != race.name_in_english:
+                model.name_in_english = race.name_in_english
+            if old.source_id != race.source_id:
+                model.source = await session.get_one(SourceModel, race.source_id)
+            model.description = race.description
             model.increase_modifiers.clear()
             model.increase_modifiers.extend(
                 [
-                    RaceIncreaseModifierModel.from_domain(race.race_id(), im)
-                    for im in race.increase_modifiers()
+                    RaceIncreaseModifierModel.from_app(race.race_id, im)
+                    for im in race.increase_modifiers
                 ]
             )
             model.features.clear()
             model.features.extend(
-                [
-                    RaceFeatureModel.from_domain(race.race_id(), f)
-                    for f in race.features()
-                ]
+                [RaceFeatureModel.from_app(race.race_id, f) for f in race.features]
             )
             await session.commit()
 
@@ -131,7 +125,7 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
             await session.execute(query)
             await session.commit()
 
-    def _add_options(self, query: Select) -> Select:
+    def _add_options(self, query: Select[tuple[RaceModel]]) -> Select[tuple[RaceModel]]:
         return query.options(
             selectinload(RaceModel.increase_modifiers),
             selectinload(RaceModel.features),

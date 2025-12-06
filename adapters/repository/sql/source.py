@@ -2,8 +2,8 @@ from uuid import UUID, uuid4
 
 from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models import SourceModel
+from application.dto.model.source import AppSource
 from application.repository import SourceRepository as AppSourceRepository
-from domain.source import Source
 from domain.source import SourceRepository as DomainSourceRepository
 from sqlalchemy import delete, exists, or_, select
 
@@ -29,14 +29,14 @@ class SQLSourceRepository(DomainSourceRepository, AppSourceRepository):
             result = result.scalar()
             return result if result is not None else False
 
-    async def get_by_id(self, source_id: UUID) -> Source:
+    async def get_by_id(self, source_id: UUID) -> AppSource:
         async with self.__db_helper.session as session:
             query = select(SourceModel).where(SourceModel.id == source_id)
             result = await session.execute(query)
             result = result.scalar_one()
-            return result.to_domain()
+            return result.to_app()
 
-    async def filter(self, search_by_name: str | None = None) -> list[Source]:
+    async def filter(self, search_by_name: str | None = None) -> list[AppSource]:
         async with self.__db_helper.session as session:
             query = select(SourceModel)
             if search_by_name:
@@ -48,23 +48,23 @@ class SQLSourceRepository(DomainSourceRepository, AppSourceRepository):
                 )
             result = await session.execute(query)
             result = result.scalars().all()
-            return [source.to_domain() for source in result]
+            return [source.to_app() for source in result]
 
-    async def get_all(self) -> list[Source]:
+    async def get_all(self) -> list[AppSource]:
         async with self.__db_helper.session as session:
             query = select(SourceModel)
             result = await session.execute(query)
             result = result.scalars().all()
-            return [source.to_domain() for source in result]
+            return [source.to_app() for source in result]
 
-    async def create(self, source: Source) -> None:
+    async def create(self, source: AppSource) -> None:
         async with self.__db_helper.session as session:
-            session.add(SourceModel.from_domain(source))
+            session.add(SourceModel.from_app(source))
             await session.commit()
 
-    async def update(self, source: Source) -> None:
+    async def update(self, source: AppSource) -> None:
         async with self.__db_helper.session as session:
-            await session.merge(SourceModel.from_domain(source))
+            await session.merge(SourceModel.from_app(source))
             await session.commit()
 
     async def delete(self, source_id: UUID) -> None:

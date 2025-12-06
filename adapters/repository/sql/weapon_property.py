@@ -2,10 +2,10 @@ from uuid import UUID, uuid4
 
 from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models import WeaponPropertyModel
+from application.dto.model.weapon_property import AppWeaponProperty
 from application.repository import (
     WeaponPropertyRepository as AppWeaponPropertyRepository,
 )
-from domain.weapon_property import WeaponProperty
 from domain.weapon_property import (
     WeaponPropertyRepository as DomainWeaponPropertyRepository,
 )
@@ -39,23 +39,25 @@ class SQLWeaponPropertyRepository(
             result = result.scalar()
             return result if result is not None else False
 
-    async def get_by_id(self, weapon_property_id: UUID) -> WeaponProperty:
+    async def get_by_id(self, weapon_property_id: UUID) -> AppWeaponProperty:
         async with self.__helper.session as session:
             query = select(WeaponPropertyModel).where(
                 WeaponPropertyModel.id == weapon_property_id
             )
             result = await session.execute(query)
             result = result.scalar_one()
-            return result.to_domain()
+            return result.to_app()
 
-    async def get_all(self) -> list[WeaponProperty]:
+    async def get_all(self) -> list[AppWeaponProperty]:
         async with self.__helper.session as session:
             query = select(WeaponPropertyModel)
             result = await session.execute(query)
             result = result.scalars().all()
-            return [item.to_domain() for item in result]
+            return [item.to_app() for item in result]
 
-    async def filter(self, search_by_name: str | None = None) -> list[WeaponProperty]:
+    async def filter(
+        self, search_by_name: str | None = None
+    ) -> list[AppWeaponProperty]:
         async with self.__helper.session as session:
             query = select(WeaponPropertyModel)
             if search_by_name is not None:
@@ -64,40 +66,36 @@ class SQLWeaponPropertyRepository(
                 )
             result = await session.execute(query)
             result = result.scalars().all()
-            return [item.to_domain() for item in result]
+            return [item.to_app() for item in result]
 
-    async def create(self, weapon_property: WeaponProperty) -> None:
+    async def create(self, weapon_property: AppWeaponProperty) -> None:
         async with self.__helper.session as session:
-            session.add(WeaponPropertyModel.from_domain(weapon_property))
+            session.add(WeaponPropertyModel.from_app(weapon_property))
             await session.commit()
 
-    async def update(self, weapon_property: WeaponProperty) -> None:
+    async def update(self, weapon_property: AppWeaponProperty) -> None:
         async with self.__helper.session as session:
             query = select(WeaponPropertyModel).where(
-                WeaponPropertyModel.id == weapon_property.weapon_property_id()
+                WeaponPropertyModel.id == weapon_property.weapon_property_id
             )
             result = await session.execute(query)
             model = result.scalar_one()
-            old_domain = model.to_domain()
-            if old_domain.name() != weapon_property.name():
-                model.name = weapon_property.name()
-            if old_domain.base_range() != weapon_property.base_range():
-                base_range = weapon_property.base_range()
-                model.base_range = (
-                    base_range.in_ft() if base_range is not None else None
-                )
-            if old_domain.max_range() != weapon_property.max_range():
-                max_range = weapon_property.max_range()
-                model.max_range = max_range.in_ft() if max_range is not None else None
-            if old_domain.second_hand_dice() != weapon_property.second_hand_dice():
-                second_hand_dice = weapon_property.second_hand_dice()
+            old = model.to_app()
+            if old.name != weapon_property.name:
+                model.name = weapon_property.name
+            if old.base_range != weapon_property.base_range:
+                base_range = weapon_property.base_range
+                model.base_range = base_range.count if base_range is not None else None
+            if old.max_range != weapon_property.max_range:
+                max_range = weapon_property.max_range
+                model.max_range = max_range.count if max_range is not None else None
+            if old.second_hand_dice != weapon_property.second_hand_dice:
+                second_hand_dice = weapon_property.second_hand_dice
                 model.second_hand_dice_name = (
-                    second_hand_dice.dice_type().name
-                    if second_hand_dice is not None
-                    else None
+                    second_hand_dice.dice_type if second_hand_dice is not None else None
                 )
                 model.second_hand_dice_count = (
-                    second_hand_dice.count() if second_hand_dice is not None else None
+                    second_hand_dice.count if second_hand_dice is not None else None
                 )
             await session.commit()
 

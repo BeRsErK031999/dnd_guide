@@ -2,8 +2,8 @@ from uuid import UUID, uuid4
 
 from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models.material import MaterialModel
+from application.dto.model.material import AppMaterial
 from application.repository import MaterialRepository as AppMaterialRepository
-from domain.material import Material
 from domain.material import MaterialRepository as DomainMaterialRepository
 from sqlalchemy import delete, exists, select
 
@@ -29,35 +29,35 @@ class SQLMaterialRepository(DomainMaterialRepository, AppMaterialRepository):
             result = result.scalar()
             return result if result is not None else False
 
-    async def get_by_id(self, material_id: UUID) -> Material:
+    async def get_by_id(self, material_id: UUID) -> AppMaterial:
         async with self.__helper.session as session:
             query = select(MaterialModel).where(MaterialModel.id == material_id)
             result = await session.execute(query)
             material_model = result.scalar_one()
-            return material_model.to_domain()
+            return material_model.to_app()
 
-    async def get_all(self) -> list[Material]:
+    async def get_all(self) -> list[AppMaterial]:
         async with self.__helper.session as session:
             query = select(MaterialModel)
             result = await session.execute(query)
-            return [model.to_domain() for model in result.scalars().all()]
+            return [model.to_app() for model in result.scalars().all()]
 
-    async def filter(self, search_by_name: str | None = None) -> list[Material]:
+    async def filter(self, search_by_name: str | None = None) -> list[AppMaterial]:
         async with self.__helper.session as session:
             query = select(MaterialModel)
             if search_by_name is not None:
                 query = query.where(MaterialModel.name.ilike(f"%{search_by_name}%"))
             result = await session.execute(query)
-            return [model.to_domain() for model in result.scalars().all()]
+            return [model.to_app() for model in result.scalars().all()]
 
-    async def create(self, material: Material) -> None:
+    async def create(self, material: AppMaterial) -> None:
         async with self.__helper.session as session:
-            session.add(MaterialModel.from_domain(material))
+            session.add(MaterialModel.from_app(material))
             await session.commit()
 
-    async def update(self, material: Material) -> None:
+    async def update(self, material: AppMaterial) -> None:
         async with self.__helper.session as session:
-            await session.merge(MaterialModel.from_domain(material))
+            await session.merge(MaterialModel.from_app(material))
             await session.commit()
 
     async def delete(self, material_id: UUID) -> None:

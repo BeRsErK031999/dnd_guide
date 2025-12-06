@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Sequence
 from uuid import UUID
 
 from domain.class_level import (
@@ -93,7 +92,7 @@ class AppClassLevel:
     class_id: UUID
     level: int
     dice: AppClassLevelDice | None = None
-    spell_slots: Sequence[int] | None = None
+    spell_slots: list[int] | None = None
     number_cantrips_know: int | None = None
     number_spells_know: int | None = None
     number_arcanums_know: int | None = None

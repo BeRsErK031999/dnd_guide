@@ -2,8 +2,8 @@ from uuid import UUID, uuid4
 
 from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models import ToolModel, ToolUtilizeModel
+from application.dto.model.tool import AppTool
 from application.repository import ToolRepository as AppToolRepository
-from domain.tool import Tool
 from domain.tool import ToolRepository as DomainToolRepository
 from sqlalchemy import delete, exists, select
 from sqlalchemy.orm import selectinload
@@ -30,7 +30,7 @@ class SQLToolRepository(DomainToolRepository, AppToolRepository):
             result = result.scalar()
             return result if result is not None else False
 
-    async def get_by_id(self, tool_id: UUID) -> Tool:
+    async def get_by_id(self, tool_id: UUID) -> AppTool:
         async with self.__helper.session as session:
             query = (
                 select(ToolModel)
@@ -39,61 +39,61 @@ class SQLToolRepository(DomainToolRepository, AppToolRepository):
             )
             result = await session.execute(query)
             tool_model = result.scalar_one()
-            return tool_model.to_domain()
+            return tool_model.to_app()
 
-    async def get_all(self) -> list[Tool]:
+    async def get_all(self) -> list[AppTool]:
         async with self.__helper.session as session:
             stmt = select(ToolModel).options(selectinload(ToolModel.utilizes))
             result = await session.execute(stmt)
-            return [tool_model.to_domain() for tool_model in result.scalars().all()]
+            return [tool_model.to_app() for tool_model in result.scalars().all()]
 
-    async def filter(self, search_by_name: str | None = None) -> list[Tool]:
+    async def filter(self, search_by_name: str | None = None) -> list[AppTool]:
         async with self.__helper.session as session:
             query = select(ToolModel).options(selectinload(ToolModel.utilizes))
             if search_by_name is not None:
                 query = query.where(ToolModel.name.ilike(f"%{search_by_name}%"))
             result = await session.execute(query)
-            return [tool_model.to_domain() for tool_model in result.scalars().all()]
+            return [tool_model.to_app() for tool_model in result.scalars().all()]
 
-    async def create(self, tool: Tool) -> None:
+    async def create(self, tool: AppTool) -> None:
         async with self.__helper.session as session:
-            model = ToolModel.from_domain(tool)
-            if len(tool.utilizes()) > 0:
+            model = ToolModel.from_app(tool)
+            if len(tool.utilizes) > 0:
                 model.utilizes.extend(
                     [
-                        ToolUtilizeModel.from_domain(tool.tool_id(), utilize)
-                        for utilize in tool.utilizes()
+                        ToolUtilizeModel.from_app(tool.tool_id, utilize)
+                        for utilize in tool.utilizes
                     ]
                 )
             session.add(model)
             await session.commit()
 
-    async def update(self, tool: Tool) -> None:
+    async def update(self, tool: AppTool) -> None:
         async with self.__helper.session as session:
             query = (
                 select(ToolModel)
-                .where(ToolModel.id == tool.tool_id())
+                .where(ToolModel.id == tool.tool_id)
                 .options(selectinload(ToolModel.utilizes))
             )
             result = await session.execute(query)
             model = result.scalar_one()
-            old_domain = model.to_domain()
-            if tool.tool_type() != old_domain.tool_type():
-                model.tool_type = tool.tool_type().name
-            if tool.name() != old_domain.name():
-                model.name = tool.name()
-            if tool.cost() != old_domain.cost():
-                model.cost = tool.cost().in_copper()
-            if tool.weight() != old_domain.weight():
-                model.weight = tool.weight().in_lb()
+            old = model.to_app()
+            if tool.tool_type != old.tool_type:
+                model.tool_type = tool.tool_type
+            if tool.name != old.name:
+                model.name = tool.name
+            if tool.cost != old.cost:
+                model.cost = tool.cost.count
+            if tool.weight != old.weight:
+                model.weight = tool.weight.count
             model.utilizes.clear()
             model.utilizes.extend(
                 [
-                    ToolUtilizeModel.from_domain(tool.tool_id(), utilize)
-                    for utilize in tool.utilizes()
+                    ToolUtilizeModel.from_app(tool.tool_id, utilize)
+                    for utilize in tool.utilizes
                 ]
             )
-            model.description = tool.description()
+            model.description = tool.description
             await session.commit()
 
     async def delete(self, tool_id: UUID) -> None:

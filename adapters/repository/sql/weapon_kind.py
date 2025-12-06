@@ -2,8 +2,8 @@ from uuid import UUID, uuid4
 
 from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models import WeaponKindModel
+from application.dto.model.weapon_kind import AppWeaponKind
 from application.repository import WeaponKindRepository as AppWeaponKindRepository
-from domain.weapon_kind import WeaponKind
 from domain.weapon_kind import WeaponKindRepository as DomainWeaponKindRepository
 from sqlalchemy import delete, exists, select
 
@@ -31,25 +31,25 @@ class SQLWeaponKindRepository(DomainWeaponKindRepository, AppWeaponKindRepositor
             result = result.scalar()
             return result if result is not None else False
 
-    async def get_by_id(self, weapon_kind_id: UUID) -> WeaponKind:
+    async def get_by_id(self, weapon_kind_id: UUID) -> AppWeaponKind:
         async with self.__helper.session as session:
             query = select(WeaponKindModel).where(WeaponKindModel.id == weapon_kind_id)
             result = await session.execute(query)
             result = result.scalar_one()
-            return result.to_domain()
+            return result.to_app()
 
-    async def get_all(self) -> list[WeaponKind]:
+    async def get_all(self) -> list[AppWeaponKind]:
         async with self.__helper.session as session:
             query = select(WeaponKindModel)
             result = await session.execute(query)
             result = result.scalars().all()
-            return [item.to_domain() for item in result]
+            return [item.to_app() for item in result]
 
     async def filter(
         self,
         search_by_name: str | None = None,
         filter_by_types: list[str] | None = None,
-    ) -> list[WeaponKind]:
+    ) -> list[AppWeaponKind]:
         async with self.__helper.session as session:
             query = select(WeaponKindModel)
             conditions = list()
@@ -61,27 +61,27 @@ class SQLWeaponKindRepository(DomainWeaponKindRepository, AppWeaponKindRepositor
                 query = query.where(*conditions)
             result = await session.execute(query)
             result = result.scalars().all()
-            return [item.to_domain() for item in result]
+            return [item.to_app() for item in result]
 
-    async def create(self, weapon_kind: WeaponKind) -> None:
+    async def create(self, weapon_kind: AppWeaponKind) -> None:
         async with self.__helper.session as session:
-            session.add(WeaponKindModel.from_domain(weapon_kind))
+            session.add(WeaponKindModel.from_app(weapon_kind))
             await session.commit()
 
-    async def update(self, weapon_kind: WeaponKind) -> None:
+    async def update(self, weapon_kind: AppWeaponKind) -> None:
         async with self.__helper.session as session:
             query = select(WeaponKindModel).where(
                 WeaponKindModel.id == weapon_kind.weapon_kind_id
             )
             model = await session.execute(query)
             model = model.scalar_one()
-            old_domain = model.to_domain()
-            if old_domain.name() != weapon_kind.name():
-                model.name = weapon_kind.name()
-            if old_domain.description() != weapon_kind.description():
-                model.description = weapon_kind.description()
-            if old_domain.weapon_type() != weapon_kind.weapon_type():
-                model.weapon_type = weapon_kind.weapon_type().name
+            old = model.to_app()
+            if old.name != weapon_kind.name:
+                model.name = weapon_kind.name
+            if old.description != weapon_kind.description:
+                model.description = weapon_kind.description
+            if old.weapon_type != weapon_kind.weapon_type:
+                model.weapon_type = weapon_kind.weapon_type
             await session.commit()
 
     async def delete(self, weapon_kind_id: UUID) -> None:

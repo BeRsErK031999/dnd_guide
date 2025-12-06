@@ -2,10 +2,10 @@ from uuid import UUID, uuid4
 
 from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models import MaterialComponentModel
+from application.dto.model.material_component import AppMaterialComponent
 from application.repository import (
     MaterialComponentRepository as AppMaterialComponentRepository,
 )
-from domain.material_component import MaterialComponent
 from domain.material_component import (
     MaterialComponentRepository as DomainMaterialComponentRepository,
 )
@@ -39,25 +39,25 @@ class SQLMaterialComponentRepository(
             result = result.scalar()
             return result if result is not None else False
 
-    async def get_by_id(self, material_id: UUID) -> MaterialComponent:
+    async def get_by_id(self, material_id: UUID) -> AppMaterialComponent:
         async with self.__db_helper.session as session:
             query = select(MaterialComponentModel).where(
                 MaterialComponentModel.id == material_id
             )
             result = await session.execute(query)
             result = result.scalar_one()
-            return result.to_domain()
+            return result.to_app()
 
-    async def get_all(self) -> list[MaterialComponent]:
+    async def get_all(self) -> list[AppMaterialComponent]:
         async with self.__db_helper.session as session:
             query = select(MaterialComponentModel)
             result = await session.execute(query)
             result = result.scalars().all()
-            return [item.to_domain() for item in result]
+            return [item.to_app() for item in result]
 
     async def filter(
         self, search_by_name: str | None = None
-    ) -> list[MaterialComponent]:
+    ) -> list[AppMaterialComponent]:
         async with self.__db_helper.session as session:
             query = select(MaterialComponentModel)
             if search_by_name is not None:
@@ -65,17 +65,17 @@ class SQLMaterialComponentRepository(
                     MaterialComponentModel.name.ilike(f"%{search_by_name}%")
                 )
             result = await session.execute(query)
-            return [item.to_domain() for item in result.scalars().all()]
+            return [item.to_app() for item in result.scalars().all()]
 
-    async def create(self, material: MaterialComponent) -> None:
+    async def create(self, material: AppMaterialComponent) -> None:
         async with self.__db_helper.session as session:
-            material_model = MaterialComponentModel.from_domain(material)
+            material_model = MaterialComponentModel.from_app(material)
             session.add(material_model)
             await session.commit()
 
-    async def update(self, material: MaterialComponent) -> None:
+    async def update(self, material: AppMaterialComponent) -> None:
         async with self.__db_helper.session as session:
-            await session.merge(MaterialComponentModel.from_domain(material))
+            await session.merge(MaterialComponentModel.from_app(material))
             await session.commit()
 
     async def delete(self, material_id: UUID) -> None:
