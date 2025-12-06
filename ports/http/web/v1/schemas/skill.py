@@ -1,16 +1,16 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
-from domain.skill import Skill
+from application.dto.model.skill import AppSkill, AppSkills
 
 
 @dataclass
 class SkillSchema:
     value: str
-    modifiers: str
+    modifier: str
 
     @staticmethod
-    def from_domain(skill: Skill) -> "SkillSchema":
-        return SkillSchema(value=skill.value, modifiers=skill.modifier().value)
+    def from_app(skill: AppSkill) -> "SkillSchema":
+        return SkillSchema(value=skill.value, modifier=skill.modifier)
 
 
 @dataclass
@@ -35,7 +35,10 @@ class ReadSkillSchema:
     persuasion: SkillSchema
 
     @staticmethod
-    def from_domain() -> "ReadSkillSchema":
+    def from_app() -> "ReadSkillSchema":
         return ReadSkillSchema(
-            **{skill.name.lower(): SkillSchema.from_domain(skill) for skill in Skill}
+            **{
+                skill: SkillSchema.from_app(st)
+                for skill, st in asdict(AppSkills.from_domain()).items()
+            }
         )

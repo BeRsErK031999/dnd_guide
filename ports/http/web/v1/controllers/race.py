@@ -26,7 +26,7 @@ class RaceController(Controller):
     @get("/{race_id:uuid}")
     async def get_race(self, race_id: UUID, use_cases: RaceUseCases) -> ReadRaceSchema:
         race = await use_cases.get_one.execute(RaceQuery(race_id=race_id))
-        return ReadRaceSchema.from_domain(race)
+        return ReadRaceSchema.from_app(race)
 
     @get()
     async def get_races(
@@ -34,7 +34,7 @@ class RaceController(Controller):
     ) -> list[ReadRaceSchema]:
         query = RacesQuery(search_by_name=search_by_name)
         races = await use_cases.get_all.execute(query)
-        return [ReadRaceSchema.from_domain(race) for race in races]
+        return [ReadRaceSchema.from_app(race) for race in races]
 
     @post()
     async def create_race(

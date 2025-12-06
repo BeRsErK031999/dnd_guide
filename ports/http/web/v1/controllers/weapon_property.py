@@ -39,7 +39,7 @@ class WeaponPropertyController(Controller):
         weapon_property = await use_cases.get_one.execute(
             WeaponPropertyQuery(weapon_property_id=weapon_property_id)
         )
-        return ReadWeaponPropertySchema.from_domain(weapon_property)
+        return ReadWeaponPropertySchema.from_app(weapon_property)
 
     @get()
     async def get_weapon_properties(
@@ -48,7 +48,7 @@ class WeaponPropertyController(Controller):
         query = WeaponPropertiesQuery(search_by_name=search_by_name)
         weapon_properties = await use_cases.get_all.execute(query)
         return [
-            ReadWeaponPropertySchema.from_domain(weapon_property)
+            ReadWeaponPropertySchema.from_app(weapon_property)
             for weapon_property in weapon_properties
         ]
 

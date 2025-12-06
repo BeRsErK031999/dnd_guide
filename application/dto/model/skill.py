@@ -6,11 +6,11 @@ from domain.skill import Skill
 @dataclass
 class AppSkill:
     value: str
-    modifiers: str
+    modifier: str
 
     @staticmethod
     def from_domain(skill: Skill) -> "AppSkill":
-        return AppSkill(value=skill.value, modifiers=skill.modifier().value)
+        return AppSkill(value=skill.value, modifier=skill.modifier().value)
 
 
 @dataclass

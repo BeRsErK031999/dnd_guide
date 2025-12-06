@@ -29,7 +29,7 @@ class WeaponController(Controller):
         self, weapon_id: UUID, use_cases: WeaponUseCases
     ) -> ReadWeaponSchema:
         weapon = await use_cases.get_one.execute(WeaponQuery(weapon_id=weapon_id))
-        return ReadWeaponSchema.from_domain(weapon)
+        return ReadWeaponSchema.from_app(weapon)
 
     @get()
     async def get_weapons(
@@ -49,7 +49,7 @@ class WeaponController(Controller):
             filter_by_material_ids=filter_by_material_ids,
         )
         weapons = await use_cases.get_all.execute(query)
-        return [ReadWeaponSchema.from_domain(weapon) for weapon in weapons]
+        return [ReadWeaponSchema.from_app(weapon) for weapon in weapons]
 
     @post()
     async def create_weapon(

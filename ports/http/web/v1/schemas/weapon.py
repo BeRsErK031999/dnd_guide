@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
-from domain.weapon import Weapon, WeaponDamage
+from application.dto.model.weapon import AppWeapon, AppWeaponDamage
 from ports.http.web.v1.schemas.coin import CoinSchema
 from ports.http.web.v1.schemas.dice import DiceSchema
 from ports.http.web.v1.schemas.weight import WeightSchema
@@ -15,11 +15,11 @@ class WeaponDamageSchema:
     bonus_damage: int
 
     @staticmethod
-    def from_domain(weapon_damage: WeaponDamage) -> "WeaponDamageSchema":
+    def from_app(weapon_damage: AppWeaponDamage) -> "WeaponDamageSchema":
         return WeaponDamageSchema(
-            dice=DiceSchema.from_domain(weapon_damage.dice()),
-            damage_type=weapon_damage.damage_type(),
-            bonus_damage=weapon_damage.bonus_damage(),
+            dice=DiceSchema.from_app(weapon_damage.dice),
+            damage_type=weapon_damage.damage_type,
+            bonus_damage=weapon_damage.bonus_damage,
         )
 
 
@@ -36,17 +36,17 @@ class ReadWeaponSchema:
     material_id: UUID
 
     @staticmethod
-    def from_domain(weapon: Weapon) -> "ReadWeaponSchema":
+    def from_app(weapon: AppWeapon) -> "ReadWeaponSchema":
         return ReadWeaponSchema(
-            weapon_id=weapon.weapon_id(),
-            weapon_kind_id=weapon.kind_id(),
-            name=weapon.name(),
-            description=weapon.description(),
-            cost=CoinSchema.from_domain(weapon.cost()),
-            damage=WeaponDamageSchema.from_domain(weapon.damage()),
-            weight=WeightSchema.from_domain(weapon.weight()),
-            weapon_property_ids=weapon.property_ids(),
-            material_id=weapon.material_id(),
+            weapon_id=weapon.weapon_id,
+            weapon_kind_id=weapon.weapon_kind_id,
+            name=weapon.name,
+            description=weapon.description,
+            cost=CoinSchema.from_app(weapon.cost),
+            damage=WeaponDamageSchema.from_app(weapon.damage),
+            weight=WeightSchema.from_app(weapon.weight),
+            weapon_property_ids=weapon.weapon_property_ids,
+            material_id=weapon.material_id,
         )
 
 

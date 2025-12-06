@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
-from domain.dice import Dice, DiceType
+from application.dto.model.dice import AppDice, AppDiceType
 
 
 @dataclass
@@ -14,10 +14,8 @@ class ReadDiceTypeSchema:
     d100: int
 
     @staticmethod
-    def from_domain() -> "ReadDiceTypeSchema":
-        return ReadDiceTypeSchema(
-            **{dice_type.name.lower(): dice_type.value for dice_type in DiceType}
-        )
+    def from_app() -> "ReadDiceTypeSchema":
+        return ReadDiceTypeSchema(**asdict(AppDiceType.from_domain()))
 
 
 @dataclass
@@ -26,8 +24,5 @@ class DiceSchema:
     dice_type: str
 
     @staticmethod
-    def from_domain(dice: Dice) -> "DiceSchema":
-        return DiceSchema(
-            count=dice.count(),
-            dice_type=dice.dice_type().name,
-        )
+    def from_app(dice: AppDice) -> "DiceSchema":
+        return DiceSchema(count=dice.count, dice_type=dice.dice_type)

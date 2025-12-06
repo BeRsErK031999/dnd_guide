@@ -1,8 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Sequence
 from uuid import UUID
 
-from domain.tool import Tool, ToolType, ToolUtilize
+from application.dto.model.tool import AppTool, AppToolType, AppToolUtilizes
 from ports.http.web.v1.schemas.coin import CoinSchema
 from ports.http.web.v1.schemas.weight import WeightSchema
 
@@ -21,9 +21,7 @@ class ReadToolTypeSchema:
 
     @staticmethod
     def from_domain() -> "ReadToolTypeSchema":
-        return ReadToolTypeSchema(
-            **{tool_type.name.lower(): tool_type.value for tool_type in ToolType}
-        )
+        return ReadToolTypeSchema(**asdict(AppToolType.from_domain()))
 
 
 @dataclass
@@ -32,10 +30,9 @@ class ToolUtilizesSchema:
     complexity: int
 
     @staticmethod
-    def from_domain(tool_utilize: ToolUtilize) -> "ToolUtilizesSchema":
+    def from_app(tool_utilize: AppToolUtilizes) -> "ToolUtilizesSchema":
         return ToolUtilizesSchema(
-            action=tool_utilize.action(),
-            complexity=tool_utilize.complexity(),
+            action=tool_utilize.action, complexity=tool_utilize.complexity
         )
 
 
@@ -50,17 +47,15 @@ class ReadToolSchema:
     utilizes: Sequence[ToolUtilizesSchema]
 
     @staticmethod
-    def from_domain(tool: Tool) -> "ReadToolSchema":
+    def from_app(tool: AppTool) -> "ReadToolSchema":
         return ReadToolSchema(
-            tool_id=tool.tool_id(),
-            tool_type=tool.tool_type().value,
-            name=tool.name(),
-            description=tool.description(),
-            cost=CoinSchema.from_domain(tool.cost()),
-            weight=WeightSchema.from_domain(tool.weight()),
-            utilizes=[
-                ToolUtilizesSchema.from_domain(utilize) for utilize in tool.utilizes()
-            ],
+            tool_id=tool.tool_id,
+            tool_type=tool.tool_type,
+            name=tool.name,
+            description=tool.description,
+            cost=CoinSchema.from_app(tool.cost),
+            weight=WeightSchema.from_app(tool.weight),
+            utilizes=[ToolUtilizesSchema.from_app(u) for u in tool.utilizes],
         )
 
 

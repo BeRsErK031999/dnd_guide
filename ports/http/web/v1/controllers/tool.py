@@ -27,7 +27,7 @@ class ToolController(Controller):
     @get("/{tool_id:uuid}")
     async def get_tool(self, tool_id: UUID, use_cases: ToolUseCases) -> ReadToolSchema:
         tool = await use_cases.get_one.execute(ToolQuery(tool_id=tool_id))
-        return ReadToolSchema.from_domain(tool)
+        return ReadToolSchema.from_app(tool)
 
     @get()
     async def get_tools(
@@ -35,7 +35,7 @@ class ToolController(Controller):
     ) -> list[ReadToolSchema]:
         query = ToolsQuery(search_by_name=search_by_name)
         tools = await use_cases.get_all.execute(query)
-        return [ReadToolSchema.from_domain(tool) for tool in tools]
+        return [ReadToolSchema.from_app(tool) for tool in tools]
 
     @post()
     async def create_tool(

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from domain.source import Source
+from application.dto.model.source import AppSource
 
 
 @dataclass
@@ -12,12 +12,12 @@ class ReadSourceSchema:
     name_in_english: str
 
     @staticmethod
-    def from_domain(source: Source) -> "ReadSourceSchema":
+    def from_app(source: AppSource) -> "ReadSourceSchema":
         return ReadSourceSchema(
-            source_id=source.source_id(),
-            name=source.name(),
-            description=source.description(),
-            name_in_english=source.name_in_english(),
+            source_id=source.source_id,
+            name=source.name,
+            description=source.description,
+            name_in_english=source.name_in_english,
         )
 
 

@@ -33,7 +33,7 @@ class MaterialController(Controller):
         material = await use_cases.get_one.execute(
             MaterialQuery(material_id=material_id)
         )
-        return ReadMaterialSchema.from_domain(material)
+        return ReadMaterialSchema.from_app(material)
 
     @get()
     async def get_materials(
@@ -41,7 +41,7 @@ class MaterialController(Controller):
     ) -> list[ReadMaterialSchema]:
         query = MaterialsQuery(search_by_name=search_by_name)
         materials = await use_cases.get_all.execute(query)
-        return [ReadMaterialSchema.from_domain(material) for material in materials]
+        return [ReadMaterialSchema.from_app(material) for material in materials]
 
     @post()
     async def create_material(

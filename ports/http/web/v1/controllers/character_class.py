@@ -28,7 +28,7 @@ class ClassController(Controller):
         self, class_id: UUID, use_cases: ClassUseCases
     ) -> ReadClassSchema:
         character_class = await use_cases.get_one.execute(ClassQuery(class_id=class_id))
-        return ReadClassSchema.from_domain(character_class)
+        return ReadClassSchema.from_app(character_class)
 
     @get()
     async def get_classes(
@@ -37,7 +37,7 @@ class ClassController(Controller):
         query = ClassesQuery(search_by_name=search_by_name)
         classes = await use_cases.get_all.execute(query)
         return [
-            ReadClassSchema.from_domain(character_class) for character_class in classes
+            ReadClassSchema.from_app(character_class) for character_class in classes
         ]
 
     @post()

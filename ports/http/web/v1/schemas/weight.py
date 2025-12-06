@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
-from domain.weight import Weight, WeightUnit
+from application.dto.model.weight import AppWeight, AppWeightUnit
 
 
 @dataclass
@@ -9,8 +9,8 @@ class ReadWeightUnitSchema:
     kg: str
 
     @staticmethod
-    def from_domain() -> "ReadWeightUnitSchema":
-        return ReadWeightUnitSchema(lb=WeightUnit.LB.value, kg=WeightUnit.KG.value)
+    def from_app() -> "ReadWeightUnitSchema":
+        return ReadWeightUnitSchema(**asdict(AppWeightUnit.from_domain()))
 
 
 @dataclass
@@ -19,8 +19,5 @@ class WeightSchema:
     unit: str
 
     @staticmethod
-    def from_domain(weight: Weight) -> "WeightSchema":
-        return WeightSchema(
-            count=weight.in_lb(),
-            unit=WeightUnit.LB.value,
-        )
+    def from_app(weight: AppWeight) -> "WeightSchema":
+        return WeightSchema(count=weight.count, unit=weight.unit)

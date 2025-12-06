@@ -1,7 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from uuid import UUID
 
-from domain.weapon_kind import WeaponKind, WeaponType
+from application.dto.model.weapon_kind import AppWeaponKind, AppWeaponType
 
 
 @dataclass
@@ -13,12 +13,7 @@ class ReadWeaponTypeSchema:
 
     @staticmethod
     def from_domain() -> "ReadWeaponTypeSchema":
-        return ReadWeaponTypeSchema(
-            **{
-                weapon_type.name.lower(): weapon_type.value
-                for weapon_type in WeaponType
-            }
-        )
+        return ReadWeaponTypeSchema(**asdict(AppWeaponType.from_domain()))
 
 
 @dataclass
@@ -29,12 +24,12 @@ class ReadWeaponKindSchema:
     description: str
 
     @staticmethod
-    def from_domain(weapon_kind: WeaponKind) -> "ReadWeaponKindSchema":
+    def from_app(weapon_kind: AppWeaponKind) -> "ReadWeaponKindSchema":
         return ReadWeaponKindSchema(
-            weapon_kind_id=weapon_kind.weapon_kind_id(),
-            weapon_type=weapon_kind.weapon_type(),
-            name=weapon_kind.name(),
-            description=weapon_kind.description(),
+            weapon_kind_id=weapon_kind.weapon_kind_id,
+            weapon_type=weapon_kind.weapon_type,
+            name=weapon_kind.name,
+            description=weapon_kind.description,
         )
 
 

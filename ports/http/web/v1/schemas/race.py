@@ -2,7 +2,13 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
-from domain.race import Race, RaceAge, RaceFeature, RaceIncreaseModifier, RaceSpeed
+from application.dto.model.race import (
+    AppRace,
+    AppRaceAge,
+    AppRaceFeature,
+    AppRaceIncreaseModifier,
+    AppRaceSpeed,
+)
 from ports.http.web.v1.schemas.length import LengthSchema
 
 
@@ -12,11 +18,8 @@ class RaceFeatureSchema:
     description: str
 
     @staticmethod
-    def from_domain(feature: RaceFeature) -> "RaceFeatureSchema":
-        return RaceFeatureSchema(
-            name=feature.name(),
-            description=feature.description(),
-        )
+    def from_app(feature: AppRaceFeature) -> "RaceFeatureSchema":
+        return RaceFeatureSchema(name=feature.name, description=feature.description)
 
 
 @dataclass
@@ -25,11 +28,8 @@ class RaceAgeSchema:
     description: str
 
     @staticmethod
-    def from_domain(age: RaceAge) -> "RaceAgeSchema":
-        return RaceAgeSchema(
-            max_age=age.max_age(),
-            description=age.description(),
-        )
+    def from_app(age: AppRaceAge) -> "RaceAgeSchema":
+        return RaceAgeSchema(max_age=age.max_age, description=age.description)
 
 
 @dataclass
@@ -38,10 +38,10 @@ class RaceSpeedSchema:
     description: str
 
     @staticmethod
-    def from_domain(speed: RaceSpeed) -> "RaceSpeedSchema":
+    def from_app(speed: AppRaceSpeed) -> "RaceSpeedSchema":
         return RaceSpeedSchema(
-            base_speed=LengthSchema.from_domain(speed.base_speed()),
-            description=speed.description(),
+            base_speed=LengthSchema.from_app(speed.base_speed),
+            description=speed.description,
         )
 
 
@@ -51,10 +51,9 @@ class RaceIncreaseModifierSchema:
     bonus: int
 
     @staticmethod
-    def from_domain(modifier: RaceIncreaseModifier) -> "RaceIncreaseModifierSchema":
+    def from_app(modifier: AppRaceIncreaseModifier) -> "RaceIncreaseModifierSchema":
         return RaceIncreaseModifierSchema(
-            modifier=modifier.modifier(),
-            bonus=modifier.bonus(),
+            modifier=modifier.modifier, bonus=modifier.bonus
         )
 
 
@@ -73,24 +72,21 @@ class ReadRaceSchema:
     name_in_english: str
 
     @staticmethod
-    def from_domain(race: Race) -> "ReadRaceSchema":
+    def from_app(race: AppRace) -> "ReadRaceSchema":
         return ReadRaceSchema(
-            race_id=race.race_id(),
-            name=race.name(),
-            description=race.description(),
-            creature_type=race.creature_type().value,
-            creature_size=race.creature_size().value,
-            speed=RaceSpeedSchema.from_domain(race.speed()),
-            age=RaceAgeSchema.from_domain(race.age()),
+            race_id=race.race_id,
+            name=race.name,
+            description=race.description,
+            creature_type=race.creature_type,
+            creature_size=race.creature_size,
+            speed=RaceSpeedSchema.from_app(race.speed),
+            age=RaceAgeSchema.from_app(race.age),
             increase_modifiers=[
-                RaceIncreaseModifierSchema.from_domain(modifier)
-                for modifier in race.increase_modifiers()
+                RaceIncreaseModifierSchema.from_app(m) for m in race.increase_modifiers
             ],
-            source_id=race.source_id(),
-            features=[
-                RaceFeatureSchema.from_domain(feature) for feature in race.features()
-            ],
-            name_in_english=race.name_in_english(),
+            source_id=race.source_id,
+            features=[RaceFeatureSchema.from_app(f) for f in race.features],
+            name_in_english=race.name_in_english,
         )
 
 

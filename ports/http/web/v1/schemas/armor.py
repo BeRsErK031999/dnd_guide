@@ -1,7 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from uuid import UUID
 
-from domain.armor import Armor, ArmorClass, ArmorType
+from application.dto.model.armor import AppArmor, AppArmorClass, AppArmorType
 from ports.http.web.v1.schemas.coin import CoinSchema
 from ports.http.web.v1.schemas.weight import WeightSchema
 
@@ -14,10 +14,8 @@ class ReadArmorTypeSchema:
     shield: str
 
     @staticmethod
-    def from_domain() -> "ReadArmorTypeSchema":
-        return ReadArmorTypeSchema(
-            **{armor_type.name.lower(): armor_type.value for armor_type in ArmorType}
-        )
+    def from_app() -> "ReadArmorTypeSchema":
+        return ReadArmorTypeSchema(**asdict(AppArmorType.from_domain()))
 
 
 @dataclass
@@ -27,12 +25,11 @@ class ArmorClassSchema:
     max_modifier_bonus: int | None
 
     @staticmethod
-    def from_domain(armor_class: ArmorClass) -> "ArmorClassSchema":
-        modifier = armor_class.modifier()
+    def from_app(armor_class: AppArmorClass) -> "ArmorClassSchema":
         return ArmorClassSchema(
-            base_class=armor_class.base_class(),
-            modifier=modifier.value if modifier is not None else None,
-            max_modifier_bonus=armor_class.max_modifier_bonus(),
+            base_class=armor_class.base_class,
+            modifier=armor_class.modifier,
+            max_modifier_bonus=armor_class.max_modifier_bonus,
         )
 
 
@@ -50,18 +47,18 @@ class ReadArmorSchema:
     material_id: UUID
 
     @staticmethod
-    def from_domain(armor: Armor) -> "ReadArmorSchema":
+    def from_app(armor: AppArmor) -> "ReadArmorSchema":
         return ReadArmorSchema(
-            armor_id=armor.armor_id(),
-            armor_type=armor.armor_type().value,
-            name=armor.name(),
-            description=armor.description(),
-            armor_class=ArmorClassSchema.from_domain(armor.armor_class()),
-            strength=armor.strength(),
-            stealth=armor.stealth(),
-            weight=WeightSchema.from_domain(armor.weight()),
-            cost=CoinSchema.from_domain(armor.cost()),
-            material_id=armor.material_id(),
+            armor_id=armor.armor_id,
+            armor_type=armor.armor_type,
+            name=armor.name,
+            description=armor.description,
+            armor_class=ArmorClassSchema.from_app(armor.armor_class),
+            strength=armor.strength,
+            stealth=armor.stealth,
+            weight=WeightSchema.from_app(armor.weight),
+            cost=CoinSchema.from_app(armor.cost),
+            material_id=armor.material_id,
         )
 
 

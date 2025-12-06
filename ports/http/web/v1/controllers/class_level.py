@@ -33,7 +33,7 @@ class ClassLevelController(Controller):
         level = await use_cases.get_one.execute(
             ClassLevelQuery(class_level_id=class_level_id)
         )
-        return ReadClassLevelSchema.from_domain(level)
+        return ReadClassLevelSchema.from_app(level)
 
     @get()
     async def get_class_levels(
@@ -41,7 +41,7 @@ class ClassLevelController(Controller):
     ) -> list[ReadClassLevelSchema]:
         query = ClassLevelsQuery(filter_by_class_id=filter_by_class_id)
         levels = await use_cases.get_all.execute(query)
-        return [ReadClassLevelSchema.from_domain(level) for level in levels]
+        return [ReadClassLevelSchema.from_app(level) for level in levels]
 
     @post()
     async def create_class_level(

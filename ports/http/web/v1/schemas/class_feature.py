@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from domain.class_feature import ClassFeature
+from application.dto.model.class_feature import AppClassFeature
 
 
 @dataclass
@@ -14,14 +14,14 @@ class ReadClassFeatureSchema:
     name_in_english: str
 
     @staticmethod
-    def from_domain(feature: ClassFeature) -> "ReadClassFeatureSchema":
+    def from_app(feature: AppClassFeature) -> "ReadClassFeatureSchema":
         return ReadClassFeatureSchema(
-            feature_id=feature.feature_id(),
-            class_id=feature.class_id(),
-            name=feature.name(),
-            description=feature.description(),
-            level=feature.level(),
-            name_in_english=feature.name_in_english(),
+            feature_id=feature.feature_id,
+            class_id=feature.class_id,
+            name=feature.name,
+            description=feature.description,
+            level=feature.level,
+            name_in_english=feature.name_in_english,
         )
 
 

@@ -2,12 +2,12 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
-from domain.class_level import (
-    ClassLevel,
-    ClassLevelBonusDamage,
-    ClassLevelDice,
-    ClassLevelIncreaseSpeed,
-    ClassLevelPoints,
+from application.dto.model.class_level import (
+    AppClassLevel,
+    AppClassLevelBonusDamage,
+    AppClassLevelDice,
+    AppClassLevelIncreaseSpeed,
+    AppClassLevelPoints,
 )
 from ports.http.web.v1.schemas.dice import DiceSchema
 from ports.http.web.v1.schemas.length import LengthSchema
@@ -19,10 +19,10 @@ class ClassLevelDiceSchema:
     description: str
 
     @staticmethod
-    def from_domain(level_dice: ClassLevelDice) -> "ClassLevelDiceSchema":
+    def from_app(level_dice: AppClassLevelDice) -> "ClassLevelDiceSchema":
         return ClassLevelDiceSchema(
-            dice=DiceSchema.from_domain(level_dice.dice()),
-            description=level_dice.description(),
+            dice=DiceSchema.from_app(level_dice.dice),
+            description=level_dice.description,
         )
 
 
@@ -32,10 +32,10 @@ class ClassLevelPointsSchema:
     description: str
 
     @staticmethod
-    def from_domain(level_points: ClassLevelPoints) -> "ClassLevelPointsSchema":
+    def from_app(level_points: AppClassLevelPoints) -> "ClassLevelPointsSchema":
         return ClassLevelPointsSchema(
-            points=level_points.points(),
-            description=level_points.description(),
+            points=level_points.points,
+            description=level_points.description,
         )
 
 
@@ -45,12 +45,12 @@ class ClassLevelBonusDamageSchema:
     description: str
 
     @staticmethod
-    def from_domain(
-        level_bonus_damage: ClassLevelBonusDamage,
+    def from_app(
+        level_bonus_damage: AppClassLevelBonusDamage,
     ) -> "ClassLevelBonusDamageSchema":
         return ClassLevelBonusDamageSchema(
-            damage=level_bonus_damage.damage(),
-            description=level_bonus_damage.description(),
+            damage=level_bonus_damage.damage,
+            description=level_bonus_damage.description,
         )
 
 
@@ -60,12 +60,12 @@ class ClassLevelIncreaseSpeedSchema:
     description: str
 
     @staticmethod
-    def from_domain(
-        level_increase_speed: ClassLevelIncreaseSpeed,
+    def from_app(
+        level_increase_speed: AppClassLevelIncreaseSpeed,
     ) -> "ClassLevelIncreaseSpeedSchema":
         return ClassLevelIncreaseSpeedSchema(
-            speed=LengthSchema.from_domain(level_increase_speed.speed()),
-            description=level_increase_speed.description(),
+            speed=LengthSchema.from_app(level_increase_speed.speed),
+            description=level_increase_speed.description,
         )
 
 
@@ -84,33 +84,34 @@ class ReadClassLevelSchema:
     increase_speed: ClassLevelIncreaseSpeedSchema | None = None
 
     @staticmethod
-    def from_domain(level: ClassLevel) -> "ReadClassLevelSchema":
-        dice = level.dice()
-        slots = level.spell_slots()
-        points = level.points()
-        bonus_damage = level.bonus_damage()
-        increase_speed = level.increase_speed()
+    def from_app(level: AppClassLevel) -> "ReadClassLevelSchema":
+        dice = level.dice
+        points = level.points
+        bonus_damage = level.bonus_damage
+        increase_speed = level.increase_speed
         return ReadClassLevelSchema(
-            class_level_id=level.level_id(),
-            class_id=level.class_id(),
-            level=level.level(),
-            dice=ClassLevelDiceSchema.from_domain(dice) if dice is not None else None,
-            spell_slots=slots.slots() if slots is not None else None,
-            number_cantrips_know=level.number_cantrips_know(),
-            number_spells_know=level.number_spells_know(),
-            number_arcanums_know=level.number_arcanums_know(),
-            points=(
-                ClassLevelPointsSchema.from_domain(points)
-                if points is not None
+            class_level_id=level.class_level_id,
+            class_id=level.class_id,
+            level=level.level,
+            dice=(
+                ClassLevelDiceSchema.from_app(level.dice)
+                if level.dice is not None
                 else None
             ),
+            spell_slots=level.spell_slots,
+            number_cantrips_know=level.number_cantrips_know,
+            number_spells_know=level.number_spells_know,
+            number_arcanums_know=level.number_arcanums_know,
+            points=(
+                ClassLevelPointsSchema.from_app(points) if points is not None else None
+            ),
             bonus_damage=(
-                ClassLevelBonusDamageSchema.from_domain(bonus_damage)
+                ClassLevelBonusDamageSchema.from_app(bonus_damage)
                 if bonus_damage is not None
                 else None
             ),
             increase_speed=(
-                ClassLevelIncreaseSpeedSchema.from_domain(increase_speed)
+                ClassLevelIncreaseSpeedSchema.from_app(increase_speed)
                 if increase_speed is not None
                 else None
             ),

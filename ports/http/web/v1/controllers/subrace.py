@@ -31,7 +31,7 @@ class SubraceController(Controller):
         self, subrace_id: UUID, use_cases: SubraceUseCases
     ) -> ReadSubraceSchema:
         subrace = await use_cases.get_one.execute(SubraceQuery(subrace_id=subrace_id))
-        return ReadSubraceSchema.from_domain(subrace)
+        return ReadSubraceSchema.from_app(subrace)
 
     @get()
     async def get_subraces(
@@ -39,7 +39,7 @@ class SubraceController(Controller):
     ) -> list[ReadSubraceSchema]:
         query = SubracesQuery(search_by_name=search_by_name)
         subraces = await use_cases.get_all.execute(query)
-        return [ReadSubraceSchema.from_domain(subrace) for subrace in subraces]
+        return [ReadSubraceSchema.from_app(subrace) for subrace in subraces]
 
     @post()
     async def create_subrace(

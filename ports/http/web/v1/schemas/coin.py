@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
-from domain.coin import Coins, PieceType
+from application.dto.model.coin import AppCoins, AppPieceType
 
 
 @dataclass
@@ -12,10 +12,8 @@ class ReadPieceTypeSchema:
     platinum: str
 
     @staticmethod
-    def from_domain() -> "ReadPieceTypeSchema":
-        return ReadPieceTypeSchema(
-            **{name.name.lower(): name.value for name in PieceType}
-        )
+    def from_app() -> "ReadPieceTypeSchema":
+        return ReadPieceTypeSchema(**asdict(AppPieceType.from_domain()))
 
 
 @dataclass
@@ -24,8 +22,5 @@ class CoinSchema:
     piece_type: str
 
     @staticmethod
-    def from_domain(coin: Coins) -> "CoinSchema":
-        return CoinSchema(
-            count=coin.in_copper(),
-            piece_type=PieceType.COPPER.name,
-        )
+    def from_app(coin: AppCoins) -> "CoinSchema":
+        return CoinSchema(count=coin.count, piece_type=coin.piece_type)

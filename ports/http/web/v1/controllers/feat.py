@@ -26,7 +26,7 @@ class FeatController(Controller):
     @get("/{feat_id:uuid}")
     async def get_feat(self, feat_id: UUID, use_cases: FeatUseCases) -> ReadFeatSchema:
         feat = await use_cases.get_one.execute(FeatQuery(feat_id=feat_id))
-        return ReadFeatSchema.from_domain(feat)
+        return ReadFeatSchema.from_app(feat)
 
     @get()
     async def get_feats(
@@ -46,7 +46,7 @@ class FeatController(Controller):
             filter_by_increase_modifiers=filter_by_increase_modifiers,
         )
         feats = await use_cases.get_all.execute(query)
-        return [ReadFeatSchema.from_domain(feat) for feat in feats]
+        return [ReadFeatSchema.from_app(feat) for feat in feats]
 
     @post()
     async def create_feat(

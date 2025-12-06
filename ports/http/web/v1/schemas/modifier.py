@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
-from domain.modifier import Modifier
+from application.dto.model.modifier import AppModifier
 
 
 @dataclass
@@ -13,7 +13,5 @@ class ReadModifierSchema:
     charisma: str
 
     @staticmethod
-    def from_domain() -> "ReadModifierSchema":
-        return ReadModifierSchema(
-            **{modifier.name.lower(): modifier.value for modifier in Modifier}
-        )
+    def from_app() -> "ReadModifierSchema":
+        return ReadModifierSchema(**asdict(AppModifier.from_domain()))

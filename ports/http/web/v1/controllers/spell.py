@@ -29,7 +29,7 @@ class SpellController(Controller):
         self, spell_id: UUID, use_cases: SpellUseCases
     ) -> ReadSpellSchema:
         spell = await use_cases.get_one.execute(SpellQuery(spell_id=spell_id))
-        return ReadSpellSchema.from_domain(spell)
+        return ReadSpellSchema.from_app(spell)
 
     @get()
     async def get_spells(
@@ -65,7 +65,7 @@ class SpellController(Controller):
             filter_by_source_ids=filter_by_source_ids,
         )
         spells = await use_cases.get_all.execute(query)
-        return [ReadSpellSchema.from_domain(spell) for spell in spells]
+        return [ReadSpellSchema.from_app(spell) for spell in spells]
 
     @post()
     async def create_spell(

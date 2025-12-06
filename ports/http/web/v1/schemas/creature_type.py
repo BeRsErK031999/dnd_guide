@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
-from domain.creature_type import CreatureType
+from application.dto.model.creature_type import AppCreatureType
 
 
 @dataclass
@@ -23,10 +23,5 @@ class ReadCreatureTypeSchema:
     object: str
 
     @staticmethod
-    def from_domain() -> "ReadCreatureTypeSchema":
-        return ReadCreatureTypeSchema(
-            **{
-                creature_type.name.lower(): creature_type.value
-                for creature_type in CreatureType
-            }
-        )
+    def from_app() -> "ReadCreatureTypeSchema":
+        return ReadCreatureTypeSchema(**asdict(AppCreatureType.from_domain()))

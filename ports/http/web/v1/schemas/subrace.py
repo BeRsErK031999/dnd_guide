@@ -2,7 +2,11 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
-from domain.subrace import Subrace, SubraceFeature, SubraceIncreaseModifier
+from application.dto.model.subrace import (
+    AppSubrace,
+    AppSubraceFeature,
+    AppSubraceIncreaseModifier,
+)
 
 
 @dataclass
@@ -11,11 +15,8 @@ class SubraceFeatureSchema:
     description: str
 
     @staticmethod
-    def from_domain(feature: SubraceFeature) -> "SubraceFeatureSchema":
-        return SubraceFeatureSchema(
-            name=feature.name(),
-            description=feature.description(),
-        )
+    def from_app(feature: AppSubraceFeature) -> "SubraceFeatureSchema":
+        return SubraceFeatureSchema(name=feature.name, description=feature.description)
 
 
 @dataclass
@@ -24,12 +25,11 @@ class SubraceIncreaseModifierSchema:
     bonus: int
 
     @staticmethod
-    def from_domain(
-        modifier: SubraceIncreaseModifier,
+    def from_app(
+        modifier: AppSubraceIncreaseModifier,
     ) -> "SubraceIncreaseModifierSchema":
         return SubraceIncreaseModifierSchema(
-            modifier=modifier.modifier().value,
-            bonus=modifier.bonus(),
+            modifier=modifier.modifier, bonus=modifier.bonus
         )
 
 
@@ -44,21 +44,18 @@ class ReadSubraceSchema:
     features: Sequence[SubraceFeatureSchema]
 
     @staticmethod
-    def from_domain(subrace: Subrace) -> "ReadSubraceSchema":
+    def from_app(subrace: AppSubrace) -> "ReadSubraceSchema":
         return ReadSubraceSchema(
-            subrace_id=subrace.subrace_id(),
-            race_id=subrace.race_id(),
-            name=subrace.name(),
-            description=subrace.description(),
+            subrace_id=subrace.subrace_id,
+            race_id=subrace.race_id,
+            name=subrace.name,
+            description=subrace.description,
             increase_modifiers=[
-                SubraceIncreaseModifierSchema.from_domain(modifier)
-                for modifier in subrace.increase_modifiers()
+                SubraceIncreaseModifierSchema.from_app(m)
+                for m in subrace.increase_modifiers
             ],
-            name_in_english=subrace.name_in_english(),
-            features=[
-                SubraceFeatureSchema.from_domain(feature)
-                for feature in subrace.features()
-            ],
+            name_in_english=subrace.name_in_english,
+            features=[SubraceFeatureSchema.from_app(f) for f in subrace.features],
         )
 
 

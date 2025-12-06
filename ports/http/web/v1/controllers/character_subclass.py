@@ -33,7 +33,7 @@ class SubclassController(Controller):
         subclass = await use_cases.get_one.execute(
             SubclassQuery(subclass_id=subclass_id)
         )
-        return ReadSubclassSchema.from_domain(subclass)
+        return ReadSubclassSchema.from_app(subclass)
 
     @get()
     async def get_subclasses(
@@ -41,7 +41,7 @@ class SubclassController(Controller):
     ) -> list[ReadSubclassSchema]:
         query = SubclassesQuery(filter_by_class_id=filter_by_class_id)
         subclasses = await use_cases.get_all.execute(query)
-        return [ReadSubclassSchema.from_domain(subclass) for subclass in subclasses]
+        return [ReadSubclassSchema.from_app(subclass) for subclass in subclasses]
 
     @post()
     async def create_subclass(

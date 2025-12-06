@@ -38,7 +38,7 @@ class SubclassFeatureController(Controller):
         feature = await use_cases.get_one.execute(
             SubclassFeatureQuery(feature_id=feature_id)
         )
-        return ReadSubclassFeatureSchema.from_domain(feature)
+        return ReadSubclassFeatureSchema.from_app(feature)
 
     @get()
     async def get_features(
@@ -46,7 +46,7 @@ class SubclassFeatureController(Controller):
     ) -> list[ReadSubclassFeatureSchema]:
         query = SubclassFeaturesQuery(filter_by_subclass_id=filter_by_subclass_id)
         features = await use_cases.get_all.execute(query)
-        return [ReadSubclassFeatureSchema.from_domain(feature) for feature in features]
+        return [ReadSubclassFeatureSchema.from_app(feature) for feature in features]
 
     @post()
     async def create_feature(

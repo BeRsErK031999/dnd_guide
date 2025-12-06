@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
-from domain.feat import Feat, FeatRequiredModifier
+from application.dto.model.feat import AppFeat, AppFeatRequiredModifier
 
 
 @dataclass
@@ -11,9 +11,9 @@ class FeatRequiredModifierSchema:
     min_value: int
 
     @staticmethod
-    def from_domain(modifier: FeatRequiredModifier) -> "FeatRequiredModifierSchema":
+    def from_app(modifier: AppFeatRequiredModifier) -> "FeatRequiredModifierSchema":
         return FeatRequiredModifierSchema(
-            modifier=modifier.modifier().value, min_value=modifier.min_value()
+            modifier=modifier.modifier, min_value=modifier.min_value
         )
 
 
@@ -28,22 +28,17 @@ class ReadFeatSchema:
     increase_modifiers: Sequence[str]
 
     @staticmethod
-    def from_domain(feat: Feat) -> "ReadFeatSchema":
+    def from_app(feat: AppFeat) -> "ReadFeatSchema":
         return ReadFeatSchema(
-            feat_id=feat.feat_id(),
-            name=feat.name(),
-            description=feat.description(),
-            caster=feat.caster(),
-            required_armor_types=[
-                armor_type.value for armor_type in feat.required_armor_types()
-            ],
+            feat_id=feat.feat_id,
+            name=feat.name,
+            description=feat.description,
+            caster=feat.caster,
+            required_armor_types=feat.required_armor_types,
             required_modifiers=[
-                FeatRequiredModifierSchema.from_domain(modifier)
-                for modifier in feat.required_modifiers()
+                FeatRequiredModifierSchema.from_app(m) for m in feat.required_modifiers
             ],
-            increase_modifiers=[
-                modifier.value for modifier in feat.increase_modifiers()
-            ],
+            increase_modifiers=feat.increase_modifiers,
         )
 
 

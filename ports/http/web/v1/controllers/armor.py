@@ -29,7 +29,7 @@ class ArmorController(Controller):
         self, armor_id: UUID, use_cases: ArmorUseCases
     ) -> ReadArmorSchema:
         armor = await use_cases.get_one.execute(ArmorQuery(armor_id=armor_id))
-        return ReadArmorSchema.from_domain(armor)
+        return ReadArmorSchema.from_app(armor)
 
     @get()
     async def get_armors(
@@ -45,7 +45,7 @@ class ArmorController(Controller):
             filter_by_material_ids=filter_by_material_ids,
         )
         armors = await use_cases.get_all.execute(query)
-        return [ReadArmorSchema.from_domain(armor) for armor in armors]
+        return [ReadArmorSchema.from_app(armor) for armor in armors]
 
     @post()
     async def create_armor(
@@ -68,4 +68,4 @@ class ArmorController(Controller):
 
     @get("/types")
     async def get_armor_types(self) -> ReadArmorTypeSchema:
-        return ReadArmorTypeSchema.from_domain()
+        return ReadArmorTypeSchema.from_app()

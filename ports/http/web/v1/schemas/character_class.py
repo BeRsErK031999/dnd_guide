@@ -2,7 +2,11 @@ from dataclasses import dataclass
 from typing import Sequence
 from uuid import UUID
 
-from domain.character_class import CharacterClass, ClassHits, ClassProficiencies
+from application.dto.model.character_class import (
+    AppClass,
+    AppClassHits,
+    AppClassProficiencies,
+)
 from ports.http.web.v1.schemas.dice import DiceSchema
 
 
@@ -14,12 +18,12 @@ class ClassHitsSchema:
     next_level_hits: int
 
     @staticmethod
-    def from_domain(hits: ClassHits) -> "ClassHitsSchema":
+    def from_app(hits: AppClassHits) -> "ClassHitsSchema":
         return ClassHitsSchema(
-            hit_dice=DiceSchema.from_domain(hits.dice()),
-            starting_hits=hits.starting(),
-            hit_modifier=hits.modifier().value,
-            next_level_hits=hits.standard_next_level(),
+            hit_dice=DiceSchema.from_app(hits.hit_dice),
+            starting_hits=hits.starting_hits,
+            hit_modifier=hits.hit_modifier,
+            next_level_hits=hits.next_level_hits,
         )
 
 
@@ -34,15 +38,15 @@ class ClassProficienciesSchema:
     number_tools: int
 
     @staticmethod
-    def from_domain(proficiencies: ClassProficiencies) -> "ClassProficienciesSchema":
+    def from_app(proficiencies: AppClassProficiencies) -> "ClassProficienciesSchema":
         return ClassProficienciesSchema(
-            armors=proficiencies.armors(),
-            weapons=proficiencies.weapons(),
-            tools=proficiencies.tools(),
-            saving_throws=proficiencies.saving_throws(),
-            skills=proficiencies.skills(),
-            number_skills=proficiencies.number_skills(),
-            number_tools=proficiencies.number_tools(),
+            armors=proficiencies.armors,
+            weapons=proficiencies.weapons,
+            tools=proficiencies.tools,
+            saving_throws=proficiencies.saving_throws,
+            skills=proficiencies.skills,
+            number_skills=proficiencies.number_skills,
+            number_tools=proficiencies.number_tools,
         )
 
 
@@ -58,18 +62,18 @@ class ReadClassSchema:
     source_id: UUID
 
     @staticmethod
-    def from_domain(character_class: CharacterClass) -> "ReadClassSchema":
+    def from_app(character_class: AppClass) -> "ReadClassSchema":
         return ReadClassSchema(
-            class_id=character_class.class_id(),
-            name=character_class.name(),
-            description=character_class.description(),
-            primary_modifiers=character_class.primary_modifiers(),
-            hits=ClassHitsSchema.from_domain(character_class.hits()),
-            proficiencies=ClassProficienciesSchema.from_domain(
-                character_class.proficiency()
+            class_id=character_class.class_id,
+            name=character_class.name,
+            description=character_class.description,
+            primary_modifiers=character_class.primary_modifiers,
+            hits=ClassHitsSchema.from_app(character_class.hits),
+            proficiencies=ClassProficienciesSchema.from_app(
+                character_class.proficiencies
             ),
-            name_in_english=character_class.name_in_english(),
-            source_id=character_class.source_id(),
+            name_in_english=character_class.name_in_english,
+            source_id=character_class.source_id,
         )
 
 

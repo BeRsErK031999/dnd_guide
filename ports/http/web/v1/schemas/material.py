@@ -1,8 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 
-from domain.material import Material
-from litestar.dto import DataclassDTO
+from application.dto.model.material import AppMaterial
 
 
 @dataclass
@@ -12,11 +11,11 @@ class ReadMaterialSchema:
     description: str
 
     @staticmethod
-    def from_domain(material: Material) -> "ReadMaterialSchema":
+    def from_app(material: AppMaterial) -> "ReadMaterialSchema":
         return ReadMaterialSchema(
-            material_id=material.material_id(),
-            name=material.name(),
-            description=material.description(),
+            material_id=material.material_id,
+            name=material.name,
+            description=material.description,
         )
 
 

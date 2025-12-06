@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
-from domain.creature_size import CreatureSize
+from application.dto.model.creature_size import AppCreatureSize
 
 
 @dataclass
@@ -13,7 +13,5 @@ class ReadCreatureSizeSchema:
     gargantuan: str
 
     @staticmethod
-    def from_domain() -> "ReadCreatureSizeSchema":
-        return ReadCreatureSizeSchema(
-            **{size.name.lower(): size.value for size in CreatureSize}
-        )
+    def from_app() -> "ReadCreatureSizeSchema":
+        return ReadCreatureSizeSchema(**asdict(AppCreatureSize.from_domain()))

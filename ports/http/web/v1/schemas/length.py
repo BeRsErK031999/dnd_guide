@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
-from domain.length import Length, LengthUnit
+from application.dto.model.length import AppLength, AppLengthUnit
 
 
 @dataclass
@@ -9,8 +9,8 @@ class ReadLengthUnitSchema:
     m: str
 
     @staticmethod
-    def from_domain() -> "ReadLengthUnitSchema":
-        return ReadLengthUnitSchema(ft=LengthUnit.FT.value, m=LengthUnit.M.value)
+    def from_app() -> "ReadLengthUnitSchema":
+        return ReadLengthUnitSchema(**asdict(AppLengthUnit.from_domain()))
 
 
 @dataclass
@@ -19,5 +19,5 @@ class LengthSchema:
     unit: str
 
     @staticmethod
-    def from_domain(length: Length) -> "LengthSchema":
-        return LengthSchema(count=length.in_ft(), unit=LengthUnit.FT.value)
+    def from_app(length: AppLength) -> "LengthSchema":
+        return LengthSchema(count=length.count, unit=length.unit)

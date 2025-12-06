@@ -1,11 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from typing import Sequence
 from uuid import UUID
 
-from domain.damage_type import DamageType
-from domain.game_time import GameTime
-from domain.length import Length
-from domain.spell import Spell, SpellComponents, SpellSchool
+from application.dto.model.spell import AppSpell, AppSpellComponents, AppSpellSchool
 from ports.http.web.v1.schemas.game_time import GameTimeSchema
 from ports.http.web.v1.schemas.length import LengthSchema
 
@@ -18,12 +15,12 @@ class SpellComponentsSchema:
     materials: list[UUID]
 
     @staticmethod
-    def from_domain(components: SpellComponents) -> "SpellComponentsSchema":
+    def from_app(components: AppSpellComponents) -> "SpellComponentsSchema":
         return SpellComponentsSchema(
-            verbal=components.verbal(),
-            symbolic=components.symbolic(),
-            material=components.material(),
-            materials=components.materials(),
+            verbal=components.verbal,
+            symbolic=components.symbolic,
+            material=components.material,
+            materials=components.materials,
         )
 
 
@@ -31,27 +28,15 @@ class SpellComponentsSchema:
 class SpellDurationSchema:
     game_time: GameTimeSchema | None
 
-    @staticmethod
-    def from_domain(duration: GameTime) -> "SpellDurationSchema":
-        return SpellDurationSchema(game_time=GameTimeSchema.from_domain(duration))
-
 
 @dataclass
 class SpellDamageTypeSchema:
     name: str | None
 
-    @staticmethod
-    def from_domain(damage_type: DamageType) -> "SpellDamageTypeSchema":
-        return SpellDamageTypeSchema(name=damage_type.value)
-
 
 @dataclass
 class SplashSchema:
     splash: LengthSchema | None
-
-    @staticmethod
-    def from_domain(splash: Length) -> "SplashSchema":
-        return SplashSchema(splash=LengthSchema.from_domain(splash))
 
 
 @dataclass
@@ -67,9 +52,7 @@ class ReadSpellSchoolSchema:
 
     @staticmethod
     def from_domain() -> "ReadSpellSchoolSchema":
-        return ReadSpellSchoolSchema(
-            **{school.name.lower(): school.value for school in SpellSchool}
-        )
+        return ReadSpellSchoolSchema(**asdict(AppSpellSchool.from_domain()))
 
 
 @dataclass
@@ -82,11 +65,11 @@ class ReadSpellSchema:
     next_level_description: str
     level: int
     school: str
-    damage_type: SpellDamageTypeSchema | None
-    duration: SpellDurationSchema | None
+    damage_type: str | None
+    duration: GameTimeSchema | None
     casting_time: GameTimeSchema
     spell_range: LengthSchema
-    splash: SplashSchema | None
+    splash: LengthSchema | None
     components: SpellComponentsSchema
     concentration: bool
     ritual: bool
@@ -95,38 +78,35 @@ class ReadSpellSchema:
     source_id: UUID
 
     @staticmethod
-    def from_domain(spell: Spell) -> "ReadSpellSchema":
-        damage_type = spell.damage_type()
-        duration = spell.duration()
-        splash = spell.splash()
+    def from_app(spell: AppSpell) -> "ReadSpellSchema":
         return ReadSpellSchema(
-            spell_id=spell.spell_id(),
-            class_ids=spell.class_ids(),
-            subclass_ids=spell.subclass_ids(),
-            name=spell.name(),
-            description=spell.description(),
-            next_level_description=spell.next_level_description(),
-            level=spell.level(),
-            school=spell.school().value,
-            damage_type=(
-                SpellDamageTypeSchema.from_domain(damage_type)
-                if damage_type is not None
-                else None
-            ),
+            spell_id=spell.spell_id,
+            class_ids=spell.class_ids,
+            subclass_ids=spell.subclass_ids,
+            name=spell.name,
+            description=spell.description,
+            next_level_description=spell.next_level_description,
+            level=spell.level,
+            school=spell.school,
+            damage_type=spell.damage_type,
             duration=(
-                SpellDurationSchema.from_domain(duration)
-                if duration is not None
+                GameTimeSchema.from_app(spell.duration)
+                if spell.duration is not None
                 else None
             ),
-            casting_time=GameTimeSchema.from_domain(spell.casting_time()),
-            spell_range=LengthSchema.from_domain(spell.spell_range()),
-            splash=SplashSchema.from_domain(splash) if splash is not None else None,
-            components=SpellComponentsSchema.from_domain(spell.components()),
-            concentration=spell.concentration(),
-            ritual=spell.ritual(),
-            saving_throws=spell.saving_throws(),
-            name_in_english=spell.name_in_english(),
-            source_id=spell.source_id(),
+            casting_time=GameTimeSchema.from_app(spell.casting_time),
+            spell_range=LengthSchema.from_app(spell.spell_range),
+            splash=(
+                LengthSchema.from_app(spell.splash)
+                if spell.splash is not None
+                else None
+            ),
+            components=SpellComponentsSchema.from_app(spell.components),
+            concentration=spell.concentration,
+            ritual=spell.ritual,
+            saving_throws=spell.saving_throws,
+            name_in_english=spell.name_in_english,
+            source_id=spell.source_id,
         )
 
 

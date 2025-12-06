@@ -28,7 +28,7 @@ class SourceController(Controller):
         self, source_id: UUID, use_cases: SourceUseCases
     ) -> ReadSourceSchema:
         source = await use_cases.get_one.execute(SourceQuery(source_id=source_id))
-        return ReadSourceSchema.from_domain(source)
+        return ReadSourceSchema.from_app(source)
 
     @get()
     async def get_sources(
@@ -36,7 +36,7 @@ class SourceController(Controller):
     ) -> list[ReadSourceSchema]:
         query = SourcesQuery(search_by_name=search_by_name)
         sources = await use_cases.get_all.execute(query)
-        return [ReadSourceSchema.from_domain(source) for source in sources]
+        return [ReadSourceSchema.from_app(source) for source in sources]
 
     @post()
     async def create_source(

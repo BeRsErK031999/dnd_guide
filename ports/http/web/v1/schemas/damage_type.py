@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
-from domain.damage_type import DamageType
+from application.dto.model.damage_type import AppDamageType
 
 
 @dataclass
@@ -20,10 +20,5 @@ class ReadDamageTypeSchema:
     thunder: str
 
     @staticmethod
-    def from_domain() -> "ReadDamageTypeSchema":
-        return ReadDamageTypeSchema(
-            **{
-                damage_type.name.lower(): damage_type.value
-                for damage_type in DamageType
-            }
-        )
+    def from_app() -> "ReadDamageTypeSchema":
+        return ReadDamageTypeSchema(**asdict(AppDamageType.from_domain()))
