@@ -19,32 +19,32 @@ class ClassHits:
             raise DomainError.invalid_data(
                 "количество хитов при увеличении уровня не может быть меньше 1"
             )
-        self.__dice = hit_dice
-        self.__starting = starting_hits
-        self.__modifier = hit_modifier
-        self.__next_level = next_level_hits
+        self._dice = hit_dice
+        self._starting = starting_hits
+        self._modifier = hit_modifier
+        self._next_level = next_level_hits
 
     def dice(self) -> Dice:
-        return self.__dice
+        return self._dice
 
     def starting(self) -> int:
-        return self.__starting
+        return self._starting
 
     def modifier(self) -> Modifier:
-        return self.__modifier
+        return self._modifier
 
     def random_next_level(self) -> Dice:
-        return self.__dice
+        return self._dice
 
     def standard_next_level(self) -> int:
-        return self.__next_level
+        return self._next_level
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
             return (
-                self.__dice == value.__dice
-                and self.__starting == value.__starting
-                and self.__modifier == value.__modifier
-                and self.__next_level == value.__next_level
+                self._dice == value._dice
+                and self._starting == value._starting
+                and self._modifier == value._modifier
+                and self._next_level == value._next_level
             )
         raise NotImplemented

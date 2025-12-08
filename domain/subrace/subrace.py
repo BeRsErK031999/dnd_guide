@@ -18,55 +18,55 @@ class Subrace(EntityName, EntityDescription, EntityNameInEnglish):
         features: Sequence[SubraceFeature],
         name_in_english: str,
     ) -> None:
-        self.__validate_features(features)
-        self.__validate_increase_modifiers(increase_modifiers)
+        self._validate_features(features)
+        self._validate_increase_modifiers(increase_modifiers)
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
         EntityNameInEnglish.__init__(self, name_in_english)
-        self.__subrace_id = subrace_id
-        self.__race_id = race_id
-        self.__increase_modifiers = list(increase_modifiers)
-        self.__features = list(features)
+        self._subrace_id = subrace_id
+        self._race_id = race_id
+        self._increase_modifiers = list(increase_modifiers)
+        self._features = list(features)
 
     def subrace_id(self) -> UUID:
-        return self.__subrace_id
+        return self._subrace_id
 
     def race_id(self) -> UUID:
-        return self.__race_id
+        return self._race_id
 
     def increase_modifiers(self) -> list[SubraceIncreaseModifier]:
-        return self.__increase_modifiers
+        return self._increase_modifiers
 
     def features(self) -> list[SubraceFeature]:
-        return self.__features
+        return self._features
 
     def new_race_id(self, race_id: UUID) -> None:
-        if self.__race_id == race_id:
+        if self._race_id == race_id:
             raise DomainError.idempotent("текущая раса ровна новой расе")
-        self.__race_id = race_id
+        self._race_id = race_id
 
     def new_increase_modifiers(
         self, increase_modifiers: Sequence[SubraceIncreaseModifier]
     ) -> None:
-        self.__validate_increase_modifiers(increase_modifiers)
-        self.__increase_modifiers = list(increase_modifiers)
+        self._validate_increase_modifiers(increase_modifiers)
+        self._increase_modifiers = list(increase_modifiers)
 
     def new_features(self, features: Sequence[SubraceFeature]) -> None:
-        self.__validate_features(features)
-        self.__features = list(features)
+        self._validate_features(features)
+        self._features = list(features)
 
     def add_features(self, features: Sequence[SubraceFeature]) -> None:
         if len(features) == 0:
             raise DomainError.invalid_data(
                 "список для добавления умений не может быть пустым"
             )
-        self.__validate_features(features)
+        self._validate_features(features)
         for feature in features:
-            if feature in self.__features:
+            if feature in self._features:
                 raise DomainError.invalid_data(
                     f"умение с названием {feature.name()} уже существует"
                 )
-        self.__features.extend(features)
+        self._features.extend(features)
 
     def remove_features(self, feature_names: Sequence[str]) -> None:
         if len(feature_names) == 0:
@@ -74,19 +74,19 @@ class Subrace(EntityName, EntityDescription, EntityNameInEnglish):
                 "список названий для удаления умений не может быть пустым"
             )
         removing_indexes = list()
-        for i, feature in enumerate(self.__features):
+        for i, feature in enumerate(self._features):
             if feature.name() in feature_names:
                 removing_indexes.append(i)
-        [self.__features.pop(i) for i in removing_indexes]
+        [self._features.pop(i) for i in removing_indexes]
 
-    def __validate_features(self, features: Sequence[SubraceFeature]) -> None:
+    def _validate_features(self, features: Sequence[SubraceFeature]) -> None:
         if len(features) == 0:
             return
         temp = [feature.name() for feature in features]
         if len(temp) != len(set(temp)):
             raise DomainError.invalid_data("умения содержат дубликаты")
 
-    def __validate_increase_modifiers(
+    def _validate_increase_modifiers(
         self, increase_modifiers: Sequence[SubraceIncreaseModifier]
     ) -> None:
         if len(increase_modifiers) == 0:
@@ -100,11 +100,11 @@ class Subrace(EntityName, EntityDescription, EntityNameInEnglish):
             )
 
     def __str__(self) -> str:
-        return self.__name
+        return self._name
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__subrace_id == value.__subrace_id
+            return self._subrace_id == value._subrace_id
         if isinstance(value, UUID):
-            return self.__subrace_id == value
+            return self._subrace_id == value
         raise NotImplemented

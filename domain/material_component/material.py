@@ -12,17 +12,17 @@ class MaterialComponent(EntityName, EntityDescription):
     ) -> None:
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
-        self.__material_id = material_id
+        self._material_id = material_id
 
     def material_id(self) -> UUID:
-        return self.__material_id
+        return self._material_id
 
     def __str__(self) -> str:
-        return self.__name
+        return self._name
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__material_id == value.__material_id
+            return self._material_id == value._material_id
         if isinstance(value, UUID):
-            return self.__material_id == value
+            return self._material_id == value
         raise NotImplemented

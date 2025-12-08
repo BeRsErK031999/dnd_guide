@@ -31,89 +31,89 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish, EntitySource):
         name_in_english: str,
         source_id: UUID,
     ) -> None:
-        self.__validate_features(features)
-        self.__validate_increase_modifiers(increase_modifiers)
+        self._validate_features(features)
+        self._validate_increase_modifiers(increase_modifiers)
         EntityName.__init__(self, name)
         EntityNameInEnglish.__init__(self, name_in_english)
         EntityDescription.__init__(self, description)
         EntitySource.__init__(self, source_id)
-        self.__race_id = race_id
-        self.__creature_type = creature_type
-        self.__creature_size = creature_size
-        self.__speed = speed
-        self.__age = age
-        self.__increase_modifiers = list(increase_modifiers)
-        self.__features = list(features)
+        self._race_id = race_id
+        self._creature_type = creature_type
+        self._creature_size = creature_size
+        self._speed = speed
+        self._age = age
+        self._increase_modifiers = list(increase_modifiers)
+        self._features = list(features)
 
     def race_id(self) -> UUID:
-        return self.__race_id
+        return self._race_id
 
     def creature_type(self) -> CreatureType:
-        return self.__creature_type
+        return self._creature_type
 
     def creature_size(self) -> CreatureSize:
-        return self.__creature_size
+        return self._creature_size
 
     def speed(self) -> RaceSpeed:
-        return self.__speed
+        return self._speed
 
     def age(self) -> RaceAge:
-        return self.__age
+        return self._age
 
     def increase_modifiers(self) -> list[RaceIncreaseModifier]:
-        return self.__increase_modifiers
+        return self._increase_modifiers
 
     def features(self) -> list[RaceFeature]:
-        return self.__features
+        return self._features
 
     def new_creature_type(self, creature_type: CreatureType) -> None:
-        if self.__creature_type == creature_type:
+        if self._creature_type == creature_type:
             raise DomainError.idempotent("текущий тип расы равен новому типу расы")
-        self.__creature_type = creature_type
+        self._creature_type = creature_type
 
     def new_creature_size(self, creature_size: CreatureSize) -> None:
-        if self.__creature_size == creature_size:
+        if self._creature_size == creature_size:
             raise DomainError.idempotent(
                 "текущий размер расы равен новому размеру расы"
             )
-        self.__creature_size = creature_size
+        self._creature_size = creature_size
 
     def new_speed(self, speed: RaceSpeed) -> None:
-        if self.__speed == speed:
+        if self._speed == speed:
             raise DomainError.idempotent(
                 "текущий скорость расы равен новому скорости расы"
             )
-        self.__speed = speed
+        self._speed = speed
 
     def new_age(self, age: RaceAge) -> None:
-        if self.__age == age:
+        if self._age == age:
             raise DomainError.idempotent(
                 "текущий возраст расы равен новому возрасту расы"
             )
-        self.__age = age
+        self._age = age
 
     def new_increase_modifiers(
         self, increase_modifiers: Sequence[RaceIncreaseModifier]
     ) -> None:
-        self.__validate_increase_modifiers(increase_modifiers)
-        self.__increase_modifiers = list(increase_modifiers)
+        self._validate_increase_modifiers(increase_modifiers)
+        self._increase_modifiers = list(increase_modifiers)
 
     def new_features(self, features: Sequence[RaceFeature]) -> None:
-        self.__validate_features(features)
-        self.__features = list(features)
+        self._validate_features(features)
+        self._features = list(features)
 
     def add_features(self, features: Sequence[RaceFeature]) -> None:
         if len(features) == 0:
             raise DomainError.invalid_data(
                 "список для добавления умений не может быть пустым"
             )
-        self.__validate_features(features)
+        self._validate_features(features)
         for feature in features:
-            if feature in self.__features:
+            if feature in self._features:
                 raise DomainError.invalid_data(
                     f"умение с названием {feature.name()} уже существует"
                 )
-        self.__features.extend(features)
+        self._features.extend(features)
 
     def remove_features(self, feature_names: Sequence[str]) -> None:
         if len(feature_names) == 0:
@@ -121,12 +121,12 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish, EntitySource):
                 "список названий для удаления умений не может быть пустым"
             )
         removing_indexes = list()
-        for i, feature in enumerate(self.__features):
+        for i, feature in enumerate(self._features):
             if feature.name() in feature_names:
                 removing_indexes.append(i)
-        [self.__features.pop(i) for i in removing_indexes]
+        [self._features.pop(i) for i in removing_indexes]
 
-    def __validate_increase_modifiers(
+    def _validate_increase_modifiers(
         self, increase_modifiers: Sequence[RaceIncreaseModifier]
     ) -> None:
         if len(increase_modifiers) == 0:
@@ -139,7 +139,7 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish, EntitySource):
                 "увеличения модификаторов расы содержат дубликаты"
             )
 
-    def __validate_features(self, features: Sequence[RaceFeature]) -> None:
+    def _validate_features(self, features: Sequence[RaceFeature]) -> None:
         if len(features) == 0:
             return
         temp = [feature.name() for feature in features]
@@ -147,11 +147,11 @@ class Race(EntityName, EntityDescription, EntityNameInEnglish, EntitySource):
             raise DomainError.invalid_data("умения расы содержат дубликаты")
 
     def __str__(self) -> str:
-        return self.__name
+        return self._name
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__race_id == value.__race_id
+            return self._race_id == value._race_id
         if isinstance(value, UUID):
-            return self.__race_id == value
+            return self._race_id == value
         raise NotImplemented

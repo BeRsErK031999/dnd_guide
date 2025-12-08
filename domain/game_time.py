@@ -36,16 +36,16 @@ class GameTime:
             raise DomainError.invalid_data(
                 "отрицательного количества времени не может быть"
             )
-        self.__count = count
-        self.__units = units
+        self._count = count
+        self._units = units
 
     def count(self) -> int:
-        return self.__count
+        return self._count
 
     def units(self) -> GameTimeUnit:
-        return self.__units
+        return self._units
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__count == value.__count and self.__units == value.__units
+            return self._count == value._count and self._units == value._units
         raise NotImplemented

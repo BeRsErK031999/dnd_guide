@@ -27,19 +27,19 @@ class Weight:
             raise DomainError.invalid_data("масса не может быть отрицательной")
         match unit:
             case WeightUnit.LB:
-                self.__count = count
+                self._count = count
             case WeightUnit.KG:
-                self.__count = 2.205 * count
+                self._count = 2.205 * count
             case _:
                 raise DomainError.invalid_data("неизвестная единица измерения массы")
 
     def in_lb(self) -> float:
-        return self.__count
+        return self._count
 
     def in_kg(self) -> float:
-        return self.__count / 2.205
+        return self._count / 2.205
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__count == value.__count
+            return self._count == value._count
         raise NotImplemented

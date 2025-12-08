@@ -23,24 +23,24 @@ class ArmorClass:
             raise DomainError.invalid_data(
                 "бонус от модификации должен находиться в диапазоне от 1 до 10"
             )
-        self.__base_class = base_class
-        self.__modifier = modifier
-        self.__max_modifier_bonus = max_modifier_bonus
+        self._base_class = base_class
+        self._modifier = modifier
+        self._max_modifier_bonus = max_modifier_bonus
 
     def base_class(self) -> int:
-        return self.__base_class
+        return self._base_class
 
     def modifier(self) -> Modifier | None:
-        return self.__modifier
+        return self._modifier
 
     def max_modifier_bonus(self) -> int | None:
-        return self.__max_modifier_bonus
+        return self._max_modifier_bonus
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
             return (
-                self.__base_class == value.__base_class
-                and self.__modifier == value.__modifier
-                and self.__max_modifier_bonus == value.__max_modifier_bonus
+                self._base_class == value._base_class
+                and self._modifier == value._modifier
+                and self._max_modifier_bonus == value._max_modifier_bonus
             )
         raise NotImplemented

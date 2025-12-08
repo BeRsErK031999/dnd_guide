@@ -14,46 +14,46 @@ class SubclassFeature(EntityName, EntityDescription, EntityNameInEnglish):
         level: int,
         name_in_english: str,
     ) -> None:
-        self.__validate_level(level)
+        self._validate_level(level)
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
         EntityNameInEnglish.__init__(self, name_in_english)
-        self.__feature_id = feature_id
-        self.__subclass_id = subclass_id
-        self.__level = level
+        self._feature_id = feature_id
+        self._subclass_id = subclass_id
+        self._level = level
 
     def feature_id(self) -> UUID:
-        return self.__feature_id
+        return self._feature_id
 
     def subclass_id(self) -> UUID:
-        return self.__subclass_id
+        return self._subclass_id
 
     def level(self) -> int:
-        return self.__level
+        return self._level
 
     def new_subclass_id(self, subclass_id: UUID) -> None:
-        if self.__subclass_id == subclass_id:
+        if self._subclass_id == subclass_id:
             raise DomainError.idempotent("текущий подкласс равен новому")
-        self.__subclass_id = subclass_id
+        self._subclass_id = subclass_id
 
     def new_level(self, level: int) -> None:
-        if self.__level == level:
+        if self._level == level:
             raise DomainError.idempotent("текущее уровень умения равен новому")
-        self.__validate_level(level)
-        self.__level = level
+        self._validate_level(level)
+        self._level = level
 
-    def __validate_level(self, level: int) -> None:
+    def _validate_level(self, level: int) -> None:
         if level < 1 or level > 20:
             raise DomainError.invalid_data(
                 "уровень умения должен находиться в диапазоне от 1 до 20"
             )
 
     def __str__(self) -> str:
-        return self.__name
+        return self._name
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__feature_id == value.__feature_id
+            return self._feature_id == value._feature_id
         if isinstance(value, UUID):
-            return self.__feature_id == value
+            return self._feature_id == value
         raise NotImplemented

@@ -12,37 +12,37 @@ class Source(EntityDescription):
         description: str,
         name_in_english: str,
     ) -> None:
-        self.__validate_name_in_english(name_in_english)
-        self.__validate_name(name)
+        self._validate_name_in_english(name_in_english)
+        self._validate_name(name)
         EntityDescription.__init__(self, description)
-        self.__source_id = source_id
-        self.__name = name
-        self.__name_in_english = name_in_english
+        self._source_id = source_id
+        self._name = name
+        self._name_in_english = name_in_english
 
     def source_id(self) -> UUID:
-        return self.__source_id
+        return self._source_id
 
     def name(self) -> str:
-        return self.__name
+        return self._name
 
     def name_in_english(self) -> str:
-        return self.__name_in_english
+        return self._name_in_english
 
     def new_name(self, name: str) -> None:
-        if self.__name == name:
+        if self._name == name:
             raise DomainError.idempotent("текущее название равно новому названию")
-        self.__validate_name(name)
-        self.__name = name
+        self._validate_name(name)
+        self._name = name
 
     def new_name_in_english(self, name_in_english: str) -> None:
-        if self.__name_in_english == name_in_english:
+        if self._name_in_english == name_in_english:
             raise DomainError.idempotent(
                 "текущее название на английском равно новому названию на английском"
             )
-        self.__validate_name_in_english(name_in_english)
-        self.__name_in_english = name_in_english
+        self._validate_name_in_english(name_in_english)
+        self._name_in_english = name_in_english
 
-    def __validate_name(self, name: str) -> None:
+    def _validate_name(self, name: str) -> None:
         if len(name) == 0:
             raise DomainError.invalid_data("название не может быть пустым")
         if len(name) > 100:
@@ -50,18 +50,18 @@ class Source(EntityDescription):
                 "название не может содержать более 100 символов"
             )
 
-    def __validate_name_in_english(self, name_in_english: str) -> None:
+    def _validate_name_in_english(self, name_in_english: str) -> None:
         if len(name_in_english) > 100:
             raise DomainError.invalid_data(
                 "название на английском не может содержать более 100 символов"
             )
 
     def __str__(self) -> str:
-        return self.__name
+        return self._name
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__source_id == value.__source_id
+            return self._source_id == value._source_id
         if isinstance(value, UUID):
-            return self.__source_id == value
+            return self._source_id == value
         raise NotImplemented

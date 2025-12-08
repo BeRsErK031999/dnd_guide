@@ -38,34 +38,34 @@ class Coins:
             )
         match piece_type:
             case PieceType.COPPER:
-                self.__count = count
+                self._count = count
             case PieceType.SILVER:
-                self.__count = count * 10
+                self._count = count * 10
             case PieceType.ELECTRUM:
-                self.__count = count * 50
+                self._count = count * 50
             case PieceType.GOLD:
-                self.__count = count * 100
+                self._count = count * 100
             case PieceType.PLATINUM:
-                self.__count = count * 1000
+                self._count = count * 1000
             case _:
                 raise DomainError.invalid_data("неизвестный тип монет")
 
     def in_copper(self) -> int:
-        return self.__count
+        return self._count
 
     def in_silver(self) -> float:
-        return self.__count / 10
+        return self._count / 10
 
     def in_electrum(self) -> float:
-        return self.__count / 50
+        return self._count / 50
 
     def in_gold(self) -> float:
-        return self.__count / 100
+        return self._count / 100
 
     def in_platinum(self) -> float:
-        return self.__count / 1_000
+        return self._count / 1_000
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__count == value.__count
+            return self._count == value._count
         raise NotImplemented

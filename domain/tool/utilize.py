@@ -9,22 +9,21 @@ class ToolUtilize:
             raise DomainError.invalid_data(
                 "сложность действия должна находиться в диапазоне от 0 до 20"
             )
-        self.__action = action
-        self.__complexity = complexity
+        self._action = action
+        self._complexity = complexity
 
     def action(self) -> str:
-        return self.__action
+        return self._action
 
     def complexity(self) -> int:
-        return self.__complexity
+        return self._complexity
 
     def __str__(self) -> str:
-        return f"{self.__action} (сложность {self.__complexity})"
+        return f"{self._action} (сложность {self._complexity})"
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
             return (
-                self.__action == value.__action
-                and self.__complexity == value.__complexity
+                self._action == value._action and self._complexity == value._complexity
             )
         raise NotImplemented

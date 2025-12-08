@@ -9,15 +9,12 @@ class ClassLevelDice(ValueDescription):
         dice_description: str,
     ) -> None:
         ValueDescription.__init__(self, dice_description)
-        self.__dice = dice
+        self._dice = dice
 
     def dice(self) -> Dice:
-        return self.__dice
+        return self._dice
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return (
-                self.__dice == value.__dice
-                and self.__description == value.__description
-            )
+            return self._dice == value._dice and self._description == value._description
         raise NotImplemented

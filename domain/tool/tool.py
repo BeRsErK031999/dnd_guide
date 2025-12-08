@@ -20,50 +20,50 @@ class Tool(EntityName, EntityDescription):
         weight: Weight,
         utilizes: Sequence[ToolUtilize],
     ) -> None:
-        self.__validate_utilizes(utilizes)
+        self._validate_utilizes(utilizes)
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
-        self.__tool_id = tool_id
-        self.__tool_type = tool_type
-        self.__cost = cost
-        self.__weight = weight
-        self.__utilizes = list(utilizes)
+        self._tool_id = tool_id
+        self._tool_type = tool_type
+        self._cost = cost
+        self._weight = weight
+        self._utilizes = list(utilizes)
 
     def tool_id(self) -> UUID:
-        return self.__tool_id
+        return self._tool_id
 
     def tool_type(self) -> ToolType:
-        return self.__tool_type
+        return self._tool_type
 
     def cost(self) -> Coins:
-        return self.__cost
+        return self._cost
 
     def weight(self) -> Weight:
-        return self.__weight
+        return self._weight
 
     def utilizes(self) -> list[ToolUtilize]:
-        return self.__utilizes
+        return self._utilizes
 
     def new_tool_type(self, tool_type: ToolType) -> None:
-        if self.__tool_type == tool_type:
+        if self._tool_type == tool_type:
             raise DomainError.idempotent("текущий тип инструментов равен новому типу")
-        self.__tool_type = tool_type
+        self._tool_type = tool_type
 
     def new_cost(self, cost: Coins) -> None:
-        if self.__cost == cost:
+        if self._cost == cost:
             raise DomainError.idempotent("текущая цена инструментов ровна новой цене")
-        self.__cost = cost
+        self._cost = cost
 
     def new_weight(self, weight: Weight) -> None:
-        if self.__weight == weight:
+        if self._weight == weight:
             raise DomainError.idempotent("текущая масса инструментов ровна новой массе")
-        self.__weight = weight
+        self._weight = weight
 
     def new_utilizes(self, utilizes: Sequence[ToolUtilize]) -> None:
-        self.__validate_utilizes(utilizes)
-        self.__utilizes = list(utilizes)
+        self._validate_utilizes(utilizes)
+        self._utilizes = list(utilizes)
 
-    def __validate_utilizes(self, utilizes: Sequence[ToolUtilize]) -> None:
+    def _validate_utilizes(self, utilizes: Sequence[ToolUtilize]) -> None:
         if len(utilizes) == 0:
             return
         temp = [utilize.action() for utilize in utilizes]
@@ -71,11 +71,11 @@ class Tool(EntityName, EntityDescription):
             raise DomainError.invalid_data("действия содержат дубликаты")
 
     def __str__(self) -> str:
-        return self.__name
+        return self._name
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__tool_id == value.__tool_id
+            return self._tool_id == value._tool_id
         if isinstance(value, UUID):
-            return self.__tool_id == value
+            return self._tool_id == value
         raise NotImplemented

@@ -8,16 +8,16 @@ class SubraceIncreaseModifier:
             raise DomainError.invalid_data(
                 "бонус модификатора для подрасы должен находиться в диапазоне от 1 до 5"
             )
-        self.__modifier = modifier
-        self.__bonus = bonus
+        self._modifier = modifier
+        self._bonus = bonus
 
     def modifier(self) -> Modifier:
-        return self.__modifier
+        return self._modifier
 
     def bonus(self) -> int:
-        return self.__bonus
+        return self._bonus
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__modifier == value.__modifier and self.__bonus == value.__bonus
+            return self._modifier == value._modifier and self._bonus == value._bonus
         raise NotImplemented

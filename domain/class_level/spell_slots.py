@@ -10,12 +10,12 @@ class ClassLevelSpellSlots:
             raise DomainError.invalid_data(
                 "количество ячеек заклинаний должно быть равно 5 или 9"
             )
-        self.__spell_slots = list(spell_slots)
+        self._spell_slots = list(spell_slots)
 
     def slots(self) -> list[int]:
-        return self.__spell_slots
+        return self._spell_slots
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__spell_slots == value.__spell_slots
+            return self._spell_slots == value._spell_slots
         raise NotImplemented

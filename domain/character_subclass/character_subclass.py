@@ -16,26 +16,26 @@ class CharacterSubclass(EntityName, EntityDescription, EntityNameInEnglish):
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
         EntityNameInEnglish.__init__(self, name_in_english)
-        self.__subclass_id = subclass_id
-        self.__class_id = class_id
+        self._subclass_id = subclass_id
+        self._class_id = class_id
 
     def subclass_id(self) -> UUID:
-        return self.__subclass_id
+        return self._subclass_id
 
     def class_id(self) -> UUID:
-        return self.__class_id
+        return self._class_id
 
     def new_class_id(self, class_id: UUID) -> None:
-        if self.__class_id == class_id:
+        if self._class_id == class_id:
             raise DomainError.idempotent("текущий класс равен новому")
-        self.__class_id = class_id
+        self._class_id = class_id
 
     def __str__(self) -> str:
-        return self.__name
+        return self._name
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__subclass_id == value.__subclass_id
+            return self._subclass_id == value._subclass_id
         if isinstance(value, UUID):
-            return self.__subclass_id == value
+            return self._subclass_id == value
         raise NotImplemented

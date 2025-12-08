@@ -24,102 +24,102 @@ class Armor(EntityName, EntityDescription):
     ) -> None:
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
-        self.__validate_strength(strength)
-        self.__armor_id = armor_id
-        self.__armor_type = armor_type
-        self.__armor_class = armor_class
-        self.__strength = strength
-        self.__stealth = stealth
-        self.__weight = weight
-        self.__cost = cost
-        self.__material_id = material_id
+        self._validate_strength(strength)
+        self._armor_id = armor_id
+        self._armor_type = armor_type
+        self._armor_class = armor_class
+        self._strength = strength
+        self._stealth = stealth
+        self._weight = weight
+        self._cost = cost
+        self._material_id = material_id
 
     def armor_id(self) -> UUID:
-        return self.__armor_id
+        return self._armor_id
 
     def armor_type(self) -> ArmorType:
-        return self.__armor_type
+        return self._armor_type
 
     def armor_class(self) -> ArmorClass:
-        return self.__armor_class
+        return self._armor_class
 
     def strength(self) -> int:
-        return self.__strength
+        return self._strength
 
     def stealth(self) -> bool:
-        return self.__stealth
+        return self._stealth
 
     def weight(self) -> Weight:
-        return self.__weight
+        return self._weight
 
     def cost(self) -> Coins:
-        return self.__cost
+        return self._cost
 
     def material_id(self) -> UUID:
-        return self.__material_id
+        return self._material_id
 
     def new_armor_type(self, armor_type: ArmorType) -> None:
-        if self.__armor_type == armor_type:
+        if self._armor_type == armor_type:
             raise DomainError.idempotent(
                 "текущий тип доспеха равен новому типу доспеха"
             )
-        self.__armor_type = armor_type
+        self._armor_type = armor_type
 
     def new_armor_class(self, armor_class: ArmorClass) -> None:
-        if self.__armor_class == armor_class:
+        if self._armor_class == armor_class:
             raise DomainError.idempotent(
                 "текущий класс доспеха равен новому классу доспеха"
             )
-        self.__armor_class = armor_class
+        self._armor_class = armor_class
 
     def new_strength(self, strength: int) -> None:
-        if self.__strength == strength:
+        if self._strength == strength:
             raise DomainError.idempotent(
                 "текущее требование к силе доспеха равно новому требованию к силе доспеха"
             )
-        self.__validate_strength(strength)
-        self.__strength = strength
+        self._validate_strength(strength)
+        self._strength = strength
 
     def new_stealth(self, stealth: bool) -> None:
-        if self.__stealth == stealth:
+        if self._stealth == stealth:
             raise DomainError.idempotent(
                 "текущая помеха доспеха равно новой помехе доспеха"
             )
-        self.__stealth = stealth
+        self._stealth = stealth
 
     def new_weight(self, weight: Weight) -> None:
-        if self.__weight == weight:
+        if self._weight == weight:
             raise DomainError.idempotent(
                 "текущая масса доспеха равна новой массе доспеха"
             )
-        self.__weight = weight
+        self._weight = weight
 
     def new_cost(self, cost: Coins) -> None:
-        if self.__cost == cost:
+        if self._cost == cost:
             raise DomainError.idempotent(
                 "текущая стоимость доспеха равна новой стоимости доспеха"
             )
-        self.__cost = cost
+        self._cost = cost
 
     def new_material_id(self, material_id: UUID) -> None:
-        if self.__material_id == material_id:
+        if self._material_id == material_id:
             raise DomainError.idempotent(
                 "текущий материал доспеха равен новому материалу доспеха"
             )
-        self.__material_id = material_id
+        self._material_id = material_id
 
-    def __validate_strength(self, strength: int) -> None:
+    def _validate_strength(self, strength: int) -> None:
         if strength < 0 or strength > 20:
             raise DomainError.invalid_data(
                 "модификатор силы для доспехов должен находиться в диапазоне от 0 до 20"
             )
 
     def __str__(self) -> str:
-        return self.__name
+        return self._name
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__armor_id == value.__armor_id
+            return self._armor_id == value._armor_id
         if isinstance(value, UUID):
-            return self.__armor_id == value
+            return self._armor_id == value
         raise NotImplemented

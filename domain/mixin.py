@@ -6,13 +6,13 @@ from domain.error import DomainError
 
 class ValueName:
     def __init__(self, name: str) -> None:
-        self.__validate_name(name)
-        self.__name = name
+        self._validate_name(name)
+        self._name = name
 
     def name(self) -> str:
-        return self.__name
+        return self._name
 
-    def __validate_name(self, name: str) -> None:
+    def _validate_name(self, name: str) -> None:
         if len(name) == 0:
             raise DomainError.invalid_data("название не может быть пустым")
         if len(name) > 50:
@@ -23,19 +23,19 @@ class ValueName:
 
 class EntityName(ValueName):
     def __init__(self, name: str) -> None:
-        self.__validate_name(name)
-        self.__name = name
+        self._validate_name(name)
+        self._name = name
 
     def name(self) -> str:
-        return self.__name
+        return self._name
 
     def new_name(self, name: str) -> None:
-        if self.__name == name:
+        if self._name == name:
             raise DomainError.idempotent("текущее название равно новому названию")
-        self.__validate_name(name)
-        self.__name = name
+        self._validate_name(name)
+        self._name = name
 
-    def __validate_name(self, name: str) -> None:
+    def _validate_name(self, name: str) -> None:
         if len(name) == 0:
             raise DomainError.invalid_data("название не может быть пустым")
         if len(name) > 50:
@@ -46,13 +46,13 @@ class EntityName(ValueName):
 
 class ValueNameInEnglish:
     def __init__(self, name_in_english: str) -> None:
-        self.__validate_name_in_english(name_in_english)
-        self.__name_in_english = name_in_english
+        self._validate_name_in_english(name_in_english)
+        self._name_in_english = name_in_english
 
     def name_in_english(self) -> str:
-        return self.__name_in_english
+        return self._name_in_english
 
-    def __validate_name_in_english(self, name_in_english: str) -> None:
+    def _validate_name_in_english(self, name_in_english: str) -> None:
         if len(name_in_english) > 50:
             raise DomainError.invalid_data(
                 "название на английском не может содержать более 50 символов"
@@ -61,21 +61,21 @@ class ValueNameInEnglish:
 
 class EntityNameInEnglish(ValueNameInEnglish):
     def __init__(self, name_in_english: str) -> None:
-        self.__validate_name_in_english(name_in_english)
-        self.__name_in_english = name_in_english
+        self._validate_name_in_english(name_in_english)
+        self._name_in_english = name_in_english
 
     def name_in_english(self) -> str:
-        return self.__name_in_english
+        return self._name_in_english
 
     def new_name_in_english(self, name_in_english: str) -> None:
-        if self.__name_in_english == name_in_english:
+        if self._name_in_english == name_in_english:
             raise DomainError.idempotent(
                 "текущее название на английском равно новому названию на английском"
             )
-        self.__validate_name_in_english(name_in_english)
-        self.__name_in_english = name_in_english
+        self._validate_name_in_english(name_in_english)
+        self._name_in_english = name_in_english
 
-    def __validate_name_in_english(self, name_in_english: str) -> None:
+    def _validate_name_in_english(self, name_in_english: str) -> None:
         if len(name_in_english) > 50:
             raise DomainError.invalid_data(
                 "название на английском не может содержать более 50 символов"
@@ -84,42 +84,43 @@ class EntityNameInEnglish(ValueNameInEnglish):
 
 class ValueDescription:
     def __init__(self, description: str) -> None:
-        self.__validate_description(description)
-        self.__description = description
+        self._validate_description(description)
+        self._description = description
 
     def description(self) -> str:
-        return self.__description
+        return self._description
 
-    def __validate_description(self, description: str) -> None:
+    def _validate_description(self, description: str) -> None:
         if len(description) == 0:
             raise DomainError.invalid_data("описание не может быть пустым")
 
 
 class EntityDescription:
     def __init__(self, description: str) -> None:
-        self.__validate_description(description)
-        self.__description = description
+        self._validate_description(description)
+        self._description = description
 
     def description(self) -> str:
-        return self.__description
+        return self._description
 
     def new_description(self, description: str) -> None:
-        self.__validate_description(description)
-        self.__description = description
+        self._validate_description(description)
+        self._description = description
 
-    def __validate_description(self, description: str) -> None:
+    def _validate_description(self, description: str) -> None:
         if len(description) == 0:
             raise DomainError.invalid_data("описание не может быть пустым")
 
 
 class EntitySource:
     def __init__(self, source_id: UUID) -> None:
-        self.__source_id = source_id
+        self._source_id = source_id
 
     def source_id(self) -> UUID:
-        return self.__source_id
+        return self._source_id
 
     def new_source_id(self, source_id: UUID) -> None:
-        if self.__source_id == source_id:
+        if self._source_id == source_id:
             raise DomainError.idempotent("текущий источник равен новому")
-        self.__source_id = source_id
+        self._source_id = source_id
+        self._source_id = source_id

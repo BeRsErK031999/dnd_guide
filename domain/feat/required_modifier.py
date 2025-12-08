@@ -9,19 +9,19 @@ class FeatRequiredModifier:
                 "минимальное значение требуемых модификаторов должно находиться в "
                 "диапазоне от 1 до 20"
             )
-        self.__modifier = modifier
-        self.__min_value = min_value
+        self._modifier = modifier
+        self._min_value = min_value
 
     def modifier(self) -> Modifier:
-        return self.__modifier
+        return self._modifier
 
     def min_value(self) -> int:
-        return self.__min_value
+        return self._min_value
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
             return (
-                self.__min_value == value.__min_value
-                and self.__modifier == value.__modifier
+                self._min_value == value._min_value
+                and self._modifier == value._modifier
             )
         raise NotImplemented

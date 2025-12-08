@@ -12,8 +12,5 @@ class RaceFeature(ValueName, ValueDescription):
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return (
-                self.__name == value.__name
-                and self.__description == value.__description
-            )
+            return self._name == value._name and self._description == value._description
         raise NotImplemented

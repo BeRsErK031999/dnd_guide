@@ -9,15 +9,14 @@ class ClassLevelIncreaseSpeed(ValueDescription):
         description: str,
     ) -> None:
         ValueDescription.__init__(self, description)
-        self.__speed = speed
+        self._speed = speed
 
     def speed(self) -> Length:
-        return self.__speed
+        return self._speed
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
             return (
-                self.__speed == value.__speed
-                and self.__description == value.__description
+                self._speed == value._speed and self._description == value._description
             )
         raise NotImplemented

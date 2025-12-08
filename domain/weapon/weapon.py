@@ -21,85 +21,85 @@ class Weapon(EntityName, EntityDescription):
         weapon_property_ids: Sequence[UUID],
         material_id: UUID,
     ) -> None:
-        self.__validate_property_ids(weapon_property_ids)
+        self._validate_property_ids(weapon_property_ids)
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
-        self.__weapon_id = weapon_id
-        self.__kind_id = weapon_kind_id
-        self.__cost = cost
-        self.__damage = damage
-        self.__weight = weight
-        self.__property_ids = list(weapon_property_ids)
-        self.__material_id = material_id
+        self._weapon_id = weapon_id
+        self._kind_id = weapon_kind_id
+        self._cost = cost
+        self._damage = damage
+        self._weight = weight
+        self._property_ids = list(weapon_property_ids)
+        self._material_id = material_id
 
     def weapon_id(self) -> UUID:
-        return self.__weapon_id
+        return self._weapon_id
 
     def kind_id(self) -> UUID:
-        return self.__kind
+        return self._kind_id
 
     def cost(self) -> Coins:
-        return self.__cost
+        return self._cost
 
     def damage(self) -> WeaponDamage:
-        return self.__damage
+        return self._damage
 
     def weight(self) -> Weight:
-        return self.__weight
+        return self._weight
 
     def property_ids(self) -> list[UUID]:
-        return self.__property_ids
+        return self._property_ids
 
     def material_id(self) -> UUID:
-        return self.__material_id
+        return self._material_id
 
     def new_kind_id(self, kind: UUID) -> None:
-        if self.__kind == kind:
+        if self._kind_id == kind:
             raise DomainError.idempotent("текущий вид оружия равен новому виду")
-        self.__kind = kind
+        self._kind_id = kind
 
     def new_cost(self, cost: Coins) -> None:
-        if self.__cost == cost:
+        if self._cost == cost:
             raise DomainError.idempotent("текущая цена оружия равна новой цене")
-        self.__cost = cost
+        self._cost = cost
 
     def new_damage(self, damage: WeaponDamage) -> None:
-        if self.__damage == damage:
+        if self._damage == damage:
             raise DomainError.idempotent("текущий урон оружия равен новому урону")
-        self.__damage = damage
+        self._damage = damage
 
     def new_weight(self, weight: Weight) -> None:
-        if self.__weight == weight:
+        if self._weight == weight:
             raise DomainError.idempotent("текущая масса оружия равна новой массе")
-        self.__weight = weight
+        self._weight = weight
 
     def new_property_ids(self, property_ids: Sequence[UUID]) -> None:
-        if self.__property_ids == property_ids:
+        if self._property_ids == property_ids:
             raise DomainError.idempotent(
                 "текущие свойства оружия равны новым свойствам"
             )
-        self.__validate_property_ids(property_ids)
-        self.__property_ids = list(property_ids)
+        self._validate_property_ids(property_ids)
+        self._property_ids = list(property_ids)
 
     def new_material_id(self, material_id: UUID) -> None:
-        if self.__material_id == material_id:
+        if self._material_id == material_id:
             raise DomainError.idempotent(
                 "текущий материал оружия равен новому материалу"
             )
-        self.__material_id = material_id
+        self._material_id = material_id
 
-    def __validate_property_ids(self, properties: Sequence[UUID]) -> None:
+    def _validate_property_ids(self, properties: Sequence[UUID]) -> None:
         if len(properties) == 0:
             return
         if len(properties) != len(set(properties)):
             raise DomainError.invalid_data("свойства содержат дубликаты")
 
     def __str__(self) -> str:
-        return self.__name
+        return self._name
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__weapon_id == value.__weapon_id
+            return self._weapon_id == value._weapon_id
         if isinstance(value, UUID):
-            return self.__weapon_id == value
+            return self._weapon_id == value
         raise NotImplemented

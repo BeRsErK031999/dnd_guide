@@ -39,21 +39,19 @@ class Dice:
     def __init__(self, count: int, dice_type: DiceType) -> None:
         if count < 1:
             raise DomainError.invalid_data("количество костей не может быть меньше 1")
-        self.__count = count
-        self.__dice_type = dice_type
+        self._count = count
+        self._dice_type = dice_type
 
     def count(self) -> int:
-        return self.__count
+        return self._count
 
     def dice_type(self) -> DiceType:
-        return self.__dice_type
+        return self._dice_type
 
     def __str__(self) -> str:
-        return f"{self.__count}{self.__dice_type.name.lower()}"
+        return f"{self._count}{self._dice_type.name.lower()}"
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return (
-                self.__count == value.__count and self.__dice_type == value.__dice_type
-            )
+            return self._count == value._count and self._dice_type == value._dice_type
         raise NotImplemented

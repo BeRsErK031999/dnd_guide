@@ -23,114 +23,114 @@ class ClassLevel:
         bonus_damage: ClassLevelBonusDamage | None,
         increase_speed: ClassLevelIncreaseSpeed | None,
     ) -> None:
-        self.__validate_level(level)
-        self.__level_id = level_id
-        self.__class_id = class_id
-        self.__level = level
-        self.__dice = dice
-        self.__spell_slots = spell_slots
-        self.__number_cantrips_know = number_cantrips_know
-        self.__number_spells_know = number_spells_know
-        self.__number_arcanums_know = number_arcanums_know
-        self.__points = points
-        self.__bonus_damage = bonus_damage
-        self.__increase_speed = increase_speed
+        self._validate_level(level)
+        self._level_id = level_id
+        self._class_id = class_id
+        self._level = level
+        self._dice = dice
+        self._spell_slots = spell_slots
+        self._number_cantrips_know = number_cantrips_know
+        self._number_spells_know = number_spells_know
+        self._number_arcanums_know = number_arcanums_know
+        self._points = points
+        self._bonus_damage = bonus_damage
+        self._increase_speed = increase_speed
 
     def level_id(self) -> UUID:
-        return self.__level_id
+        return self._level_id
 
     def class_id(self) -> UUID:
-        return self.__class_id
+        return self._class_id
 
     def level(self) -> int:
-        return self.__level
+        return self._level
 
     def dice(self) -> ClassLevelDice | None:
-        return self.__dice
+        return self._dice
 
     def spell_slots(self) -> ClassLevelSpellSlots | None:
-        return self.__spell_slots
+        return self._spell_slots
 
     def number_cantrips_know(self) -> int | None:
-        return self.__number_cantrips_know
+        return self._number_cantrips_know
 
     def number_spells_know(self) -> int | None:
-        return self.__number_spells_know
+        return self._number_spells_know
 
     def number_arcanums_know(self) -> int | None:
-        return self.__number_arcanums_know
+        return self._number_arcanums_know
 
     def points(self) -> ClassLevelPoints | None:
-        return self.__points
+        return self._points
 
     def bonus_damage(self) -> ClassLevelBonusDamage | None:
-        return self.__bonus_damage
+        return self._bonus_damage
 
     def increase_speed(self) -> ClassLevelIncreaseSpeed | None:
-        return self.__increase_speed
+        return self._increase_speed
 
     def new_class_id(self, class_id: UUID) -> None:
-        if self.__class_id == class_id:
+        if self._class_id == class_id:
             raise DomainError.idempotent("текущий класс равен новому")
-        self.__class_id = class_id
+        self._class_id = class_id
 
     def new_level(self, level: int) -> None:
-        if self.__level == level:
+        if self._level == level:
             raise DomainError.idempotent("текущий уровень равен новому")
-        self.__validate_level(level)
-        self.__level = level
+        self._validate_level(level)
+        self._level = level
 
     def new_dice(self, dice: ClassLevelDice | None) -> None:
-        if self.__dice == dice:
+        if self._dice == dice:
             raise DomainError.idempotent(
                 "текущие особенности связанные с костью равны новым"
             )
-        self.__dice = dice
+        self._dice = dice
 
     def new_spell_slots(self, spell_slots: ClassLevelSpellSlots | None) -> None:
-        if self.__spell_slots == spell_slots:
+        if self._spell_slots == spell_slots:
             raise DomainError.idempotent("текущие ячейки заклинаний равны новым")
-        self.__spell_slots = spell_slots
+        self._spell_slots = spell_slots
 
     def new_number_cantrips_know(self, number_cantrips_know: int | None) -> None:
-        if self.__number_cantrips_know == number_cantrips_know:
+        if self._number_cantrips_know == number_cantrips_know:
             raise DomainError.idempotent(
                 "количество текущих известных заговоров равно новым"
             )
-        self.__number_cantrips_know = number_cantrips_know
+        self._number_cantrips_know = number_cantrips_know
 
     def new_number_spells_know(self, number_spells_know: int | None) -> None:
-        if self.__number_spells_know == number_spells_know:
+        if self._number_spells_know == number_spells_know:
             raise DomainError.idempotent(
                 "количество текущих известных заклинаний равны новым"
             )
-        self.__number_spells_know = number_spells_know
+        self._number_spells_know = number_spells_know
 
     def new_number_arcanums_know(self, number_arcanums_know: int | None) -> None:
-        if self.__number_arcanums_know == number_arcanums_know:
+        if self._number_arcanums_know == number_arcanums_know:
             raise DomainError.idempotent(
                 "количество текущих известных воззваний равны новым"
             )
-        self.__number_arcanums_know = number_arcanums_know
+        self._number_arcanums_know = number_arcanums_know
 
     def new_points(self, points: ClassLevelPoints | None) -> None:
-        if self.__points == points:
+        if self._points == points:
             raise DomainError.idempotent("текущие бонусные очки равны новым")
-        self.__points = points
+        self._points = points
 
     def new_bonus_damage(self, bonus_damage: ClassLevelBonusDamage | None) -> None:
-        if self.__bonus_damage == bonus_damage:
+        if self._bonus_damage == bonus_damage:
             raise DomainError.idempotent("текущий бонусный урон равен новому")
-        self.__bonus_damage = bonus_damage
+        self._bonus_damage = bonus_damage
 
     def new_increase_speed(
         self, increase_speed: ClassLevelIncreaseSpeed | None
     ) -> None:
-        if self.__increase_speed == increase_speed:
+        if self._increase_speed == increase_speed:
             raise DomainError.idempotent("текущее увеличение скорости равно новому")
-        self.__increase_speed = increase_speed
+        self._increase_speed = increase_speed
 
-    def __validate_level(self, level: int) -> None:
+    def _validate_level(self, level: int) -> None:
         if level < 1 or level > 20:
             raise DomainError.invalid_data(
                 "уровень класса должен находиться в диапазоне от 1 до 20"
@@ -138,7 +138,7 @@ class ClassLevel:
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__level_id == value.__level_id
+            return self._level_id == value._level_id
         if isinstance(value, UUID):
-            return self.__level_id == value
+            return self._level_id == value
         raise NotImplemented

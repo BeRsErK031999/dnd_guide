@@ -1,4 +1,4 @@
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 
 from application.dto.model.skill import AppSkill, AppSkills
 
@@ -36,9 +36,24 @@ class ReadSkillSchema:
 
     @staticmethod
     def from_app() -> "ReadSkillSchema":
+        app_skills = AppSkills.from_domain()
         return ReadSkillSchema(
-            **{
-                skill: SkillSchema.from_app(st)
-                for skill, st in asdict(AppSkills.from_domain()).items()
-            }
+            acrobatics=SkillSchema.from_app(app_skills.acrobatics),
+            athletics=SkillSchema.from_app(app_skills.athletics),
+            perception=SkillSchema.from_app(app_skills.perception),
+            survival=SkillSchema.from_app(app_skills.survival),
+            animal_handling=SkillSchema.from_app(app_skills.animal_handling),
+            intimidation=SkillSchema.from_app(app_skills.intimidation),
+            performance=SkillSchema.from_app(app_skills.performance),
+            history=SkillSchema.from_app(app_skills.history),
+            sleight_of_hand=SkillSchema.from_app(app_skills.sleight_of_hand),
+            arcana=SkillSchema.from_app(app_skills.arcana),
+            medicine=SkillSchema.from_app(app_skills.medicine),
+            deception=SkillSchema.from_app(app_skills.deception),
+            nature=SkillSchema.from_app(app_skills.nature),
+            insight=SkillSchema.from_app(app_skills.insight),
+            investigation=SkillSchema.from_app(app_skills.investigation),
+            religion=SkillSchema.from_app(app_skills.religion),
+            stealth=SkillSchema.from_app(app_skills.stealth),
+            persuasion=SkillSchema.from_app(app_skills.persuasion),
         )

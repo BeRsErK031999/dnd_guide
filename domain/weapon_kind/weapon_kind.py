@@ -15,26 +15,26 @@ class WeaponKind(EntityName, EntityDescription):
     ) -> None:
         EntityName.__init__(self, name)
         EntityDescription.__init__(self, description)
-        self.__weapon_kind_id = weapon_kind_id
-        self.__weapon_type = weapon_type
+        self._weapon_kind_id = weapon_kind_id
+        self._weapon_type = weapon_type
 
     def weapon_kind_id(self) -> UUID:
-        return self.__weapon_kind_id
+        return self._weapon_kind_id
 
     def weapon_type(self) -> WeaponType:
-        return self.__weapon_type
+        return self._weapon_type
 
     def new_weapon_type(self, weapon_type: WeaponType) -> None:
-        if self.__weapon_type == weapon_type:
+        if self._weapon_type == weapon_type:
             raise DomainError.idempotent("текущий тип оружия идентичен новому типу")
-        self.__weapon_type = weapon_type
+        self._weapon_type = weapon_type
 
     def __str__(self) -> str:
-        return self.__name
+        return self._name
 
     def __eq__(self, value: object) -> bool:
         if isinstance(value, self.__class__):
-            return self.__weapon_kind_id == value.__weapon_kind_id
+            return self._weapon_kind_id == value._weapon_kind_id
         if isinstance(value, UUID):
-            return self.__weapon_kind_id == value
+            return self._weapon_kind_id == value
         raise NotImplemented
