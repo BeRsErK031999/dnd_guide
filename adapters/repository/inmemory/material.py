@@ -1,37 +1,39 @@
 from uuid import UUID, uuid4
 
+from application.dto.model.material import AppMaterial
 from application.repository import MaterialRepository as AppMaterialRepository
-from domain.material import Material
 from domain.material import MaterialRepository as DomainMaterialRepository
 
 
 class InMemoryMaterialRepository(DomainMaterialRepository, AppMaterialRepository):
     def __init__(self) -> None:
-        self.__store: dict[UUID, Material] = {}
+        self._store: dict[UUID, AppMaterial] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(material.name() == name for material in self.__store.values())
+        return any(material.name == name for material in self._store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()
 
     async def id_exists(self, material_id: UUID) -> bool:
-        return material_id in self.__store
+        return material_id in self._store
 
-    async def get_by_id(self, material_id: UUID) -> Material:
-        return self.__store[material_id]
+    async def get_by_id(self, material_id: UUID) -> AppMaterial:
+        return self._store[material_id]
 
-    async def get_all(self) -> list[Material]:
-        return list(self.__store.values())
+    async def get_all(self) -> list[AppMaterial]:
+        return list(self._store.values())
 
-    async def filter(self, search_by_name: str | None = None) -> list[Material]:
-        return await self.get_all()
+    async def filter(self, search_by_name: str | None = None) -> list[AppMaterial]:
+        if search_by_name is not None:
+            return [m for m in self._store.values() if search_by_name in m.name]
+        return list(self._store.values())
 
-    async def create(self, material: Material) -> None:
-        self.__store[material.material_id()] = material
+    async def create(self, material: AppMaterial) -> None:
+        self._store[material.material_id] = material
 
-    async def update(self, material: Material) -> None:
-        self.__store[material.material_id()] = material
+    async def update(self, material: AppMaterial) -> None:
+        self._store[material.material_id] = material
 
     async def delete(self, material_id: UUID) -> None:
-        del self.__store[material_id]
+        del self._store[material_id]

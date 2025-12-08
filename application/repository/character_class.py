@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from uuid import UUID
 
 from application.dto.model.character_class import AppClass
-from domain.character_class import CharacterClass
 
 
 class ClassRepository(ABC):

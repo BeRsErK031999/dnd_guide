@@ -1,9 +1,9 @@
 from uuid import UUID, uuid4
 
+from application.dto.model.material_component import AppMaterialComponent
 from application.repository import (
     MaterialComponentRepository as AppMaterialComponentRepository,
 )
-from domain.material_component import MaterialComponent
 from domain.material_component import (
     MaterialComponentRepository as DomainMaterialComponentRepository,
 )
@@ -13,28 +13,35 @@ class InMemoryMaterialComponentRepository(
     DomainMaterialComponentRepository, AppMaterialComponentRepository
 ):
     def __init__(self) -> None:
-        self.__store: dict[UUID, MaterialComponent] = {}
+        self._store: dict[UUID, AppMaterialComponent] = {}
 
     async def name_exists(self, name: str) -> bool:
-        return any(material.name() == name for material in self.__store.values())
+        return any(material.name == name for material in self._store.values())
 
     async def next_id(self) -> UUID:
         return uuid4()
 
     async def id_exists(self, material_id: UUID) -> bool:
-        return material_id in self.__store
+        return material_id in self._store
 
-    async def get_by_id(self, material_id: UUID) -> MaterialComponent:
-        return self.__store[material_id]
+    async def get_by_id(self, material_id: UUID) -> AppMaterialComponent:
+        return self._store[material_id]
 
-    async def get_all(self) -> list[MaterialComponent]:
-        return list(self.__store.values())
+    async def get_all(self) -> list[AppMaterialComponent]:
+        return list(self._store.values())
 
-    async def create(self, material: MaterialComponent) -> None:
-        self.__store[material.material_id()] = material
+    async def filter(
+        self, search_by_name: str | None = None
+    ) -> list[AppMaterialComponent]:
+        if search_by_name is not None:
+            return [m for m in self._store.values() if search_by_name in m.name]
+        return list(self._store.values())
 
-    async def update(self, material: MaterialComponent) -> None:
-        self.__store[material.material_id()] = material
+    async def create(self, material: AppMaterialComponent) -> None:
+        self._store[material.material_id] = material
+
+    async def update(self, material: AppMaterialComponent) -> None:
+        self._store[material.material_id] = material
 
     async def delete(self, material_id: UUID) -> None:
-        del self.__store[material_id]
+        del self._store[material_id]
