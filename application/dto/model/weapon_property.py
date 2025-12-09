@@ -6,6 +6,11 @@ from domain.weapon_property import WeaponProperty, WeaponPropertyName
 from .dice import AppDice
 from .length import AppLength
 
+__all__ = [
+    "AppWeaponProperty",
+    "AppWeaponPropertyName",
+]
+
 
 @dataclass
 class AppWeaponPropertyName:

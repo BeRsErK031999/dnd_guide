@@ -5,6 +5,14 @@ from uuid import UUID
 from application.dto.command.dice import DiceCommand
 from domain.error import DomainError
 
+__all__ = [
+    "ClassHitsCommand",
+    "ClassProficienciesCommand",
+    "CreateClassCommand",
+    "UpdateClassCommand",
+    "DeleteClassCommand",
+]
+
 
 @dataclass
 class ClassHitsCommand:

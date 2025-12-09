@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from domain.coin import Coins, PieceType
 
+__all__ = ["AppCoins", "AppPieceType"]
+
 
 @dataclass
 class AppPieceType:

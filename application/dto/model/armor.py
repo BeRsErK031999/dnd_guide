@@ -7,6 +7,8 @@ from domain.modifier import Modifier
 from .coin import AppCoins
 from .weight import AppWeight
 
+__all__ = ["AppArmorType", "AppArmorClass", "AppArmor"]
+
 
 @dataclass
 class AppArmorType:

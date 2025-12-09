@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from domain.damage_type import DamageType
 
+__all__ = ["AppDamageType"]
+
 
 @dataclass
 class AppDamageType:

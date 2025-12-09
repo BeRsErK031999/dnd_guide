@@ -3,6 +3,8 @@ from uuid import UUID
 
 from domain.material_component import MaterialComponent
 
+__all__ = ["AppMaterialComponent"]
+
 
 @dataclass
 class AppMaterialComponent:

@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from domain.dice import Dice, DiceType
 
+__all__ = ["AppDice", "AppDiceType"]
+
 
 @dataclass
 class AppDiceType:

@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from domain.modifier import Modifier
 
+__all__ = ["AppModifier"]
+
 
 @dataclass
 class AppModifier:

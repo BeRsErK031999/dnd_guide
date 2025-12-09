@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from domain.skill import Skill
 
+__all__ = ["AppSkill", "AppSkills"]
+
 
 @dataclass
 class AppSkill:

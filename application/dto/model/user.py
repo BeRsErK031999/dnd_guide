@@ -3,6 +3,8 @@ from uuid import UUID
 
 from domain.user import User
 
+__all__ = ["AppUser"]
+
 
 @dataclass
 class AppUser:

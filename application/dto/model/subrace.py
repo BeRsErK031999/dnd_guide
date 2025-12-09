@@ -5,6 +5,8 @@ from uuid import UUID
 from domain.modifier import Modifier
 from domain.subrace import Subrace, SubraceFeature, SubraceIncreaseModifier
 
+__all__ = ["AppSubrace", "AppSubraceFeature", "AppSubraceIncreaseModifier"]
+
 
 @dataclass
 class AppSubraceFeature:

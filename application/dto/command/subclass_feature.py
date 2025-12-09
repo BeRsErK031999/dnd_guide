@@ -3,6 +3,12 @@ from uuid import UUID
 
 from domain.error import DomainError
 
+__all__ = [
+    "CreateSubclassFeatureCommand",
+    "UpdateSubclassFeatureCommand",
+    "DeleteSubclassFeatureCommand",
+]
+
 
 @dataclass
 class CreateSubclassFeatureCommand:

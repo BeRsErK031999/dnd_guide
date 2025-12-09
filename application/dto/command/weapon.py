@@ -7,6 +7,13 @@ from application.dto.command.dice import DiceCommand
 from application.dto.command.weight import WeightCommand
 from domain.error import DomainError
 
+__all__ = [
+    "WeaponDamageCommand",
+    "CreateWeaponCommand",
+    "UpdateWeaponCommand",
+    "DeleteWeaponCommand",
+]
+
 
 @dataclass
 class WeaponDamageCommand:

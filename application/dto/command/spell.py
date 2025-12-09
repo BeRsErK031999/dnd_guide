@@ -6,6 +6,16 @@ from application.dto.command.game_time import GameTimeCommand
 from application.dto.command.length import LengthCommand
 from domain.error import DomainError
 
+__all__ = [
+    "SpellComponentsCommand",
+    "SpellDurationCommand",
+    "SpellDamageTypeCommand",
+    "SplashCommand",
+    "CreateSpellCommand",
+    "UpdateSpellCommand",
+    "DeleteSpellCommand",
+]
+
 
 @dataclass
 class SpellComponentsCommand:

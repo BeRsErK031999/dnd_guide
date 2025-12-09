@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from domain.creature_size import CreatureSize
 
+__all__ = ["AppCreatureSize"]
+
 
 @dataclass
 class AppCreatureSize:

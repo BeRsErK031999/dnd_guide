@@ -5,6 +5,13 @@ from application.dto.command.coin import CoinCommand
 from application.dto.command.weight import WeightCommand
 from domain.error import DomainError
 
+__all__ = [
+    "ArmorClassCommand",
+    "CreateArmorCommand",
+    "UpdateArmorCommand",
+    "DeleteArmorCommand",
+]
+
 
 @dataclass
 class ArmorClassCommand:

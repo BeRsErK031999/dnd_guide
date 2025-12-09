@@ -4,6 +4,15 @@ from uuid import UUID
 from application.dto.command.dice import DiceCommand
 from application.dto.command.length import LengthCommand
 
+__all__ = [
+    "WeaponPropertyBaseRangeCommand",
+    "WeaponPropertyMaxRangeCommand",
+    "WeaponPropertySecondHandDiceCommand",
+    "CreateWeaponPropertyCommand",
+    "UpdateWeaponPropertyCommand",
+    "DeleteWeaponPropertyCommand",
+]
+
 
 @dataclass
 class WeaponPropertyBaseRangeCommand:

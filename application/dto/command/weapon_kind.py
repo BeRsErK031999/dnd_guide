@@ -3,6 +3,12 @@ from uuid import UUID
 
 from domain.error import DomainError
 
+__all__ = [
+    "CreateWeaponKindCommand",
+    "UpdateWeaponKindCommand",
+    "DeleteWeaponKindCommand",
+]
+
 
 @dataclass
 class CreateWeaponKindCommand:

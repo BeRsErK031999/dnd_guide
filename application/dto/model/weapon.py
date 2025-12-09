@@ -9,6 +9,8 @@ from .coin import AppCoins
 from .dice import AppDice
 from .weight import AppWeight
 
+__all__ = ["AppWeapon", "AppWeaponDamage"]
+
 
 @dataclass
 class AppWeaponDamage:

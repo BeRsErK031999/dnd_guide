@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from domain.length import Length, LengthUnit
 
+__all__ = ["AppLength", "AppLengthUnit"]
+
 
 @dataclass
 class AppLengthUnit:

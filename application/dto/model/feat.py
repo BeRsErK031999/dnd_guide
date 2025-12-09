@@ -6,6 +6,8 @@ from domain.armor.armor_type import ArmorType
 from domain.feat import Feat, FeatRequiredModifier
 from domain.modifier import Modifier
 
+__all__ = ["AppFeat", "AppFeatRequiredModifier"]
+
 
 @dataclass
 class AppFeatRequiredModifier:

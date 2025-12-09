@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+__all__ = ["ClassLevelQuery", "ClassLevelsQuery"]
+
 
 @dataclass
 class ClassLevelQuery:

@@ -13,6 +13,14 @@ from domain.class_level.spell_slots import ClassLevelSpellSlots
 from .dice import AppDice
 from .length import AppLength
 
+__all__ = [
+    "AppClassLevel",
+    "AppClassLevelDice",
+    "AppClassLevelPoints",
+    "AppClassLevelBonusDamage",
+    "AppClassLevelIncreaseSpeed",
+]
+
 
 @dataclass
 class AppClassLevelDice:

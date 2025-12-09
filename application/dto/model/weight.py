@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from domain.weight import Weight, WeightUnit
 
+__all__ = ["AppWeight", "AppWeightUnit"]
+
 
 @dataclass
 class AppWeightUnit:

@@ -6,16 +6,16 @@ from application.repository import UserRepository
 
 class InMemoryUserRepository(UserRepository):
     def __init__(self) -> None:
-        self.__store: dict[UUID, AppUser] = {}
+        self._store: dict[UUID, AppUser] = {}
 
     async def id_exists(self, user_id: UUID) -> bool:
-        return user_id in self.__store
+        return user_id in self._store
 
     async def get_all(self) -> list[AppUser]:
-        return list(self.__store.values())
+        return list(self._store.values())
 
     async def create(self, user: AppUser) -> None:
-        self.__store[user.user_id] = user
+        self._store[user.user_id] = user
 
     async def delete(self, user_id: UUID) -> None:
-        del self.__store[user_id]
+        del self._store[user_id]

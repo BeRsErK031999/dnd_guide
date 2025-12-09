@@ -3,6 +3,8 @@ from uuid import UUID
 
 from domain.source import Source
 
+__all__ = ["AppSource"]
+
 
 @dataclass
 class AppSource:

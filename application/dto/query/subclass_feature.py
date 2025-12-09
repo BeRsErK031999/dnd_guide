@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+__all__ = ["SubclassFeatureQuery", "SubclassFeaturesQuery"]
+
 
 @dataclass
 class SubclassFeatureQuery:

@@ -9,6 +9,8 @@ from domain.skill import Skill
 
 from .dice import AppDice
 
+__all__ = ["AppClass", "AppClassHits", "AppClassProficiencies"]
+
 
 @dataclass
 class AppClassHits:

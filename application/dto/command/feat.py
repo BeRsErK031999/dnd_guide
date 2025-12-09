@@ -4,6 +4,13 @@ from uuid import UUID
 
 from domain.error import DomainError
 
+__all__ = [
+    "FeatRequiredModifierCommand",
+    "CreateFeatCommand",
+    "UpdateFeatCommand",
+    "DeleteFeatCommand",
+]
+
 
 @dataclass
 class FeatRequiredModifierCommand:

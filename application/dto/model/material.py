@@ -3,6 +3,8 @@ from uuid import UUID
 
 from domain.material import Material
 
+__all__ = ["AppMaterial"]
+
 
 @dataclass
 class AppMaterial:

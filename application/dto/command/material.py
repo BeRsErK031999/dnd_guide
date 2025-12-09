@@ -1,6 +1,12 @@
 from dataclasses import dataclass
 from uuid import UUID
 
+__all__ = [
+    "CreateMaterialCommand",
+    "UpdateMaterialCommand",
+    "DeleteMaterialCommand",
+]
+
 
 @dataclass
 class CreateMaterialCommand:

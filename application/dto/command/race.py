@@ -5,6 +5,16 @@ from uuid import UUID
 from application.dto.command.length import LengthCommand
 from domain.error import DomainError
 
+__all__ = [
+    "RaceFeatureCommand",
+    "RaceAgeCommand",
+    "RaceSpeedCommand",
+    "RaceIncreaseModifierCommand",
+    "CreateRaceCommand",
+    "UpdateRaceCommand",
+    "DeleteRaceCommand",
+]
+
 
 @dataclass
 class RaceFeatureCommand:

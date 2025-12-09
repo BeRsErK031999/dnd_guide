@@ -6,6 +6,16 @@ from application.dto.command.dice import DiceCommand
 from application.dto.command.length import LengthCommand
 from domain.error import DomainError
 
+__all__ = [
+    "ClassLevelDiceCommand",
+    "ClassLevelPointsCommand",
+    "ClassLevelBonusDamageCommand",
+    "ClassLevelIncreaseSpeedCommand",
+    "CreateClassLevelCommand",
+    "UpdateClassLevelCommand",
+    "DeleteClassLevelCommand",
+]
+
 
 @dataclass
 class ClassLevelDiceCommand:

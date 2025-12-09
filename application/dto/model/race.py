@@ -9,6 +9,14 @@ from domain.race import Race, RaceAge, RaceFeature, RaceIncreaseModifier, RaceSp
 
 from .length import AppLength
 
+__all__ = [
+    "AppRace",
+    "AppRaceFeature",
+    "AppRaceAge",
+    "AppRaceSpeed",
+    "AppRaceIncreaseModifier",
+]
+
 
 @dataclass
 class AppRaceFeature:

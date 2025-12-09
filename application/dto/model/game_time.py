@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from domain.game_time import GameTime, GameTimeUnit
 
+__all__ = ["AppGameTime", "AppGameTimeUnit"]
+
 
 @dataclass
 class AppGameTimeUnit:

@@ -3,6 +3,8 @@ from uuid import UUID
 
 from domain.weapon_kind import WeaponKind, WeaponType
 
+__all__ = ["AppWeaponKind", "AppWeaponType"]
+
 
 @dataclass
 class AppWeaponType:

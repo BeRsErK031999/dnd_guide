@@ -3,6 +3,8 @@ from uuid import UUID
 
 from domain.character_subclass import CharacterSubclass
 
+__all__ = ["AppSubclass"]
+
 
 @dataclass
 class AppSubclass:
