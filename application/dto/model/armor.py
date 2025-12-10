@@ -35,7 +35,7 @@ class AppArmorClass:
         modifier = armor_class.modifier()
         return AppArmorClass(
             base_class=armor_class.base_class(),
-            modifier=modifier.value if modifier is not None else None,
+            modifier=modifier.name.lower() if modifier is not None else None,
             max_modifier_bonus=armor_class.max_modifier_bonus(),
         )
 
@@ -66,7 +66,7 @@ class AppArmor:
     def from_domain(armor: Armor) -> "AppArmor":
         return AppArmor(
             armor_id=armor.armor_id(),
-            armor_type=armor.armor_type().value,
+            armor_type=armor.armor_type().name.lower(),
             name=armor.name(),
             description=armor.description(),
             armor_class=AppArmorClass.from_domain(armor.armor_class()),

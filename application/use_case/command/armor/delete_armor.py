@@ -11,12 +11,12 @@ class DeleteArmorUseCase(UserCheck):
         armor_repository: ArmorRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__armor_repository = armor_repository
+        self._armor_repository = armor_repository
 
     async def execute(self, command: DeleteArmorCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__armor_repository.id_exists(command.armor_id):
+        if not await self._armor_repository.id_exists(command.armor_id):
             raise DomainError.not_found(
                 f"доспехов с id {command.armor_id} не существует"
             )
-        await self.__armor_repository.delete(command.armor_id)
+        await self._armor_repository.delete(command.armor_id)

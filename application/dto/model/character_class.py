@@ -24,7 +24,7 @@ class AppClassHits:
         return AppClassHits(
             hit_dice=AppDice.from_domain(hits.dice()),
             starting_hits=hits.starting(),
-            hit_modifier=hits.modifier().value,
+            hit_modifier=hits.modifier().name.lower(),
             next_level_hits=hits.standard_next_level(),
         )
 
@@ -50,11 +50,11 @@ class AppClassProficiencies:
     @staticmethod
     def from_domain(proficiencies: ClassProficiencies) -> "AppClassProficiencies":
         return AppClassProficiencies(
-            armors=proficiencies.armors(),
+            armors=[a.name.lower() for a in proficiencies.armors()],
             weapons=proficiencies.weapons(),
             tools=proficiencies.tools(),
-            saving_throws=proficiencies.saving_throws(),
-            skills=proficiencies.skills(),
+            saving_throws=[m.name.lower() for m in proficiencies.saving_throws()],
+            skills=[s.name.lower() for s in proficiencies.skills()],
             number_skills=proficiencies.number_skills(),
             number_tools=proficiencies.number_tools(),
         )
@@ -88,7 +88,9 @@ class AppClass:
             class_id=character_class.class_id(),
             name=character_class.name(),
             description=character_class.description(),
-            primary_modifiers=character_class.primary_modifiers(),
+            primary_modifiers=[
+                m.name.lower() for m in character_class.primary_modifiers()
+            ],
             hits=AppClassHits.from_domain(character_class.hits()),
             proficiencies=AppClassProficiencies.from_domain(
                 character_class.proficiency()

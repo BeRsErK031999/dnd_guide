@@ -139,7 +139,7 @@ async def test_create_name_exists(
             "user_id": user.user_id,
             "armor_type": ArmorType.LIGHT_ARMOR.name.lower(),
             "model_name": "armor_type",
-            "new_value": ArmorType.LIGHT_ARMOR.value,
+            "new_value": ArmorType.LIGHT_ARMOR.name.lower(),
         },
         {
             "user_id": user.user_id,

@@ -5,7 +5,7 @@ from application.repository import ClassRepository
 
 class GetClassesUseCase:
     def __init__(self, class_repository: ClassRepository):
-        self.__repository = class_repository
+        self._repository = class_repository
 
     async def execute(self, query: ClassesQuery) -> list[AppClass]:
-        return await self.__repository.filter(search_by_name=query.search_by_name)
+        return await self._repository.filter(search_by_name=query.search_by_name)

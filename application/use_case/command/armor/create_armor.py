@@ -20,22 +20,22 @@ class CreateArmorUseCase(UserCheck):
         material_repository: MaterialRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__armor_service = armor_service
-        self.__armor_repository = armor_repository
-        self.__material_repository = material_repository
+        self._armor_service = armor_service
+        self._armor_repository = armor_repository
+        self._material_repository = material_repository
 
     async def execute(self, command: CreateArmorCommand) -> UUID:
         await self._user_check(command.user_id)
-        if not await self.__armor_service.can_create_with_name(command.name):
+        if not await self._armor_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"не возможно создать доспехи с названием {command.name}"
             )
-        if not await self.__material_repository.id_exists(command.material_id):
+        if not await self._material_repository.id_exists(command.material_id):
             raise DomainError.invalid_data(
                 f"материал с id {command.material_id} не существует"
             )
         armor = Armor(
-            await self.__armor_repository.next_id(),
+            await self._armor_repository.next_id(),
             ArmorType.from_str(command.armor_type),
             command.name,
             command.description,
@@ -54,5 +54,5 @@ class CreateArmorUseCase(UserCheck):
             Coins(command.cost.count, PieceType.from_str(command.cost.piece_type)),
             command.material_id,
         )
-        await self.__armor_repository.create(AppArmor.from_domain(armor))
+        await self._armor_repository.create(AppArmor.from_domain(armor))
         return armor.armor_id()

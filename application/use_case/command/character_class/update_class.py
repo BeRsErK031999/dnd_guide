@@ -27,20 +27,23 @@ class UpdateClassUseCase(UserCheck):
         source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__class_service = class_service
-        self.__class_repository = class_repository
-        self.__weapon_repository = weapon_repository
-        self.__tool_repository = tool_repository
-        self.__source_repository = source_repository
+        self._class_service = class_service
+        self._class_repository = class_repository
+        self._weapon_repository = weapon_repository
+        self._tool_repository = tool_repository
+        self._source_repository = source_repository
 
     async def execute(self, command: UpdateClassCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__class_repository.id_exists(command.class_id):
+        if not await self._class_repository.id_exists(command.class_id):
             raise DomainError.not_found(f"класса с id {command.class_id} не существует")
-        app_changing_class = await self.__class_repository.get_by_id(command.class_id)
+        app_changing_class = await self._class_repository.get_by_id(command.class_id)
         changing_class = app_changing_class.to_domain()
         if command.name is not None:
-            await self.__class_service.can_rename_with_name(command.name)
+            if not await self._class_service.can_rename_with_name(command.name):
+                raise DomainError.invalid_data(
+                    f"класс с названием {command.name} уже существует"
+                )
             changing_class.new_name(command.name)
         if command.description is not None:
             changing_class.new_description(command.description)
@@ -62,12 +65,12 @@ class UpdateClassUseCase(UserCheck):
             )
         if command.proficiencies is not None:
             for weapon_id in command.proficiencies.weapons:
-                if not await self.__weapon_repository.id_exists(weapon_id):
+                if not await self._weapon_repository.id_exists(weapon_id):
                     raise DomainError.invalid_data(
                         f"оружия с id {weapon_id} не существует"
                     )
             for tool_id in command.proficiencies.tools:
-                if not await self.__tool_repository.id_exists(tool_id):
+                if not await self._tool_repository.id_exists(tool_id):
                     raise DomainError.invalid_data(
                         f"инструментов с id {tool_id} не существует"
                     )
@@ -91,9 +94,9 @@ class UpdateClassUseCase(UserCheck):
         if command.name_in_english is not None:
             changing_class.new_name_in_english(command.name_in_english)
         if command.source_id is not None:
-            if not await self.__source_repository.id_exists(command.source_id):
+            if not await self._source_repository.id_exists(command.source_id):
                 raise DomainError.invalid_data(
                     f"источник с id {command.source_id} не существует"
                 )
             changing_class.new_source_id(command.source_id)
-        await self.__class_repository.update(AppClass.from_domain(changing_class))
+        await self._class_repository.update(AppClass.from_domain(changing_class))

@@ -34,32 +34,32 @@ class CreateClassUseCase(UserCheck):
         source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__class_service = class_service
-        self.__class_repository = class_repository
-        self.__weapon_repository = weapon_repository
-        self.__tool_repository = tool_repository
-        self.__source_repository = source_repository
+        self._class_service = class_service
+        self._class_repository = class_repository
+        self._weapon_repository = weapon_repository
+        self._tool_repository = tool_repository
+        self._source_repository = source_repository
 
     async def execute(self, command: CreateClassCommand) -> UUID:
         await self._user_check(command.user_id)
-        if not await self.__class_service.can_create_with_name(command.name):
+        if not await self._class_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"класс с названием {command.name} уже существует"
             )
         for weapon_id in command.proficiencies.weapons:
-            if not await self.__weapon_repository.id_exists(weapon_id):
+            if not await self._weapon_repository.id_exists(weapon_id):
                 raise DomainError.invalid_data(f"оружия с id {weapon_id} не существует")
         for tool_id in command.proficiencies.tools:
-            if not await self.__tool_repository.id_exists(tool_id):
+            if not await self._tool_repository.id_exists(tool_id):
                 raise DomainError.invalid_data(
                     f"инструментов с id {tool_id} не существует"
                 )
-        if not await self.__source_repository.id_exists(command.source_id):
+        if not await self._source_repository.id_exists(command.source_id):
             raise DomainError.invalid_data(
                 f"источник с id {command.source_id} не существует"
             )
         new_class = CharacterClass(
-            await self.__class_repository.next_id(),
+            await self._class_repository.next_id(),
             command.name,
             command.description,
             [Modifier.from_str(modifier) for modifier in command.primary_modifiers],
@@ -90,5 +90,5 @@ class CreateClassUseCase(UserCheck):
             command.name_in_english,
             command.source_id,
         )
-        await self.__class_repository.create(AppClass.from_domain(new_class))
+        await self._class_repository.create(AppClass.from_domain(new_class))
         return new_class.class_id()

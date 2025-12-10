@@ -18,22 +18,22 @@ class UpdateArmorUseCase(UserCheck):
         material_repository: MaterialRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__armor_service = armor_service
-        self.__armor_repository = armor_repository
-        self.__material_repository = material_repository
+        self._armor_service = armor_service
+        self._armor_repository = armor_repository
+        self._material_repository = material_repository
 
     async def execute(self, command: UpdateArmorCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__armor_repository.id_exists(command.armor_id):
+        if not await self._armor_repository.id_exists(command.armor_id):
             raise DomainError.not_found(
                 f"доспехов с id {command.armor_id} не существует"
             )
-        app_armor = await self.__armor_repository.get_by_id(command.armor_id)
+        app_armor = await self._armor_repository.get_by_id(command.armor_id)
         armor = app_armor.to_domain()
         if command.armor_type is not None:
             armor.new_armor_type(ArmorType.from_str(command.armor_type))
         if command.name is not None:
-            if not await self.__armor_service.can_rename_with_name(command.name):
+            if not await self._armor_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
                     f"не возможно создать доспехи с названием {command.name}"
                 )
@@ -65,9 +65,9 @@ class UpdateArmorUseCase(UserCheck):
                 Coins(command.cost.count, PieceType.from_str(command.cost.piece_type))
             )
         if command.material_id is not None:
-            if not await self.__material_repository.id_exists(command.material_id):
+            if not await self._material_repository.id_exists(command.material_id):
                 raise DomainError.invalid_data(
                     f"материал с id {command.material_id} не существует"
                 )
             armor.new_material_id(command.material_id)
-        await self.__armor_repository.update(AppArmor.from_domain(armor))
+        await self._armor_repository.update(AppArmor.from_domain(armor))
