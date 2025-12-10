@@ -5,9 +5,9 @@ from application.repository import SubclassRepository
 
 class GetSubclassesUseCase:
     def __init__(self, subclass_repository: SubclassRepository):
-        self.__repository = subclass_repository
+        self._repository = subclass_repository
 
     async def execute(self, query: SubclassesQuery) -> list[AppSubclass]:
-        return await self.__repository.filter(
+        return await self._repository.filter(
             filter_by_class_id=query.filter_by_class_id
         )

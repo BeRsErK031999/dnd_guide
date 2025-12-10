@@ -17,26 +17,26 @@ class CreateSubclassUseCase(UserCheck):
         subclass_repository: SubclassRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__subclass_service = subclass_service
-        self.__class_repository = class_repository
-        self.__subclass_repository = subclass_repository
+        self._subclass_service = subclass_service
+        self._class_repository = class_repository
+        self._subclass_repository = subclass_repository
 
     async def execute(self, command: CreateSubclassCommand) -> UUID:
         await self._user_check(command.user_id)
-        if not await self.__subclass_service.can_create_with_name(command.name):
+        if not await self._subclass_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"подкласс с названием {command.name} уже существует"
             )
-        if not await self.__class_repository.id_exists(command.class_id):
+        if not await self._class_repository.id_exists(command.class_id):
             raise DomainError.invalid_data(
                 f"класса с id {command.class_id} не существует"
             )
         new_subclass = CharacterSubclass(
-            await self.__subclass_repository.next_id(),
+            await self._subclass_repository.next_id(),
             command.class_id,
             command.name,
             command.description,
             command.name_in_english,
         )
-        await self.__subclass_repository.create(AppSubclass.from_domain(new_subclass))
+        await self._subclass_repository.create(AppSubclass.from_domain(new_subclass))
         return new_subclass.subclass_id()
