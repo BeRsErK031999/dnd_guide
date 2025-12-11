@@ -5,10 +5,10 @@ from application.repository import SpellRepository
 
 class GetSpellsUseCase:
     def __init__(self, spell_repository: SpellRepository):
-        self.__repository = spell_repository
+        self._repository = spell_repository
 
     async def execute(self, query: SpellsQuery) -> list[AppSpell]:
-        return await self.__repository.filter(
+        return await self._repository.filter(
             search_by_name=query.search_by_name,
             filter_by_class_ids=query.filter_by_class_ids,
             filter_by_subclass_ids=query.filter_by_subclass_ids,

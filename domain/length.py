@@ -39,6 +39,8 @@ class Length:
         return self._count / 3.281
 
     def __eq__(self, value: object) -> bool:
+        if value is None:
+            return False
         if isinstance(value, self.__class__):
             return self._count == value._count
         raise NotImplemented

@@ -52,6 +52,8 @@ class Dice:
         return f"{self._count}{self._dice_type.name.lower()}"
 
     def __eq__(self, value: object) -> bool:
+        if value is None:
+            return False
         if isinstance(value, self.__class__):
             return self._count == value._count and self._dice_type == value._dice_type
         raise NotImplemented

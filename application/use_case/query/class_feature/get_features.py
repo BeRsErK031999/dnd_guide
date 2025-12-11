@@ -5,9 +5,9 @@ from application.repository import ClassFeatureRepository
 
 class GetClassFeaturesUseCase:
     def __init__(self, feature_repository: ClassFeatureRepository):
-        self.__repository = feature_repository
+        self._repository = feature_repository
 
     async def execute(self, query: ClassFeaturesQuery) -> list[AppClassFeature]:
-        return await self.__repository.filter(
+        return await self._repository.filter(
             filter_by_class_id=query.filter_by_class_id
         )

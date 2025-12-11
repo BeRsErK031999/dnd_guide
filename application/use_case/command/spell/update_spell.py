@@ -2,6 +2,7 @@ from application.dto.command.spell import UpdateSpellCommand
 from application.dto.model.spell import AppSpell
 from application.repository import (
     ClassRepository,
+    MaterialComponentRepository,
     SourceRepository,
     SpellRepository,
     SubclassRepository,
@@ -24,39 +25,41 @@ class UpdateSpellUseCase(UserCheck):
         spell_repository: SpellRepository,
         class_repository: ClassRepository,
         subclass_repository: SubclassRepository,
+        material_component_repository: MaterialComponentRepository,
         source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__spell_service = spell_service
-        self.__spell_repository = spell_repository
-        self.__class_repository = class_repository
-        self.__subclass_repository = subclass_repository
-        self.__source_repository = source_repository
+        self._spell_service = spell_service
+        self._spell_repository = spell_repository
+        self._class_repository = class_repository
+        self._subclass_repository = subclass_repository
+        self._material_repository = material_component_repository
+        self._source_repository = source_repository
 
     async def execute(self, command: UpdateSpellCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__spell_repository.id_exists(command.spell_id):
+        if not await self._spell_repository.id_exists(command.spell_id):
             raise DomainError.not_found(
                 f"заклинание с id {command.spell_id} не существует"
             )
-        app_spell = await self.__spell_repository.get_by_id(command.spell_id)
+        app_spell = await self._spell_repository.get_by_id(command.spell_id)
         spell = app_spell.to_domain()
         if command.class_ids is not None:
             for class_id in command.class_ids:
-                if not await self.__class_repository.id_exists(class_id):
+                if not await self._class_repository.id_exists(class_id):
                     raise DomainError.invalid_data(
                         f"класс с id {class_id} не существует"
                     )
             spell.new_class_ids(command.class_ids)
         if command.subclass_ids is not None:
             for subclass_id in command.subclass_ids:
-                if not await self.__subclass_repository.id_exists(subclass_id):
+                if not await self._subclass_repository.id_exists(subclass_id):
                     raise DomainError.invalid_data(
                         f"подкласс с id {subclass_id} не существует"
                     )
             spell.new_subclass_ids(command.subclass_ids)
         if command.name is not None:
-            if not await self.__spell_service.can_create_with_name(command.name):
+            if not await self._spell_service.can_create_with_name(command.name):
                 raise DomainError.invalid_data(
                     f"заклинание не возможно переименовать с названием {command.name}"
                 )
@@ -110,6 +113,11 @@ class UpdateSpellUseCase(UserCheck):
                 else None
             )
         if command.components is not None:
+            for material_id in command.components.materials:
+                if not await self._material_repository.id_exists(material_id):
+                    raise DomainError.invalid_data(
+                        f"материал с id {material_id} не существует"
+                    )
             spell.new_components(
                 SpellComponents(
                     command.components.verbal,
@@ -129,9 +137,9 @@ class UpdateSpellUseCase(UserCheck):
         if command.name_in_english is not None:
             spell.new_name_in_english(command.name_in_english)
         if command.source_id is not None:
-            if not await self.__source_repository.id_exists(command.source_id):
+            if not await self._source_repository.id_exists(command.source_id):
                 raise DomainError.invalid_data(
                     f"источник с id {command.source_id} не существует"
                 )
             spell.new_source_id(command.source_id)
-        await self.__spell_repository.update(AppSpell.from_domain(spell))
+        await self._spell_repository.update(AppSpell.from_domain(spell))

@@ -94,10 +94,8 @@ class AppSpell:
             description=spell.description(),
             next_level_description=spell.next_level_description(),
             level=spell.level(),
-            school=spell.school().value,
-            damage_type=(
-                DamageType.from_str(damage_type) if damage_type is not None else None
-            ),
+            school=spell.school().name.lower(),
+            damage_type=(damage_type.name.lower() if damage_type is not None else None),
             duration=(
                 AppGameTime.from_domain(duration) if duration is not None else None
             ),
@@ -107,7 +105,7 @@ class AppSpell:
             components=AppSpellComponents.from_domain(spell.components()),
             concentration=spell.concentration(),
             ritual=spell.ritual(),
-            saving_throws=spell.saving_throws(),
+            saving_throws=[m.name.lower() for m in spell.saving_throws()],
             name_in_english=spell.name_in_english(),
             source_id=spell.source_id(),
         )
