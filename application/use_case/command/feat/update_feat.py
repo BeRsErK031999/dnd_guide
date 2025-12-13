@@ -16,17 +16,17 @@ class UpdateFeatUseCase(UserCheck):
         feat_repository: FeatRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__feat_service = feat_service
-        self.__feat_repository = feat_repository
+        self._feat_service = feat_service
+        self._feat_repository = feat_repository
 
     async def execute(self, command: UpdateFeatCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__feat_repository.id_exists(command.feat_id):
+        if not await self._feat_repository.id_exists(command.feat_id):
             raise DomainError.not_found(f"черты с id {command.feat_id} не существует")
-        app_feat = await self.__feat_repository.get_by_id(command.feat_id)
+        app_feat = await self._feat_repository.get_by_id(command.feat_id)
         feat = app_feat.to_domain()
         if command.name is not None:
-            if not await self.__feat_service.can_rename_with_name(command.name):
+            if not await self._feat_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
                     f"не возможно переименовать черту с названием {command.name}"
                 )
@@ -59,4 +59,4 @@ class UpdateFeatUseCase(UserCheck):
                     for increase_modifier in command.increase_modifiers
                 ]
             )
-        await self.__feat_repository.update(AppFeat.from_domain(feat))
+        await self._feat_repository.update(AppFeat.from_domain(feat))

@@ -17,7 +17,7 @@ class AppFeatRequiredModifier:
     @staticmethod
     def from_domain(modifier: FeatRequiredModifier) -> "AppFeatRequiredModifier":
         return AppFeatRequiredModifier(
-            modifier=modifier.modifier().value, min_value=modifier.min_value()
+            modifier=modifier.modifier().name.lower(), min_value=modifier.min_value()
         )
 
     def to_domain(self) -> FeatRequiredModifier:
@@ -45,14 +45,14 @@ class AppFeat:
             description=feat.description(),
             caster=feat.caster(),
             required_armor_types=[
-                armor_type.value for armor_type in feat.required_armor_types()
+                armor_type.name.lower() for armor_type in feat.required_armor_types()
             ],
             required_modifiers=[
                 AppFeatRequiredModifier.from_domain(modifier)
                 for modifier in feat.required_modifiers()
             ],
             increase_modifiers=[
-                modifier.value for modifier in feat.increase_modifiers()
+                modifier.name.lower() for modifier in feat.increase_modifiers()
             ],
         )
 

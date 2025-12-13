@@ -18,17 +18,17 @@ class CreateFeatUseCase(UserCheck):
         feat_repository: FeatRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__feat_service = feat_service
-        self.__feat_repository = feat_repository
+        self._feat_service = feat_service
+        self._feat_repository = feat_repository
 
     async def execute(self, command: CreateFeatCommand) -> UUID:
         await self._user_check(command.user_id)
-        if not await self.__feat_service.can_create_with_name(command.name):
+        if not await self._feat_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"не возможно создать черту с названием {command.name}"
             )
         feat = Feat(
-            feat_id=await self.__feat_repository.next_id(),
+            feat_id=await self._feat_repository.next_id(),
             name=command.name,
             description=command.description,
             caster=command.caster,
@@ -47,5 +47,5 @@ class CreateFeatUseCase(UserCheck):
                 for increase_modifier in command.increase_modifiers
             ],
         )
-        await self.__feat_repository.create(AppFeat.from_domain(feat))
+        await self._feat_repository.create(AppFeat.from_domain(feat))
         return feat.feat_id()

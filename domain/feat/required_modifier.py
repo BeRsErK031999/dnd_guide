@@ -25,3 +25,6 @@ class FeatRequiredModifier:
                 and self._modifier == value._modifier
             )
         raise NotImplemented
+
+    def __hash__(self) -> int:
+        return hash((self._modifier, self._min_value))

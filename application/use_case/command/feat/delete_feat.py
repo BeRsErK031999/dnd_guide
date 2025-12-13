@@ -11,10 +11,10 @@ class DeleteFeatUseCase(UserCheck):
         feat_repository: FeatRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__feat_repository = feat_repository
+        self._feat_repository = feat_repository
 
     async def execute(self, command: DeleteFeatCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__feat_repository.id_exists(command.feat_id):
+        if not await self._feat_repository.id_exists(command.feat_id):
             raise DomainError.not_found(f"черты с id {command.feat_id} не существует")
-        await self.__feat_repository.delete(command.feat_id)
+        await self._feat_repository.delete(command.feat_id)
