@@ -15,6 +15,8 @@ class ClassLevelDice(ValueDescription):
         return self._dice
 
     def __eq__(self, value: object) -> bool:
+        if value is None:
+            return False
         if isinstance(value, self.__class__):
             return self._dice == value._dice and self._description == value._description
         raise NotImplemented

@@ -16,6 +16,8 @@ class ClassLevelSpellSlots:
         return self._spell_slots
 
     def __eq__(self, value: object) -> bool:
+        if value is None:
+            return False
         if isinstance(value, self.__class__):
             return self._spell_slots == value._spell_slots
         raise NotImplemented

@@ -15,6 +15,8 @@ class ClassLevelIncreaseSpeed(ValueDescription):
         return self._speed
 
     def __eq__(self, value: object) -> bool:
+        if value is None:
+            return False
         if isinstance(value, self.__class__):
             return (
                 self._speed == value._speed and self._description == value._description

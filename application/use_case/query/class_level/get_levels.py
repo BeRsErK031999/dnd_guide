@@ -5,9 +5,9 @@ from application.repository import ClassLevelRepository
 
 class GetClassLevelsUseCase:
     def __init__(self, class_level_repository: ClassLevelRepository):
-        self.__repository = class_level_repository
+        self._repository = class_level_repository
 
     async def execute(self, query: ClassLevelsQuery) -> list[AppClassLevel]:
-        return await self.__repository.filter(
+        return await self._repository.filter(
             filter_by_class_id=query.filter_by_class_id
         )

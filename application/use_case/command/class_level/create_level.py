@@ -27,17 +27,17 @@ class CreateClassLevelUseCase(UserCheck):
         class_repository: ClassRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__class_level_service = class_level_service
-        self.__class_level_repository = class_level_repository
-        self.__class_repository = class_repository
+        self._class_level_service = class_level_service
+        self._class_level_repository = class_level_repository
+        self._class_repository = class_repository
 
     async def execute(self, command: CreateClassLevelCommand) -> UUID:
         await self._user_check(command.user_id)
-        if not await self.__class_repository.id_exists(command.class_id):
+        if not await self._class_repository.id_exists(command.class_id):
             raise DomainError.invalid_data(
                 f"класс с id {command.class_id} не существует"
             )
-        if not await self.__class_level_service.can_create_with_class_and_level(
+        if not await self._class_level_service.can_create_with_class_and_level(
             command.class_id, command.level
         ):
             raise DomainError.invalid_data(
@@ -73,7 +73,7 @@ class CreateClassLevelUseCase(UserCheck):
                 command.increase_speed.description,
             )
         class_level = ClassLevel(
-            await self.__class_level_repository.next_id(),
+            await self._class_level_repository.next_id(),
             command.class_id,
             command.level,
             level_dice,
@@ -85,7 +85,7 @@ class CreateClassLevelUseCase(UserCheck):
             bonus_damage,
             increase_speed,
         )
-        await self.__class_level_repository.create(
+        await self._class_level_repository.create(
             AppClassLevel.from_domain(class_level)
         )
         return class_level.level_id()

@@ -235,9 +235,9 @@ def class_level_increase_speed_model_factory(
 
 
 def class_level_model_factory(
-    class_level_id: UUID,
-    class_id: UUID,
-    level: int,
+    class_level_id: UUID = uuid4(),
+    class_id: UUID = uuid4(),
+    level: int = 1,
     dice: class_level.AppClassLevelDice | None = None,
     spell_slots: list[int] | None = None,
     number_cantrips_know: int | None = None,

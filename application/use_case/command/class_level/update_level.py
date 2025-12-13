@@ -24,26 +24,26 @@ class UpdateClassLevelUseCase(UserCheck):
         class_repository: ClassRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__class_level_service = class_level_service
-        self.__class_level_repository = class_level_repository
-        self.__class_repository = class_repository
+        self._class_level_service = class_level_service
+        self._class_level_repository = class_level_repository
+        self._class_repository = class_repository
 
     async def execute(self, command: UpdateClassLevelCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__class_level_repository.id_exists(command.class_level_id):
+        if not await self._class_level_repository.id_exists(command.class_level_id):
             raise DomainError.not_found(
                 f"уровень с id {command.class_level_id} не существует"
             )
-        app_class_level = await self.__class_level_repository.get_by_id(
+        app_class_level = await self._class_level_repository.get_by_id(
             command.class_level_id
         )
         class_level = app_class_level.to_domain()
         if command.class_id is not None and command.level is not None:
-            if not await self.__class_repository.id_exists(command.class_id):
+            if not await self._class_repository.id_exists(command.class_id):
                 raise DomainError.invalid_data(
                     f"класс с id {command.class_id} не существует"
                 )
-            if not await self.__class_level_service.can_create_with_class_and_level(
+            if not await self._class_level_service.can_create_with_class_and_level(
                 command.class_id, command.level
             ):
                 raise DomainError.invalid_data(
@@ -52,11 +52,11 @@ class UpdateClassLevelUseCase(UserCheck):
             class_level.new_class_id(command.class_id)
             class_level.new_level(command.level)
         if command.class_id is not None:
-            if not await self.__class_repository.id_exists(command.class_id):
+            if not await self._class_repository.id_exists(command.class_id):
                 raise DomainError.invalid_data(
                     f"класс с id {command.class_id} не существует"
                 )
-            if not await self.__class_level_service.can_create_with_class_and_level(
+            if not await self._class_level_service.can_create_with_class_and_level(
                 command.class_id, class_level.level()
             ):
                 raise DomainError.invalid_data(
@@ -64,7 +64,7 @@ class UpdateClassLevelUseCase(UserCheck):
                 )
             class_level.new_class_id(command.class_id)
         if command.level is not None:
-            if not await self.__class_level_service.can_create_with_class_and_level(
+            if not await self._class_level_service.can_create_with_class_and_level(
                 class_level.class_id(), command.level
             ):
                 raise DomainError.invalid_data(
@@ -109,6 +109,6 @@ class UpdateClassLevelUseCase(UserCheck):
             class_level.new_number_spells_know(command.number_spells_know)
         if command.number_arcanums_know is not None:
             class_level.new_number_arcanums_know(command.number_arcanums_know)
-        await self.__class_level_repository.update(
+        await self._class_level_repository.update(
             AppClassLevel.from_domain(class_level)
         )
