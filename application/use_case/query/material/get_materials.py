@@ -5,7 +5,7 @@ from application.repository import MaterialRepository
 
 class GetMaterialsUseCase:
     def __init__(self, material_repository: MaterialRepository) -> None:
-        self.__repository = material_repository
+        self._repository = material_repository
 
     async def execute(self, query: MaterialsQuery) -> list[AppMaterial]:
-        return await self.__repository.filter(search_by_name=query.search_by_name)
+        return await self._repository.filter(search_by_name=query.search_by_name)
