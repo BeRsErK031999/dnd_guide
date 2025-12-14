@@ -22,20 +22,20 @@ class CreateSubraceUseCase(UserCheck):
         race_repository: RaceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__subrace_service = subrace_service
-        self.__subrace_repository = subrace_repository
-        self.__race_repository = race_repository
+        self._subrace_service = subrace_service
+        self._subrace_repository = subrace_repository
+        self._race_repository = race_repository
 
     async def execute(self, command: CreateSubraceCommand) -> UUID:
         await self._user_check(command.user_id)
-        if not await self.__subrace_service.can_create_with_name(command.name):
+        if not await self._subrace_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"не возможно создать подрасу с названием {command.name}"
             )
-        if not await self.__race_repository.id_exists(command.race_id):
+        if not await self._race_repository.id_exists(command.race_id):
             raise DomainError.invalid_data(f"расы с id {command.race_id} не существует")
         subrace = Subrace(
-            await self.__subrace_repository.next_id(),
+            await self._subrace_repository.next_id(),
             command.race_id,
             command.name,
             command.description,
@@ -52,5 +52,5 @@ class CreateSubraceUseCase(UserCheck):
             ],
             command.name_in_english,
         )
-        await self.__subrace_repository.create(AppSubrace.from_domain(subrace))
+        await self._subrace_repository.create(AppSubrace.from_domain(subrace))
         return subrace.subrace_id()

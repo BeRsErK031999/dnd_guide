@@ -34,7 +34,7 @@ class AppSubraceIncreaseModifier:
         modifier: SubraceIncreaseModifier,
     ) -> "AppSubraceIncreaseModifier":
         return AppSubraceIncreaseModifier(
-            modifier=modifier.modifier().value,
+            modifier=modifier.modifier().name.lower(),
             bonus=modifier.bonus(),
         )
 

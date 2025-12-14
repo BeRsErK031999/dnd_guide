@@ -16,22 +16,22 @@ class UpdateSubraceUseCase(UserCheck):
         race_repository: RaceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__subrace_service = subrace_service
-        self.__race_repository = race_repository
-        self.__subrace_repository = subrace_repository
+        self._subrace_service = subrace_service
+        self._race_repository = race_repository
+        self._subrace_repository = subrace_repository
 
     async def execute(self, command: UpdateSubraceCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__subrace_repository.id_exists(command.subrace_id):
+        if not await self._subrace_repository.id_exists(command.subrace_id):
             raise DomainError.not_found(f"подрасы с id {command.race_id} не существует")
-        app_subrace = await self.__subrace_repository.get_by_id(command.subrace_id)
+        app_subrace = await self._subrace_repository.get_by_id(command.subrace_id)
         subrace = app_subrace.to_domain()
         if command.race_id is not None:
-            if not await self.__race_repository.id_exists(command.race_id):
+            if not await self._race_repository.id_exists(command.race_id):
                 raise DomainError.invalid_data(f"расы с id {command} не существует")
             subrace.new_race_id(command.race_id)
         if command.name is not None:
-            if not await self.__subrace_service.can_rename_with_name(command.name):
+            if not await self._subrace_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
                     "не возможно переименовать подрасу с использованием "
                     f"названия {command.name}"
@@ -67,4 +67,4 @@ class UpdateSubraceUseCase(UserCheck):
             subrace.remove_features(command.remove_features)
         if command.name_in_english is not None:
             subrace.new_name_in_english(command.name_in_english)
-        await self.__subrace_repository.update(AppSubrace.from_domain(subrace))
+        await self._subrace_repository.update(AppSubrace.from_domain(subrace))
