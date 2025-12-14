@@ -48,7 +48,7 @@ class AppWeaponProperty:
         second_hand_dice = weapon_property.second_hand_dice()
         return AppWeaponProperty(
             weapon_property_id=weapon_property.weapon_property_id(),
-            name=weapon_property.name(),
+            name=weapon_property.name().name.lower(),
             description=weapon_property.description(),
             base_range=(
                 AppLength.from_domain(base_range) if base_range is not None else None

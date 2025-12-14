@@ -22,17 +22,17 @@ class CreateWeaponPropertyUseCase(UserCheck):
         weapon_property_repository: WeaponPropertyRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__property_service = weapon_property_service
-        self.__property_repository = weapon_property_repository
+        self._property_service = weapon_property_service
+        self._property_repository = weapon_property_repository
 
     async def execute(self, command: CreateWeaponPropertyCommand) -> UUID:
         await self._user_check(command.user_id)
-        if not await self.__property_service.can_create_with_name(command.name):
+        if not await self._property_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"свойство с именем {command.name} не возможно создать"
             )
         weapon_property = WeaponProperty(
-            await self.__property_repository.next_id(),
+            await self._property_repository.next_id(),
             WeaponPropertyName.from_str(command.name),
             command.description,
             (
@@ -62,7 +62,7 @@ class CreateWeaponPropertyUseCase(UserCheck):
                 else None
             ),
         )
-        await self.__property_repository.create(
+        await self._property_repository.create(
             AppWeaponProperty.from_domain(weapon_property)
         )
         return weapon_property.weapon_property_id()

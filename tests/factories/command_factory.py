@@ -38,6 +38,7 @@ from domain.skill import Skill
 from domain.spell.school import SpellSchool
 from domain.tool.tool_type import ToolType
 from domain.weapon_kind.weapon_type import WeaponType
+from domain.weapon_property.name import WeaponPropertyName
 from domain.weight import WeightUnit
 
 
@@ -1121,7 +1122,7 @@ class WeaponPropertyCommandFactory:
     @staticmethod
     def create(
         user_id: UUID = uuid4(),
-        name: str = "weapon_property_name",
+        name: str = WeaponPropertyName.HEAVY.name.lower(),
         description: str = "weapon_property_description",
         base_range: weapon_property.WeaponPropertyBaseRangeCommand | None = None,
         max_range: weapon_property.WeaponPropertyMaxRangeCommand | None = None,

@@ -39,6 +39,7 @@ from domain.skill import Skill
 from domain.spell.school import SpellSchool
 from domain.tool.tool_type import ToolType
 from domain.weapon_kind.weapon_type import WeaponType
+from domain.weapon_property.name import WeaponPropertyName
 from domain.weight import WeightUnit
 
 
@@ -562,7 +563,7 @@ def weapon_kind_model_factory(
 
 def weapon_property_model_factory(
     weapon_property_id: UUID = uuid4(),
-    name: str = "weapon_property_name",
+    name: str = WeaponPropertyName.HEAVY.name.lower(),
     description: str = "weapon_property_description",
     base_range: length.AppLength | None = None,
     max_range: length.AppLength | None = None,

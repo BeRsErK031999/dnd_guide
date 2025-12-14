@@ -16,21 +16,21 @@ class UpdateWeaponPropertyUseCase(UserCheck):
         weapon_property_repository: WeaponPropertyRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__property_service = weapon_property_service
-        self.__property_repository = weapon_property_repository
+        self._property_service = weapon_property_service
+        self._property_repository = weapon_property_repository
 
     async def execute(self, command: UpdateWeaponPropertyCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__property_repository.id_exists(command.weapon_property_id):
+        if not await self._property_repository.id_exists(command.weapon_property_id):
             raise DomainError.not_found(
                 f"свойство с id {command.weapon_property_id} не существует"
             )
-        app_weapon_property = await self.__property_repository.get_by_id(
+        app_weapon_property = await self._property_repository.get_by_id(
             command.weapon_property_id
         )
         weapon_property = app_weapon_property.to_domain()
         if command.name is not None:
-            if not await self.__property_service.can_rename_with_name(command.name):
+            if not await self._property_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
                     f"свойство не возможно переименовать с названием {command.name}"
                 )
@@ -39,7 +39,7 @@ class UpdateWeaponPropertyUseCase(UserCheck):
                 (
                     Length(
                         command.base_range.range.count,
-                        LengthUnit(command.base_range.range.unit),
+                        LengthUnit.from_str(command.base_range.range.unit),
                     )
                     if command.base_range is not None
                     and command.base_range.range is not None
@@ -48,7 +48,7 @@ class UpdateWeaponPropertyUseCase(UserCheck):
                 (
                     Length(
                         command.max_range.range.count,
-                        LengthUnit(command.max_range.range.unit),
+                        LengthUnit.from_str(command.max_range.range.unit),
                     )
                     if command.max_range is not None
                     and command.max_range.range is not None
@@ -64,41 +64,42 @@ class UpdateWeaponPropertyUseCase(UserCheck):
                     else weapon_property.second_hand_dice()
                 ),
             )
+        else:
+            if command.base_range is not None:
+                weapon_property.new_base_range(
+                    (
+                        Length(
+                            command.base_range.range.count,
+                            LengthUnit(command.base_range.range.unit),
+                        )
+                        if command.base_range.range is not None
+                        else None
+                    )
+                )
+            if command.max_range is not None:
+                weapon_property.new_max_range(
+                    (
+                        Length(
+                            command.max_range.range.count,
+                            LengthUnit(command.max_range.range.unit),
+                        )
+                        if command.max_range.range is not None
+                        else None
+                    )
+                )
+            if command.second_hand_dice is not None:
+                weapon_property.new_second_hand_dice(
+                    (
+                        Dice(
+                            command.second_hand_dice.dice.count,
+                            DiceType.from_str(command.second_hand_dice.dice.dice_type),
+                        )
+                        if command.second_hand_dice.dice is not None
+                        else None
+                    )
+                )
         if command.description is not None:
             weapon_property.new_description(command.description)
-        if command.base_range is not None:
-            weapon_property.new_base_range(
-                (
-                    Length(
-                        command.base_range.range.count,
-                        LengthUnit(command.base_range.range.unit),
-                    )
-                    if command.base_range.range is not None
-                    else None
-                )
-            )
-        if command.max_range is not None:
-            weapon_property.new_max_range(
-                (
-                    Length(
-                        command.max_range.range.count,
-                        LengthUnit(command.max_range.range.unit),
-                    )
-                    if command.max_range.range is not None
-                    else None
-                )
-            )
-        if command.second_hand_dice is not None:
-            weapon_property.new_second_hand_dice(
-                (
-                    Dice(
-                        command.second_hand_dice.dice.count,
-                        DiceType.from_str(command.second_hand_dice.dice.dice_type),
-                    )
-                    if command.second_hand_dice.dice is not None
-                    else None
-                )
-            )
-        await self.__property_repository.update(
+        await self._property_repository.update(
             AppWeaponProperty.from_domain(weapon_property)
         )
