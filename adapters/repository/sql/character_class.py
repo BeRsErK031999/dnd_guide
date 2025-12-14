@@ -60,6 +60,7 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
         search_by_name: str | None = None,
         filter_by_source_ids: list[UUID] | None = None,
         filter_by_tool_ids: list[UUID] | None = None,
+        filter_by_weapon_ids: list[UUID] | None = None,
     ) -> list[AppClass]:
         async with self.__helper.session as session:
             query = self._add_options(select(CharacterClassModel))
@@ -81,6 +82,14 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
                     exists().where(
                         CharacterClassModel.tools.any(
                             ToolModel.id.in_(filter_by_tool_ids)
+                        )
+                    )
+                )
+            if filter_by_weapon_ids is not None:
+                query = query.where(
+                    exists().where(
+                        CharacterClassModel.weapons.any(
+                            WeaponModel.id.in_(filter_by_weapon_ids)
                         )
                     )
                 )

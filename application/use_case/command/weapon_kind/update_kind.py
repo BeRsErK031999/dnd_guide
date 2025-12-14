@@ -14,25 +14,25 @@ class UpdateWeaponKindUseCase(UserCheck):
         weapon_kind_repository: WeaponKindRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__kind_service = weapon_kind_service
-        self.__kind_repository = weapon_kind_repository
+        self._kind_service = weapon_kind_service
+        self._kind_repository = weapon_kind_repository
 
     async def execute(self, command: UpdateWeaponKindCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__kind_repository.id_exists(command.weapon_kind_id):
+        if not await self._kind_repository.id_exists(command.weapon_kind_id):
             raise DomainError.not_found(
                 f"вид оружия с id {command.weapon_kind_id} не существует"
             )
-        app_kind = await self.__kind_repository.get_by_id(command.weapon_kind_id)
+        app_kind = await self._kind_repository.get_by_id(command.weapon_kind_id)
         kind = app_kind.to_domain()
         if command.weapon_type is not None:
             kind.new_weapon_type(WeaponType.from_str(command.weapon_type))
         if command.name is not None:
-            if not await self.__kind_service.can_rename_with_name(command.name):
+            if not await self._kind_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
                     f"вид оружия не возможно переименовать с названием {command.name}"
                 )
             kind.new_name(command.name)
         if command.description is not None:
             kind.new_description(command.description)
-        await self.__kind_repository.update(AppWeaponKind.from_domain(kind))
+        await self._kind_repository.update(AppWeaponKind.from_domain(kind))

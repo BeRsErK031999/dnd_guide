@@ -34,7 +34,7 @@ class AppWeaponKind:
     def from_domain(weapon_kind: WeaponKind) -> "AppWeaponKind":
         return AppWeaponKind(
             weapon_kind_id=weapon_kind.weapon_kind_id(),
-            weapon_type=weapon_kind.weapon_type(),
+            weapon_type=weapon_kind.weapon_type().name.lower(),
             name=weapon_kind.name(),
             description=weapon_kind.description(),
         )

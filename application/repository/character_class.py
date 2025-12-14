@@ -27,6 +27,7 @@ class ClassRepository(ABC):
         search_by_name: str | None = None,
         filter_by_source_ids: list[UUID] | None = None,
         filter_by_tool_ids: list[UUID] | None = None,
+        filter_by_weapon_ids: list[UUID] | None = None,
     ) -> list[AppClass]:
         raise NotImplemented
 

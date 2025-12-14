@@ -31,6 +31,7 @@ class InMemoryClassRepository(DomainClassRepository, AppClassRepository):
         search_by_name: str | None = None,
         filter_by_source_ids: list[UUID] | None = None,
         filter_by_tool_ids: list[UUID] | None = None,
+        filter_by_weapon_ids: list[UUID] | None = None,
     ) -> list[AppClass]:
         result: list[AppClass] = list()
         for c in self._store.values():
@@ -42,6 +43,10 @@ class InMemoryClassRepository(DomainClassRepository, AppClassRepository):
                 and (
                     filter_by_tool_ids is None
                     or any(t in c.proficiencies.tools for t in filter_by_tool_ids)
+                )
+                and (
+                    filter_by_weapon_ids is None
+                    or any(w in c.proficiencies.weapons for w in filter_by_weapon_ids)
                 )
             ):
                 result.append(c)
