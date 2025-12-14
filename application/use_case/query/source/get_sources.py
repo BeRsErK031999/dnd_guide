@@ -5,7 +5,7 @@ from application.repository import SourceRepository
 
 class GetSourcesUseCase:
     def __init__(self, source_repository: SourceRepository):
-        self.__repository = source_repository
+        self._source_repository = source_repository
 
     async def execute(self, query: SourcesQuery) -> list[AppSource]:
-        return await self.__repository.filter(search_by_name=query.search_by_name)
+        return await self._source_repository.filter(search_by_name=query.search_by_name)

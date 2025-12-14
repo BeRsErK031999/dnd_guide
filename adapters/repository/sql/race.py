@@ -49,7 +49,11 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
             result = result.scalars().all()
             return [item.to_app() for item in result]
 
-    async def filter(self, search_by_name: str | None = None) -> list[AppRace]:
+    async def filter(
+        self,
+        search_by_name: str | None = None,
+        filter_by_source_ids: list[UUID] | None = None,
+    ) -> list[AppRace]:
         async with self.__db_helper.session as session:
             query = self._add_options(select(RaceModel))
             if search_by_name is not None:
@@ -59,6 +63,8 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
                         RaceModel.name_in_english.ilike(f"%{search_by_name}%"),
                     )
                 )
+            if filter_by_source_ids is not None:
+                query = query.where(RaceModel.source_id.in_(filter_by_source_ids))
             result = await session.execute(query)
             result = result.scalars().all()
             return [item.to_app() for item in result]

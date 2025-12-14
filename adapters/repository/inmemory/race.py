@@ -24,10 +24,18 @@ class InMemoryRaceRepository(DomainRaceRepository, AppRaceRepository):
     async def get_all(self) -> list[AppRace]:
         return list(self._store.values())
 
-    async def filter(self, search_by_name: str | None = None) -> list[AppRace]:
-        if search_by_name is not None:
-            return [r for r in self._store.values() if search_by_name in r.name]
-        return list(self._store.values())
+    async def filter(
+        self,
+        search_by_name: str | None = None,
+        filter_by_source_ids: list[UUID] | None = None,
+    ) -> list[AppRace]:
+        result: list[AppRace] = list()
+        for r in self._store.values():
+            if (search_by_name is None or search_by_name in r.name) and (
+                filter_by_source_ids is None or r.source_id in filter_by_source_ids
+            ):
+                result.append(r)
+        return result
 
     async def create(self, race: AppRace) -> None:
         self._store[race.race_id] = race

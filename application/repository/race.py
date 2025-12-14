@@ -22,7 +22,11 @@ class RaceRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def filter(self, search_by_name: str | None = None) -> list[AppRace]:
+    async def filter(
+        self,
+        search_by_name: str | None = None,
+        filter_by_source_ids: list[UUID] | None = None,
+    ) -> list[AppRace]:
         raise NotImplemented
 
     @abstractmethod

@@ -16,20 +16,20 @@ class CreateSourceUseCase(UserCheck):
         source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__source_service = source_service
-        self.__source_repository = source_repository
+        self._source_service = source_service
+        self._source_repository = source_repository
 
     async def execute(self, command: CreateSourceCommand) -> UUID:
         await self._user_check(command.user_id)
-        if not await self.__source_service.can_create_with_name(command.name):
+        if not await self._source_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"не возможно создать источник с названием {command.name}"
             )
         source = Source(
-            await self.__source_repository.next_id(),
+            await self._source_repository.next_id(),
             command.name,
             command.description,
             command.name_in_english,
         )
-        await self.__source_repository.create(AppSource.from_domain(source))
+        await self._source_repository.create(AppSource.from_domain(source))
         return source.source_id()

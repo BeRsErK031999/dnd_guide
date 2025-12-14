@@ -26,10 +26,16 @@ class InMemoryClassRepository(DomainClassRepository, AppClassRepository):
     async def get_all(self) -> list[AppClass]:
         return list(self._store.values())
 
-    async def filter(self, search_by_name: str | None = None) -> list[AppClass]:
+    async def filter(
+        self,
+        search_by_name: str | None = None,
+        filter_by_source_ids: list[UUID] | None = None,
+    ) -> list[AppClass]:
         result: list[AppClass] = list()
         for c in self._store.values():
-            if search_by_name is None or search_by_name in c.name:
+            if (search_by_name is None or search_by_name in c.name) and (
+                filter_by_source_ids is None or c.source_id in filter_by_source_ids
+            ):
                 result.append(c)
         return result
 

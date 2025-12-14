@@ -6,11 +6,11 @@ from domain.error import DomainError
 
 class GetSourceUseCase:
     def __init__(self, source_repository: SourceRepository):
-        self.__class_repository = source_repository
+        self._source_repository = source_repository
 
     async def execute(self, query: SourceQuery) -> AppSource:
-        if not await self.__class_repository.id_exists(query.source_id):
+        if not await self._source_repository.id_exists(query.source_id):
             raise DomainError.not_found(
                 f"источник с id {query.source_id} не существует"
             )
-        return await self.__class_repository.get_by_id(query.source_id)
+        return await self._source_repository.get_by_id(query.source_id)
