@@ -238,6 +238,8 @@ class MaterialUseCases:
         self.delete = command.material.DeleteMaterialUseCase(
             user_repository=user_repo,
             material_repository=material_repo,
+            armor_repository=armor_repo,
+            weapon_repository=weapon_repo,
         )
         self.get_one = query.material.GetMaterialUseCase(
             material_repository=material_repo,
@@ -262,6 +264,7 @@ class MaterialComponentUseCases:
         self.delete = command.material_component.DeleteMaterialComponentUseCase(
             user_repository=user_repo,
             material_repository=material_component_repo,
+            spell_repository=spell_repo,
         )
         self.get_one = query.material_component.GetMaterialComponentUseCase(
             material_repository=material_component_repo,
@@ -312,6 +315,9 @@ class SourceUseCases:
         self.delete = command.source.DeleteSourceUseCase(
             user_repository=user_repo,
             source_repository=source_repo,
+            class_repository=character_class_repo,
+            race_repository=race_repo,
+            spell_repository=spell_repo,
         )
         self.get_one = query.source.GetSourceUseCase(
             source_repository=source_repo,
@@ -330,6 +336,7 @@ class SpellUseCases:
             class_repository=character_class_repo,
             subclass_repository=character_subclass_repo,
             source_repository=source_repo,
+            material_component_repository=material_component_repo,
         )
         self.update = command.spell.UpdateSpellUseCase(
             spell_service=spell_domain_service,
@@ -338,6 +345,7 @@ class SpellUseCases:
             class_repository=character_class_repo,
             subclass_repository=character_subclass_repo,
             source_repository=source_repo,
+            material_component_repository=material_component_repo,
         )
         self.delete = command.spell.DeleteSpellUseCase(
             user_repository=user_repo,
@@ -418,6 +426,7 @@ class ToolUseCases:
         self.delete = command.tool.DeleteToolUseCase(
             user_repository=user_repo,
             tool_repository=tool_repo,
+            class_repository=character_class_repo,
         )
         self.get_one = query.tool.GetToolUseCase(
             tool_repository=tool_repo,
@@ -448,6 +457,7 @@ class WeaponUseCases:
         self.delete = command.weapon.DeleteWeaponUseCase(
             user_repository=user_repo,
             weapon_repository=weapon_repo,
+            class_repository=character_class_repo,
         )
         self.get_one = query.weapon.GetWeaponUseCase(
             weapon_repository=weapon_repo,
@@ -472,6 +482,7 @@ class WeaponKindUseCases:
         self.delete = command.weapon_kind.DeleteWeaponKindUseCase(
             user_repository=user_repo,
             weapon_kind_repository=weapon_kind_repo,
+            weapon_repository=weapon_repo,
         )
         self.get_one = query.weapon_kind.GetWeaponKindUseCase(
             weapon_kind_repository=weapon_kind_repo,
@@ -496,6 +507,7 @@ class WeaponPropertyUseCases:
         self.delete = command.weapon_property.DeleteWeaponPropertyUseCase(
             user_repository=user_repo,
             weapon_property_repository=weapon_property_repo,
+            weapon_repository=weapon_repo,
         )
         self.get_one = query.weapon_property.GetWeaponPropertyUseCase(
             weapon_property_repository=weapon_property_repo,
