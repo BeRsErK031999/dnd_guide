@@ -16,21 +16,21 @@ class CreateMaterialComponentUseCase(UserCheck):
         material_repository: MaterialComponentRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__material_service = material_service
-        self.__material_repository = material_repository
+        self._material_service = material_service
+        self._material_repository = material_repository
 
     async def execute(self, command: CreateMaterialComponentCommand) -> UUID:
         await self._user_check(command.user_id)
-        if not await self.__material_service.can_create_with_name(command.name):
+        if not await self._material_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"невозможно создать материал с названием {command.name}"
             )
         material = MaterialComponent(
-            await self.__material_repository.next_id(),
+            await self._material_repository.next_id(),
             command.name,
             command.description,
         )
-        await self.__material_repository.create(
+        await self._material_repository.create(
             AppMaterialComponent.from_domain(material)
         )
         return material.material_id()

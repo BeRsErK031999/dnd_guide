@@ -65,6 +65,7 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
         filter_by_verbal_component: bool | None = None,
         filter_by_symbolic_component: bool | None = None,
         filter_by_material_component: bool | None = None,
+        filter_by_material_ids: list[UUID] | None = None,
         filter_by_concentration: bool | None = None,
         filter_by_ritual: bool | None = None,
         filter_by_source_ids: list[UUID] | None = None,
@@ -101,19 +102,25 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
                 conditions.append(
                     SpellModel.casting_time_unit.in_(filter_by_casting_times)
                 )
-            if filter_by_verbal_component:
+            if filter_by_verbal_component is not None:
                 conditions.append(
                     SpellModel.verbal_component == filter_by_verbal_component
                 )
-            if filter_by_symbolic_component:
+            if filter_by_symbolic_component is not None:
                 conditions.append(
                     SpellModel.symbolic_component == filter_by_symbolic_component
                 )
-            if filter_by_material_component:
+            if filter_by_material_component is not None:
                 conditions.append(
                     SpellModel.material_component == filter_by_material_component
                 )
-            if filter_by_concentration:
+            if filter_by_material_ids is not None:
+                conditions.append(
+                    SpellModel.materials.any(
+                        MaterialComponentModel.id.in_(filter_by_material_ids)
+                    )
+                )
+            if filter_by_concentration is not None:
                 conditions.append(SpellModel.concentration == filter_by_concentration)
             if filter_by_ritual:
                 conditions.append(SpellModel.ritual == filter_by_ritual)

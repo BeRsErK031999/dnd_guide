@@ -112,7 +112,7 @@ class MaterialComponentQueryFactory:
     def queries(
         search_by_name: str | None = None,
     ) -> material_component.MaterialComponentsQuery:
-        return material_component.MaterialComponentsQuery()
+        return material_component.MaterialComponentsQuery(search_by_name=search_by_name)
 
 
 class RaceQueryFactory:

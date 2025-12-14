@@ -36,6 +36,7 @@ class InMemorySpellRepository(DomainSpellRepository, AppSpellRepository):
         filter_by_verbal_component: bool | None = None,
         filter_by_symbolic_component: bool | None = None,
         filter_by_material_component: bool | None = None,
+        filter_by_material_ids: list[UUID] | None = None,
         filter_by_concentration: bool | None = None,
         filter_by_ritual: bool | None = None,
         filter_by_source_ids: list[UUID] | None = None,
@@ -79,6 +80,12 @@ class InMemorySpellRepository(DomainSpellRepository, AppSpellRepository):
                 and (
                     filter_by_material_component is None
                     or s.components.material == filter_by_material_component
+                )
+                and (
+                    filter_by_material_ids is None
+                    or any(
+                        [m in filter_by_material_ids for m in s.components.materials]
+                    )
                 )
                 and (
                     filter_by_concentration is None

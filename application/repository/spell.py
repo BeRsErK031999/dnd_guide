@@ -34,6 +34,7 @@ class SpellRepository(ABC):
         filter_by_verbal_component: bool | None = None,
         filter_by_symbolic_component: bool | None = None,
         filter_by_material_component: bool | None = None,
+        filter_by_material_ids: list[UUID] | None = None,
         filter_by_concentration: bool | None = None,
         filter_by_ritual: bool | None = None,
         filter_by_source_ids: list[UUID] | None = None,
