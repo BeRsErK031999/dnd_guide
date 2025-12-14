@@ -25,18 +25,18 @@ class UpdateRaceUseCase(UserCheck):
         source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__race_service = race_service
-        self.__race_repository = race_repository
-        self.__source_repository = source_repository
+        self._race_service = race_service
+        self._race_repository = race_repository
+        self._source_repository = source_repository
 
     async def execute(self, command: UpdateRaceCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__race_repository.id_exists(command.race_id):
+        if not await self._race_repository.id_exists(command.race_id):
             raise DomainError.not_found(f"расы с id {command.race_id} не существует")
-        app_race = await self.__race_repository.get_by_id(command.race_id)
+        app_race = await self._race_repository.get_by_id(command.race_id)
         race = app_race.to_domain()
         if command.name is not None:
-            if not await self.__race_service.can_rename_with_name(command.name):
+            if not await self._race_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
                     "не возможно переименовать расу с использованием "
                     f"названия {command.name}"
@@ -89,9 +89,9 @@ class UpdateRaceUseCase(UserCheck):
         if command.name_in_english is not None:
             race.new_name_in_english(command.name_in_english)
         if command.source_id is not None:
-            if not await self.__source_repository.id_exists(command.source_id):
+            if not await self._source_repository.id_exists(command.source_id):
                 raise DomainError.invalid_data(
                     f"источник с id {command.source_id} не существует"
                 )
             race.new_source_id(command.source_id)
-        await self.__race_repository.update(AppRace.from_domain(race))
+        await self._race_repository.update(AppRace.from_domain(race))

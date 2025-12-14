@@ -28,22 +28,22 @@ class CreateRaceUseCase(UserCheck):
         source_repository: SourceRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__race_service = race_service
-        self.__race_repository = race_repository
-        self.__source_repository = source_repository
+        self._race_service = race_service
+        self._race_repository = race_repository
+        self._source_repository = source_repository
 
     async def execute(self, command: CreateRaceCommand) -> UUID:
         await self._user_check(command.user_id)
-        if not await self.__race_service.can_create_with_name(command.name):
+        if not await self._race_service.can_create_with_name(command.name):
             raise DomainError.invalid_data(
                 f"не возможно создать расу с названием {command.name}"
             )
-        if not await self.__source_repository.id_exists(command.source_id):
+        if not await self._source_repository.id_exists(command.source_id):
             raise DomainError.invalid_data(
                 f"источник с id {command.source_id} не существует"
             )
         race = Race(
-            race_id=await self.__race_repository.next_id(),
+            race_id=await self._race_repository.next_id(),
             name=command.name,
             description=command.description,
             creature_type=CreatureType.from_str(command.creature_type),
@@ -70,5 +70,5 @@ class CreateRaceUseCase(UserCheck):
             name_in_english=command.name_in_english,
             source_id=command.source_id,
         )
-        await self.__race_repository.create(AppRace.from_domain(race))
+        await self._race_repository.create(AppRace.from_domain(race))
         return race.race_id()

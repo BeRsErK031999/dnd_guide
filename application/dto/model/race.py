@@ -83,7 +83,7 @@ class AppRaceIncreaseModifier:
     @staticmethod
     def from_domain(modifier: RaceIncreaseModifier) -> "AppRaceIncreaseModifier":
         return AppRaceIncreaseModifier(
-            modifier=modifier.modifier(),
+            modifier=modifier.modifier().name.lower(),
             bonus=modifier.bonus(),
         )
 
@@ -114,8 +114,8 @@ class AppRace:
             race_id=race.race_id(),
             name=race.name(),
             description=race.description(),
-            creature_type=race.creature_type().value,
-            creature_size=race.creature_size().value,
+            creature_type=race.creature_type().name.lower(),
+            creature_size=race.creature_size().name.lower(),
             speed=AppRaceSpeed.from_domain(race.speed()),
             age=AppRaceAge.from_domain(race.age()),
             increase_modifiers=[

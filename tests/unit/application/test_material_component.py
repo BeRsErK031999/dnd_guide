@@ -46,7 +46,7 @@ async def test_create_ok(user_repository, material_component_repository):
     result = await use_case.execute(
         command_factory.MaterialComponentCommandFactory.create(user_id=st_user.user_id)
     )
-    assert material_component_repository.id_exists(result)
+    assert await material_component_repository.id_exists(result)
 
 
 @pytest.mark.asyncio
