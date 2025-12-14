@@ -5,9 +5,9 @@ from application.repository import SubclassFeatureRepository
 
 class GetSubclassFeaturesUseCase:
     def __init__(self, feature_repository: SubclassFeatureRepository):
-        self.__repository = feature_repository
+        self._repository = feature_repository
 
     async def execute(self, query: SubclassFeaturesQuery) -> list[AppSubclassFeature]:
-        return await self.__repository.filter(
+        return await self._repository.filter(
             filter_by_subclass_id=query.filter_by_subclass_id
         )

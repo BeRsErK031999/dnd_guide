@@ -19,7 +19,7 @@ class SQLSubclassFeatureRepository(
     def __init__(self, db_helper: DBHelper) -> None:
         self.__db_helper = db_helper
 
-    async def name_for_class_exists(self, subclass_id: UUID, name: str) -> bool:
+    async def name_for_subclass_exists(self, subclass_id: UUID, name: str) -> bool:
         async with self.__db_helper.session as session:
             query = select(exists(SubclassFeatureModel)).where(
                 SubclassFeatureModel.name == name,
