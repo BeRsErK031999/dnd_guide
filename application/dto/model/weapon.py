@@ -22,7 +22,7 @@ class AppWeaponDamage:
     def from_domain(weapon_damage: WeaponDamage) -> "AppWeaponDamage":
         return AppWeaponDamage(
             dice=AppDice.from_domain(weapon_damage.dice()),
-            damage_type=weapon_damage.damage_type(),
+            damage_type=weapon_damage.damage_type().name.lower(),
             bonus_damage=weapon_damage.bonus_damage(),
         )
 

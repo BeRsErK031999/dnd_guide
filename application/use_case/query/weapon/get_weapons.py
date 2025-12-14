@@ -5,10 +5,10 @@ from application.repository import WeaponRepository
 
 class GetWeaponsUseCase:
     def __init__(self, weapon_repository: WeaponRepository):
-        self.__repository = weapon_repository
+        self._repository = weapon_repository
 
     async def execute(self, query: WeaponsQuery) -> list[AppWeapon]:
-        return await self.__repository.filter(
+        return await self._repository.filter(
             search_by_name=query.search_by_name,
             filter_by_kind_ids=query.filter_by_kind_ids,
             filter_by_damage_types=query.filter_by_damage_types,

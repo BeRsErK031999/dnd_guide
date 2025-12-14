@@ -27,28 +27,28 @@ class UpdateWeaponUseCase(UserCheck):
         material_repository: MaterialRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__weapon_service = weapon_service
-        self.__weapon_repository = weapon_repository
-        self.__kind_repository = kind_repository
-        self.__property_repository = property_repository
-        self.__material_repository = material_repository
+        self._weapon_service = weapon_service
+        self._weapon_repository = weapon_repository
+        self._kind_repository = kind_repository
+        self._property_repository = property_repository
+        self._material_repository = material_repository
 
     async def execute(self, command: UpdateWeaponCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__weapon_repository.id_exists(command.weapon_id):
+        if not await self._weapon_repository.id_exists(command.weapon_id):
             raise DomainError.not_found(
                 f"оружие с id {command.weapon_id} не существует"
             )
-        app_weapon = await self.__weapon_repository.get_by_id(command.weapon_id)
+        app_weapon = await self._weapon_repository.get_by_id(command.weapon_id)
         weapon = app_weapon.to_domain()
         if command.weapon_kind_id is not None:
-            if not await self.__kind_repository.id_exists(command.weapon_kind_id):
+            if not await self._kind_repository.id_exists(command.weapon_kind_id):
                 raise DomainError.invalid_data(
                     f"тип оружия с id {command.weapon_kind_id} не существует"
                 )
             weapon.new_kind_id(command.weapon_kind_id)
         if command.name is not None:
-            if not await self.__weapon_service.can_rename_with_name(command.name):
+            if not await self._weapon_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
                     f"не возможно переименовать оружие с названием {command.name}"
                 )
@@ -76,15 +76,15 @@ class UpdateWeaponUseCase(UserCheck):
             )
         if command.weapon_property_ids is not None:
             for property_id in command.weapon_property_ids:
-                if not await self.__property_repository.id_exists(property_id):
+                if not await self._property_repository.id_exists(property_id):
                     raise DomainError.invalid_data(
                         f"свойство оружия с id {property_id} не существует"
                     )
             weapon.new_property_ids(command.weapon_property_ids)
         if command.material_id is not None:
-            if not await self.__material_repository.id_exists(command.material_id):
+            if not await self._material_repository.id_exists(command.material_id):
                 raise DomainError.invalid_data(
                     f"материал с id {command.material_id} не существует"
                 )
             weapon.new_material_id(command.material_id)
-        await self.__weapon_repository.update(AppWeapon.from_domain(weapon))
+        await self._weapon_repository.update(AppWeapon.from_domain(weapon))

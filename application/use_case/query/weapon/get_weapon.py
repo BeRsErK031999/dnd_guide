@@ -6,9 +6,9 @@ from domain.error import DomainError
 
 class GetWeaponUseCase:
     def __init__(self, weapon_repository: WeaponRepository):
-        self.__repository = weapon_repository
+        self._repository = weapon_repository
 
     async def execute(self, query: WeaponQuery) -> AppWeapon:
-        if not await self.__repository.id_exists(query.weapon_id):
+        if not await self._repository.id_exists(query.weapon_id):
             raise DomainError.not_found(f"оружия с id {query.weapon_id} не существует")
-        return await self.__repository.get_by_id(query.weapon_id)
+        return await self._repository.get_by_id(query.weapon_id)
