@@ -16,21 +16,21 @@ class UpdateToolUseCase(UserCheck):
         tool_repository: ToolRepository,
     ) -> None:
         UserCheck.__init__(self, user_repository)
-        self.__tool_service = tool_service
-        self.__tool_repository = tool_repository
+        self._tool_service = tool_service
+        self._tool_repository = tool_repository
 
     async def execute(self, command: UpdateToolCommand) -> None:
         await self._user_check(command.user_id)
-        if not await self.__tool_repository.id_exists(command.tool_id):
+        if not await self._tool_repository.id_exists(command.tool_id):
             raise DomainError.not_found(
                 f"инструмент с id {command.tool_id} не существует"
             )
-        app_tool = await self.__tool_repository.get_by_id(command.tool_id)
+        app_tool = await self._tool_repository.get_by_id(command.tool_id)
         tool = app_tool.to_domain()
         if command.tool_type is not None:
             tool.new_tool_type(ToolType.from_str(command.tool_type))
         if command.name is not None:
-            if not await self.__tool_service.can_rename_with_name(command.name):
+            if not await self._tool_service.can_rename_with_name(command.name):
                 raise DomainError.invalid_data(
                     f"не возможно переименовать инструмент с названием {command.name}"
                 )
@@ -52,4 +52,4 @@ class UpdateToolUseCase(UserCheck):
                     for utilize in command.utilizes
                 ]
             )
-        await self.__tool_repository.update(AppTool.from_domain(tool))
+        await self._tool_repository.update(AppTool.from_domain(tool))

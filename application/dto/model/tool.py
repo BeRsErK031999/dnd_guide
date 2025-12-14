@@ -62,7 +62,7 @@ class AppTool:
     def from_domain(tool: Tool) -> "AppTool":
         return AppTool(
             tool_id=tool.tool_id(),
-            tool_type=tool.tool_type().value,
+            tool_type=tool.tool_type().name.lower(),
             name=tool.name(),
             description=tool.description(),
             cost=AppCoins.from_domain(tool.cost()),

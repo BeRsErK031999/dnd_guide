@@ -36,6 +36,7 @@ from domain.length import LengthUnit
 from domain.modifier import Modifier
 from domain.skill import Skill
 from domain.spell.school import SpellSchool
+from domain.tool.tool_type import ToolType
 from domain.weapon_kind.weapon_type import WeaponType
 from domain.weight import WeightUnit
 
@@ -945,7 +946,7 @@ class ToolCommandFactory:
     @staticmethod
     def create(
         user_id: UUID = uuid4(),
-        tool_type: str = "tool_type",
+        tool_type: str = ToolType.ARTISANS_TOOLS.name.lower(),
         name: str = "tool_name",
         description: str = "tool_description",
         cost: coin.CoinCommand = coin_command_factory(),
