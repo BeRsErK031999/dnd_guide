@@ -75,7 +75,7 @@ def coins_model_factory(
 
 def armor_class_model_factory(
     base_class: int = 10,
-    modifier: Modifier | None = None,
+    modifier: str | None = None,
     max_modifier_bonus: int | None = None,
 ) -> armor.AppArmorClass:
     return armor.AppArmorClass(

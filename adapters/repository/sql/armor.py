@@ -5,6 +5,7 @@ from adapters.repository.sql.models import ArmorModel, MaterialModel
 from application.dto.model.armor import AppArmor
 from application.repository import ArmorRepository as AppArmorRepository
 from domain.armor import ArmorRepository as DomainArmorRepository
+from domain.error import DomainError
 from sqlalchemy import delete, exists, select
 
 
@@ -33,7 +34,9 @@ class SQLArmorRepository(DomainArmorRepository, AppArmorRepository):
         async with self.__helper.session as session:
             query = select(ArmorModel).where(ArmorModel.id == armor_id)
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(f"доспехи с id {armor_id} не существует")
             return result.to_app()
 
     async def get_all(self) -> list[AppArmor]:
@@ -82,6 +85,8 @@ class SQLArmorRepository(DomainArmorRepository, AppArmorRepository):
             result = await session.execute(query)
             model = result.scalar_one()
             old = model.to_app()
+            if old.name != armor.name:
+                model.name = armor.name
             if old.armor_type != armor.armor_type:
                 model.armor_type = armor.armor_type
             if old.armor_class != armor.armor_class:
@@ -99,10 +104,13 @@ class SQLArmorRepository(DomainArmorRepository, AppArmorRepository):
                 model.cost = armor.cost.count
             if old.material_id != armor.material_id:
                 model.material = await session.get_one(MaterialModel, armor.material_id)
+            model.description = armor.description
             await session.commit()
 
     async def delete(self, armor_id: UUID) -> None:
         async with self.__helper.session as session:
             stmt = delete(ArmorModel).where(ArmorModel.id == armor_id)
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"доспехи с id {armor_id} не существует")
             await session.commit()
