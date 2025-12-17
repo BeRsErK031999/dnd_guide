@@ -8,12 +8,14 @@ from tests.factories import model_factory
 st_material = model_factory.material_component_model_factory()
 
 
+@pytest.mark.asyncio
 async def test_create(db_helper):
     repo = SQLMaterialComponentRepository(db_helper)
     await repo.save(st_material)
     assert await repo.id_exists(material_id=st_material.material_id)
 
 
+@pytest.mark.asyncio
 async def test_update(db_helper):
     repo = SQLMaterialComponentRepository(db_helper)
     material = model_factory.material_component_model_factory()
@@ -26,6 +28,7 @@ async def test_update(db_helper):
     assert updated_material.name == "new_name"
 
 
+@pytest.mark.asyncio
 async def test_delete_not_exists(db_helper):
     repo = SQLMaterialComponentRepository(db_helper)
     try:
@@ -36,6 +39,7 @@ async def test_delete_not_exists(db_helper):
     pytest.fail("not raised exception")
 
 
+@pytest.mark.asyncio
 async def test_delete(db_helper):
     repo = SQLMaterialComponentRepository(db_helper)
     material = model_factory.material_component_model_factory()
@@ -46,6 +50,7 @@ async def test_delete(db_helper):
     assert not await repo.id_exists(material_id=material.material_id)
 
 
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "name,expected",
     [["random_name", False], [st_material.name, True]],
@@ -58,6 +63,7 @@ async def test_name_exists(db_helper, name, expected):
     assert await repo.name_exists(name) == expected
 
 
+@pytest.mark.asyncio
 async def test_get_by_id(db_helper):
     repo = SQLMaterialComponentRepository(db_helper)
     await repo.save(st_material)
@@ -65,6 +71,7 @@ async def test_get_by_id(db_helper):
     assert got_material == st_material
 
 
+@pytest.mark.asyncio
 async def test_get_by_id_not_exists(db_helper):
     repo = SQLMaterialComponentRepository(db_helper)
     await repo.save(st_material)
@@ -76,6 +83,7 @@ async def test_get_by_id_not_exists(db_helper):
     pytest.fail("not raised exception")
 
 
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "name,count",
     [
