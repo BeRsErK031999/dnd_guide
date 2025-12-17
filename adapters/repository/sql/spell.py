@@ -11,6 +11,7 @@ from adapters.repository.sql.models import (
 )
 from application.dto.model.spell import AppSpell
 from application.repository import SpellRepository as AppSpellRepository
+from domain.error import DomainError
 from domain.spell import SpellRepository as DomainSpellRepository
 from sqlalchemy import Select, delete, exists, or_, select
 from sqlalchemy.orm import selectinload
@@ -43,7 +44,9 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
                 select(SpellModel).where(SpellModel.id == spell_id)
             )
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(f"заклинание с id {spell_id} не существует")
             return result.to_app()
 
     async def get_all(self) -> list[AppSpell]:
@@ -141,8 +144,6 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
     async def create(self, spell: AppSpell) -> None:
         async with self.__db_helper.session as session:
             model = SpellModel.from_app(spell)
-            session.add(model)
-            await session.flush()
             if len(spell.class_ids) > 0:
                 classes_query = select(CharacterClassModel).where(
                     CharacterClassModel.id.in_(spell.class_ids)
@@ -182,28 +183,30 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
             )
             model = await session.execute(model_query)
             model = model.scalar_one()
-            old_domain = model.to_app()
-            if old_domain.name != spell.name:
+            old = model.to_app()
+            if old.name != spell.name:
                 model.name = spell.name
-            if old_domain.school != spell.school:
+            if old.level != spell.level:
+                model.level = spell.level
+            if old.school != spell.school:
                 model.school = spell.school
-            if old_domain.damage_type != spell.damage_type:
+            if old.damage_type != spell.damage_type:
                 damage_type = spell.damage_type
                 model.damage_type = damage_type if damage_type else None
-            if old_domain.duration != spell.duration:
+            if old.duration != spell.duration:
                 duration = spell.duration
                 model.duration_count = duration.count if duration is not None else None
                 model.duration_unit = duration.unit if duration is not None else None
-            if old_domain.casting_time != spell.casting_time:
+            if old.casting_time != spell.casting_time:
                 casting_time = spell.casting_time
                 model.casting_time_count = casting_time.count
                 model.casting_time_unit = casting_time.unit
-            if old_domain.spell_range != spell.spell_range:
+            if old.spell_range != spell.spell_range:
                 model.spell_range = spell.spell_range.count
-            if old_domain.splash != spell.splash:
+            if old.splash != spell.splash:
                 splash = spell.splash
                 model.splash = splash.count if splash is not None else None
-            if old_domain.components != spell.components:
+            if old.components != spell.components:
                 components = spell.components
                 model.symbolic_component = components.symbolic
                 model.material_component = components.material
@@ -216,13 +219,13 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
                     materials = await session.execute(materials_query)
                     materials = materials.scalars().all()
                     model.materials.extend(materials)
-            if old_domain.concentration != spell.concentration:
+            if old.concentration != spell.concentration:
                 model.concentration = spell.concentration
-            if old_domain.ritual != spell.ritual:
+            if old.ritual != spell.ritual:
                 model.ritual = spell.ritual
-            if old_domain.name_in_english != spell.name_in_english:
+            if old.name_in_english != spell.name_in_english:
                 model.name_in_english = spell.name_in_english
-            if old_domain.source_id != spell.source_id:
+            if old.source_id != spell.source_id:
                 source = await session.get_one(SourceModel, spell.source_id)
                 model.source = source
             model.description = spell.description
@@ -256,7 +259,9 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
     async def delete(self, spell_id: UUID) -> None:
         async with self.__db_helper.session as session:
             stmt = delete(SpellModel).where(SpellModel.id == spell_id)
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"заклинание с id {spell_id} не существует")
             await session.commit()
 
     def _add_options(
