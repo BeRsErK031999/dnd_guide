@@ -128,7 +128,7 @@ class WeaponPropertyModel(Base):
             base_range=base_range.count if base_range else None,
             max_range=max_range.count if max_range else None,
             second_hand_dice_name=dice.dice_type if dice is not None else None,
-            second_hand_dace_count=dice.count if dice is not None else None,
+            second_hand_dice_count=dice.count if dice is not None else None,
         )
 
 
