@@ -38,7 +38,7 @@ class CreateWeaponPropertyUseCase(UserCheck):
             (
                 Length(
                     command.base_range.range.count,
-                    LengthUnit(command.base_range.range.unit),
+                    LengthUnit.from_str(command.base_range.range.unit),
                 )
                 if command.base_range is not None
                 and command.base_range.range is not None
@@ -47,7 +47,7 @@ class CreateWeaponPropertyUseCase(UserCheck):
             (
                 Length(
                     command.max_range.range.count,
-                    LengthUnit(command.max_range.range.unit),
+                    LengthUnit.from_str(command.max_range.range.unit),
                 )
                 if command.max_range is not None and command.max_range.range is not None
                 else None

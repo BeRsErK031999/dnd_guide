@@ -111,7 +111,7 @@ class SpellModel(Base):
             concentration=spell.concentration,
             ritual=spell.ritual,
             verbal_component=spell.components.verbal,
-            symbol_component=spell.components.symbolic,
+            symbolic_component=spell.components.symbolic,
             material_component=spell.components.material,
             source_id=spell.source_id,
         )
