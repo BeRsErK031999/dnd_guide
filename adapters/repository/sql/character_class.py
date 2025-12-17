@@ -14,6 +14,7 @@ from adapters.repository.sql.models import (
 from application.dto.model.character_class import AppClass
 from application.repository import ClassRepository as AppClassRepository
 from domain.character_class import ClassRepository as DomainClassRepository
+from domain.error import DomainError
 from sqlalchemy import Select, delete, exists, or_, select
 from sqlalchemy.orm import joinedload, selectinload
 
@@ -45,7 +46,9 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
                 select(CharacterClassModel).where(CharacterClassModel.id == class_id)
             )
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(f"класса с id {class_id} не существует")
             return result.to_app()
 
     async def get_all(self) -> list[AppClass]:
@@ -79,18 +82,12 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
                 )
             if filter_by_tool_ids is not None:
                 query = query.where(
-                    exists().where(
-                        CharacterClassModel.tools.any(
-                            ToolModel.id.in_(filter_by_tool_ids)
-                        )
-                    )
+                    CharacterClassModel.tools.any(ToolModel.id.in_(filter_by_tool_ids))
                 )
             if filter_by_weapon_ids is not None:
                 query = query.where(
-                    exists().where(
-                        CharacterClassModel.weapons.any(
-                            WeaponModel.id.in_(filter_by_weapon_ids)
-                        )
+                    CharacterClassModel.weapons.any(
+                        WeaponModel.id.in_(filter_by_weapon_ids)
                     )
                 )
             result = await session.execute(query)
@@ -213,11 +210,14 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
                     SourceModel, character_class.source_id
                 )
             model.description = character_class.description
+            await session.commit()
 
     async def delete(self, class_id: UUID) -> None:
         async with self.__helper.session as session:
             stmt = delete(CharacterClassModel).where(CharacterClassModel.id == class_id)
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"класса с id {class_id} не существует")
             await session.commit()
 
     def _add_options(

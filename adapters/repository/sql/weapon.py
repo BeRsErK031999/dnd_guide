@@ -101,7 +101,6 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
             model = WeaponModel.from_app(weapon)
             model.kind = await session.get_one(WeaponKindModel, weapon.weapon_kind_id)
             model.material = await session.get_one(MaterialModel, weapon.material_id)
-            await session.flush()
             if len(weapon.weapon_property_ids) > 0:
                 property_query = select(WeaponPropertyModel).where(
                     WeaponPropertyModel.id.in_(weapon.weapon_property_ids)
@@ -116,6 +115,7 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
                         f"свойств не существует, id: {not_exists_ids}"
                     )
                 model.properties.extend(property_model)
+            session.add(model)
             await session.commit()
 
     async def update(self, weapon: AppWeapon) -> None:
