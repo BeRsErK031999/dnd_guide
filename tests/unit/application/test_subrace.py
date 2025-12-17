@@ -22,15 +22,15 @@ def subrace_service(subrace_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_subrace(subrace_repository, subrace):
-    await subrace_repository.create(subrace)
+    await subrace_repository.save(subrace)
 
 
 async def save_race(race_repository, race):
-    await race_repository.create(race)
+    await race_repository.save(race)
 
 
 @pytest.mark.asyncio

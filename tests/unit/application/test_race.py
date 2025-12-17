@@ -25,15 +25,15 @@ def race_service(race_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_race(race_repository, race):
-    await race_repository.create(race)
+    await race_repository.save(race)
 
 
 async def save_source(source_repository, source):
-    await source_repository.create(source)
+    await source_repository.save(source)
 
 
 @pytest.mark.asyncio

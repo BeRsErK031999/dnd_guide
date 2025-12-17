@@ -36,10 +36,7 @@ class InMemoryClassFeatureRepository(
             return [f for f in self._store.values() if f.class_id == filter_by_class_id]
         return list(self._store.values())
 
-    async def create(self, feature: AppClassFeature) -> None:
-        self._store[feature.feature_id] = feature
-
-    async def update(self, feature: AppClassFeature) -> None:
+    async def save(self, feature: AppClassFeature) -> None:
         self._store[feature.feature_id] = feature
 
     async def delete(self, feature_id: UUID) -> None:

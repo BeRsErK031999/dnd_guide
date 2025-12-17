@@ -20,19 +20,19 @@ def material_service(material_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_material(material_repository, material):
-    await material_repository.create(material)
+    await material_repository.save(material)
 
 
 async def save_weapon(weapon_repository, weapon):
-    await weapon_repository.create(weapon)
+    await weapon_repository.save(weapon)
 
 
 async def save_armor(armor_repository, armor):
-    await armor_repository.create(armor)
+    await armor_repository.save(armor)
 
 
 @pytest.mark.asyncio

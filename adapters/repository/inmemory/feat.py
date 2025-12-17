@@ -60,10 +60,7 @@ class InMemoryFeatRepository(DomainFeatRepository, AppFeatRepository):
                 result.append(f)
         return result
 
-    async def create(self, feat: AppFeat) -> None:
-        self._store[feat.feat_id] = feat
-
-    async def update(self, feat: AppFeat) -> None:
+    async def save(self, feat: AppFeat) -> None:
         self._store[feat.feat_id] = feat
 
     async def delete(self, feat_id: UUID) -> None:

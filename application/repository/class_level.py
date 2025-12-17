@@ -28,11 +28,7 @@ class ClassLevelRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, level: AppClassLevel) -> None:
-        raise NotImplemented
-
-    @abstractmethod
-    async def update(self, level: AppClassLevel) -> None:
+    async def save(self, level: AppClassLevel) -> None:
         raise NotImplemented
 
     @abstractmethod

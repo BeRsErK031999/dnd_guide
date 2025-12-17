@@ -69,6 +69,11 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
             result = result.scalars().all()
             return [level.to_app() for level in result]
 
+    async def save(self, level: AppClassLevel) -> None:
+        if await self.id_exists(level.class_level_id):
+            await self.update(level)
+        await self.create(level)
+
     async def create(self, level: AppClassLevel) -> None:
         async with self.__helper.session as session:
             model = ClassLevelModel.from_app(level)

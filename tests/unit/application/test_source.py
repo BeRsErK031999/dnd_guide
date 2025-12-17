@@ -20,23 +20,23 @@ def source_service(source_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_source(source_repository, source):
-    await source_repository.create(source)
+    await source_repository.save(source)
 
 
 async def save_spell(spell_repository, spell):
-    await spell_repository.create(spell)
+    await spell_repository.save(spell)
 
 
 async def save_class(class_repository, character_class):
-    await class_repository.create(character_class)
+    await class_repository.save(character_class)
 
 
 async def save_race(race_repository, race):
-    await race_repository.create(race)
+    await race_repository.save(race)
 
 
 @pytest.mark.asyncio

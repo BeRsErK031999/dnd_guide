@@ -26,11 +26,7 @@ class ToolRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, tool: AppTool) -> None:
-        raise NotImplemented
-
-    @abstractmethod
-    async def update(self, tool: AppTool) -> None:
+    async def save(self, tool: AppTool) -> None:
         raise NotImplemented
 
     @abstractmethod

@@ -112,5 +112,5 @@ class CreateSpellUseCase(UserCheck):
             name_in_english=command.name_in_english,
             source_id=command.source_id,
         )
-        await self._spell_repository.create(AppSpell.from_domain(spell))
+        await self._spell_repository.save(AppSpell.from_domain(spell))
         return spell.spell_id()

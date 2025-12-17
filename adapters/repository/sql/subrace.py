@@ -65,6 +65,11 @@ class SQLSubraceRepository(DomainSubraceRepository, AppSubraceRepository):
             result = result.scalars().all()
             return [r.to_app() for r in result]
 
+    async def save(self, subrace: AppSubrace) -> None:
+        if await self.id_exists(subrace.subrace_id):
+            await self.update(subrace)
+        await self.create(subrace)
+
     async def create(self, subrace: AppSubrace) -> None:
         async with self.__db_helper.session as session:
             model = SubraceModel.from_domain(subrace)

@@ -25,9 +25,9 @@ class SQLUserRepository(UserRepository):
             users = result.scalars().all()
             return [user.to_app() for user in users]
 
-    async def create(self, user: AppUser) -> None:
+    async def save(self, user: AppUser) -> None:
         async with self.__helper.session as session:
-            session.add(UserModel.from_app(user))
+            await session.merge(UserModel.from_app(user))
             await session.commit()
 
     async def delete(self, user_id: UUID) -> None:

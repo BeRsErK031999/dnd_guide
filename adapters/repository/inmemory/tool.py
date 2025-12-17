@@ -29,10 +29,7 @@ class InMemoryToolRepository(DomainToolRepository, AppToolRepository):
             return [t for t in self._store.values() if search_by_name in t.name]
         return list(self._store.values())
 
-    async def create(self, tool: AppTool) -> None:
-        self._store[tool.tool_id] = tool
-
-    async def update(self, tool: AppTool) -> None:
+    async def save(self, tool: AppTool) -> None:
         self._store[tool.tool_id] = tool
 
     async def delete(self, tool_id: UUID) -> None:

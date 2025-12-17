@@ -85,7 +85,5 @@ class CreateClassLevelUseCase(UserCheck):
             bonus_damage,
             increase_speed,
         )
-        await self._class_level_repository.create(
-            AppClassLevel.from_domain(class_level)
-        )
+        await self._class_level_repository.save(AppClassLevel.from_domain(class_level))
         return class_level.level_id()

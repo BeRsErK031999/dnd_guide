@@ -69,6 +69,11 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
             result = result.scalars().all()
             return [item.to_app() for item in result]
 
+    async def save(self, race: AppRace) -> None:
+        if await self.id_exists(race.race_id):
+            await self.update(race)
+        await self.create(race)
+
     async def create(self, race: AppRace) -> None:
         async with self.__db_helper.session as session:
             model = RaceModel.from_app(race)

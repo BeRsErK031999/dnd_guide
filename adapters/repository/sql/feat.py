@@ -90,6 +90,11 @@ class SQLFeatRepository(DomainFeatRepository, AppFeatRepository):
             result = result.scalars().all()
             return [item.to_app() for item in result]
 
+    async def save(self, feat: AppFeat) -> None:
+        if await self.id_exists(feat.feat_id):
+            await self.update(feat)
+        await self.create(feat)
+
     async def create(self, feat: AppFeat) -> None:
         async with self.__helper.session as session:
             model = FeatModel.from_app(feat)

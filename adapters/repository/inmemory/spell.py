@@ -100,10 +100,7 @@ class InMemorySpellRepository(DomainSpellRepository, AppSpellRepository):
                 result.append(s)
         return result
 
-    async def create(self, spell: AppSpell) -> None:
-        self._store[spell.spell_id] = spell
-
-    async def update(self, spell: AppSpell) -> None:
+    async def save(self, spell: AppSpell) -> None:
         self._store[spell.spell_id] = spell
 
     async def delete(self, spell_id: UUID) -> None:

@@ -33,11 +33,7 @@ class FeatRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, feat: AppFeat) -> None:
-        raise NotImplemented
-
-    @abstractmethod
-    async def update(self, feat: AppFeat) -> None:
+    async def save(self, feat: AppFeat) -> None:
         raise NotImplemented
 
     @abstractmethod

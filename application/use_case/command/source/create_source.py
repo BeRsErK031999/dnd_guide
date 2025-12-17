@@ -31,5 +31,5 @@ class CreateSourceUseCase(UserCheck):
             command.description,
             command.name_in_english,
         )
-        await self._source_repository.create(AppSource.from_domain(source))
+        await self._source_repository.save(AppSource.from_domain(source))
         return source.source_id()

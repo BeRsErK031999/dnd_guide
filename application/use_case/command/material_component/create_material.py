@@ -30,7 +30,5 @@ class CreateMaterialComponentUseCase(UserCheck):
             command.name,
             command.description,
         )
-        await self._material_repository.create(
-            AppMaterialComponent.from_domain(material)
-        )
+        await self._material_repository.save(AppMaterialComponent.from_domain(material))
         return material.material_id()

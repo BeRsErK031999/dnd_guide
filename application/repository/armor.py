@@ -31,11 +31,7 @@ class ArmorRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, armor: AppArmor) -> None:
-        raise NotImplemented
-
-    @abstractmethod
-    async def update(self, armor: AppArmor) -> None:
+    async def save(self, armor: AppArmor) -> None:
         raise NotImplemented
 
     @abstractmethod

@@ -70,5 +70,5 @@ class CreateRaceUseCase(UserCheck):
             name_in_english=command.name_in_english,
             source_id=command.source_id,
         )
-        await self._race_repository.create(AppRace.from_domain(race))
+        await self._race_repository.save(AppRace.from_domain(race))
         return race.race_id()

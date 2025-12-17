@@ -63,6 +63,11 @@ class SQLArmorRepository(DomainArmorRepository, AppArmorRepository):
             result = await session.execute(query)
             return [armor.to_app() for armor in result.scalars().all()]
 
+    async def save(self, armor: AppArmor) -> None:
+        if await self.id_exists(armor.armor_id):
+            await self.update(armor)
+        await self.create(armor)
+
     async def create(self, armor: AppArmor) -> None:
         async with self.__helper.session as session:
             model = ArmorModel.from_app(armor)

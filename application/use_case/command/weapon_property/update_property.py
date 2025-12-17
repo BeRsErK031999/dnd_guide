@@ -100,6 +100,6 @@ class UpdateWeaponPropertyUseCase(UserCheck):
                 )
         if command.description is not None:
             weapon_property.new_description(command.description)
-        await self._property_repository.update(
+        await self._property_repository.save(
             AppWeaponProperty.from_domain(weapon_property)
         )

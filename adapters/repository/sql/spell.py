@@ -132,6 +132,11 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
             result = result.scalars().all()
             return [item.to_app() for item in result]
 
+    async def save(self, spell: AppSpell) -> None:
+        if await self.id_exists(spell.spell_id):
+            await self.update(spell)
+        await self.create(spell)
+
     async def create(self, spell: AppSpell) -> None:
         async with self.__db_helper.session as session:
             model = SpellModel.from_app(spell)

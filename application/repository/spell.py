@@ -42,11 +42,7 @@ class SpellRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, spell: AppSpell) -> None:
-        raise NotImplemented
-
-    @abstractmethod
-    async def update(self, spell: AppSpell) -> None:
+    async def save(self, spell: AppSpell) -> None:
         raise NotImplemented
 
     @abstractmethod

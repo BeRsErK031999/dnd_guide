@@ -24,15 +24,15 @@ def feature_service(feature_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_class(class_repository, character_class):
-    await class_repository.create(character_class)
+    await class_repository.save(character_class)
 
 
 async def save_feature(feature_repository, class_feature):
-    await feature_repository.create(class_feature)
+    await feature_repository.save(class_feature)
 
 
 @pytest.mark.asyncio

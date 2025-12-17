@@ -63,6 +63,11 @@ class SQLSubclassRepository(DomainSubclassRepository, AppSubclassRepository):
             result = result.scalars().all()
             return [subclass.to_app() for subclass in result]
 
+    async def save(self, subclass: AppSubclass) -> None:
+        if await self.id_exists(subclass.subclass_id):
+            await self.update(subclass)
+        await self.create(subclass)
+
     async def create(self, subclass: AppSubclass) -> None:
         async with self.__helper.session as session:
             model = CharacterSubclassModel.from_app(subclass)

@@ -29,10 +29,7 @@ class InMemorySubraceRepository(DomainSubraceRepository, AppSubraceRepository):
             return [s for s in self._store.values() if search_by_name in s.name]
         return list(self._store.values())
 
-    async def create(self, subrace: AppSubrace) -> None:
-        self._store[subrace.subrace_id] = subrace
-
-    async def update(self, subrace: AppSubrace) -> None:
+    async def save(self, subrace: AppSubrace) -> None:
         self._store[subrace.subrace_id] = subrace
 
     async def delete(self, subrace_id: UUID) -> None:

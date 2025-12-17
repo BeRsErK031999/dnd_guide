@@ -4,6 +4,7 @@ from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models.material import MaterialModel
 from application.dto.model.material import AppMaterial
 from application.repository import MaterialRepository as AppMaterialRepository
+from domain.error import DomainError
 from domain.material import MaterialRepository as DomainMaterialRepository
 from sqlalchemy import delete, exists, select
 
@@ -33,7 +34,11 @@ class SQLMaterialRepository(DomainMaterialRepository, AppMaterialRepository):
         async with self.__helper.session as session:
             query = select(MaterialModel).where(MaterialModel.id == material_id)
             result = await session.execute(query)
-            material_model = result.scalar_one()
+            material_model = result.scalar()
+            if material_model is None:
+                raise DomainError.not_found(
+                    f"материала с id {material_id} не существует"
+                )
             return material_model.to_app()
 
     async def get_all(self) -> list[AppMaterial]:
@@ -50,12 +55,7 @@ class SQLMaterialRepository(DomainMaterialRepository, AppMaterialRepository):
             result = await session.execute(query)
             return [model.to_app() for model in result.scalars().all()]
 
-    async def create(self, material: AppMaterial) -> None:
-        async with self.__helper.session as session:
-            session.add(MaterialModel.from_app(material))
-            await session.commit()
-
-    async def update(self, material: AppMaterial) -> None:
+    async def save(self, material: AppMaterial) -> None:
         async with self.__helper.session as session:
             await session.merge(MaterialModel.from_app(material))
             await session.commit()
@@ -63,5 +63,9 @@ class SQLMaterialRepository(DomainMaterialRepository, AppMaterialRepository):
     async def delete(self, material_id: UUID) -> None:
         async with self.__helper.session as session:
             stmt = delete(MaterialModel).where(MaterialModel.id == material_id)
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(
+                    f"материала с id {material_id} не существует"
+                )
             await session.commit()

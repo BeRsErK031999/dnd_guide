@@ -28,11 +28,7 @@ class SubclassFeatureRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, feature: AppSubclassFeature) -> None:
-        raise NotImplemented
-
-    @abstractmethod
-    async def update(self, feature: AppSubclassFeature) -> None:
+    async def save(self, feature: AppSubclassFeature) -> None:
         raise NotImplemented
 
     @abstractmethod

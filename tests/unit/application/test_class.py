@@ -27,23 +27,23 @@ def class_service(class_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_weapon(weapon_repository, weapon):
-    await weapon_repository.create(weapon)
+    await weapon_repository.save(weapon)
 
 
 async def save_class(class_repository, character_class):
-    await class_repository.create(character_class)
+    await class_repository.save(character_class)
 
 
 async def save_tool(tool_repository, tool):
-    await tool_repository.create(tool)
+    await tool_repository.save(tool)
 
 
 async def save_source(source_repository, source):
-    await source_repository.create(source)
+    await source_repository.save(source)
 
 
 @pytest.mark.asyncio

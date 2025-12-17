@@ -12,9 +12,11 @@ def utcnow() -> datetime:
 class Base(DeclarativeBase):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     created_at: Mapped[datetime] = mapped_column(
-        server_default=text("TIMEZONE('utc', now())")
+        # server_default=text("TIMEZONE('utc', now())")
+        default=utcnow
     )
     updated_at: Mapped[datetime] = mapped_column(
-        server_default=text("TIMEZONE('utc', now())"),
+        # server_default=text("TIMEZONE('utc', now())"),
+        default=utcnow,
         onupdate=utcnow,
     )

@@ -28,27 +28,27 @@ def spell_service(spell_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_spell(spell_repository, spell):
-    await spell_repository.create(spell)
+    await spell_repository.save(spell)
 
 
 async def save_class(class_repository, character_class):
-    await class_repository.create(character_class)
+    await class_repository.save(character_class)
 
 
 async def save_subclass(subclass_repository, subclass):
-    await subclass_repository.create(subclass)
+    await subclass_repository.save(subclass)
 
 
 async def save_material_component(material_component_repository, material_component):
-    await material_component_repository.create(material_component)
+    await material_component_repository.save(material_component)
 
 
 async def save_source(source_repository, source):
-    await source_repository.create(source)
+    await source_repository.save(source)
 
 
 @pytest.mark.asyncio

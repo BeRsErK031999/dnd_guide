@@ -52,10 +52,7 @@ class InMemoryClassRepository(DomainClassRepository, AppClassRepository):
                 result.append(c)
         return result
 
-    async def create(self, character_class: AppClass) -> None:
-        self._store[character_class.class_id] = character_class
-
-    async def update(self, character_class: AppClass) -> None:
+    async def save(self, character_class: AppClass) -> None:
         self._store[character_class.class_id] = character_class
 
     async def delete(self, class_id: UUID) -> None:

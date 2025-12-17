@@ -19,15 +19,15 @@ def tool_service(tool_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_tool(tool_repository, tool):
-    await tool_repository.create(tool)
+    await tool_repository.save(tool)
 
 
 async def save_class(class_repository, class_):
-    await class_repository.create(class_)
+    await class_repository.save(class_)
 
 
 @pytest.mark.asyncio

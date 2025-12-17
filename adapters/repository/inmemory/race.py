@@ -37,10 +37,7 @@ class InMemoryRaceRepository(DomainRaceRepository, AppRaceRepository):
                 result.append(r)
         return result
 
-    async def create(self, race: AppRace) -> None:
-        self._store[race.race_id] = race
-
-    async def update(self, race: AppRace) -> None:
+    async def save(self, race: AppRace) -> None:
         self._store[race.race_id] = race
 
     async def delete(self, race_id: UUID) -> None:

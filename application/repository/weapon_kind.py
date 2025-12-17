@@ -30,11 +30,7 @@ class WeaponKindRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, weapon_kind: AppWeaponKind) -> None:
-        raise NotImplemented
-
-    @abstractmethod
-    async def update(self, weapon_kind: AppWeaponKind) -> None:
+    async def save(self, weapon_kind: AppWeaponKind) -> None:
         raise NotImplemented
 
     @abstractmethod

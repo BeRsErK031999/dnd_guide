@@ -54,5 +54,5 @@ class CreateArmorUseCase(UserCheck):
             Coins(command.cost.count, PieceType.from_str(command.cost.piece_type)),
             command.material_id,
         )
-        await self._armor_repository.create(AppArmor.from_domain(armor))
+        await self._armor_repository.save(AppArmor.from_domain(armor))
         return armor.armor_id()

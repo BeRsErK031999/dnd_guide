@@ -90,5 +90,5 @@ class CreateClassUseCase(UserCheck):
             command.name_in_english,
             command.source_id,
         )
-        await self._class_repository.create(AppClass.from_domain(new_class))
+        await self._class_repository.save(AppClass.from_domain(new_class))
         return new_class.class_id()

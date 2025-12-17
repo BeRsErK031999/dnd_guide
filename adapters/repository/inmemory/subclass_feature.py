@@ -44,10 +44,7 @@ class InMemorySubclassFeatureRepository(
             ]
         return list(self._store.values())
 
-    async def create(self, feature: AppSubclassFeature) -> None:
-        self._store[feature.feature_id] = feature
-
-    async def update(self, feature: AppSubclassFeature) -> None:
+    async def save(self, feature: AppSubclassFeature) -> None:
         self._store[feature.feature_id] = feature
 
     async def delete(self, feature_id: UUID) -> None:

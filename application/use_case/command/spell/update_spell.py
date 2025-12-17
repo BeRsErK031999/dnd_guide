@@ -142,4 +142,4 @@ class UpdateSpellUseCase(UserCheck):
                     f"источник с id {command.source_id} не существует"
                 )
             spell.new_source_id(command.source_id)
-        await self._spell_repository.update(AppSpell.from_domain(spell))
+        await self._spell_repository.save(AppSpell.from_domain(spell))

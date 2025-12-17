@@ -55,10 +55,7 @@ class InMemoryWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
                 result.append(w)
         return result
 
-    async def create(self, weapon: AppWeapon) -> None:
-        self._store[weapon.weapon_id] = weapon
-
-    async def update(self, weapon: AppWeapon) -> None:
+    async def save(self, weapon: AppWeapon) -> None:
         self._store[weapon.weapon_id] = weapon
 
     async def delete(self, weapon_id: UUID) -> None:

@@ -55,6 +55,11 @@ class SQLToolRepository(DomainToolRepository, AppToolRepository):
             result = await session.execute(query)
             return [tool_model.to_app() for tool_model in result.scalars().all()]
 
+    async def save(self, tool: AppTool) -> None:
+        if await self.id_exists(tool.tool_id):
+            await self.update(tool)
+        await self.create(tool)
+
     async def create(self, tool: AppTool) -> None:
         async with self.__helper.session as session:
             model = ToolModel.from_app(tool)

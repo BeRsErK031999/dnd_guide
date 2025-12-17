@@ -90,6 +90,11 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
             weapons = weapons.scalars().all()
             return [w.to_app() for w in weapons]
 
+    async def save(self, weapon: AppWeapon) -> None:
+        if await self.id_exists(weapon.weapon_id):
+            await self.update(weapon)
+        await self.create(weapon)
+
     async def create(self, weapon: AppWeapon) -> None:
         async with self.__helper.session as session:
             model = WeaponModel.from_app(weapon)

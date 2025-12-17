@@ -67,4 +67,4 @@ class UpdateSubraceUseCase(UserCheck):
             subrace.remove_features(command.remove_features)
         if command.name_in_english is not None:
             subrace.new_name_in_english(command.name_in_english)
-        await self._subrace_repository.update(AppSubrace.from_domain(subrace))
+        await self._subrace_repository.save(AppSubrace.from_domain(subrace))

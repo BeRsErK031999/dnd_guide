@@ -6,6 +6,7 @@ from application.dto.model.material_component import AppMaterialComponent
 from application.repository import (
     MaterialComponentRepository as AppMaterialComponentRepository,
 )
+from domain.error import DomainError
 from domain.material_component import (
     MaterialComponentRepository as DomainMaterialComponentRepository,
 )
@@ -45,7 +46,11 @@ class SQLMaterialComponentRepository(
                 MaterialComponentModel.id == material_id
             )
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(
+                    f"материала с id {material_id} не существует"
+                )
             return result.to_app()
 
     async def get_all(self) -> list[AppMaterialComponent]:
@@ -67,13 +72,7 @@ class SQLMaterialComponentRepository(
             result = await session.execute(query)
             return [item.to_app() for item in result.scalars().all()]
 
-    async def create(self, material: AppMaterialComponent) -> None:
-        async with self.__db_helper.session as session:
-            material_model = MaterialComponentModel.from_app(material)
-            session.add(material_model)
-            await session.commit()
-
-    async def update(self, material: AppMaterialComponent) -> None:
+    async def save(self, material: AppMaterialComponent) -> None:
         async with self.__db_helper.session as session:
             await session.merge(MaterialComponentModel.from_app(material))
             await session.commit()
@@ -83,5 +82,9 @@ class SQLMaterialComponentRepository(
             stmt = delete(MaterialComponentModel).where(
                 MaterialComponentModel.id == material_id
             )
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(
+                    f"материала с id {material_id} не существует"
+                )
             await session.commit()

@@ -29,10 +29,7 @@ class InMemorySourceRepository(DomainSourceRepository, AppSourceRepository):
             return [s for s in self._store.values() if search_by_name in s.name]
         return list(self._store.values())
 
-    async def create(self, source: AppSource) -> None:
-        self._store[source.source_id] = source
-
-    async def update(self, source: AppSource) -> None:
+    async def save(self, source: AppSource) -> None:
         self._store[source.source_id] = source
 
     async def delete(self, source_id: UUID) -> None:

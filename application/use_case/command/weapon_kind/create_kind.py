@@ -31,5 +31,5 @@ class CreateWeaponKindUseCase(UserCheck):
             command.description,
             WeaponType.from_str(command.weapon_type),
         )
-        await self._kind_repository.create(AppWeaponKind.from_domain(kind))
+        await self._kind_repository.save(AppWeaponKind.from_domain(kind))
         return kind.weapon_kind_id()

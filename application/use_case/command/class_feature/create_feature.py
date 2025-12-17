@@ -45,5 +45,5 @@ class CreateClassFeatureUseCase(UserCheck):
             command.level,
             command.name_in_english,
         )
-        await self.__feature_repository.create(AppClassFeature.from_domain(feature))
+        await self.__feature_repository.save(AppClassFeature.from_domain(feature))
         return feature.feature_id()

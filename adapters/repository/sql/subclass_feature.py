@@ -76,6 +76,11 @@ class SQLSubclassFeatureRepository(
             result = result.scalars().all()
             return [model.to_app() for model in result]
 
+    async def save(self, feature: AppSubclassFeature) -> None:
+        if await self.id_exists(feature.feature_id):
+            await self.update(feature)
+        await self.create(feature)
+
     async def create(self, feature: AppSubclassFeature) -> None:
         async with self.__db_helper.session as session:
             session.add(SubclassFeatureModel.from_app(feature))

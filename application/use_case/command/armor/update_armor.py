@@ -70,4 +70,4 @@ class UpdateArmorUseCase(UserCheck):
                     f"материал с id {command.material_id} не существует"
                 )
             armor.new_material_id(command.material_id)
-        await self._armor_repository.update(AppArmor.from_domain(armor))
+        await self._armor_repository.save(AppArmor.from_domain(armor))

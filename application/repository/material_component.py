@@ -28,11 +28,7 @@ class MaterialComponentRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, material: AppMaterialComponent) -> None:
-        raise NotImplemented
-
-    @abstractmethod
-    async def update(self, material: AppMaterialComponent) -> None:
+    async def save(self, material: AppMaterialComponent) -> None:
         raise NotImplemented
 
     @abstractmethod

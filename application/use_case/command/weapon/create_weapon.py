@@ -72,5 +72,5 @@ class CreateWeaponUseCase(UserCheck):
             command.weapon_property_ids,
             command.material_id,
         )
-        await self._weapon_repository.create(AppWeapon.from_domain(weapon))
+        await self._weapon_repository.save(AppWeapon.from_domain(weapon))
         return weapon.weapon_id()

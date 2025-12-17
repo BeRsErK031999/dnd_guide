@@ -38,5 +38,5 @@ class CreateSubclassUseCase(UserCheck):
             command.description,
             command.name_in_english,
         )
-        await self._subclass_repository.create(AppSubclass.from_domain(new_subclass))
+        await self._subclass_repository.save(AppSubclass.from_domain(new_subclass))
         return new_subclass.subclass_id()

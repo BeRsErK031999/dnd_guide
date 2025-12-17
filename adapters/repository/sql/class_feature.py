@@ -63,6 +63,11 @@ class SQLClassFeatureRepository(
             result = result.scalars().all()
             return [feature.to_app() for feature in result]
 
+    async def save(self, feature: AppClassFeature) -> None:
+        if await self.id_exists(feature.feature_id):
+            await self.update(feature)
+        await self.create(feature)
+
     async def create(self, feature: AppClassFeature) -> None:
         async with self.__db_helper.session as session:
             model = ClassFeatureModel.from_app(feature)

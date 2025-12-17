@@ -57,6 +57,11 @@ class SQLSourceRepository(DomainSourceRepository, AppSourceRepository):
             result = result.scalars().all()
             return [source.to_app() for source in result]
 
+    async def save(self, source: AppSource) -> None:
+        if await self.id_exists(source.source_id):
+            await self.update(source)
+        await self.create(source)
+
     async def create(self, source: AppSource) -> None:
         async with self.__db_helper.session as session:
             session.add(SourceModel.from_app(source))

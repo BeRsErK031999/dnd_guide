@@ -23,15 +23,15 @@ def property_service(property_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_property(property_repository, weapon_property):
-    await property_repository.create(weapon_property)
+    await property_repository.save(weapon_property)
 
 
 async def save_weapon(weapon_repository, weapon):
-    await weapon_repository.create(weapon)
+    await weapon_repository.save(weapon)
 
 
 @pytest.mark.asyncio

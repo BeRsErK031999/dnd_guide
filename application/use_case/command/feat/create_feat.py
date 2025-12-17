@@ -47,5 +47,5 @@ class CreateFeatUseCase(UserCheck):
                 for increase_modifier in command.increase_modifiers
             ],
         )
-        await self._feat_repository.create(AppFeat.from_domain(feat))
+        await self._feat_repository.save(AppFeat.from_domain(feat))
         return feat.feat_id()

@@ -24,15 +24,15 @@ def kind_service(weapon_kind_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_kind(weapon_kind_repository, weapon_kind):
-    await weapon_kind_repository.create(weapon_kind)
+    await weapon_kind_repository.save(weapon_kind)
 
 
 async def save_weapon(weapon_repository, weapon):
-    await weapon_repository.create(weapon)
+    await weapon_repository.save(weapon)
 
 
 @pytest.mark.asyncio

@@ -63,6 +63,11 @@ class SQLWeaponKindRepository(DomainWeaponKindRepository, AppWeaponKindRepositor
             result = result.scalars().all()
             return [item.to_app() for item in result]
 
+    async def save(self, weapon_kind: AppWeaponKind) -> None:
+        if await self.id_exists(weapon_kind.weapon_kind_id):
+            await self.update(weapon_kind)
+        await self.create(weapon_kind)
+
     async def create(self, weapon_kind: AppWeaponKind) -> None:
         async with self.__helper.session as session:
             session.add(WeaponKindModel.from_app(weapon_kind))

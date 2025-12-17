@@ -14,7 +14,7 @@ class InMemoryUserRepository(UserRepository):
     async def get_all(self) -> list[AppUser]:
         return list(self._store.values())
 
-    async def create(self, user: AppUser) -> None:
+    async def save(self, user: AppUser) -> None:
         self._store[user.user_id] = user
 
     async def delete(self, user_id: UUID) -> None:

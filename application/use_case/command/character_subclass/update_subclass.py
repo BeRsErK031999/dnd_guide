@@ -45,4 +45,4 @@ class UpdateSubclassUseCase(UserCheck):
             changing_class.new_description(command.description)
         if command.name_in_english is not None:
             changing_class.new_name_in_english(command.name_in_english)
-        await self._subclass_repository.update(AppSubclass.from_domain(changing_class))
+        await self._subclass_repository.save(AppSubclass.from_domain(changing_class))

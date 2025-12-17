@@ -35,4 +35,4 @@ class UpdateSourceUseCase(UserCheck):
             source.new_description(command.description)
         if command.name_in_english is not None:
             source.new_name_in_english(command.name_in_english)
-        await self._source_repository.update(AppSource.from_domain(source))
+        await self._source_repository.save(AppSource.from_domain(source))

@@ -25,15 +25,15 @@ def class_level_service(class_level_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_class(class_repository, character_class):
-    await class_repository.create(character_class)
+    await class_repository.save(character_class)
 
 
 async def save_class_level(class_level_repository, class_level):
-    await class_level_repository.create(class_level)
+    await class_level_repository.save(class_level)
 
 
 @pytest.mark.asyncio

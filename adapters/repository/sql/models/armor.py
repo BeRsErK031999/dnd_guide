@@ -54,7 +54,7 @@ class ArmorModel(Base):
             armor_type=armor.armor_type,
             name=armor.name,
             description=armor.description,
-            armor_class=armor.armor_class.base_class,
+            base_class=armor.armor_class.base_class,
             modifier=armor.armor_class.modifier,
             max_modifier_bonus=armor.armor_class.max_modifier_bonus,
             strength=armor.strength,

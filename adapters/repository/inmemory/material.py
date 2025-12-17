@@ -29,10 +29,7 @@ class InMemoryMaterialRepository(DomainMaterialRepository, AppMaterialRepository
             return [m for m in self._store.values() if search_by_name in m.name]
         return list(self._store.values())
 
-    async def create(self, material: AppMaterial) -> None:
-        self._store[material.material_id] = material
-
-    async def update(self, material: AppMaterial) -> None:
+    async def save(self, material: AppMaterial) -> None:
         self._store[material.material_id] = material
 
     async def delete(self, material_id: UUID) -> None:

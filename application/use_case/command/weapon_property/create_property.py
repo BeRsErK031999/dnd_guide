@@ -62,7 +62,7 @@ class CreateWeaponPropertyUseCase(UserCheck):
                 else None
             ),
         )
-        await self._property_repository.create(
+        await self._property_repository.save(
             AppWeaponProperty.from_domain(weapon_property)
         )
         return weapon_property.weapon_property_id()

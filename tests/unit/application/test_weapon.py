@@ -25,23 +25,23 @@ def weapon_service(weapon_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_weapon(weapon_repository, weapon):
-    await weapon_repository.create(weapon)
+    await weapon_repository.save(weapon)
 
 
 async def save_weapon_kind(weapon_kind_repository, weapon_kind):
-    await weapon_kind_repository.create(weapon_kind)
+    await weapon_kind_repository.save(weapon_kind)
 
 
 async def save_weapon_property(weapon_property_repository, weapon_property):
-    await weapon_property_repository.create(weapon_property)
+    await weapon_property_repository.save(weapon_property)
 
 
 async def save_material(material_repository, material):
-    await material_repository.create(material)
+    await material_repository.save(material)
 
 
 @pytest.mark.asyncio
@@ -393,7 +393,7 @@ async def test_delete_with_class(
             weapons=[st_weapon.weapon_id]
         )
     )
-    await class_repository.create(exists_class)
+    await class_repository.save(exists_class)
     use_case = DeleteWeaponUseCase(user_repository, weapon_repository, class_repository)
     try:
         await use_case.execute(

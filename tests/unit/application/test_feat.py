@@ -22,11 +22,11 @@ def feat_service(feat_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_feat(feat_repository, feat):
-    await feat_repository.create(feat)
+    await feat_repository.save(feat)
 
 
 @pytest.mark.asyncio

@@ -24,15 +24,15 @@ def material_component_service(material_component_repository):
 
 
 async def save_user(user_repository, user):
-    await user_repository.create(user)
+    await user_repository.save(user)
 
 
 async def save_material_component(material_component_repository, material_component):
-    await material_component_repository.create(material_component)
+    await material_component_repository.save(material_component)
 
 
 async def save_spell(spell_repository, spell):
-    await spell_repository.create(spell)
+    await spell_repository.save(spell)
 
 
 @pytest.mark.asyncio

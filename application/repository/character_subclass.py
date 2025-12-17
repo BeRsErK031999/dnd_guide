@@ -26,11 +26,7 @@ class SubclassRepository(ABC):
         raise NotImplemented
 
     @abstractmethod
-    async def create(self, subclass: AppSubclass) -> None:
-        raise NotImplemented
-
-    @abstractmethod
-    async def update(self, subclass: AppSubclass) -> None:
+    async def save(self, subclass: AppSubclass) -> None:
         raise NotImplemented
 
     @abstractmethod

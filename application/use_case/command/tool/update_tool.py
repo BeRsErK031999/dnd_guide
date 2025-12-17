@@ -52,4 +52,4 @@ class UpdateToolUseCase(UserCheck):
                     for utilize in command.utilizes
                 ]
             )
-        await self._tool_repository.update(AppTool.from_domain(tool))
+        await self._tool_repository.save(AppTool.from_domain(tool))

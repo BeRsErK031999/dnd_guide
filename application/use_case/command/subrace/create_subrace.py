@@ -52,5 +52,5 @@ class CreateSubraceUseCase(UserCheck):
             ],
             command.name_in_english,
         )
-        await self._subrace_repository.create(AppSubrace.from_domain(subrace))
+        await self._subrace_repository.save(AppSubrace.from_domain(subrace))
         return subrace.subrace_id()

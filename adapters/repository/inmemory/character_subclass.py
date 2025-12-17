@@ -35,10 +35,7 @@ class InMemorySubclassRepository(DomainSubclassRepository, AppSubclassRepository
         else:
             return list(self._store.values())
 
-    async def create(self, subclass: AppSubclass) -> None:
-        self._store[subclass.subclass_id] = subclass
-
-    async def update(self, subclass: AppSubclass) -> None:
+    async def save(self, subclass: AppSubclass) -> None:
         self._store[subclass.subclass_id] = subclass
 
     async def delete(self, subclass_id: UUID) -> None:
