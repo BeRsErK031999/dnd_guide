@@ -33,7 +33,7 @@ class RaceModel(Base):
     source_id: Mapped[UUID] = mapped_column(ForeignKey("source.id"))
 
     increase_modifiers: Mapped[list["RaceIncreaseModifierModel"]] = relationship(
-        back_populates="race"
+        back_populates="race", cascade="all, delete-orphan"
     )
     features: Mapped[list["RaceFeatureModel"]] = relationship(back_populates="race")
     source: Mapped["SourceModel"] = relationship(back_populates="races")
@@ -76,7 +76,7 @@ class RaceIncreaseModifierModel(Base):
 
     name: Mapped[str] = mapped_column(String(50))
     bonus: Mapped[int]
-    race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
+    race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id", ondelete="CASCADE"))
 
     race: Mapped["RaceModel"] = relationship(back_populates="increase_modifiers")
 
@@ -102,7 +102,7 @@ class RaceFeatureModel(Base):
 
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str]
-    race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id"))
+    race_id: Mapped[UUID] = mapped_column(ForeignKey("race.id", ondelete="CASCADE"))
 
     race: Mapped["RaceModel"] = relationship(back_populates="features")
 

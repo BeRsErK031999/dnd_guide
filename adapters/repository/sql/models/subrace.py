@@ -24,10 +24,10 @@ class SubraceModel(Base):
 
     race: Mapped["RaceModel"] = relationship(back_populates="subraces")
     increase_modifiers: Mapped[list["SubraceIncreaseModifierModel"]] = relationship(
-        back_populates="subrace"
+        back_populates="subrace", cascade="all, delete-orphan"
     )
     features: Mapped[list["SubraceFeatureModel"]] = relationship(
-        back_populates="subrace"
+        back_populates="subrace", cascade="all, delete-orphan"
     )
 
     def to_app(self) -> AppSubrace:
@@ -57,7 +57,9 @@ class SubraceIncreaseModifierModel(Base):
 
     name: Mapped[str] = mapped_column(String(50))
     bonus: Mapped[int]
-    subrace_id: Mapped[UUID] = mapped_column(ForeignKey("subrace.id"))
+    subrace_id: Mapped[UUID] = mapped_column(
+        ForeignKey("subrace.id", ondelete="CASCADE")
+    )
 
     subrace: Mapped["SubraceModel"] = relationship(back_populates="increase_modifiers")
 
@@ -78,7 +80,9 @@ class SubraceFeatureModel(Base):
 
     name: Mapped[str] = mapped_column(String(50))
     description: Mapped[str]
-    subrace_id: Mapped[UUID] = mapped_column(ForeignKey("subrace.id"))
+    subrace_id: Mapped[UUID] = mapped_column(
+        ForeignKey("subrace.id", ondelete="CASCADE")
+    )
 
     subrace: Mapped["SubraceModel"] = relationship(back_populates="features")
 

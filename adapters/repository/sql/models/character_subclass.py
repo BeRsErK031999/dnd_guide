@@ -24,7 +24,7 @@ class CharacterSubclassModel(Base):
         back_populates="character_subclasses"
     )
     features: Mapped["SubclassFeatureModel"] = relationship(
-        back_populates="character_subclass"
+        back_populates="character_subclass", cascade="all, delete-orphan"
     )
     spells: Mapped[list["SpellModel"]] = relationship(
         back_populates="character_subclasses", secondary="rel_spell_character_subclass"

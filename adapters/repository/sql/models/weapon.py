@@ -162,5 +162,9 @@ class WeaponKindModel(Base):
 class RelWeaponPropertyModel(Base):
     __tablename__ = "rel_weapon_property"
 
-    weapon_id: Mapped[UUID] = mapped_column(ForeignKey("weapon.id"), unique=True)
-    weapon_property_id: Mapped[UUID] = mapped_column(ForeignKey("weapon_property.id"))
+    weapon_id: Mapped[UUID] = mapped_column(
+        ForeignKey("weapon.id", ondelete="CASCADE"), unique=True
+    )
+    weapon_property_id: Mapped[UUID] = mapped_column(
+        ForeignKey("weapon_property.id", ondelete="CASCADE")
+    )

@@ -37,16 +37,16 @@ class CharacterClassModel(Base):
     source_id: Mapped[UUID] = mapped_column(ForeignKey("source.id"))
 
     primary_modifiers: Mapped[list["ClassPrimaryModifierModel"]] = relationship(
-        back_populates="character_class"
+        back_populates="character_class", cascade="all, delete-orphan"
     )
     armor_types: Mapped[list["ClassArmorTypeModel"]] = relationship(
-        back_populates="character_class"
+        back_populates="character_class", cascade="all, delete-orphan"
     )
     saving_throws: Mapped[list["ClassSavingThrowModel"]] = relationship(
-        back_populates="character_class"
+        back_populates="character_class", cascade="all, delete-orphan"
     )
     skills: Mapped[list["ClassSkillModel"]] = relationship(
-        back_populates="character_class"
+        back_populates="character_class", cascade="all, delete-orphan"
     )
     weapons: Mapped[list["WeaponModel"]] = relationship(
         back_populates="character_classes", secondary="rel_class_weapon"
@@ -55,13 +55,13 @@ class CharacterClassModel(Base):
         back_populates="character_classes", secondary="rel_class_tool"
     )
     features: Mapped[list["ClassFeatureModel"]] = relationship(
-        back_populates="character_class"
+        back_populates="character_class", cascade="all, delete-orphan"
     )
     character_subclasses: Mapped[list["CharacterSubclassModel"]] = relationship(
-        back_populates="character_class"
+        back_populates="character_class", cascade="all, delete-orphan"
     )
     class_levels: Mapped[list["ClassLevelModel"]] = relationship(
-        back_populates="character_class"
+        back_populates="character_class", cascade="all, delete-orphan"
     )
     spells: Mapped[list["SpellModel"]] = relationship(
         back_populates="character_classes", secondary="rel_spell_character_class"
@@ -117,7 +117,9 @@ class ClassPrimaryModifierModel(Base):
     __tablename__ = "class_primary_modifier"
 
     name: Mapped[str] = mapped_column(String(50))
-    class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
+    class_id: Mapped[UUID] = mapped_column(
+        ForeignKey("character_class.id", ondelete="CASCADE")
+    )
 
     character_class: Mapped["CharacterClassModel"] = relationship(
         back_populates="primary_modifiers"
@@ -138,7 +140,9 @@ class ClassArmorTypeModel(Base):
     __tablename__ = "class_armor_type"
 
     name: Mapped[str] = mapped_column(String(50))
-    class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
+    class_id: Mapped[UUID] = mapped_column(
+        ForeignKey("character_class.id", ondelete="CASCADE")
+    )
 
     character_class: Mapped["CharacterClassModel"] = relationship(
         back_populates="armor_types"
@@ -159,7 +163,9 @@ class ClassSavingThrowModel(Base):
     __tablename__ = "class_saving_throw"
 
     name: Mapped[str] = mapped_column(String(50))
-    class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
+    class_id: Mapped[UUID] = mapped_column(
+        ForeignKey("character_class.id", ondelete="CASCADE")
+    )
 
     character_class: Mapped["CharacterClassModel"] = relationship(
         back_populates="saving_throws"
@@ -180,7 +186,9 @@ class ClassSkillModel(Base):
     __tablename__ = "class_skill"
 
     name: Mapped[str] = mapped_column(String(50))
-    class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
+    class_id: Mapped[UUID] = mapped_column(
+        ForeignKey("character_class.id", ondelete="CASCADE")
+    )
 
     character_class: Mapped["CharacterClassModel"] = relationship(
         back_populates="skills"
@@ -200,12 +208,16 @@ class ClassSkillModel(Base):
 class RelClassToolModel(Base):
     __tablename__ = "rel_class_tool"
 
-    tool_id: Mapped[UUID] = mapped_column(ForeignKey("tool.id"))
-    class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
+    tool_id: Mapped[UUID] = mapped_column(ForeignKey("tool.id", ondelete="CASCADE"))
+    class_id: Mapped[UUID] = mapped_column(
+        ForeignKey("character_class.id", ondelete="CASCADE")
+    )
 
 
 class RelClassWeaponModel(Base):
     __tablename__ = "rel_class_weapon"
 
-    weapon_id: Mapped[UUID] = mapped_column(ForeignKey("weapon.id"))
-    class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
+    weapon_id: Mapped[UUID] = mapped_column(ForeignKey("weapon.id", ondelete="CASCADE"))
+    class_id: Mapped[UUID] = mapped_column(
+        ForeignKey("character_class.id", ondelete="CASCADE")
+    )

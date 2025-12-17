@@ -136,21 +136,25 @@ class SpellSavingThrowModel(Base):
 class RelSpellCharacterClassModel(Base):
     __tablename__ = "rel_spell_character_class"
 
-    character_class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
-    spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"))
+    character_class_id: Mapped[UUID] = mapped_column(
+        ForeignKey("character_class.id", ondelete="CASCADE")
+    )
+    spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id", ondelete="CASCADE"))
 
 
 class RelSpellCharacterSubclassModel(Base):
     __tablename__ = "rel_spell_character_subclass"
 
     character_subclass_id: Mapped[UUID] = mapped_column(
-        ForeignKey("character_subclass.id")
+        ForeignKey("character_subclass.id", ondelete="CASCADE")
     )
-    spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"))
+    spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id", ondelete="CASCADE"))
 
 
 class RelSpellMaterialModel(Base):
     __tablename__ = "rel_spell_material"
 
-    material_id: Mapped[UUID] = mapped_column(ForeignKey("material_component.id"))
-    spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"))
+    material_id: Mapped[UUID] = mapped_column(
+        ForeignKey("material_component.id", ondelete="CASCADE")
+    )
+    spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id", ondelete="CASCADE"))

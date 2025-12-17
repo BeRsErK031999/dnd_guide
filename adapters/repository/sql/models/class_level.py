@@ -34,13 +34,15 @@ class ClassLevelModel(Base):
     bonus_damage_description: Mapped[str | None]
     increase_speed: Mapped[float | None]
     increase_speed_description: Mapped[str | None]
-    character_class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
+    character_class_id: Mapped[UUID] = mapped_column(
+        ForeignKey("character_class.id", ondelete="CASCADE")
+    )
 
     character_class: Mapped["CharacterClassModel"] = relationship(
         back_populates="class_levels"
     )
     class_level_spell_slot: Mapped["ClassLevelSpellSlotModel | None"] = relationship(
-        back_populates="class_level"
+        back_populates="class_level", cascade="all, delete-orphan"
     )
 
     def to_app(self) -> "AppClassLevel":
@@ -130,7 +132,9 @@ class ClassLevelSpellSlotModel(Base):
     level_7: Mapped[int]
     level_8: Mapped[int]
     level_9: Mapped[int]
-    class_level_id: Mapped[UUID] = mapped_column(ForeignKey("class_level.id"))
+    class_level_id: Mapped[UUID] = mapped_column(
+        ForeignKey("class_level.id", ondelete="CASCADE")
+    )
 
     class_level: Mapped["ClassLevelModel"] = relationship(
         back_populates="class_level_spell_slot"

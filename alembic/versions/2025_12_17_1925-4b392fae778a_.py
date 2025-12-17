@@ -1,8 +1,8 @@
-"""initial
+"""empty message
 
-Revision ID: 83fa423d5579
+Revision ID: 4b392fae778a
 Revises:
-Create Date: 2025-11-18 16:44:07.450140
+Create Date: 2025-12-17 19:25:32.445832
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "83fa423d5579"
+revision: str = "4b392fae778a"
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,18 +28,8 @@ def upgrade() -> None:
         sa.Column("description", sa.String(), nullable=False),
         sa.Column("caster", sa.Boolean(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
     )
@@ -48,18 +38,8 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=50), nullable=False),
         sa.Column("description", sa.String(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
     )
@@ -68,18 +48,8 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=50), nullable=False),
         sa.Column("description", sa.String(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
     )
@@ -89,18 +59,8 @@ def upgrade() -> None:
         sa.Column("description", sa.String(), nullable=False),
         sa.Column("name_in_english", sa.String(length=100), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
     )
@@ -112,36 +72,16 @@ def upgrade() -> None:
         sa.Column("weight", sa.Float(), nullable=False),
         sa.Column("tool_type", sa.String(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
     )
     op.create_table(
         "user",
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
@@ -150,18 +90,8 @@ def upgrade() -> None:
         sa.Column("description", sa.String(), nullable=False),
         sa.Column("weapon_type", sa.String(length=50), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
     )
@@ -174,18 +104,8 @@ def upgrade() -> None:
         sa.Column("second_hand_dice_name", sa.String(), nullable=True),
         sa.Column("second_hand_dice_count", sa.Integer(), nullable=True),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
     )
@@ -203,18 +123,8 @@ def upgrade() -> None:
         sa.Column("max_modifier_bonus", sa.Integer(), nullable=True),
         sa.Column("material_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
             ["material_id"],
             ["material.id"],
@@ -236,18 +146,8 @@ def upgrade() -> None:
         sa.Column("number_tools", sa.Integer(), nullable=False),
         sa.Column("source_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
             ["source_id"],
             ["source.id"],
@@ -260,22 +160,9 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=50), nullable=False),
         sa.Column("feat_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.ForeignKeyConstraint(
-            ["feat_id"],
-            ["feat.id"],
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.ForeignKeyConstraint(["feat_id"], ["feat.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
@@ -283,22 +170,9 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=50), nullable=False),
         sa.Column("feat_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.ForeignKeyConstraint(
-            ["feat_id"],
-            ["feat.id"],
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.ForeignKeyConstraint(["feat_id"], ["feat.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
@@ -307,22 +181,9 @@ def upgrade() -> None:
         sa.Column("min_value", sa.Integer(), nullable=False),
         sa.Column("feat_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.ForeignKeyConstraint(
-            ["feat_id"],
-            ["feat.id"],
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.ForeignKeyConstraint(["feat_id"], ["feat.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
@@ -338,18 +199,8 @@ def upgrade() -> None:
         sa.Column("creature_size", sa.String(length=50), nullable=False),
         sa.Column("source_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
             ["source_id"],
             ["source.id"],
@@ -379,18 +230,8 @@ def upgrade() -> None:
         sa.Column("material_component", sa.Boolean(), nullable=False),
         sa.Column("source_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
             ["source_id"],
             ["source.id"],
@@ -404,18 +245,8 @@ def upgrade() -> None:
         sa.Column("complexity", sa.Integer(), nullable=False),
         sa.Column("tool_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(["tool_id"], ["tool.id"], ondelete="cascade"),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -432,18 +263,8 @@ def upgrade() -> None:
         sa.Column("material_id", sa.Uuid(), nullable=False),
         sa.Column("kind_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
             ["kind_id"],
             ["weapon_kind.id"],
@@ -462,18 +283,8 @@ def upgrade() -> None:
         sa.Column("name_in_english", sa.String(length=50), nullable=False),
         sa.Column("character_class_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
             ["character_class_id"],
             ["character_class.id"],
@@ -486,21 +297,10 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=50), nullable=False),
         sa.Column("class_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["class_id"],
-            ["character_class.id"],
+            ["class_id"], ["character_class.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -512,21 +312,10 @@ def upgrade() -> None:
         sa.Column("level", sa.Integer(), nullable=False),
         sa.Column("character_class_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["character_class_id"],
-            ["character_class.id"],
+            ["character_class_id"], ["character_class.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
@@ -548,21 +337,10 @@ def upgrade() -> None:
         sa.Column("increase_speed_description", sa.String(), nullable=True),
         sa.Column("character_class_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["character_class_id"],
-            ["character_class.id"],
+            ["character_class_id"], ["character_class.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -571,21 +349,10 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=50), nullable=False),
         sa.Column("class_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["class_id"],
-            ["character_class.id"],
+            ["class_id"], ["character_class.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -594,21 +361,10 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=50), nullable=False),
         sa.Column("class_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["class_id"],
-            ["character_class.id"],
+            ["class_id"], ["character_class.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -617,21 +373,10 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=50), nullable=False),
         sa.Column("class_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["class_id"],
-            ["character_class.id"],
+            ["class_id"], ["character_class.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -641,22 +386,9 @@ def upgrade() -> None:
         sa.Column("description", sa.String(), nullable=False),
         sa.Column("race_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.ForeignKeyConstraint(
-            ["race_id"],
-            ["race.id"],
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.ForeignKeyConstraint(["race_id"], ["race.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
@@ -665,22 +397,9 @@ def upgrade() -> None:
         sa.Column("bonus", sa.Integer(), nullable=False),
         sa.Column("race_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.ForeignKeyConstraint(
-            ["race_id"],
-            ["race.id"],
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.ForeignKeyConstraint(["race_id"], ["race.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
@@ -688,26 +407,12 @@ def upgrade() -> None:
         sa.Column("tool_id", sa.Uuid(), nullable=False),
         sa.Column("class_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["class_id"],
-            ["character_class.id"],
+            ["class_id"], ["character_class.id"], ondelete="CASCADE"
         ),
-        sa.ForeignKeyConstraint(
-            ["tool_id"],
-            ["tool.id"],
-        ),
+        sa.ForeignKeyConstraint(["tool_id"], ["tool.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_table(
@@ -715,25 +420,13 @@ def upgrade() -> None:
         sa.Column("weapon_id", sa.Uuid(), nullable=False),
         sa.Column("class_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["class_id"], ["character_class.id"], ondelete="CASCADE"
         ),
         sa.ForeignKeyConstraint(
-            ["class_id"],
-            ["character_class.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["weapon_id"],
-            ["weapon.id"],
+            ["weapon_id"], ["weapon.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -742,25 +435,13 @@ def upgrade() -> None:
         sa.Column("character_class_id", sa.Uuid(), nullable=False),
         sa.Column("spell_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["character_class_id"], ["character_class.id"], ondelete="CASCADE"
         ),
         sa.ForeignKeyConstraint(
-            ["character_class_id"],
-            ["character_class.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["spell_id"],
-            ["spell.id"],
+            ["spell_id"], ["spell.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -769,25 +450,13 @@ def upgrade() -> None:
         sa.Column("material_id", sa.Uuid(), nullable=False),
         sa.Column("spell_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["material_id"], ["material_component.id"], ondelete="CASCADE"
         ),
         sa.ForeignKeyConstraint(
-            ["material_id"],
-            ["material_component.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["spell_id"],
-            ["spell.id"],
+            ["spell_id"], ["spell.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -796,25 +465,13 @@ def upgrade() -> None:
         sa.Column("weapon_id", sa.Uuid(), nullable=False),
         sa.Column("weapon_property_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
+        sa.ForeignKeyConstraint(
+            ["weapon_id"], ["weapon.id"], ondelete="CASCADE"
         ),
         sa.ForeignKeyConstraint(
-            ["weapon_id"],
-            ["weapon.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["weapon_property_id"],
-            ["weapon_property.id"],
+            ["weapon_property_id"], ["weapon_property.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("weapon_id"),
@@ -824,21 +481,10 @@ def upgrade() -> None:
         sa.Column("name", sa.String(), nullable=False),
         sa.Column("spell_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["spell_id"],
-            ["spell.id"],
+            ["spell_id"], ["spell.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -849,18 +495,8 @@ def upgrade() -> None:
         sa.Column("name_in_english", sa.String(length=50), nullable=False),
         sa.Column("race_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
             ["race_id"],
             ["race.id"],
@@ -881,21 +517,10 @@ def upgrade() -> None:
         sa.Column("level_9", sa.Integer(), nullable=False),
         sa.Column("class_level_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["class_level_id"],
-            ["class_level.id"],
+            ["class_level_id"], ["class_level.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -904,25 +529,15 @@ def upgrade() -> None:
         sa.Column("character_subclass_id", sa.Uuid(), nullable=False),
         sa.Column("spell_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
             ["character_subclass_id"],
             ["character_subclass.id"],
+            ondelete="CASCADE",
         ),
         sa.ForeignKeyConstraint(
-            ["spell_id"],
-            ["spell.id"],
+            ["spell_id"], ["spell.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -934,18 +549,8 @@ def upgrade() -> None:
         sa.Column("level", sa.Integer(), nullable=False),
         sa.Column("character_subclass_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
             ["character_subclass_id"],
             ["character_subclass.id"],
@@ -959,21 +564,10 @@ def upgrade() -> None:
         sa.Column("description", sa.String(), nullable=False),
         sa.Column("subrace_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["subrace_id"],
-            ["subrace.id"],
+            ["subrace_id"], ["subrace.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -983,21 +577,10 @@ def upgrade() -> None:
         sa.Column("bonus", sa.Integer(), nullable=False),
         sa.Column("subrace_id", sa.Uuid(), nullable=False),
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column(
-            "created_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
-        sa.Column(
-            "updated_at",
-            sa.DateTime(),
-            server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=False,
-        ),
+        sa.Column("created_at", sa.DateTime(), nullable=False),
+        sa.Column("updated_at", sa.DateTime(), nullable=False),
         sa.ForeignKeyConstraint(
-            ["subrace_id"],
-            ["subrace.id"],
+            ["subrace_id"], ["subrace.id"], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )

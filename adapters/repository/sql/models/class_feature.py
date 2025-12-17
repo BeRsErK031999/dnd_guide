@@ -17,7 +17,9 @@ class ClassFeatureModel(Base):
     description: Mapped[str]
     name_in_english: Mapped[str] = mapped_column(String(50))
     level: Mapped[int]
-    character_class_id: Mapped[UUID] = mapped_column(ForeignKey("character_class.id"))
+    character_class_id: Mapped[UUID] = mapped_column(
+        ForeignKey("character_class.id", ondelete="CASCADE")
+    )
 
     character_class: Mapped["CharacterClassModel"] = relationship(
         back_populates="features"
