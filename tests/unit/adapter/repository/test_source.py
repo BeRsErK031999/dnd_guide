@@ -39,6 +39,18 @@ async def test_delete(db_helper):
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "name,expected",
+    [["random_name", False], [st_source.name, True]],
+    ids=["not_exists", "exists"],
+)
+async def test_name_exists(db_helper, name, expected):
+    repo = SQLSourceRepository(db_helper)
+    await repo.save(st_source)
+    assert await repo.name_exists(name) == expected
+
+
+@pytest.mark.asyncio
 async def test_delete_not_exists(db_helper):
     repo = SQLSourceRepository(db_helper)
     await repo.save(st_source)

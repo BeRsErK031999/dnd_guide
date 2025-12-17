@@ -72,7 +72,8 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
     async def save(self, level: AppClassLevel) -> None:
         if await self.id_exists(level.class_level_id):
             await self.update(level)
-        await self.create(level)
+        else:
+            await self.create(level)
 
     async def create(self, level: AppClassLevel) -> None:
         async with self.__helper.session as session:

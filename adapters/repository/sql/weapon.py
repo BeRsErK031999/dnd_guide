@@ -93,7 +93,8 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
     async def save(self, weapon: AppWeapon) -> None:
         if await self.id_exists(weapon.weapon_id):
             await self.update(weapon)
-        await self.create(weapon)
+        else:
+            await self.create(weapon)
 
     async def create(self, weapon: AppWeapon) -> None:
         async with self.__helper.session as session:

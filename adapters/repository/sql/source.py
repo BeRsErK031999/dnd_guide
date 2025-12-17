@@ -4,6 +4,7 @@ from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models import SourceModel
 from application.dto.model.source import AppSource
 from application.repository import SourceRepository as AppSourceRepository
+from domain.error import DomainError
 from domain.source import SourceRepository as DomainSourceRepository
 from sqlalchemy import delete, exists, or_, select
 
@@ -33,7 +34,9 @@ class SQLSourceRepository(DomainSourceRepository, AppSourceRepository):
         async with self.__db_helper.session as session:
             query = select(SourceModel).where(SourceModel.id == source_id)
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(f"источника с id {source_id} не существует")
             return result.to_app()
 
     async def filter(self, search_by_name: str | None = None) -> list[AppSource]:
@@ -65,5 +68,7 @@ class SQLSourceRepository(DomainSourceRepository, AppSourceRepository):
     async def delete(self, source_id: UUID) -> None:
         async with self.__db_helper.session as session:
             query = delete(SourceModel).where(SourceModel.id == source_id)
-            await session.execute(query)
+            result = await session.execute(query)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"источника с id {source_id} не существует")
             await session.commit()

@@ -135,7 +135,8 @@ class SQLSpellRepository(DomainSpellRepository, AppSpellRepository):
     async def save(self, spell: AppSpell) -> None:
         if await self.id_exists(spell.spell_id):
             await self.update(spell)
-        await self.create(spell)
+        else:
+            await self.create(spell)
 
     async def create(self, spell: AppSpell) -> None:
         async with self.__db_helper.session as session:

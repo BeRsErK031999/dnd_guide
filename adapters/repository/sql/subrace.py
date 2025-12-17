@@ -68,7 +68,8 @@ class SQLSubraceRepository(DomainSubraceRepository, AppSubraceRepository):
     async def save(self, subrace: AppSubrace) -> None:
         if await self.id_exists(subrace.subrace_id):
             await self.update(subrace)
-        await self.create(subrace)
+        else:
+            await self.create(subrace)
 
     async def create(self, subrace: AppSubrace) -> None:
         async with self.__db_helper.session as session:

@@ -66,7 +66,8 @@ class SQLArmorRepository(DomainArmorRepository, AppArmorRepository):
     async def save(self, armor: AppArmor) -> None:
         if await self.id_exists(armor.armor_id):
             await self.update(armor)
-        await self.create(armor)
+        else:
+            await self.create(armor)
 
     async def create(self, armor: AppArmor) -> None:
         async with self.__helper.session as session:

@@ -4,6 +4,7 @@ from adapters.repository.sql.database import DBHelper
 from adapters.repository.sql.models import ToolModel, ToolUtilizeModel
 from application.dto.model.tool import AppTool
 from application.repository import ToolRepository as AppToolRepository
+from domain.error import DomainError
 from domain.tool import ToolRepository as DomainToolRepository
 from sqlalchemy import delete, exists, select
 from sqlalchemy.orm import selectinload
@@ -38,7 +39,9 @@ class SQLToolRepository(DomainToolRepository, AppToolRepository):
                 .options(selectinload(ToolModel.utilizes))
             )
             result = await session.execute(query)
-            tool_model = result.scalar_one()
+            tool_model = result.scalar()
+            if tool_model is None:
+                raise DomainError.not_found(f"инструмента с id {tool_id} не существует")
             return tool_model.to_app()
 
     async def get_all(self) -> list[AppTool]:
@@ -58,7 +61,8 @@ class SQLToolRepository(DomainToolRepository, AppToolRepository):
     async def save(self, tool: AppTool) -> None:
         if await self.id_exists(tool.tool_id):
             await self.update(tool)
-        await self.create(tool)
+        else:
+            await self.create(tool)
 
     async def create(self, tool: AppTool) -> None:
         async with self.__helper.session as session:
@@ -104,5 +108,7 @@ class SQLToolRepository(DomainToolRepository, AppToolRepository):
     async def delete(self, tool_id: UUID) -> None:
         async with self.__helper.session as session:
             stmt = delete(ToolModel).where(ToolModel.id == tool_id)
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"инструмента с id {tool_id} не существует")
             await session.commit()

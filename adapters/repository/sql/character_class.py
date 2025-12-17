@@ -99,7 +99,8 @@ class SQLClassRepository(DomainClassRepository, AppClassRepository):
     async def save(self, character_class: AppClass) -> None:
         if await self.id_exists(character_class.class_id):
             await self.update(character_class)
-        await self.create(character_class)
+        else:
+            await self.create(character_class)
 
     async def create(self, character_class: AppClass) -> None:
         async with self.__helper.session as session:
