@@ -35,7 +35,9 @@ class RaceModel(Base):
     increase_modifiers: Mapped[list["RaceIncreaseModifierModel"]] = relationship(
         back_populates="race", cascade="all, delete-orphan"
     )
-    features: Mapped[list["RaceFeatureModel"]] = relationship(back_populates="race")
+    features: Mapped[list["RaceFeatureModel"]] = relationship(
+        back_populates="race", cascade="all, delete-orphan"
+    )
     source: Mapped["SourceModel"] = relationship(back_populates="races")
     subraces: Mapped[list["SubraceModel"]] = relationship(back_populates="race")
 

@@ -92,7 +92,6 @@ async def test_update(db_helper, field, value):
     await create_level(db_helper, level)
     repo = SQLClassLevelRepository(db_helper)
     assert await repo.id_exists(level.class_level_id)
-    model_factory.class_level_model_factory()
 
     setattr(level, field, value)
     await repo.save(level)

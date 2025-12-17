@@ -9,6 +9,7 @@ from adapters.repository.sql.models import (
 )
 from application.dto.model.race import AppRace
 from application.repository import RaceRepository as AppRaceRepository
+from domain.error import DomainError
 from domain.race import RaceRepository as DomainRaceRepository
 from sqlalchemy import Select, delete, exists, or_, select
 from sqlalchemy.orm import selectinload
@@ -39,7 +40,9 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
         async with self.__db_helper.session as session:
             query = self._add_options(select(RaceModel).where(RaceModel.id == race_id))
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(f"раса с id {race_id} не существует")
             return result.to_app()
 
     async def get_all(self) -> list[AppRace]:
@@ -134,7 +137,9 @@ class SQLRaceRepository(DomainRaceRepository, AppRaceRepository):
     async def delete(self, race_id: UUID) -> None:
         async with self.__db_helper.session as session:
             query = delete(RaceModel).where(RaceModel.id == race_id)
-            await session.execute(query)
+            result = await session.execute(query)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"раса с id {race_id} не существует")
             await session.commit()
 
     def _add_options(self, query: Select[tuple[RaceModel]]) -> Select[tuple[RaceModel]]:
