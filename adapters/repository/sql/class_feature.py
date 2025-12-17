@@ -5,6 +5,7 @@ from adapters.repository.sql.models import CharacterClassModel, ClassFeatureMode
 from application.dto.model.class_feature import AppClassFeature
 from application.repository import ClassFeatureRepository as AppClassFeatureRepository
 from domain.class_feature import ClassFeatureRepository as DomainClassFeatureRepository
+from domain.error import DomainError
 from sqlalchemy import delete, exists, select
 
 
@@ -40,7 +41,9 @@ class SQLClassFeatureRepository(
         async with self.__db_helper.session as session:
             query = select(ClassFeatureModel).where(ClassFeatureModel.id == feature_id)
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(f"умения с id {feature_id} не существует")
             return result.to_app()
 
     async def get_all(self) -> list[AppClassFeature]:
@@ -94,11 +97,15 @@ class SQLClassFeatureRepository(
                 model.level = feature.level
             if old.name != feature.name:
                 model.name = feature.name
+            if old.name_in_english != feature.name_in_english:
+                model.name_in_english = feature.name_in_english
             model.description = feature.description
             await session.commit()
 
     async def delete(self, feature_id: UUID) -> None:
         async with self.__db_helper.session as session:
             stmt = delete(ClassFeatureModel).where(ClassFeatureModel.id == feature_id)
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"умения с id {feature_id} не существует")
             await session.commit()
