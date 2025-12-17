@@ -155,6 +155,9 @@ class ClassLevelSpellSlotModel(Base):
 
     @staticmethod
     def from_app(level_id: UUID, slots: list[int]) -> "ClassLevelSpellSlotModel":
+        if len(slots) < 9:
+            for _ in range(9 - len(slots)):
+                slots.append(0)
         return ClassLevelSpellSlotModel(
             level_1=slots[0],
             level_2=slots[1],

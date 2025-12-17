@@ -9,6 +9,7 @@ from adapters.repository.sql.models import (
 from application.dto.model.class_level import AppClassLevel
 from application.repository import ClassLevelRepository as AppClassLevelRepository
 from domain.class_level import ClassLevelRepository as DomainClassLevelRepository
+from domain.error import DomainError
 from sqlalchemy import Select, delete, exists, select
 from sqlalchemy.orm import joinedload
 
@@ -45,7 +46,9 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
                 select(ClassLevelModel).where(ClassLevelModel.id == level_id)
             )
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(f"уровень с id {level_id} не существует")
             return result.to_app()
 
     async def get_all(self) -> list[AppClassLevel]:
@@ -158,7 +161,9 @@ class SQLClassLevelRepository(DomainClassLevelRepository, AppClassLevelRepositor
     async def delete(self, level_id: UUID) -> None:
         async with self.__helper.session as session:
             stmt = delete(ClassLevelModel).where(ClassLevelModel.id == level_id)
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"уровень с id {level_id} не существует")
             await session.commit()
 
     def _add_options(
