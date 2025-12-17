@@ -46,7 +46,7 @@ class SpellModel(Base):
         back_populates="spells", secondary="rel_spell_character_subclass"
     )
     saving_throws: Mapped[list["SpellSavingThrowModel"]] = relationship(
-        back_populates="spell"
+        back_populates="spell", cascade="all, delete-orphan"
     )
     character_classes: Mapped[list["CharacterClassModel"]] = relationship(
         back_populates="spells", secondary="rel_spell_character_class"
@@ -121,7 +121,7 @@ class SpellSavingThrowModel(Base):
     __tablename__ = "spell_saving_throw"
 
     name: Mapped[str]
-    spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id"))
+    spell_id: Mapped[UUID] = mapped_column(ForeignKey("spell.id", ondelete="CASCADE"))
 
     spell: Mapped["SpellModel"] = relationship(back_populates="saving_throws")
 

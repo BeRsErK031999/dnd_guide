@@ -161,6 +161,18 @@ async def test_delete_not_exists(db_helper):
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "name,expected",
+    [[st_spell.name, True], ["random_name", False]],
+    ids=["exists", "not_exists"],
+)
+async def test_name_exists(db_helper, name, expected):
+    await save_spell(db_helper, st_spell)
+    repo = SQLSpellRepository(db_helper)
+    assert await repo.name_exists(name) == expected
+
+
+@pytest.mark.asyncio
 async def test_get_by_id(db_helper):
     await save_spell(db_helper, st_spell)
     repo = SQLSpellRepository(db_helper)

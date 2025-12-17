@@ -9,6 +9,7 @@ from adapters.repository.sql.models import (
 )
 from application.dto.model.feat import AppFeat
 from application.repository import FeatRepository as AppFeatRepository
+from domain.error import DomainError
 from domain.feat import FeatRepository as DomainFeatRepository
 from sqlalchemy import Select, delete, exists, select
 from sqlalchemy.orm import selectinload
@@ -39,7 +40,9 @@ class SQLFeatRepository(DomainFeatRepository, AppFeatRepository):
         async with self.__helper.session as session:
             query = self._add_options(select(FeatModel).where(FeatModel.id == feat_id))
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(f"черты с id {feat_id} не существует")
             return result.to_app()
 
     async def get_all(self) -> list[AppFeat]:
@@ -165,7 +168,9 @@ class SQLFeatRepository(DomainFeatRepository, AppFeatRepository):
     async def delete(self, feat_id: UUID) -> None:
         async with self.__helper.session as session:
             stmt = delete(FeatModel).where(FeatModel.id == feat_id)
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"черты с id {feat_id} не существует")
             await session.commit()
 
     def _add_options(self, query: Select[tuple[FeatModel]]) -> Select[tuple[FeatModel]]:
