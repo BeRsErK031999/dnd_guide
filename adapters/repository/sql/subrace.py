@@ -9,6 +9,7 @@ from adapters.repository.sql.models import (
 )
 from application.dto.model.subrace import AppSubrace
 from application.repository import SubraceRepository as AppSubraceRepository
+from domain.error import DomainError
 from domain.subrace import SubraceRepository as DomainSubraceRepository
 from sqlalchemy import Select, delete, exists, or_, select
 from sqlalchemy.orm import selectinload
@@ -41,7 +42,9 @@ class SQLSubraceRepository(DomainSubraceRepository, AppSubraceRepository):
                 select(SubraceModel).where(SubraceModel.id == subrace_id)
             )
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(f"подраса с id {subrace_id} не существует")
             return result.to_app()
 
     async def get_all(self) -> list[AppSubrace]:
@@ -117,7 +120,9 @@ class SQLSubraceRepository(DomainSubraceRepository, AppSubraceRepository):
     async def delete(self, subrace_id: UUID) -> None:
         async with self.__db_helper.session as session:
             stmt = delete(SubraceModel).where(SubraceModel.id == subrace_id)
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"подраса с id {subrace_id} не существует")
             await session.commit()
 
     def _add_options(
