@@ -5,6 +5,7 @@ from adapters.repository.sql.models import CharacterClassModel, CharacterSubclas
 from application.dto.model.character_subclass import AppSubclass
 from application.repository import SubclassRepository as AppSubclassRepository
 from domain.character_subclass import SubclassRepository as DomainSubclassRepository
+from domain.error import DomainError
 from sqlalchemy import delete, exists, select
 from sqlalchemy.orm import selectinload
 
@@ -38,7 +39,11 @@ class SQLSubclassRepository(DomainSubclassRepository, AppSubclassRepository):
                 .options(selectinload(CharacterSubclassModel.character_class))
             )
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(
+                    f"подкласс с id {subclass_id} не существует"
+                )
             return result.to_app()
 
     async def get_all(self) -> list[AppSubclass]:
@@ -102,5 +107,9 @@ class SQLSubclassRepository(DomainSubclassRepository, AppSubclassRepository):
             stmt = delete(CharacterSubclassModel).where(
                 CharacterSubclassModel.id == subclass_id
             )
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(
+                    f"подкласс с id {subclass_id} не существует"
+                )
             await session.commit()
