@@ -6,6 +6,7 @@ from application.dto.model.subclass_feature import AppSubclassFeature
 from application.repository import (
     SubclassFeatureRepository as AppSubclassFeatureRepository,
 )
+from domain.error import DomainError
 from domain.subclass_feature import (
     SubclassFeatureRepository as DomainSubclassFeatureRepository,
 )
@@ -49,7 +50,9 @@ class SQLSubclassFeatureRepository(
                 .options(selectinload(SubclassFeatureModel.character_subclass))
             )
             result = await session.execute(query)
-            model = result.scalar_one()
+            model = result.scalar()
+            if model is None:
+                raise DomainError.not_found(f"умения с id {feature_id} не существует")
             return model.to_app()
 
     async def get_all(self) -> list[AppSubclassFeature]:
@@ -115,5 +118,7 @@ class SQLSubclassFeatureRepository(
             stmt = delete(SubclassFeatureModel).where(
                 SubclassFeatureModel.id == feature_id
             )
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"умения с id {feature_id} не существует")
             await session.commit()
