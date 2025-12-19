@@ -45,7 +45,9 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
                 .options(selectinload(WeaponModel.properties))
             )
             weapon = await session.execute(weapon_query)
-            weapon = weapon.scalar_one()
+            weapon = weapon.scalar()
+            if weapon is None:
+                raise DomainError.not_found(f"оружия с id {weapon_id} не существует")
             return weapon.to_app()
 
     async def get_all(self) -> list[AppWeapon]:
@@ -128,6 +130,8 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
             model = await session.execute(query)
             model = model.scalar_one()
             old = model.to_app()
+            if old.name != weapon.name:
+                model.name = weapon.name
             if old.weapon_kind_id != weapon.weapon_kind_id:
                 model.kind = await session.get_one(
                     WeaponKindModel, weapon.weapon_kind_id
@@ -137,6 +141,7 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
             if old.damage != weapon.damage:
                 damage_dice = weapon.damage.dice
                 model.damage_type = weapon.damage.damage_type
+                model.bonus_damage = weapon.damage.bonus_damage
                 model.damage_dice_name = damage_dice.dice_type
                 model.damage_dice_count = damage_dice.count
             if old.weight != weapon.weight:
@@ -145,6 +150,7 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
                 model.material = await session.get_one(
                     MaterialModel, weapon.material_id
                 )
+            model.description = weapon.description
             property_query = select(WeaponPropertyModel).where(
                 WeaponPropertyModel.id.in_(weapon.weapon_property_ids)
             )
@@ -164,5 +170,7 @@ class SQLWeaponRepository(DomainWeaponRepository, AppWeaponRepository):
     async def delete(self, weapon_id: UUID) -> None:
         async with self.__helper.session as session:
             stmt = delete(WeaponModel).where(WeaponModel.id == weapon_id)
-            await session.execute(stmt)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(f"оружия с id {weapon_id} не существует")
             await session.commit()
