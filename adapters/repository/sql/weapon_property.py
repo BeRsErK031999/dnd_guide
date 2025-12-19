@@ -6,6 +6,7 @@ from application.dto.model.weapon_property import AppWeaponProperty
 from application.repository import (
     WeaponPropertyRepository as AppWeaponPropertyRepository,
 )
+from domain.error import DomainError
 from domain.weapon_property import (
     WeaponPropertyRepository as DomainWeaponPropertyRepository,
 )
@@ -45,7 +46,11 @@ class SQLWeaponPropertyRepository(
                 WeaponPropertyModel.id == weapon_property_id
             )
             result = await session.execute(query)
-            result = result.scalar_one()
+            result = result.scalar()
+            if result is None:
+                raise DomainError.not_found(
+                    f"свойства оружия с id {weapon_property_id} не существует"
+                )
             return result.to_app()
 
     async def get_all(self) -> list[AppWeaponProperty]:
@@ -103,12 +108,17 @@ class SQLWeaponPropertyRepository(
                 model.second_hand_dice_count = (
                     second_hand_dice.count if second_hand_dice is not None else None
                 )
+            model.description = weapon_property.description
             await session.commit()
 
     async def delete(self, weapon_property_id: UUID) -> None:
         async with self.__helper.session as session:
-            query = delete(WeaponPropertyModel).where(
+            stmt = delete(WeaponPropertyModel).where(
                 WeaponPropertyModel.id == weapon_property_id
             )
-            await session.execute(query)
+            result = await session.execute(stmt)
+            if result.rowcount == 0:
+                raise DomainError.not_found(
+                    f"свойства оружия с id {weapon_property_id} не существует"
+                )
             await session.commit()
