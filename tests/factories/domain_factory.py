@@ -53,8 +53,8 @@ def weight_factory(count: int = 1, unit: weight.WeightUnit = weight.WeightUnit.L
     )
 
 
-def coin_factory():
-    return coin.Coins(count=10, piece_type=coin.PieceType.COPPER)
+def coin_factory(count: int = 10, piece_type: coin.PieceType = coin.PieceType.COPPER):
+    return coin.Coins(count=count, piece_type=piece_type)
 
 
 def armor_class_factory(
